@@ -1,0 +1,25 @@
+<p>
+  purchasse-order works!
+
+  type: <input type="number" [(ngModel)]="type" name="type" placeholder="type">
+  id: <input type="number" [(ngModel)]="id" name="id" placeholder="id">
+
+  <button (click)="ajouterDataForm()">add dataform</button>
+</p>
+
+<div class="conatinerFormData">
+
+  <app-form [datas]="customer" [isCustomer]="true" (updateDataForm)="onValueCustomerUpdated($event)">
+  </app-form>
+
+  <app-form [datas]="removal" [isCustomer]="false" (updateDataForm)="onValueRemovalUpdated($event)">
+  </app-form>
+
+  <app-form [datas]="recipient" [isCustomer]="false" (updateDataForm)="onValueRecipientUpdated($event)">
+  </app-form>
+
+
+
+</div>
+
+

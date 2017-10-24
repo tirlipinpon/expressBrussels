@@ -1,0 +1,6 @@
+.conatinerFormData {
+  border: 1px solid blue;
+  margin:1px;
+  padding:1px;
+  display: flex;
+}
