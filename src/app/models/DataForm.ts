@@ -8,8 +8,10 @@ export interface DataForm {
   phone: string,
   info1: string,
   info2: string,
-  typeForm: number,
-  fk_client: string,
+  type: number,
+  fk_client: number,
   active:  boolean,
+  created: Date,
+  fk_type: number
 }
 

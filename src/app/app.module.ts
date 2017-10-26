@@ -7,9 +7,10 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import {PurchasseModule} from "./purchasse-order/purchasse-order.module";
 import {Routes, RouterModule} from "@angular/router";
 import {PurchasseOrderComponent} from "./purchasse-order/purchasse-order.component";
-import {ServiceService} from "./servicse/service.service";
+import {CustomerService} from "./services/customer.service";
 import {StoreDevtoolsModule} from "@ngrx/store-devtools";
 import { SortByValuePipe } from './shared/pipe/sort-by-value.pipe';
+import {CustomerEffectService} from "./effects/customer/customer-effect.service";
 
 
 export const firebaseconfig = {
@@ -44,7 +45,7 @@ const appRoutes: Routes = [
       maxAge: 10
     })
   ],
-  providers: [ServiceService],
+  providers: [CustomerService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,13 +1,16 @@
 <form  *ngIf="isCustomer"  novalidate [formGroup]="formGroup">
+  <input type="hidden" formControlName="id">
   <input type="text" formControlName="name">
   <input type="text" formControlName="address">
   <input type="text" formControlName="number">
-  <input type="text" formControlName="cp">
+  <input type="number" formControlName="cp">
   <input type="text" formControlName="state">
   <input type="text" formControlName="phone">
   <input type="text" formControlName="info1">
   <input type="text" formControlName="info2">
-  <!--<button *ngIf="isCustomer" type="button" (click)="editCustomer()">save</button>-->
+  <input type="text" formControlName="created">
+  <input type="hidden" formControlName="fk_type">
+  <button  type="button" [disabled]="!formGroup.valid || formGroup.pristine" (click)="saveData()">save</button>
 </form>
 
 <form  *ngIf="!isCustomer"  novalidate [formGroup]="formGroup">
@@ -16,13 +19,14 @@
     <input id="search" (click)="toogleDropDown()" type="text" formControlName="name">
     <div clickOutside (clickOutside)="toogleDropDown()" *ngIf="showDropDown" class="state-container-dropdown">
       <div>
-        <div (click)="initSelectdedValue(data.name)" class="state" *ngFor="let data of datas | searchFilter:getSearchValue();  let index=index">
-          {{index}} {{data.name}}
+        <div (click)="initSelectdedValue(d.name)" class="state" *ngFor="let d of _user | searchFilter:getSearchValue();  let index=index">
+          {{index}} {{d.name}}
         </div>
       </div>
     </div>
   </div>
 
+  <input type="hidden" formControlName="id">
   <input type="text" formControlName="address">
   <input type="text" formControlName="number">
   <input type="text" formControlName="cp">
@@ -30,5 +34,7 @@
   <input type="text" formControlName="phone">
   <input type="text" formControlName="info1">
   <input type="text" formControlName="info2">
+  <input type="text" formControlName="created">
+  <input type="hidden" formControlName="fk_type">
   <!--<button *ngIf="isCustomer" type="button" (click)="editCustomer()">save</button>-->
 </form>
