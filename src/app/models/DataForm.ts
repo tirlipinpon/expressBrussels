@@ -6,11 +6,13 @@ export interface DataForm {
   cp: number,
   state: string,
   phone: string,
-  info1: string,
-  info2: string,
+  infos: {
+    info1: string,
+    info2: string
+  },
   type: number,
   fk_client: number,
-  active:  boolean,
+  active:  number,
   created: Date,
   fk_type: number
 }

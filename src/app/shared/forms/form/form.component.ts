@@ -1,40 +1,64 @@
 import {
-  Component, OnInit, Input, AfterViewInit, OnChanges, SimpleChanges, Output, EventEmitter,
-  AfterContentChecked, AfterViewChecked
-} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+  Component, OnInit, Input, Output, EventEmitter, OnDestroy} from '@angular/core';
+import { FormGroup} from "@angular/forms";
 import {DataForm} from "../../../models/DataForm";
+import {Observable} from "rxjs/Observable";
 
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.css']
 })
-export class FormComponent {
+export class FormComponent implements OnInit, OnDestroy {
 
   @Input('isCustomer') isCustomer: boolean;
   @Input('formGroup') formGroup: FormGroup;
+  @Input('nameForm') nameForm: string;
   @Output() updateDataForm = new EventEmitter<FormGroup>();
+  @Output() updateDataFormInfos = new EventEmitter<FormGroup>();
   showDropDown = false;
+  // private
   private _user: DataForm[] = [];
+  private valueChanges$ = null;
+  private valueChangesInfos$ = null;
+  private valueInfosChanged = false;
 
   @Input('datas') set data(value: DataForm[]) {
     if (!!value) {
-
       if (this.isCustomer) {
         this._initData(value);
       }else{
-        for(let i=0; i< Object.keys(value).length; i++){
-          this._user.push(value[i]);
+        if(this._user.length == 0) {
+          for(let i=0; i< Object.keys(value).length; i++){
+            this._user.push(value[i]);
+            console.log("this._user= ", this._user);
+          }
         }
+
       }
     }
   }
 
   constructor() {}
 
+  ngOnInit() {
+    if(!this.isCustomer){
+      this.onChanges();
+    }
+  }
+
+  ngOnDestroy(){
+    if(this.valueChanges$){
+      this.valueChanges$.unsubscribe();
+    }
+    if(this.valueChangesInfos$){
+      this.valueChangesInfos$.unsubscribe();
+    }
+  }
+
   private _initData(data): void {
-    this.formGroup.setValue({
+    console.log("init data : ", data);
+    this.formGroup.patchValue({
       id: data.id,
       name: data.name,
       address: data.address,
@@ -42,8 +66,10 @@ export class FormComponent {
       cp: data.cp,
       state: data.state,
       phone: data.phone,
-      info1: data.info1,
-      info2: data.info2,
+      infos: {
+        info1: data.infos.info1,
+        info2: data.infos.info2,
+      },
       type: data.type,
       fk_client: data.fk_client,
       active: data.active,
@@ -53,28 +79,33 @@ export class FormComponent {
   }
 
   saveData(): void {
-    console.log('button pushed for save data = ', this.formGroup.value);
+    console.log("-?- " + this.nameForm + ' button pushed for save data = ', this.formGroup.value);
     this.updateDataForm.emit(this.formGroup.value);
   }
 
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if(changes['datas'] && this.data) {
-  //     console.log('changed data', this.data);
-  //     // this.sortDatas();
-  //     // this.initData(this.datas);
-  //   }
-  // }
+  // not for customer
+  onChanges(): void {
+    this.valueChanges$ = this.formGroup.get('id').valueChanges.subscribe(val => {
+      console.log("-?- " + this.nameForm +' selected  id = ', val);
+      this.updateDataForm.emit(val);
+    });
+    this.valueChangesInfos$ = this.formGroup.get('infos').valueChanges.subscribe(val => {
+      console.log("-?- " + this.nameForm + ' edited infos = ', val);
+      this.valueInfosChanged = true;
+    });
+  }
 
-//
-//   sortDatas() {
-//     if(!this.isCustomer){
-//       this._user.sort(function(a, b) { return a.name - b.name; })
-//     }
-//   }
+  emitDataInfos(): void {
+    if(this.valueInfosChanged) {
+      console.log("-?- " + this.nameForm + " emit data info child:", this.formGroup.get('infos').value);
+      this.valueInfosChanged = false;
+      this.updateDataFormInfos.emit(this.formGroup.get('infos').value);
+    }
+  }
 
 
   toogleDropDown() {
-    // console.log('toogleDropDown showDropDown = '+  this.showDropDown)
+    // console.log('toogleDropDown showDropDown = '+  this.showDropDown);
     this.showDropDown = !this.showDropDown;
   }
 
@@ -84,7 +115,7 @@ export class FormComponent {
 
   initSelectdedValue(value) {
     // this.formGroup.patchValue({"name":this.datas[value].name});
-    console.log('initSelectdedValue');
+    // console.log('initSelectdedValue');
     this._initData(this.getByValue(value));
     this.toogleDropDown();
   }

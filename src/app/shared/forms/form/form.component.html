@@ -6,8 +6,10 @@
   <input type="number" formControlName="cp">
   <input type="text" formControlName="state">
   <input type="text" formControlName="phone">
-  <input type="text" formControlName="info1">
-  <input type="text" formControlName="info2">
+  <div formGroupName="infos">
+    <input type="text" formControlName="info1" >
+    <input type="text" formControlName="info2">
+  </div>
   <input type="text" formControlName="created">
   <input type="hidden" formControlName="fk_type">
   <button  type="button" [disabled]="!formGroup.valid || formGroup.pristine" (click)="saveData()">save</button>
@@ -16,8 +18,8 @@
 <form  *ngIf="!isCustomer"  novalidate [formGroup]="formGroup">
 
   <div class="pos-rel">
-    <input id="search" (click)="toogleDropDown()" type="text" formControlName="name">
-    <div clickOutside (clickOutside)="toogleDropDown()" *ngIf="showDropDown" class="state-container-dropdown">
+    <input id="search" (click)="toogleDropDown()" type="text" formControlName="name" >
+    <div clickOutside  (clickOutside)="toogleDropDown()" *ngIf="showDropDown" class="state-container-dropdown">
       <div>
         <div (click)="initSelectdedValue(d.name)" class="state" *ngFor="let d of _user | searchFilter:getSearchValue();  let index=index">
           {{index}} {{d.name}}
@@ -27,14 +29,18 @@
   </div>
 
   <input type="hidden" formControlName="id">
-  <input type="text" formControlName="address">
-  <input type="text" formControlName="number">
-  <input type="text" formControlName="cp">
-  <input type="text" formControlName="state">
-  <input type="text" formControlName="phone">
-  <input type="text" formControlName="info1">
-  <input type="text" formControlName="info2">
-  <input type="text" formControlName="created">
-  <input type="hidden" formControlName="fk_type">
+  <input type="text" formControlName="address" [readonly]="true">
+  <input type="text" formControlName="number" [readonly]="true">
+  <input type="text" formControlName="cp" [readonly]="true">
+  <input type="text" formControlName="state" [readonly]="true">
+  <input type="text" formControlName="phone" [readonly]="true">
+
+  <div formGroupName="infos">
+    <input  (blur)="emitDataInfos()" type="text" formControlName="info1" >
+    <input  (blur)="emitDataInfos()" type="text" formControlName="info2">
+  </div>
+
+  <input type="text" formControlName="created" [readonly]="true">
+  <input type="hidden" formControlName="fk_type" [readonly]="true">
   <!--<button *ngIf="isCustomer" type="button" (click)="editCustomer()">save</button>-->
 </form>

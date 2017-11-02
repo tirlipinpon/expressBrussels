@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import {Store, Action} from "@ngrx/store";
 import {Actions, Effect} from "@ngrx/effects";
 import {RemovalService} from "../../services/removal.service";
-import {Observable} from "rxjs";
+import {Observable} from "rxjs/Observable";
 import * as RecipientActions  from '../../actions/recipient.actions';
+import  'rxjs/add/operator/switchMap';
 
 @Injectable()
 export class RecipientEffectService {

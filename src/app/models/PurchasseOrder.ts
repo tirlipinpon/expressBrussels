@@ -3,8 +3,15 @@ export interface PurchasseOrder {
   fk_customer_id: number,
   fk_removal_id: number,
   fk_recipient_id: number,
-  order_date: Date,
+
+  contact_removal: string,
+  message_removal: string,
+
+  contact_recipient: string,
+  message_recipient: string,
+
+  date: Date,
   price: number,
-  option: string,
+  options: string,
   tomorrow: boolean
 }

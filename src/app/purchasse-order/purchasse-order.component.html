@@ -1,20 +1,40 @@
-<p>
-  purchasse-order works!
-</p>
-
 <div class="conatinerFormData">
 
-  <app-form [datas]="customer$ | async" [isCustomer]="true"  [formGroup]="formCustomer" (updateDataForm)="onValueCustomerUpdated($event)">
+  <app-form
+    [nameForm]="nameForm[0]"
+    [datas]="customer$ | async"
+    [isCustomer]="true"
+    [formGroup]="formCustomer"
+    (updateDataForm)="onValueCustomerUpdated($event)"
+  >
   </app-form>
 
-
-  <app-form [datas]="removals$ | async" [isCustomer]="false" [formGroup]="formRemoval"  (updateDataForm)="onValueRemovalUpdated($event)">
+  <app-form
+    [nameForm]="nameForm[1]"
+    [datas]="removals$ | async"
+    [isCustomer]="false"
+    [formGroup]="formRemoval"
+    (updateDataForm)="onValueOrderRemovalUpdated($event)"
+    (updateDataFormInfos)="onValueOrderRemovalInfosUpdated($event)"
+  >
   </app-form>
 
-  <app-form [datas]="recipients$ | async" [isCustomer]="false" [formGroup]="formRecipient"  (updateDataForm)="onValueRecipientUpdated($event)">
+  <app-form
+    [nameForm]="nameForm[2]"
+    [datas]="recipients$ | async"
+    [isCustomer]="false"
+    [formGroup]="formRecipient"
+    (updateDataForm)="onValueOrderRecipientUpdated($event)"
+    (updateDataFormInfos)="onValueOrderRecipientInfosUpdated($event)"
+  >
   </app-form>
 
+  <app-option
+    [formGroup]="formOptions"
+    (updateDataForm)="onValueOrderOptionsUpdated($event)">
+  </app-option>
 
+  <button *ngIf="isFormsValide()" (click)="recapOrder()">Send order </button>
 
 </div>
 

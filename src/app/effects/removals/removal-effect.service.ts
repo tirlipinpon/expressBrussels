@@ -2,8 +2,13 @@ import { Injectable } from '@angular/core';
 import {Store, Action} from "@ngrx/store";
 import {Actions, Effect} from "@ngrx/effects";
 import {RemovalService} from "../../services/removal.service";
-import {Observable} from "rxjs";
+
 import * as RemovalActions  from '../../actions/removal.actions';
+import {Observable} from "rxjs/Observable";
+
+import  'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/of';
 
 @Injectable()
 export class RemovalEffectService {

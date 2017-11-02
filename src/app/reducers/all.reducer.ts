@@ -1,47 +1,35 @@
 import * as CustomerActions  from '../actions/customer.actions';
 import * as RemovalActions  from '../actions/removal.actions';
 import * as RecipientActions  from '../actions/recipient.actions';
+import * as PurchasseOrderActions  from '../actions/purchasseOrder.actions';
+
 import {DataForm} from "../models/DataForm";
+import {PurchasseOrder} from "../models/PurchasseOrder";
 
 export type ActionCustomer = CustomerActions.All;
 export type ActionRemoval = RemovalActions.All;
 export type ActionRecipient = RecipientActions.All;
+export type ActionPurchasseOrder = PurchasseOrderActions.All;
 
-export const dataformInitRemoval: DataForm[] =  [
+const orderInitOrder: PurchasseOrder =
     {
-      id: 1,
-      name: 'a',
-      address: '',
-      number: '',
-      cp: 0,
-      state: '',
-      phone: '',
-      info1: '',
-      info2: '',
-      type: 1,
-      fk_client: 0,
-      active: true,
-      created: new Date,
-      fk_type: 12
-    },
-    {
-      id: 2,
-      name: 'b',
-      address: '',
-      number: '',
-      cp: 0,
-      state: '',
-      phone: '',
-      info1: '',
-      info2: '',
-      type: 1,
-      fk_client: 0,
-      active: true,
-      created: new Date,
-      fk_type: 12
-    }
-  ];
-const initialStateRecupients: DataForm[] =  dataformInitRemoval;
+      id: 0,
+      fk_customer_id: 0,
+      fk_removal_id: 0,
+      fk_recipient_id: 0,
+
+      contact_removal: '',
+      message_removal: '',
+
+      contact_recipient: '',
+      message_recipient: '',
+
+      date: new Date(),
+      price: 0,
+      options: 'express',
+      tomorrow: false
+    };
+
 
 export function customerReducer(state: DataForm, action: ActionCustomer): DataForm {
   // console.log('2 - Reducer customer :', action.type, state);
@@ -75,7 +63,6 @@ export function removalReducer(state: DataForm[], action: ActionRemoval): DataFo
   }
 }
 
-
 export function recipientReducer(state: DataForm[], action: ActionRecipient): DataForm[] {
   // console.log('2 - Reducer customer :', action.type, state);
   switch (action.type) {
@@ -90,4 +77,53 @@ export function recipientReducer(state: DataForm[], action: ActionRecipient): Da
     default:
       return state;
   }
+}
+
+export function purchasseOrderReducer(state: PurchasseOrder = orderInitOrder, action: ActionPurchasseOrder): PurchasseOrder {
+  // console.log('2 - Reducer order :', action.type, state);
+  switch (action.type) {
+    // case PurchasseOrderActions.INIT_ORDER_SUCCESS:
+    //   console.log('in order reducer init payload = ', state);
+    //   return {...state, ...orderInitOrder};
+    case PurchasseOrderActions.EDIT_ORDER_OPTION_SUCCESS:
+      console.log('in order reducer edit Order option payload = ',action.payload);
+      return Object.assign({}, state, {
+        options: action.payload.options,
+        tomorrow: action.payload.tomorrow
+      });
+
+    case PurchasseOrderActions.EDIT_ORDER_REMOVAL_SUCCESS:
+      console.log('in order reducer edit Order removal payload = ',action.payload);
+      return Object.assign({}, state, {
+        fk_removal_id: action.payload,
+      });
+
+    case PurchasseOrderActions.EDIT_ORDER_RECIPIENT_SUCCESS:
+      console.log('in order reducer edit Order Recipient payload = ',action.payload);
+      return Object.assign({}, state, {
+        fk_recipient_id: action.payload,
+      });
+
+    case PurchasseOrderActions.EDIT_ORDER_REMOVAL_INFOS_SUCCESS:
+      console.log('in order reducer edit Order Removal Infos payload = ',action.payload);
+      return Object.assign({}, state, {
+        contact_removal: action.payload.info1,
+        message_removal: action.payload.info2,
+      });
+
+    case PurchasseOrderActions.EDIT_ORDER_RECIPIENT_INFOS_SUCCESS:
+      console.log('in order reducer edit Order Recipient Infos payload = ',action.payload);
+      return Object.assign({}, state, {
+        contact_recipient: action.payload.info1,
+        message_recipient: action.payload.info2,
+      });
+
+    case PurchasseOrderActions.SAVE_ORDER_SUCCESS:
+      console.log('in order reducer saveOrder payload = ',action.payload);
+      return {...state, ...action.payload};
+
+    default:
+      return state;
+  }
+
 }

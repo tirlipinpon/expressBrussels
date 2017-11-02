@@ -5,7 +5,7 @@ import { StoreModule} from "@ngrx/store";
 import { EffectsModule } from "@ngrx/effects";
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {customerReducer, removalReducer, recipientReducer} from "../reducers/all.reducer";
+import {customerReducer, removalReducer, recipientReducer, purchasseOrderReducer} from "../reducers/all.reducer";
 
 import { PurchasseOrderComponent } from './purchasse-order.component';
 import {FormComponent} from "../shared/forms/form/form.component";
@@ -16,6 +16,13 @@ import {CustomerEffectService} from "../effects/customer/customer-effect.service
 import {RemovalEffectService} from "../effects/removals/removal-effect.service";
 import {RemovalService} from "../services/removal.service";
 import {RecipientEffectService} from "../effects/recipients/recipient-effect.service";
+import {OrderService} from "../services/order.service";
+import {PurchasseOrderEffectService} from "../effects/order/purchasse-order-effect.service";
+import {RecipientsComponent} from "../recipients-edit/recipients/recipients.component";
+import {RemovalsComponent} from "../removals-edit/removals/removals.component";
+import {OptionComponent} from "../shared/forms/form/option/option.component";
+import {InfoComponent} from "../shared/forms/form/info/info.component";
+import {OnBlurDirective} from "../shared/directives/on-blur.directive";
 
 @NgModule({
   imports: [
@@ -26,14 +33,18 @@ import {RecipientEffectService} from "../effects/recipients/recipient-effect.ser
     EffectsModule.forRoot([
       CustomerService,
       RemovalService,
+      OrderService,
       RecipientEffectService,
       CustomerEffectService,
-      RemovalEffectService
+      RemovalEffectService,
+      PurchasseOrderEffectService
     ]),
+    // StoreModule.forFeature('todo', customerReducer)
     StoreModule.forRoot({
       customer: customerReducer,
       removals: removalReducer,
-      recipients: recipientReducer
+      recipients: recipientReducer,
+      order: purchasseOrderReducer
     })
   ],
   exports: [
@@ -43,7 +54,13 @@ import {RecipientEffectService} from "../effects/recipients/recipient-effect.ser
     PurchasseOrderComponent,
     FormComponent,
     DropDownDirective,
-    SearchFilterPipe
+    OnBlurDirective,
+    SearchFilterPipe,
+    RecipientsComponent,
+    RemovalsComponent,
+    OptionComponent,
+    InfoComponent
+
   ],
   providers: [],
 })

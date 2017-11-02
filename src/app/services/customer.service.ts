@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import { HttpClient  } from '@angular/common/http';
 import {DataForm} from "../models/DataForm";
-import {Observable} from "rxjs";
+import {Observable} from "rxjs/Observable";
 
 
 @Injectable()
@@ -24,6 +24,10 @@ export class CustomerService {
     console.log('in customer service set new customer to db with this data-> ', data.payload);
     let url = 'http://localhost/expressDB/php//update.php';
     return this.http.post(url,data.payload);
+  }
+
+  isLoggedIn(): boolean {
+    return true;
   }
 
 

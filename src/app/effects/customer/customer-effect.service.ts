@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
-import {Store, Action} from "@ngrx/store";
-import {Actions, Effect} from "@ngrx/effects";
-import {CustomerService} from "../../services/customer.service";
-import {Observable} from "rxjs";
+import { Action } from "@ngrx/store";
+import { Actions, Effect } from "@ngrx/effects";
+import { CustomerService } from "../../services/customer.service";
+import { Observable } from "rxjs/Observable";
 import * as CustomerActions  from '../../actions/customer.actions';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/of';
 
 @Injectable()
 export class CustomerEffectService {
@@ -13,14 +15,12 @@ export class CustomerEffectService {
     private customerService: CustomerService) { }
 
   @Effect()
-  getCustomer: Observable<Action> = this.action$
+  getCustomer$: Observable<Action> = this.action$
     .ofType(CustomerActions.GET_CUSTOMER)
     .switchMap(action =>
       this.customerService.getCustomer(action)
         .map((payload) => {
-        let customerData = payload;
-        // console.log('in effect getCustomer retrieve data from service =', customerData);
-        return new CustomerActions.GetCustomerSuccess(customerData);
+        return new CustomerActions.GetCustomerSuccess(payload);
       })
         .catch(err => {
           console.log('error in effect get customer');
@@ -29,7 +29,7 @@ export class CustomerEffectService {
     );
 
   @Effect()
-  editCustomer: Observable<Action> = this.action$
+  editCustomer$: Observable<Action> = this.action$
     .ofType(CustomerActions.EDIT_CUSTOMER)
     .switchMap(action =>
       this.customerService.setCustomer(action)
