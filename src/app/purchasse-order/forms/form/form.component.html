@@ -12,7 +12,7 @@
   </div>
   <input type="text" formControlName="created">
   <input type="hidden" formControlName="fk_type">
-  <button  type="button" [disabled]="!formGroup.valid || formGroup.pristine" (click)="saveData()">save</button>
+  <button  type="button" [disabled]="!formGroup.valid || formGroup.pristine" (click)="saveDataCustomer()">save</button>
 </form>
 
 <form  *ngIf="!isCustomer"  novalidate [formGroup]="formGroup">
@@ -35,10 +35,16 @@
   <input type="text" formControlName="state" [readonly]="true">
   <input type="text" formControlName="phone" [readonly]="true">
 
-  <div formGroupName="infos">
-    <input  (blur)="emitDataInfos()" type="text" formControlName="info1" >
-    <input  (blur)="emitDataInfos()" type="text" formControlName="info2">
-  </div>
+  <!--<div formGroupName="infos">-->
+    <!--<input  (blur)="emitDataInfos()" type="text" formControlName="info1" >-->
+    <!--<input  (blur)="emitDataInfos()" type="text" formControlName="info2">-->
+  <!--</div>-->
+
+  <app-info
+    [formGroup]="formGroup.get('infos')"
+    (updateDataFormInfosFromChild)="updateDataFormInfosFromChild($event)"
+  >
+  </app-info>
 
   <input type="text" formControlName="created" [readonly]="true">
   <input type="hidden" formControlName="fk_type" [readonly]="true">

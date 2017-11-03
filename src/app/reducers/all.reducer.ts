@@ -85,6 +85,7 @@ export function purchasseOrderReducer(state: PurchasseOrder = orderInitOrder, ac
     // case PurchasseOrderActions.INIT_ORDER_SUCCESS:
     //   console.log('in order reducer init payload = ', state);
     //   return {...state, ...orderInitOrder};
+
     case PurchasseOrderActions.EDIT_ORDER_OPTION_SUCCESS:
       console.log('in order reducer edit Order option payload = ',action.payload);
       return Object.assign({}, state, {

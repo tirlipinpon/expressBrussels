@@ -3,8 +3,8 @@ import {FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-option',
-  templateUrl: './option.component.html',
-  styleUrls: ['./option.component.css']
+  templateUrl: 'option.component.html',
+  styleUrls: ['option.component.css']
 })
 export class OptionComponent implements OnInit {
 
@@ -18,8 +18,6 @@ export class OptionComponent implements OnInit {
       this.saveData();
     });
   }
-
-
 
   saveData(): void {
     console.log('options changed = ', this.formGroup.value);

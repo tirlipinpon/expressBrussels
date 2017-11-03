@@ -8,7 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {customerReducer, removalReducer, recipientReducer, purchasseOrderReducer} from "../reducers/all.reducer";
 
 import { PurchasseOrderComponent } from './purchasse-order.component';
-import {FormComponent} from "../shared/forms/form/form.component";
+import {FormComponent} from "./forms/form/form.component";
 import {DropDownDirective} from "../shared/directives/drop-down.directive";
 import {SearchFilterPipe} from "../shared/pipe/search-filter.pipe";
 import {CustomerService} from "../services/customer.service";
@@ -20,8 +20,8 @@ import {OrderService} from "../services/order.service";
 import {PurchasseOrderEffectService} from "../effects/order/purchasse-order-effect.service";
 import {RecipientsComponent} from "../recipients-edit/recipients/recipients.component";
 import {RemovalsComponent} from "../removals-edit/removals/removals.component";
-import {OptionComponent} from "../shared/forms/form/option/option.component";
-import {InfoComponent} from "../shared/forms/form/info/info.component";
+import {OptionComponent} from "./forms/form/option/option.component";
+import {InfoComponent} from "./forms/form/info/info.component";
 import {OnBlurDirective} from "../shared/directives/on-blur.directive";
 
 @NgModule({
