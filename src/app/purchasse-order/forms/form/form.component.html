@@ -35,11 +35,6 @@
   <input type="text" formControlName="state" [readonly]="true">
   <input type="text" formControlName="phone" [readonly]="true">
 
-  <!--<div formGroupName="infos">-->
-    <!--<input  (blur)="emitDataInfos()" type="text" formControlName="info1" >-->
-    <!--<input  (blur)="emitDataInfos()" type="text" formControlName="info2">-->
-  <!--</div>-->
-
   <app-info
     [formGroup]="formGroup.get('infos')"
     (updateDataFormInfosFromChild)="updateDataFormInfosFromChild($event)"

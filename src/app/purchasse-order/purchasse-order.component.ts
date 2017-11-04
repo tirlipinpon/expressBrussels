@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
@@ -18,9 +18,8 @@ import {PurchasseOrder} from "../models/PurchasseOrder";
   templateUrl: './purchasse-order.component.html',
   styleUrls: ['./purchasse-order.component.css']
 })
-export class PurchasseOrderComponent implements OnInit {
+export class PurchasseOrderComponent implements OnInit, OnDestroy {
 
-  googleApiKey = "AIzaSyCrX3-prCSV5ilithphw0ECuWIlFuiASm4"
   customer$: Observable<DataForm>;
   removals$: Observable<DataForm[]>;
   recipients$: Observable<DataForm[]>;
@@ -30,6 +29,10 @@ export class PurchasseOrderComponent implements OnInit {
   formRemoval: FormGroup;
   formRecipient: FormGroup;
   formOptions: FormGroup;
+
+  private valueRemovalChanges$;
+  private valueRecipientChanges$;
+  private valueOptionsChanges$;
 
   customer: any;
   customerId = 1;
@@ -55,22 +58,29 @@ export class PurchasseOrderComponent implements OnInit {
     // this.store.dispatch(new OrderActions.InitOrder(this.customerId));
     this.store.dispatch(new RemovalActions.GetRemovals(this.customerId*10+1)); // (id + type)  eg: id = 69; type=1 fk_type=691
     this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10+2)); // (id + type)  eg: id = 69; type=2 fk_type=692
+
+    this.onValueOrderChanged();
+  }
+  ngOnDestroy(){
+    this.valueRemovalChanges$.unsubscribe();
+    this.valueRecipientChanges$.unsubscribe();
+    this.valueOptionsChanges$.unsubscribe();
   }
 
+  onValueOrderChanged() {
+    this.valueRemovalChanges$ = this.formRemoval.get('id').valueChanges.subscribe(val => {
+      this.store.dispatch(new OrderActions.EditOrderRemoval(val));
+    });
+    this.valueRecipientChanges$ = this.formRecipient.get('id').valueChanges.subscribe(val => {
+      this.store.dispatch(new OrderActions.EditOrderRecipient(val));
+    });
+    this.valueOptionsChanges$ = this.formOptions.valueChanges.subscribe(val => {
+      this.store.dispatch(new OrderActions.EditOrderOption(val));
+    });
+  }
   onValueCustomerUpdated(data: DataForm): void {
     console.log('on customer value  changed: ', data);
     this.store.dispatch(new CustomerActions.EditCustomer(data));
-  }
-
-  onValueOrderRemovalUpdated(data: number): void {
-    console.log('on order removal id changed: ', data);
-    this.store.dispatch(new OrderActions.EditOrderRemoval(data));
-    // this.store.dispatch(new OrderActions.EditOrderRemovalInfos({info1:'',info2:''}));
-
-  }
-  onValueOrderRecipientUpdated(data: number): void {
-    console.log('on order  recipient id  changed: ', data);
-    this.store.dispatch(new OrderActions.EditOrderRecipient(data));
   }
   onValueOrderRemovalInfosUpdated(data: any): void {
     console.log('on infos removal value  changed: ', data);
@@ -79,10 +89,6 @@ export class PurchasseOrderComponent implements OnInit {
   onValueOrderRecipientInfosUpdated(data: any): void {
     console.log('on infos recipient value  changed: ', data);
     this.store.dispatch(new OrderActions.EditOrderRecipientInfos(data));
-  }
-  onValueOrderOptionsUpdated(data: PurchasseOrder): void {
-    console.log('on option value  changed: ', data);
-    this.store.dispatch(new OrderActions.EditOrderOption(data));
   }
 
   initFormsCustomer(): void {
@@ -164,7 +170,6 @@ export class PurchasseOrderComponent implements OnInit {
     // this.isformCompleted = 0;
     this.store.dispatch(new OrderActions.InitOrder(this.customerId));
   }
-
   recapOrder() {
     console.log("button order clicked");
   }

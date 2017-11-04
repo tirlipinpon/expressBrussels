@@ -40,15 +40,8 @@ export class FormComponent implements OnInit, OnDestroy {
   private valueChangesInfos$ = null;
 
   constructor() {}
-  ngOnInit() {
-    if(!this.isCustomer){
-      this.onChanges();
-    }
-  }
-  ngOnDestroy(){
-    if(this.valueChanges$){
-      this.valueChanges$.unsubscribe();
-    }
+  ngOnInit() {}
+  ngOnDestroy() {
     if(this.valueChangesInfos$){
       this.valueChangesInfos$.unsubscribe();
     }
@@ -78,20 +71,12 @@ export class FormComponent implements OnInit, OnDestroy {
 
   // for customer
   saveDataCustomer(): void {
-    console.log("-?- " + this.nameForm + ' button pushed for save data = ', this.formGroup.value);
+    // console.log("-?- " + this.nameForm + ' button pushed for save data = ', this.formGroup.value);
     this.updateDataForm.emit(this.formGroup.value);
   }
 
   updateDataFormInfosFromChild(data){
     this.updateDataFormInfos.emit(data)
-  }
-
-  // not for customer
-  onChanges(): void {
-    this.valueChanges$ = this.formGroup.get('id').valueChanges.subscribe(val => {
-      console.log("-?- " + this.nameForm +' selected  id = ', val);
-      this.updateDataForm.emit(val);
-    });
   }
 
   // auto completion

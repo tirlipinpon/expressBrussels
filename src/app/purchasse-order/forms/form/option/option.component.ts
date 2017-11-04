@@ -9,19 +9,10 @@ import {FormGroup} from "@angular/forms";
 export class OptionComponent implements OnInit {
 
   @Input('formGroup') formGroup: FormGroup;
-  @Output() updateDataForm = new EventEmitter<FormGroup>();
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-    this.formGroup.valueChanges.subscribe(val => {
-      this.saveData();
-    });
-  }
+  ngOnInit() {}
 
-  saveData(): void {
-    console.log('options changed = ', this.formGroup.value);
-    this.updateDataForm.emit(this.formGroup.value);
-  }
 
 }
