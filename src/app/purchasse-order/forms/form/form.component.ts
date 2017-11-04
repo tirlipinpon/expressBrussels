@@ -1,10 +1,6 @@
-import {
-  Component, OnInit, Input, Output, EventEmitter, OnDestroy, ViewChild
-} from '@angular/core';
-import { FormGroup} from "@angular/forms";
-import {DataForm} from "../../../models/DataForm";
-import {Observable} from "rxjs/Observable";
-import {InfoComponent} from "./info/info.component";
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { FormGroup } from "@angular/forms";
+import { DataForm } from "../../../models/DataForm";
 
 @Component({
   selector: 'app-form',
@@ -31,21 +27,16 @@ export class FormComponent implements OnInit, OnDestroy {
       }
     }
   }
+
   @Output() updateDataForm = new EventEmitter<FormGroup>();
   @Output() updateDataFormInfos = new EventEmitter<FormGroup>();
-  // private
+
   private showDropDown = false;
   private _user: DataForm[] = [];
-  private valueChanges$ = null;
-  private valueChangesInfos$ = null;
 
   constructor() {}
   ngOnInit() {}
-  ngOnDestroy() {
-    if(this.valueChangesInfos$){
-      this.valueChangesInfos$.unsubscribe();
-    }
-  }
+  ngOnDestroy() {}
 
   private _initData(data): void {
     console.log("init data : ", data);
@@ -68,17 +59,11 @@ export class FormComponent implements OnInit, OnDestroy {
       fk_type: data.fk_type
     });
   }
-
   // for customer
   saveDataCustomer(): void {
     // console.log("-?- " + this.nameForm + ' button pushed for save data = ', this.formGroup.value);
     this.updateDataForm.emit(this.formGroup.value);
   }
-
-  updateDataFormInfosFromChild(data){
-    this.updateDataFormInfos.emit(data)
-  }
-
   // auto completion
   toogleDropDown() {
     // console.log('toogleDropDown showDropDown = '+  this.showDropDown);
@@ -97,5 +82,4 @@ export class FormComponent implements OnInit, OnDestroy {
     let arrayWithElem = this._user.filter(elem => elem.name === value);
     return arrayWithElem[0];
   }
-
 }

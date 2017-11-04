@@ -35,13 +35,9 @@
   <input type="text" formControlName="state" [readonly]="true">
   <input type="text" formControlName="phone" [readonly]="true">
 
-  <app-info
-    [formGroup]="formGroup.get('infos')"
-    (updateDataFormInfosFromChild)="updateDataFormInfosFromChild($event)"
-  >
-  </app-info>
+  <app-info [formGroup]="formGroup.get('infos')"></app-info>
 
   <input type="text" formControlName="created" [readonly]="true">
   <input type="hidden" formControlName="fk_type" [readonly]="true">
-  <!--<button *ngIf="isCustomer" type="button" (click)="editCustomer()">save</button>-->
+
 </form>

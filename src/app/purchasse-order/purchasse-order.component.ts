@@ -33,6 +33,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
   private valueRemovalChanges$;
   private valueRecipientChanges$;
   private valueOptionsChanges$;
+  private valueRemovalInfosChanges$;
+  private valueRecipientInfosChanges$;
 
   customer: any;
   customerId = 1;
@@ -41,10 +43,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
   nameForm =['customer','removal','recipient']
 
   constructor(private store: Store<AppState>, private fb: FormBuilder) {
-    this.customer$ = this.store.select((s: AppState)=> s.customer);
-    this.removals$ = this.store.select('removals');
-    this.recipients$ = this.store.select('recipients');
-    this.order$ = this.store.select('currentPurchasseOrders');
+    this.storeSelect();
 
     this.initFormsCustomer();
     this.initFormsRemoval();
@@ -53,20 +52,31 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    //this.store.dispatch({type: CustomerActions.GET_CUSTOMER, payload: this.customerId });
-    this.store.dispatch(new CustomerActions.GetCustomer(this.customerId));
-    // this.store.dispatch(new OrderActions.InitOrder(this.customerId));
-    this.store.dispatch(new RemovalActions.GetRemovals(this.customerId*10+1)); // (id + type)  eg: id = 69; type=1 fk_type=691
-    this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10+2)); // (id + type)  eg: id = 69; type=2 fk_type=692
-
+    this.storeDispatch();
     this.onValueOrderChanged();
   }
   ngOnDestroy(){
     this.valueRemovalChanges$.unsubscribe();
     this.valueRecipientChanges$.unsubscribe();
     this.valueOptionsChanges$.unsubscribe();
+    this.valueRemovalInfosChanges$.unsubscribe();
+    this.valueRecipientInfosChanges$.unsubscribe();
   }
 
+  storeSelect(){
+    this.customer$ = this.store.select((s: AppState)=> s.customer);
+    this.removals$ = this.store.select('removals');
+    this.recipients$ = this.store.select('recipients');
+    this.order$ = this.store.select('currentPurchasseOrders');
+  }
+  storeDispatch() {
+    //this.store.dispatch({type: CustomerActions.GET_CUSTOMER, payload: this.customerId });
+    this.store.dispatch(new CustomerActions.GetCustomer(this.customerId));
+    // this.store.dispatch(new OrderActions.InitOrder(this.customerId));
+    this.store.dispatch(new RemovalActions.GetRemovals(this.customerId*10+1)); // (id + type)  eg: id = 69; type=1 fk_type=691
+    this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10+2)); // (id + type)  eg: id = 69; type=2 fk_type=692
+
+  }
   onValueOrderChanged() {
     this.valueRemovalChanges$ = this.formRemoval.get('id').valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderRemoval(val));
@@ -77,18 +87,16 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
     this.valueOptionsChanges$ = this.formOptions.valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderOption(val));
     });
+    this.valueRemovalInfosChanges$ = this.formRemoval.get('infos').valueChanges.subscribe(val => {
+      this.store.dispatch(new OrderActions.EditOrderRemovalInfos(val));
+    });
+    this.valueRecipientInfosChanges$ = this.formRecipient.get('infos').valueChanges.subscribe(val => {
+      this.store.dispatch(new OrderActions.EditOrderRecipientInfos(val));
+    });
   }
   onValueCustomerUpdated(data: DataForm): void {
     console.log('on customer value  changed: ', data);
     this.store.dispatch(new CustomerActions.EditCustomer(data));
-  }
-  onValueOrderRemovalInfosUpdated(data: any): void {
-    console.log('on infos removal value  changed: ', data);
-    this.store.dispatch(new OrderActions.EditOrderRemovalInfos(data));
-  }
-  onValueOrderRecipientInfosUpdated(data: any): void {
-    console.log('on infos recipient value  changed: ', data);
-    this.store.dispatch(new OrderActions.EditOrderRecipientInfos(data));
   }
 
   initFormsCustomer(): void {
@@ -101,8 +109,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
       state: ['', Validators.required],
       phone: ['', Validators.required],
       infos: this.fb.group({
-        info1: ['', [Validators.required]],
-        info2: ['', [Validators.required]],
+        info1: ['', { updateOn: 'blur', validators: [Validators.required]} ],
+        info2: ['', { updateOn: 'blur', validators: [Validators.required]} ],
       }),
       type: ['', Validators.required],
       fk_client: ['', Validators.required],
@@ -121,8 +129,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
       state: ['', Validators.required],
       phone: ['', Validators.required],
       infos: this.fb.group({
-        info1: ['', [Validators.required]],
-        info2: ['', [Validators.required]],
+        info1: ['', { updateOn: 'blur', validators: [Validators.required]} ],
+        info2: ['', { updateOn: 'blur', validators: [Validators.required]} ],
       }),
       type: ['', Validators.required],
       fk_client: ['', Validators.required],
@@ -141,8 +149,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
       state: ['', Validators.required],
       phone: ['', Validators.required],
       infos: this.fb.group({
-        info1: ['', [Validators.required]],
-        info2: ['', [Validators.required]],
+        info1: ['', { updateOn: 'blur', validators: [Validators.required]} ],
+        info2: ['', { updateOn: 'blur', validators: [Validators.required]} ],
       }),
       type: ['', Validators.required],
       fk_client: ['', Validators.required],
