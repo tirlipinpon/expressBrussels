@@ -52,10 +52,10 @@ export function removalReducer(state: DataForm[], action: ActionRemoval): DataFo
   switch (action.type) {
     case RemovalActions.GET_REMOVALS_SUCCESS:
       console.log('in removal reducer getRemoval payload = ',action.payload);
-      return {...state, ...action.payload};
+      return Object.assign({}, state, action.payload ); //{...state, ...action.payload};
     case RemovalActions.EDIT_REMOVAL_SUCCESS:
       // console.log('in customer reducer editCustomer payload = ',action.payload);
-      return {...state, ...action.payload}; //Object.assign({}, state, action.payload );
+      return Object.assign({}, state, action.payload ); // {...state, ...action.payload};
     // case CustomerActions.VALID_CUSTOMER:
     //   return state;
     default:
@@ -71,7 +71,7 @@ export function recipientReducer(state: DataForm[], action: ActionRecipient): Da
       return {...state, ...action.payload};
     case RecipientActions.EDIT_RECIPIENT_SUCCESS:
       // console.log('in customer reducer editCustomer payload = ',action.payload);
-      return {...state, ...action.payload}; //Object.assign({}, state, action.payload );
+      return Object.assign({}, state, action.payload ); //{...state, ...action.payload}; //
     // case CustomerActions.VALID_CUSTOMER:
     //   return state;
     default:
