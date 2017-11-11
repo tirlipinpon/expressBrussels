@@ -1,4 +1,6 @@
 import {Component, OnInit} from '@angular/core';
+import {NotificationService} from "./services/notification.service";
+
 
 @Component({
   selector: 'app-root',
@@ -10,6 +12,7 @@ export class AppComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(){}
+  ngOnInit() { }
+
 
 }

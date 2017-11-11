@@ -9,6 +9,7 @@ import 'rxjs/add/operator/withLatestFrom';
 
 import * as OrderActions  from '../../actions/purchasseOrder.actions';
 import {PurchasseOrder} from "../../models/PurchasseOrder";
+import {NotificationService} from "../../services/notification.service";
 
 @Injectable()
 export class PurchasseOrderEffectService {
@@ -18,7 +19,8 @@ export class PurchasseOrderEffectService {
   constructor(
     private store: Store<AppState>,
     private action$: Actions,
-    private orderService: OrderService) {
+    private orderService: OrderService,
+    private notificationsService: NotificationService) {
     this.order$ = store.select('order');
   }
 
@@ -77,15 +79,15 @@ export class PurchasseOrderEffectService {
     .switchMap(action =>
       this.orderService.saveOrder(action[1])
         .map((payload) => {
-          console.log('in effect Save Order retrieved data from service =', payload);
+          // console.log('in effect Save Order retrieved data from service =', payload);
+          this.notificationsService.notify('success', 'some alert', payload.message);
           return new OrderActions.SaveOrderSuccess(payload);
         })
         .catch(err => {
-          console.log('error in effect SAVE order with error -> ',err);
+          // console.log('error in effect SAVE order with error -> ',err);
+          this.notificationsService.notify('error', 'some alert', err);
           return Observable.of(new OrderActions.SaveOrderFail(err))
         })
     );
-
-
 
 }

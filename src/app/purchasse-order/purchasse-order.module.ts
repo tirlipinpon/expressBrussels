@@ -23,6 +23,8 @@ import {RemovalsComponent} from "../removals-edit/removals/removals.component";
 import {OptionComponent} from "./forms/form/option/option.component";
 import {InfoComponent} from "./forms/form/info/info.component";
 import {OnBlurDirective} from "../shared/directives/on-blur.directive";
+import {NotificationComponent} from "../shared/components/notification/notification.component";
+import {GrowlModule} from "primeng/components/growl/growl";
 
 @NgModule({
   imports: [
@@ -48,7 +50,7 @@ import {OnBlurDirective} from "../shared/directives/on-blur.directive";
     })
   ],
   exports: [
-    PurchasseOrderComponent
+
   ],
   declarations: [
     PurchasseOrderComponent,
@@ -60,7 +62,6 @@ import {OnBlurDirective} from "../shared/directives/on-blur.directive";
     RemovalsComponent,
     OptionComponent,
     InfoComponent
-
   ],
   providers: [],
 })

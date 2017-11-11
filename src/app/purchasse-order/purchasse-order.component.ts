@@ -12,6 +12,7 @@ import 'rxjs/add/operator/map';
 import {AppState} from "../shared/appState";
 import {FormBuilder, Validators, FormGroup} from "@angular/forms";
 import {PurchasseOrder} from "../models/PurchasseOrder";
+import {NotificationService} from "../services/notification.service";
 
 @Component({
   selector: 'app-purchasse-order',
@@ -41,7 +42,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
   datas: any;
   nameForm = ['customer','removal','recipient'];
 
-  constructor(private store: Store<AppState>, private fb: FormBuilder) {
+  constructor(private store: Store<AppState>, private fb: FormBuilder, private notificationsService: NotificationService) {
     this.storeSelect();
 
     this.initFormsCustomer();
@@ -181,13 +182,28 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
   recapOrder() {
 
     this.store.dispatch(new OrderActions.SaveOrder());
-
+    this.notificationsService.notify('info', 'some component', 'ngOnInit was called!');
     // let orderSave$ = this.store.select((s: AppState) => s.order).subscribe(s =>   {
     //   console.log("-----------",s);
     //   this.store.dispatch(new OrderActions.SaveOrder(s));
     //   // orderSave$.unsubscribe();
     // });
     //   //
+  }
+
+  success() {
+    this.notificationsService.notify('success', 'some alert', 'push was called!');
+  }
+
+  info() {
+    this.notificationsService.notify('info', 'some alert', 'push was called!');
+  }
+  warn() {
+    this.notificationsService.notify('warn', 'some alert', 'push was called!');
+  }
+
+  error() {
+    this.notificationsService.notify('error', 'some alert', 'push was called!');
   }
 
 }

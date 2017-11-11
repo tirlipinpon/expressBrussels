@@ -1,1 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
+.ui-growl-image-info {color: #03A9F4}
+.ui-growl-image-warn {color: #F9BF08}
+.ui-growl-image-error {color: #F03369}
+.ui-growl-image-info + .ui-growl-message { color: #03A9F4 !important; }
+.ui-growl-image-warn + .ui-growl-message { color: #F9BF08 !important; }
+.ui-growl-image-error + .ui-growl-message { color: #F03369 !important; }

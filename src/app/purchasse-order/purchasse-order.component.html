@@ -1,3 +1,8 @@
+<button type="button" (click)="success()">success</button>
+<button type="button" (click)="info()">info</button>
+<button type="button" (click)="warn()">warn</button>
+<button type="button" (click)="error()">error</button>
+
 <div class="conatinerFormData">
 
   <app-form
@@ -35,5 +40,7 @@
   <button *ngIf="isFormsValide()" (click)="recapOrder()">Send order </button>
 
 </div>
+
+
 
 
