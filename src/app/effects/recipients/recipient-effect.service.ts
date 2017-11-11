@@ -13,8 +13,7 @@ export class RecipientEffectService {
     private action$: Actions,
     private removalService: RemovalService) { }
 
-  @Effect()
-  getRecipients: Observable<Action> = this.action$
+  @Effect() getRecipients: Observable<Action> = this.action$
     .ofType(RecipientActions.GET_RECIPIENTS)
     .switchMap(action =>
       this.removalService.getRemovals(action)
@@ -29,8 +28,7 @@ export class RecipientEffectService {
         })
     );
 
-  @Effect()
-  editRecipient: Observable<Action> = this.action$
+  @Effect() editRecipient: Observable<Action> = this.action$
     .ofType(RecipientActions.EDIT_RECIPIENT)
     .switchMap(action =>
       this.removalService.setRemoval(action)

@@ -5,5 +5,5 @@ export interface AppState {
   customer: DataForm;
   removals: DataForm[];
   recipients: DataForm[];
-  currentPurchasseOrders: PurchasseOrder;
+  order: PurchasseOrder;
 }

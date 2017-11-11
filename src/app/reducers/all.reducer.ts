@@ -120,8 +120,8 @@ export function purchasseOrderReducer(state: PurchasseOrder = orderInitOrder, ac
       });
 
     case PurchasseOrderActions.SAVE_ORDER_SUCCESS:
-      console.log('in order reducer saveOrder payload = ',action.payload);
-      return {...state, ...action.payload};
+      console.log('in order reducer saveOrder payload = ', action.payload);
+      return state;
 
     default:
       return state;

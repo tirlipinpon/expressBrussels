@@ -10,7 +10,7 @@ import * as OrderActions  from '../actions/purchasseOrder.actions';
 import { DataForm }from '../models/DataForm';
 import 'rxjs/add/operator/map';
 import {AppState} from "../shared/appState";
-import {FormBuilder, Validators, Form, FormGroup} from "@angular/forms";
+import {FormBuilder, Validators, FormGroup} from "@angular/forms";
 import {PurchasseOrder} from "../models/PurchasseOrder";
 
 @Component({
@@ -39,8 +39,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
   customer: any;
   customerId = 1;
   datas: any;
-
-  nameForm =['customer','removal','recipient']
+  nameForm = ['customer','removal','recipient'];
 
   constructor(private store: Store<AppState>, private fb: FormBuilder) {
     this.storeSelect();
@@ -64,10 +63,10 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
   }
 
   storeSelect(){
-    this.customer$ = this.store.select((s: AppState)=> s.customer);
+    this.customer$ = this.store.select((s: AppState) => s.customer);
     this.removals$ = this.store.select('removals');
     this.recipients$ = this.store.select('recipients');
-    this.order$ = this.store.select('currentPurchasseOrders');
+    this.order$ = this.store.select('order');
   }
   storeDispatch() {
     //this.store.dispatch({type: CustomerActions.GET_CUSTOMER, payload: this.customerId });
@@ -76,6 +75,11 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
     this.store.dispatch(new RemovalActions.GetRemovals(this.customerId*10+1)); // (id + type)  eg: id = 69; type=1 fk_type=691
     this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10+2)); // (id + type)  eg: id = 69; type=2 fk_type=692
 
+  }
+
+  onValueCustomerUpdated(data: DataForm): void {
+    // console.log('on customer value  changed: ', data);
+    this.store.dispatch(new CustomerActions.EditCustomer(data));
   }
   onValueOrderChanged() {
     this.valueRemovalChanges$ = this.formRemoval.get('id').valueChanges.subscribe(val => {
@@ -93,10 +97,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
     this.valueRecipientInfosChanges$ = this.formRecipient.get('infos').valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderRecipientInfos(val));
     });
-  }
-  onValueCustomerUpdated(data: DataForm): void {
-    console.log('on customer value  changed: ', data);
-    this.store.dispatch(new CustomerActions.EditCustomer(data));
   }
 
   initFormsCustomer(): void {
@@ -170,7 +170,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
     // console.log("canDeactivate : is form Completed:" +this.isformCompleted);
     return  !this.formRemoval.dirty && !this.formRecipient.dirty;
   }
-  isFormsValide(): boolean{
+  isFormsValide(): boolean {
     return  this.formRemoval.valid && this.formRecipient.valid;
   }
   resetOrder(){
@@ -179,7 +179,15 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
     this.store.dispatch(new OrderActions.InitOrder(this.customerId));
   }
   recapOrder() {
-    console.log("button order clicked");
+
+    this.store.dispatch(new OrderActions.SaveOrder());
+
+    // let orderSave$ = this.store.select((s: AppState) => s.order).subscribe(s =>   {
+    //   console.log("-----------",s);
+    //   this.store.dispatch(new OrderActions.SaveOrder(s));
+    //   // orderSave$.unsubscribe();
+    // });
+    //   //
   }
 
 }

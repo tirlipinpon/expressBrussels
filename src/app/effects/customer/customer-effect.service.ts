@@ -14,8 +14,7 @@ export class CustomerEffectService {
     private action$: Actions,
     private customerService: CustomerService) { }
 
-  @Effect()
-  getCustomer$: Observable<Action> = this.action$
+  @Effect() getCustomer$: Observable<Action> = this.action$
     .ofType(CustomerActions.GET_CUSTOMER)
     .switchMap(action =>
       this.customerService.getCustomer(action)
@@ -28,8 +27,7 @@ export class CustomerEffectService {
         })
     );
 
-  @Effect()
-  editCustomer$: Observable<Action> = this.action$
+  @Effect() editCustomer$: Observable<Action> = this.action$
     .ofType(CustomerActions.EDIT_CUSTOMER)
     .switchMap(action =>
       this.customerService.setCustomer(action)

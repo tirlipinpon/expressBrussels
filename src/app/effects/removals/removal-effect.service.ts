@@ -17,8 +17,7 @@ export class RemovalEffectService {
     private action$: Actions,
     private removalService: RemovalService) { }
 
-  @Effect()
-  getRemovals: Observable<Action> = this.action$
+  @Effect() getRemovals: Observable<Action> = this.action$
     .ofType(RemovalActions.GET_REMOVALS)
     .switchMap(action =>
       this.removalService.getRemovals(action)
@@ -33,8 +32,7 @@ export class RemovalEffectService {
         })
     );
 
-  @Effect()
-  editRemoval: Observable<Action> = this.action$
+  @Effect() editRemoval: Observable<Action> = this.action$
     .ofType(RemovalActions.EDIT_REMOVAL)
     .switchMap(action =>
       this.removalService.setRemoval(action)
