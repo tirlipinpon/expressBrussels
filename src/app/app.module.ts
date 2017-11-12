@@ -15,11 +15,8 @@ import { OnBlurDirective } from './shared/directives/on-blur.directive';
 import {CustomerService} from "./services/customer.service";
 import {OrderService} from "./services/order.service";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {GrowlModule} from "primeng/components/growl/growl";
 import {MessageService} from "primeng/components/common/messageservice";
-import { NotificationComponent } from './shared/components/notification/notification.component';
 import {NotificationService} from "./services/notification.service";
-
 import { CommonModule } from '@angular/common';
 import {SharedModule} from "./shared/shared.module";
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, OnDestroy  } from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Subscription} from "rxjs/Subscription";
 import {Message} from "primeng/components/common/message";
 import {NotificationService} from "../../../services/notification.service";
@@ -12,24 +12,25 @@ import {MessageService} from "primeng/components/common/messageservice";
 })
 export class NotificationComponent implements OnInit, OnDestroy {
   msgs: Message[] = [];
-  subscription: Subscription;
+  subscription$: Subscription;
+  type: string;
 
   constructor(private notificationsService: NotificationService, private messageService: MessageService) { }
 
   ngOnInit() {
-    this.subscribeToNotifications();
-  }
-  subscribeToNotifications() {
-    this.subscription = this.notificationsService.notificationChange
+    this.subscription$ = this.notificationsService.notificationChange
       .subscribe(notification => {
-        console.log('notification:', notification);
-        // this.msgs.length = 0;
+        // console.log('notification:', notification);
+        this.msgs.length = 0;
+        this.type = notification.severity;
         this.messageService.add(notification);
       });
+
   }
 
+
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.subscription$.unsubscribe();
   }
 
 }

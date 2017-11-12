@@ -19,7 +19,6 @@
     [datas]="removals$ | async"
     [isCustomer]="false"
     [formGroup]="formRemoval"
-    (updateDataFormInfos)="onValueOrderRemovalInfosUpdated($event)"
   >
   </app-form>
 
@@ -28,7 +27,6 @@
     [datas]="recipients$ | async"
     [isCustomer]="false"
     [formGroup]="formRecipient"
-    (updateDataFormInfos)="onValueOrderRecipientInfosUpdated($event)"
   >
   </app-form>
 

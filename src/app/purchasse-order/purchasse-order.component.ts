@@ -180,9 +180,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
     this.store.dispatch(new OrderActions.InitOrder(this.customerId));
   }
   recapOrder() {
-
     this.store.dispatch(new OrderActions.SaveOrder());
-    this.notificationsService.notify('info', 'some component', 'ngOnInit was called!');
     // let orderSave$ = this.store.select((s: AppState) => s.order).subscribe(s =>   {
     //   console.log("-----------",s);
     //   this.store.dispatch(new OrderActions.SaveOrder(s));

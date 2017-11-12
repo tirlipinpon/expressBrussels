@@ -10,7 +10,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "sme": "./node_modules/.bin/source-map-explorer",
-    "buildOptim": "ng build --prod --build-optimizer -sm"
+    "buildOptim": "ng build --prod --base-href=http://teatime.be/expressbrussels/dist/ --build-optimizer -sm  "
   },
   "private": true,
   "dependencies": {

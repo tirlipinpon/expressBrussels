@@ -4,8 +4,8 @@ import {NotificationComponent} from "./components/notification/notification.comp
 import {GrowlModule} from "primeng/components/growl/growl";
 
 @NgModule({
-  imports: [CommonModule,GrowlModule],
-  exports: [CommonModule, GrowlModule,NotificationComponent],
+  imports: [CommonModule, GrowlModule],
+  exports: [ GrowlModule,NotificationComponent],
   declarations: [NotificationComponent],
   providers: []
 })
