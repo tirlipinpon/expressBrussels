@@ -8,7 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {customerReducer, removalReducer, recipientReducer, purchasseOrderReducer} from "../reducers/all.reducer";
 
 import { PurchasseOrderComponent } from './purchasse-order.component';
-import {FormComponent} from "./forms/form/form.component";
+import {FormComponent} from "../shared/components/form/form.component";
 import {DropDownDirective} from "../shared/directives/drop-down.directive";
 import {SearchFilterPipe} from "../shared/pipe/search-filter.pipe";
 import {CustomerService} from "../services/customer.service";
@@ -20,11 +20,12 @@ import {OrderService} from "../services/order.service";
 import {PurchasseOrderEffectService} from "../effects/order/purchasse-order-effect.service";
 import {RecipientsComponent} from "../recipients-edit/recipients/recipients.component";
 import {RemovalsComponent} from "../removals-edit/removals/removals.component";
-import {OptionComponent} from "./forms/form/option/option.component";
-import {InfoComponent} from "./forms/form/info/info.component";
+import {OptionComponent} from "../shared/components/form/option/option.component";
+import {InfoComponent} from "../shared/components/form/info/info.component";
 import {OnBlurDirective} from "../shared/directives/on-blur.directive";
-import {NotificationComponent} from "../shared/components/notification/notification.component";
-import {GrowlModule} from "primeng/components/growl/growl";
+import {SharedModule} from "../shared/shared.module";
+import {CommonModule} from "@angular/common";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 @NgModule({
   imports: [
@@ -32,6 +33,10 @@ import {GrowlModule} from "primeng/components/growl/growl";
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    BrowserAnimationsModule,
+    CommonModule,
+
+    SharedModule,
     EffectsModule.forRoot([
       CustomerService,
       RemovalService,
@@ -54,14 +59,9 @@ import {GrowlModule} from "primeng/components/growl/growl";
   ],
   declarations: [
     PurchasseOrderComponent,
-    FormComponent,
-    DropDownDirective,
-    OnBlurDirective,
-    SearchFilterPipe,
     RecipientsComponent,
     RemovalsComponent,
-    OptionComponent,
-    InfoComponent
+
   ],
   providers: [],
 })

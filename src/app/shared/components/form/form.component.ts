@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormGroup } from "@angular/forms";
-import { DataForm } from "../../../models/DataForm";
+import {DataForm} from "../../../models/DataForm";
+
 
 @Component({
   selector: 'app-form',
@@ -29,7 +30,6 @@ export class FormComponent implements OnInit, OnDestroy {
   }
 
   @Output() updateDataForm = new EventEmitter<FormGroup>();
-  @Output() updateDataFormInfos = new EventEmitter<FormGroup>();
 
   private showDropDown = false;
   private _user: DataForm[] = [];

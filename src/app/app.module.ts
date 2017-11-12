@@ -19,6 +19,7 @@ import {MessageService} from "primeng/components/common/messageservice";
 import {NotificationService} from "./services/notification.service";
 import { CommonModule } from '@angular/common';
 import {SharedModule} from "./shared/shared.module";
+import {HttpClientModule} from "@angular/common/http";
 
 
 
@@ -38,11 +39,15 @@ const appRoutes: Routes = [
   exports: [ AppComponent ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    CommonModule,
+
     PurchasseModule,
     SharedModule,
+
     RouterModule.forRoot(
       appRoutes,
       {useHash: true}
