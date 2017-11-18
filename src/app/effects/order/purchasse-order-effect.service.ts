@@ -1,27 +1,26 @@
 import { Injectable } from '@angular/core';
 import {Actions, Effect } from "@ngrx/effects";
-import {OrderService} from "../../services/order.service";
 import {Observable} from "rxjs/Observable";
 import {Action, Store} from "@ngrx/store";
+
 import {AppState} from "../../shared/appState";
+import {PurchasseOrder} from "../../models/PurchasseOrder";
+import {OrderService} from "../../services/order.service";
+import {NotificationService} from "../../services/notification.service";
+
 import 'rxjs/add/operator/mergeMap'
 import 'rxjs/add/operator/withLatestFrom';
 
 import * as OrderActions  from '../../actions/purchasseOrder.actions';
-import {PurchasseOrder} from "../../models/PurchasseOrder";
-import {NotificationService} from "../../services/notification.service";
 
 @Injectable()
 export class PurchasseOrderEffectService {
-
-  order$: Observable<PurchasseOrder>;
 
   constructor(
     private store: Store<AppState>,
     private action$: Actions,
     private orderService: OrderService,
     private notificationsService: NotificationService) {
-    this.order$ = store.select('order');
   }
 
   // @Effect()

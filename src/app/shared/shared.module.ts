@@ -13,6 +13,8 @@ import {InfoComponent} from "./components/form/info/info.component";
 import {OnBlurDirective} from "./directives/on-blur.directive";
 import {DropDownDirective} from "./directives/drop-down.directive";
 import {FormComponent} from "./components/form/form.component";
+import { ProfileComponent } from './components/profile/profile.component';
+import {DialogModule} from "primeng/components/dialog/dialog";
 
 
 @NgModule({
@@ -25,12 +27,15 @@ import {FormComponent} from "./components/form/form.component";
     BrowserAnimationsModule,
 
     CommonModule,
-    GrowlModule],
+    GrowlModule,
+    DialogModule
+  ],
   exports: [
     GrowlModule,
     NotificationComponent,
     FormComponent,
-    OptionComponent
+    OptionComponent,
+    ProfileComponent
   ],
   declarations: [
     NotificationComponent,
@@ -40,7 +45,9 @@ import {FormComponent} from "./components/form/form.component";
     OnBlurDirective,
     InfoComponent,
     OptionComponent,
-    SearchFilterPipe
+    SearchFilterPipe,
+    ProfileComponent,
+
   ],
   providers: []
 })

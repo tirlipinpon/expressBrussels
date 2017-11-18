@@ -1,21 +1,12 @@
-<button type="button" (click)="success()">success</button>
-<button type="button" (click)="info()">info</button>
-<button type="button" (click)="warn()">warn</button>
-<button type="button" (click)="error()">error</button>
+<!--<button type="button" (click)="success()">success</button>-->
+<!--<button type="button" (click)="info()">info</button>-->
+<!--<button type="button" (click)="warn()">warn</button>-->
+<!--<button type="button" (click)="error()">error</button>-->
 
 <div class="conatinerFormData">
 
-  <!--<app-form-->
-    <!--[nameForm]="nameForm[0]"-->
-    <!--[datas]="customer$ | async"-->
-    <!--[isCustomer]="true"-->
-    <!--[formGroup]="formCustomer"-->
-    <!--(updateDataForm)="onValueCustomerUpdated($event)"-->
-  <!--&gt;-->
-  <!--</app-form>-->
-
   <app-form
-    [nameForm]="nameForm[1]"
+    [nameForm]="nameForm[0]"
     [datas]="removals$ | async"
     [isCustomer]="false"
     [formGroup]="formRemoval"
@@ -23,7 +14,7 @@
   </app-form>
 
   <app-form
-    [nameForm]="nameForm[2]"
+    [nameForm]="nameForm[1]"
     [datas]="recipients$ | async"
     [isCustomer]="false"
     [formGroup]="formRecipient"

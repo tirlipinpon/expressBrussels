@@ -21,10 +21,11 @@ export class CustomerEffectService {
     .switchMap(action =>
       this.customerService.getCustomer(action)
         .map((payload) => {
-        return new CustomerActions.GetCustomerSuccess(payload);
+          this.notificationsService.notify('info', 'get customer', 'data ok');
+          return new CustomerActions.GetCustomerSuccess(payload);
       })
         .catch(err => {
-          console.log('error in effect get customer');
+          this.notificationsService.notify('error', 'Get customers', err);
           return Observable.of(new CustomerActions.GetCustomerFail(err))
         })
     );
@@ -35,7 +36,7 @@ export class CustomerEffectService {
       this.customerService.setCustomer(action)
         .map((payload) => {
           // console.log('in effect EDIT Customer retrieved data from service =', payload);
-          this.notificationsService.notify('info', 'some alert', 'data custome saved');
+          this.notificationsService.notify('success', 'some alert', 'data custome saved');
           return new CustomerActions.EditCustomerSuccess(payload);
         })
         .catch(err => {

@@ -2,15 +2,16 @@ import * as CustomerActions  from '../actions/customer.actions';
 import * as RemovalActions  from '../actions/removal.actions';
 import * as RecipientActions  from '../actions/recipient.actions';
 import * as PurchasseOrderActions  from '../actions/purchasseOrder.actions';
+import * as OrdersActions from '../actions/orders.actions';
 
 import {DataForm} from "../models/DataForm";
 import {PurchasseOrder} from "../models/PurchasseOrder";
-import {NotificationService} from "../services/notification.service";
 
 export type ActionCustomer = CustomerActions.All;
 export type ActionRemoval = RemovalActions.All;
 export type ActionRecipient = RecipientActions.All;
 export type ActionPurchasseOrder = PurchasseOrderActions.All;
+export type ActionOrders = OrdersActions.All;
 
 const orderInitOrder: PurchasseOrder =
     {
@@ -128,4 +129,15 @@ export function purchasseOrderReducer(state: PurchasseOrder = orderInitOrder, ac
       return state;
   }
 
+}
+
+export function ordersReducer(state: PurchasseOrder[], action: ActionOrders): PurchasseOrder[] {
+  switch(action.type){
+    case OrdersActions.GET_ORDERS_SUCCESS:
+      // console.log('in orders reducer get orders by fk_customer_id',action.payload);
+      return Object.assign({}, state, action.payload);
+      // return [...state, ...action.payload];
+    default:
+      return state;
+  }
 }

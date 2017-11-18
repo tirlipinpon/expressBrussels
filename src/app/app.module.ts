@@ -20,21 +20,34 @@ import {NotificationService} from "./services/notification.service";
 import { CommonModule } from '@angular/common';
 import {SharedModule} from "./shared/shared.module";
 import {HttpClientModule} from "@angular/common/http";
+import {RecipientsEditModule} from "./recipients-edit/recipients-edit.module";
+import {RemovalsEditModule} from "./removals-edit/removals-edit.module";
+import {StoreModule} from "@ngrx/store";
+import {CustomerEffectService} from "./effects/customer/customer-effect.service";
+import {EffectsModule} from "@ngrx/effects";
+import {PurchasseOrderEffectService} from "./effects/order/purchasse-order-effect.service";
+import {RemovalEffectService} from "./effects/removals/removal-effect.service";
+import {RemovalService} from "./services/removal.service";
+import {RecipientEffectService} from "./effects/recipients/recipient-effect.service";
 
-
+import {customerReducer, removalReducer, recipientReducer, purchasseOrderReducer, ordersReducer} from "./reducers/all.reducer";
+import { OrdersComponent } from './orders/orders.component';
+import {OrdersEffectService} from "./effects/orders/orders-effect.service";
 
 const appRoutes: Routes = [
   { path: '', redirectTo: 'order', pathMatch: 'full'},
   { path: 'order',                component: PurchasseOrderComponent,canActivate: [AlwaysAuthGuardService], canDeactivate: [UnsearchedTermGuard] },
+  { path: 'orders',               component: OrdersComponent,canActivate: [AlwaysAuthGuardService] },
   { path: 'removals',             component: RemovalsComponent, canActivate: [AlwaysAuthGuardService],},
   { path: 'recipients',           component: RecipientsComponent, canActivate: [AlwaysAuthGuardService],},
-  { path: '**',                    component: PurchasseOrderComponent, canActivate: [AlwaysAuthGuardService],}
+  { path: '**',                   component: PurchasseOrderComponent, canActivate: [AlwaysAuthGuardService],}
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
-    SortByValuePipe
+    SortByValuePipe,
+    OrdersComponent
   ],
   exports: [ AppComponent ],
   imports: [
@@ -46,7 +59,29 @@ const appRoutes: Routes = [
     CommonModule,
 
     PurchasseModule,
+    RecipientsEditModule,
+    RemovalsEditModule,
     SharedModule,
+
+    EffectsModule.forRoot([
+      CustomerService,
+      RemovalService,
+      OrderService, // + orders
+
+      RecipientEffectService,
+      CustomerEffectService,
+      RemovalEffectService,
+      PurchasseOrderEffectService,
+      OrdersEffectService
+    ]),
+    // StoreModule.forFeature('todo', customerReducer)
+    StoreModule.forRoot({
+      customer: customerReducer,
+      removals: removalReducer,
+      recipients: recipientReducer,
+      order: purchasseOrderReducer,
+      orders: ordersReducer
+    }),
 
     RouterModule.forRoot(
       appRoutes,
