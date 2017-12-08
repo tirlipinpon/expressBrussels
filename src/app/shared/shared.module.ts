@@ -15,6 +15,8 @@ import {DropDownDirective} from "./directives/drop-down.directive";
 import {FormComponent} from "./components/form/form.component";
 import { ProfileComponent } from './components/profile/profile.component';
 import {DialogModule} from "primeng/components/dialog/dialog";
+import {ConfirmDialogModule} from "primeng/components/confirmdialog/confirmdialog";
+import {ConfirmationService} from "primeng/components/common/confirmationservice";
 
 
 @NgModule({
@@ -28,14 +30,16 @@ import {DialogModule} from "primeng/components/dialog/dialog";
 
     CommonModule,
     GrowlModule,
-    DialogModule
+    DialogModule,
+    ConfirmDialogModule
   ],
   exports: [
     GrowlModule,
     NotificationComponent,
     FormComponent,
     OptionComponent,
-    ProfileComponent
+    ProfileComponent,
+    ConfirmDialogModule
   ],
   declarations: [
     NotificationComponent,
@@ -46,9 +50,10 @@ import {DialogModule} from "primeng/components/dialog/dialog";
     InfoComponent,
     OptionComponent,
     SearchFilterPipe,
-    ProfileComponent,
-
+    ProfileComponent
   ],
-  providers: []
+  providers: [
+    ConfirmationService
+  ]
 })
 export class SharedModule {}

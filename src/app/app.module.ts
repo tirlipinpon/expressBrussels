@@ -110,7 +110,7 @@ const appRoutes: Routes = [
     AlwaysAuthGuardService,
     UnsearchedTermGuard,
     MessageService,
-    NotificationService
+    NotificationService,
   ],
   bootstrap: [AppComponent]
 })

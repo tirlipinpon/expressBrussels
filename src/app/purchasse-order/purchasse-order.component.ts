@@ -79,19 +79,30 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
   onValueOrderChanged() {
     this.valueRemovalChanges$ = this.formRemoval.get('id').valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderRemoval(val));
+      this.markAsDirty();
     });
+
     this.valueRecipientChanges$ = this.formRecipient.get('id').valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderRecipient(val));
+      this.markAsDirty();
     });
     this.valueOptionsChanges$ = this.formOptions.valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderOption(val));
+      this.markAsDirty();
     });
     this.valueRemovalInfosChanges$ = this.formRemoval.get('infos').valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderRemovalInfos(val));
+      this.markAsDirty();
     });
     this.valueRecipientInfosChanges$ = this.formRecipient.get('infos').valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderRecipientInfos(val));
+      this.markAsDirty();
     });
+  }
+
+  markAsDirty() {
+    this.formRecipient.markAsDirty();
+    this.formRemoval.markAsDirty();
   }
 
 
@@ -115,6 +126,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
       fk_type: ['', Validators.required],
     });
   }
+
   initFormsRecipient(): void {
     this.formRecipient = this.fb.group({
       id: ['', Validators.required],
@@ -142,9 +154,10 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
     });
   }
 
-  canDeactivate():boolean {
-    // console.log("canDeactivate : is form Completed:" +this.isformCompleted);
-    return  !this.formRemoval.dirty && !this.formRecipient.dirty;
+  canDeactivate(): boolean {
+    // console.log("canDeactivate : is form formRemoval.pristine :" + this.formRemoval.pristine );
+    // console.log("canDeactivate : is form formRecipient.pristine :" + this.formRecipient.pristine );
+    return  this.formRemoval.pristine && this.formRecipient.pristine;
   }
   isFormsValide(): boolean {
     return  this.formRemoval.valid && this.formRecipient.valid;
