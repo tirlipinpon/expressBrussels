@@ -21,7 +21,7 @@ export class FormComponent implements OnInit, OnDestroy {
         if(this._user.length == 0) {
           for(let i=0; i< Object.keys(value).length; i++){
             this._user.push(value[i]);
-            console.log("this._user "+ this.nameForm + " = ", this._user);
+            // console.log("this._user "+ this.nameForm + " = ", this._user);
           }
         }
 
@@ -39,7 +39,7 @@ export class FormComponent implements OnInit, OnDestroy {
   ngOnDestroy() {}
 
   private _initData(data): void {
-    console.log("init data : ", data);
+    // console.log("init data : ", data);
     this.formGroup.patchValue({
       id: data.id,
       name: data.name,

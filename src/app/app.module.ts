@@ -34,6 +34,11 @@ import {customerReducer, removalReducer, recipientReducer, purchasseOrderReducer
 import { OrdersComponent } from './orders/orders.component';
 import {OrdersEffectService} from "./effects/orders/orders-effect.service";
 
+import {MatTableModule} from '@angular/material/table';
+import {MatFormFieldModule, MatSortModule} from '@angular/material';
+import {MatPaginatorModule} from '@angular/material';
+import {MatInputModule} from '@angular/material';
+
 const appRoutes: Routes = [
   { path: '', redirectTo: 'order', pathMatch: 'full'},
   { path: 'order',                component: PurchasseOrderComponent,canActivate: [AlwaysAuthGuardService], canDeactivate: [UnsearchedTermGuard] },
@@ -57,6 +62,12 @@ const appRoutes: Routes = [
     HttpClientModule,
     BrowserAnimationsModule,
     CommonModule,
+
+    MatTableModule,
+    MatFormFieldModule,
+    MatPaginatorModule,
+    MatInputModule,
+    MatSortModule,
 
     PurchasseModule,
     RecipientsEditModule,

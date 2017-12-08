@@ -63,7 +63,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
     this.valueRecipientInfosChanges$.unsubscribe();
   }
 
-  storeSelect(){
+  storeSelect() {
     this.removals$ = this.store.select('removals');
     this.recipients$ = this.store.select('recipients');
     this.order$ = this.store.select('order');

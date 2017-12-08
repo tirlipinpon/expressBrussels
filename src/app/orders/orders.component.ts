@@ -1,11 +1,17 @@
-import {Component, OnInit, ViewEncapsulation, OnDestroy} from '@angular/core';
+import {  Component, OnInit, ViewEncapsulation, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import {PurchasseOrder} from "../models/PurchasseOrder";
 import {Observable} from "rxjs";
 import {AppState} from "../shared/appState";
 import {Store} from "@ngrx/store";
 
-import * as OrdersActions  from '../actions/orders.actions';
+import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 
+import * as OrdersActions  from '../actions/orders.actions';
+import * as RemovalActions  from '../actions/removal.actions';
+import * as RecipientActions  from '../actions/recipient.actions';
+import {DataForm} from "../models/DataForm";
+
+import * as _ from "lodash";
 
 @Component({
   selector: 'app-orders',
@@ -16,23 +22,100 @@ import * as OrdersActions  from '../actions/orders.actions';
 export class OrdersComponent implements OnInit, OnDestroy {
 
   orders$: Observable<PurchasseOrder[]>;
+  removals$: Observable<DataForm[]>;
+  recipients$: Observable<DataForm[]>;
+
   customerId = 1;
-  datas:  PurchasseOrder[];
+  datasOrders:  PurchasseOrder[] = [];
+  datasRemovals:  DataForm[];
+  datasRecipients:  DataForm[];
+
+  displayedColumns = ['id', 'date', 'fk_removal_id', 'fk_recipient_id', 'options'];
+  dataSource: MatTableDataSource<PurchasseOrder>;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(private store: Store<AppState>) {
-    this.orders$ = this.store.select('orders');
-    this.orders$.subscribe( (data: any) =>  {
-      console.log("data from stro select subscribe: ", data)
-      this.datas = data;
-    });
+    this.storeSelect();
   }
 
   ngOnInit() {
-    this.store.dispatch(new OrdersActions.GetOrders(this.customerId))
+    this.storeDispatch();
+    this.getDatas();
   }
+
+  getDatas() {
+    this.removals$.subscribe(data => {
+      if(data) {
+        // console.log('data removals', data);
+        this.datasRemovals = data;
+        this.isDataLoaded();
+      }
+    });
+    this.recipients$.subscribe(data => {
+      if(data) {
+        // console.log('data recipients', data);
+        this.datasRecipients = data;
+        this.isDataLoaded();
+      }
+
+    });
+    this.orders$.subscribe( (data: any) =>  {
+      if(data) {
+        for(let i=0; i< Object.keys(data).length; i++) {
+          // console.log('datasOrders:  ',data);
+          this.datasOrders.push(data[i]);
+        }
+        // console.log('data Orders', data);
+        this.isDataLoaded();
+      }
+    });
+  }
+
+  isDataLoaded() {
+
+    if(this.datasRemovals && this.datasRecipients && this.datasOrders.length) {
+      // console.log('eeeeeeeeeeeeee');
+
+      for(let i=0; i< Object.keys(this.datasOrders).length; i++) {
+
+        // console.log('datasRecipients: ', this.datasRecipients);
+
+        const orderId = this.datasOrders[i].fk_removal_id;
+        const removal = _.find(this.datasRemovals,['id', orderId]);
+
+        const recipientId = this.datasOrders[i].fk_recipient_id;
+        const recipient = _.find(this.datasRecipients,['id', recipientId]);
+        // console.log('recipientId: ', recipientId, ' recipient: ', recipient);
+
+         _.merge(this.datasOrders[i], {'removal': removal},  {'recipient': recipient});
+      }
+
+      // console.log('this.datasOrders: ', this.datasOrders);
+
+      this.dataSource = new MatTableDataSource(this.datasOrders);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
+  }
+
   ngOnDestroy(){
-
   }
-
+  storeSelect() {
+    this.orders$ = this.store.select('orders');
+    this.removals$ = this.store.select('removals');
+    this.recipients$ = this.store.select('recipients');
+  }
+  storeDispatch() {
+    this.store.dispatch(new OrdersActions.GetOrders(this.customerId));
+    this.store.dispatch(new RemovalActions.GetRemovals(this.customerId*10+1)); // (id + type)  eg: id = 69; type=1 fk_type=691
+    this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10+2)); // (id + type)  eg: id = 69; type=2 fk_type=692
+  }
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+  }
 
 }

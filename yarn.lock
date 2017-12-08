@@ -32,6 +32,12 @@
   dependencies:
     tslib "^1.7.1"
 
+"@angular/cdk@^5.0.0-rc0":
+  version "5.0.0-rc0"
+  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-5.0.0-rc0.tgz#b7225af1d8d23c13ac14bbd3fe1c6b427eb71368"
+  dependencies:
+    tslib "^1.7.1"
+
 "@angular/cli@^1.5.0":
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@angular/cli/-/cli-1.5.0.tgz#2abc3ff1648d54ad4a14f82f9d517f371370406c"
@@ -138,6 +144,12 @@
   version "4.4.6"
   resolved "https://registry.yarnpkg.com/@angular/language-service/-/language-service-4.4.6.tgz#498ece95c5f6066403bf9fd3c5831af42b45618b"
 
+"@angular/material@^5.0.0-rc0":
+  version "5.0.0-rc0"
+  resolved "https://registry.yarnpkg.com/@angular/material/-/material-5.0.0-rc0.tgz#d37e104a284b41084f91e7613ac119cfb627c56d"
+  dependencies:
+    tslib "^1.7.1"
+
 "@angular/platform-browser-dynamic@^5.0.0":
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/@angular/platform-browser-dynamic/-/platform-browser-dynamic-5.0.1.tgz#16db67d52d4531563ab15429c6bdfe18bc1bedc8"
@@ -211,6 +223,10 @@
   resolved "https://registry.yarnpkg.com/@types/jasminewd2/-/jasminewd2-2.0.3.tgz#0d2886b0cbdae4c0eeba55e30792f584bf040a95"
   dependencies:
     "@types/jasmine" "*"
+
+"@types/lodash@^4.14.85":
+  version "4.14.85"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.85.tgz#a16fbf942422f6eca5622b6910492c496c35069b"
 
 "@types/node@^6.0.46", "@types/node@~6.0.60":
   version "6.0.90"

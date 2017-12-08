@@ -1,8 +1,76 @@
-<p>
-  orders works!
-</p>
+<div class="example-header">
+  <mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="données">
+  </mat-form-field>
+  <mat-form-field>
+    <input type="date" matInput (keyup)="applyFilter($event.target.value)" placeholder="date">
+  </mat-form-field>
+  <mat-form-field>
+    <input type="number" matInput (keyup)="applyFilter($event.target.value)" placeholder="numero">
+  </mat-form-field>
+</div>
+
+<div class="example-container mat-elevation-z8">
+
+  <mat-table [dataSource]="dataSource" matSort>
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> numero </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+    </ng-container>
+
+    <!-- date Column -->
+    <ng-container matColumnDef="date">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> date </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.date | date:'d-MM-y'}} </mat-cell>
+    </ng-container>
+
+    <!-- removal Column -->
+    <ng-container matColumnDef="fk_removal_id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> removal </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <p>{{ row.removal.name  }}</p>
+        <p>{{ row.removal.address  }} {{ row.removal.number  }}  </p>
+        <p>{{ row.removal.cp  }} {{ row.removal.state  }}  </p>
+        <p>{{ row.contact_removal  }}</p>
+        <p>{{ row.message_removal  }}</p>
+      </mat-cell>
+    </ng-container>
+
+    <!-- recipient Column -->
+    <ng-container matColumnDef="fk_recipient_id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> recipient </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <p>{{ row.recipient.name  }}</p>
+        <p>{{ row.recipient.address  }} {{ row.recipient.number  }}  </p>
+        <p>{{ row.recipient.cp  }} {{ row.recipient.state  }}  </p>
+        <p>{{ row.contact_recipient  }}</p>
+        <p>{{ row.message_recipient  }}</p>
+      </mat-cell>
+    </ng-container>
+
+    <!-- options Column -->
+    <ng-container matColumnDef="options">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> options </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <p>{{ row.options }}</p>
+        <p *ngIf="row.tomorrow!=0">tomorrow</p>
+      </mat-cell>
+    </ng-container>
+
+
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;">
+    </mat-row>
+  </mat-table>
+
+  <mat-paginator #paginator [pageSizeOptions]="[25, 50, 100]"></mat-paginator>
+</div>
+
 <pre>
-  {{datas | json}}
+  {{datasOrders | json}}
 </pre>
 
 
