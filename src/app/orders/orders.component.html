@@ -30,9 +30,9 @@
     <ng-container matColumnDef="fk_removal_id">
       <mat-header-cell *matHeaderCellDef mat-sort-header> removal </mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <p>{{ row.removal.name  }}</p>
-        <p>{{ row.removal.address  }} {{ row.removal.number  }}  </p>
-        <p>{{ row.removal.cp  }} {{ row.removal.state  }}  </p>
+        <p>{{ row.removal_name  }}</p>
+        <p>{{ row.removal_address  }} {{ row.removal_number  }}  </p>
+        <p>{{ row.removal_cp  }} {{ row.removal_state  }}  </p>
         <p>{{ row.contact_removal  }}</p>
         <p>{{ row.message_removal  }}</p>
       </mat-cell>
@@ -42,9 +42,9 @@
     <ng-container matColumnDef="fk_recipient_id">
       <mat-header-cell *matHeaderCellDef mat-sort-header> recipient </mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <p>{{ row.recipient.name  }}</p>
-        <p>{{ row.recipient.address  }} {{ row.recipient.number  }}  </p>
-        <p>{{ row.recipient.cp  }} {{ row.recipient.state  }}  </p>
+        <p>{{ row.recipient_name  }}</p>
+        <p>{{ row.recipient_address  }} {{ row.recipient_number  }}  </p>
+        <p>{{ row.recipient_cp  }} {{ row.recipient_state  }}  </p>
         <p>{{ row.contact_recipient  }}</p>
         <p>{{ row.message_recipient  }}</p>
       </mat-cell>

@@ -89,10 +89,30 @@ export class OrdersComponent implements OnInit, OnDestroy {
         const recipient = _.find(this.datasRecipients,['id', recipientId]);
         // console.log('recipientId: ', recipientId, ' recipient: ', recipient);
 
-         _.merge(this.datasOrders[i], {'removal': removal},  {'recipient': recipient});
+         _.merge(this.datasOrders[i],
+           {
+             'order_address': removal.address,
+             'order_cp': removal.cp,
+             'order_name': removal.name,
+             'order_number': removal.number,
+             'order_phone': removal.phone,
+             'order_state': removal.state,
+             'order_info1': removal.infos.info1,
+             'order_info2': removal.infos.info2,
+           },
+           {
+             'recipient_address': removal.address,
+             'recipient_cp': removal.cp,
+             'recipient_name': removal.name,
+             'recipient_number': removal.number,
+             'recipient_phone': removal.phone,
+             'recipient_state': removal.state,
+             'recipient_info1': removal.infos.info1,
+             'recipient_info2': removal.infos.info2,
+           });
       }
 
-      // console.log('this.datasOrders: ', this.datasOrders);
+      console.log('this.datasOrders: ', this.datasOrders);
 
       this.dataSource = new MatTableDataSource(this.datasOrders);
       this.dataSource.paginator = this.paginator;
