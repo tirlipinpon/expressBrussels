@@ -19,11 +19,11 @@ export class RecipientEffectService {
       this.removalService.getRemovals(action)
         .map((payload) => {
         let data = payload;
-        console.log('in effect getRecipients retrieve data from service =', data);
+        // console.log('in effect getRecipients retrieve data from service =', data);
         return new RecipientActions.GetRecipientsSuccess(data);
       })
         .catch(err => {
-          console.log('error in effect get recipients');
+          // console.log('error in effect get recipients');
           return Observable.of(new RecipientActions.GetRecipientsFail(err))
         })
     );
@@ -33,11 +33,11 @@ export class RecipientEffectService {
     .switchMap(action =>
       this.removalService.setRemoval(action)
         .map((payload) => {
-          console.log('in effect EDIT recipient retrieved data from service =', payload);
+          // console.log('in effect EDIT recipient retrieved data from service =', payload);
           return new RecipientActions.EditRecipientSuccess(payload);
         })
         .catch(err => {
-          console.log('error in effect EDIT removal with error -> ',err);
+          // console.log('error in effect EDIT removal with error -> ',err);
           return Observable.of(new RecipientActions.EditRecipientFail(err))
         })
     );

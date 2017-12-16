@@ -23,11 +23,11 @@ export class RemovalEffectService {
       this.removalService.getRemovals(action)
         .map((payload) => {
         let data = payload;
-        console.log('in effect getRemovals retrieve data from service =', data);
+        // console.log('in effect getRemovals retrieve data from service =', data);
         return new RemovalActions.GetRemovalsSuccess(data);
       })
         .catch(err => {
-          console.log('error in effect get removals');
+          // console.log('error in effect get removals');
           return Observable.of(new RemovalActions.GetRemovalsFail(err))
         })
     );
@@ -37,11 +37,11 @@ export class RemovalEffectService {
     .switchMap(action =>
       this.removalService.setRemoval(action)
         .map((payload) => {
-          console.log('in effect EDIT removal retrieved data from service =', payload);
+          // console.log('in effect EDIT removal retrieved data from service =', payload);
           return new RemovalActions.EditRemovalSuccess(payload);
         })
         .catch(err => {
-          console.log('error in effect EDIT removal with error -> ',err);
+          // console.log('error in effect EDIT removal with error -> ',err);
           return Observable.of(new RemovalActions.EditRemovalFail(err))
         })
     );

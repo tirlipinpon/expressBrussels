@@ -113,7 +113,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
            });
       }
 
-      console.log('this.datasOrders: ', this.datasOrders);
+      // console.log('this.datasOrders: ', this.datasOrders);
 
       this.dataSource = new MatTableDataSource(this.datasOrders);
       this.dataSource.paginator = this.paginator;

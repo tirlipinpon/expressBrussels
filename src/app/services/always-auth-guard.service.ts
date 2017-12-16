@@ -8,7 +8,7 @@ export class AlwaysAuthGuardService implements CanActivate {
   constructor(private customerService: CustomerService) { }
 
   canActivate() {
-    console.log("AlwaysAuthGuard");
+    // console.log("AlwaysAuthGuard");
     if (this.customerService.isLoggedIn()) {
       return true;
     } else {

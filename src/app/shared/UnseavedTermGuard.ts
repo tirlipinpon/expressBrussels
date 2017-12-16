@@ -13,7 +13,7 @@ export class UnsearchedTermGuard implements CanDeactivate<PurchasseOrderComponen
                 route: ActivatedRouteSnapshot,
                 state: RouterStateSnapshot,
   ): boolean {
-    console.log("UnsearchedTermGuard");
+    // console.log("UnsearchedTermGuard");
     // console.log("route.params: ", route.params);
     // console.log("state.url: "+state.url);
 

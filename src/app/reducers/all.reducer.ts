@@ -53,7 +53,7 @@ export function removalReducer(state: DataForm[], action: ActionRemoval): DataFo
   // console.log('2 - Reducer customer :', action.type, state);
   switch (action.type) {
     case RemovalActions.GET_REMOVALS_SUCCESS:
-      console.log('in removal reducer getRemoval payload = ',action.payload);
+      // console.log('in removal reducer getRemoval payload = ',action.payload);
       return Object.assign({}, state, action.payload ); //{...state, ...action.payload};
     case RemovalActions.EDIT_REMOVAL_SUCCESS:
       // console.log('in customer reducer editCustomer payload = ',action.payload);
@@ -69,7 +69,7 @@ export function recipientReducer(state: DataForm[], action: ActionRecipient): Da
   // console.log('2 - Reducer customer :', action.type, state);
   switch (action.type) {
     case RecipientActions.GET_RECIPIENTS_SUCCESS:
-      console.log('in removal reducer getRemoval payload = ',action.payload);
+      // console.log('in removal reducer getRemoval payload = ',action.payload);
       return {...state, ...action.payload};
     case RecipientActions.EDIT_RECIPIENT_SUCCESS:
       // console.log('in customer reducer editCustomer payload = ',action.payload);
@@ -89,40 +89,40 @@ export function purchasseOrderReducer(state: PurchasseOrder = orderInitOrder, ac
     //   return {...state, ...orderInitOrder};
 
     case PurchasseOrderActions.EDIT_ORDER_OPTION_SUCCESS:
-      console.log('in order reducer edit Order option payload = ',action.payload);
+      // console.log('in order reducer edit Order option payload = ',action.payload);
       return Object.assign({}, state, {
         options: action.payload.options,
         tomorrow: action.payload.tomorrow
       });
 
     case PurchasseOrderActions.EDIT_ORDER_REMOVAL_SUCCESS:
-      console.log('in order reducer edit Order removal payload = ',action.payload);
+      // console.log('in order reducer edit Order removal payload = ',action.payload);
       return Object.assign({}, state, {
         fk_removal_id: action.payload,
       });
 
     case PurchasseOrderActions.EDIT_ORDER_RECIPIENT_SUCCESS:
-      console.log('in order reducer edit Order Recipient payload = ',action.payload);
+      // console.log('in order reducer edit Order Recipient payload = ',action.payload);
       return Object.assign({}, state, {
         fk_recipient_id: action.payload,
       });
 
     case PurchasseOrderActions.EDIT_ORDER_REMOVAL_INFOS_SUCCESS:
-      console.log('in order reducer edit Order Removal Infos payload = ',action.payload);
+      // console.log('in order reducer edit Order Removal Infos payload = ',action.payload);
       return Object.assign({}, state, {
         contact_removal: action.payload.info1,
         message_removal: action.payload.info2,
       });
 
     case PurchasseOrderActions.EDIT_ORDER_RECIPIENT_INFOS_SUCCESS:
-      console.log('in order reducer edit Order Recipient Infos payload = ',action.payload);
+      // console.log('in order reducer edit Order Recipient Infos payload = ',action.payload);
       return Object.assign({}, state, {
         contact_recipient: action.payload.info1,
         message_recipient: action.payload.info2,
       });
 
     case PurchasseOrderActions.SAVE_ORDER_SUCCESS:
-      console.log('in order reducer saveOrder payload = ', action.payload);
+      // console.log('in order reducer saveOrder payload = ', action.payload);
       return state;
 
     default:
