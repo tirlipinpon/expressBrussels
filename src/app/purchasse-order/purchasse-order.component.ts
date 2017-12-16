@@ -93,14 +93,14 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
     this.valueRecipientChanges$ = this.formRecipient.get('id').valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderRecipient(val));
     });
-    this.valueOptionsChanges$ = this.formOptions.valueChanges.subscribe(val => {
-      this.store.dispatch(new OrderActions.EditOrderOption(val));
-    });
     this.valueRemovalInfosChanges$ = this.formRemoval.get('infos').valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderRemovalInfos(val));
     });
     this.valueRecipientInfosChanges$ = this.formRecipient.get('infos').valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderRecipientInfos(val));
+    });
+    this.valueOptionsChanges$ = this.formOptions.valueChanges.subscribe(val => {
+      this.store.dispatch(new OrderActions.EditOrderOption(val));
     });
     this.formRemoval.valueChanges.subscribe(val => {
       this.chackIsFormAsValue(this.formRemoval, val);

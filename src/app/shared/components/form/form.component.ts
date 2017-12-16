@@ -10,13 +10,19 @@ import {DataForm} from "../../../models/DataForm";
 })
 export class FormComponent implements OnInit, OnDestroy {
 
+  private test = false;
+
   @Input('isCustomer') isCustomer: boolean;
   @Input('formGroup') formGroup: FormGroup;
   @Input('nameForm') nameForm: string;
   @Input('datas') set data(value: DataForm[]) {
     if (!!value) {
       if (this.isCustomer) {
-        this._initData(value);
+        if(!this.test){
+          this._initData(value);
+          this.test = true;
+        }
+
       }else{
         if(this._user.length == 0) {
           for(let i=0; i< Object.keys(value).length; i++){
@@ -29,7 +35,7 @@ export class FormComponent implements OnInit, OnDestroy {
     }
   }
 
-  @Output() updateDataForm = new EventEmitter<FormGroup>();
+  @Output() updateDataForm = new EventEmitter();
 
   private showDropDown = false;
   private _user: DataForm[] = [];
@@ -62,7 +68,7 @@ export class FormComponent implements OnInit, OnDestroy {
   // for customer
   saveDataCustomer(): void {
     // console.log("-?- " + this.nameForm + ' button pushed for save data = ', this.formGroup.value);
-    this.updateDataForm.emit(this.formGroup.value);
+    this.updateDataForm.emit();
   }
   // auto completion
   toogleDropDown() {

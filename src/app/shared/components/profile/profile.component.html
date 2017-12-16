@@ -5,7 +5,7 @@
   [datas]="customer$ | async"
   [isCustomer]="true"
   [formGroup]="formCustomer"
-  (updateDataForm)="onValueCustomerUpdated($event)"
+  (updateDataForm)="saveCustomer()"
   >
   </app-form>
 </p-dialog>

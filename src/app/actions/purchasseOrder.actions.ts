@@ -16,9 +16,7 @@ export class InitOrderSuccess implements Action {
     // console.log('in actions get customer payload= ',payload);
   }
 }
-
 //===================== removal ==============================
-
 export const EDIT_ORDER_REMOVAL = 'Edit Order Removal';
 export class EditOrderRemoval implements Action {
   readonly type = EDIT_ORDER_REMOVAL;
@@ -26,25 +24,7 @@ export class EditOrderRemoval implements Action {
     // console.log('in actions get customer payload= ',payload);
   }
 }
-
-export const EDIT_ORDER_REMOVAL_SUCCESS = 'Edit Order Removal Success';
-export class EditOrderRemovalSuccess implements Action {
-  readonly type = EDIT_ORDER_REMOVAL_SUCCESS;
-  constructor(public payload: number) {
-    // console.log('in actions get customer payload= ',payload);
-  }
-}
-
-export const EDIT_ORDER_REMOVAL_FAIL = 'Edit Order Removal Fail';
-export class EditOrderRemovalFail implements Action {
-  readonly type = EDIT_ORDER_REMOVAL_FAIL;
-  constructor(public payload: string) {
-    // console.log('in actions get customer payload= ',payload);
-  }
-}
-
 //==================== recipient ===============================
-
 export const EDIT_ORDER_RECIPIENT = 'Edit Order Recipient';
 export class EditOrderRecipient implements Action {
   readonly type = EDIT_ORDER_RECIPIENT;
@@ -52,25 +32,7 @@ export class EditOrderRecipient implements Action {
     // console.log('in actions get customer payload= ',payload);
   }
 }
-
-export const EDIT_ORDER_RECIPIENT_SUCCESS = 'Edit Order Recipient Success';
-export class EditOrderRecipientSuccess implements Action {
-  readonly type = EDIT_ORDER_RECIPIENT_SUCCESS;
-  constructor(public payload: number) {
-    // console.log('in actions get customer payload= ',payload);
-  }
-}
-
-export const EDIT_ORDER_RECIPIENT_FAIL = 'Edit Order Recipient Fail';
-export class EditOrderRecipientFail implements Action {
-  readonly type = EDIT_ORDER_RECIPIENT_FAIL;
-  constructor(public payload: string) {
-    // console.log('in actions get customer payload= ',payload);
-  }
-}
-
 //==================== removal infos ===============================
-
 export const EDIT_ORDER_REMOVAL_INFOS = 'Edit Order Removal Infos';
 export class EditOrderRemovalInfos implements Action {
   readonly type = EDIT_ORDER_REMOVAL_INFOS;
@@ -78,25 +40,7 @@ export class EditOrderRemovalInfos implements Action {
     // console.log('in actions get customer payload= ',payload);
   }
 }
-
-export const EDIT_ORDER_REMOVAL_INFOS_SUCCESS = 'Edit Order Removal Infos Success';
-export class EditOrderRemovalInfosSuccess implements Action {
-  readonly type = EDIT_ORDER_REMOVAL_INFOS_SUCCESS;
-  constructor(public payload: any) {
-    // console.log('in actions get customer payload= ',payload);
-  }
-}
-
-export const EDIT_ORDER_REMOVAL_INFOS_FAIL = 'Edit Order Removal Infos Fail';
-export class EditOrderRemovalInfosFail implements Action {
-  readonly type = EDIT_ORDER_REMOVAL_INFOS_FAIL;
-  constructor(public payload: string) {
-    // console.log('in actions get customer payload= ',payload);
-  }
-}
-
 //==================== recipient infos ===============================
-
 export const EDIT_ORDER_RECIPIENT_INFOS = 'Edit Order Recipient Infos';
 export class EditOrderRecipientInfos implements Action {
   readonly type = EDIT_ORDER_RECIPIENT_INFOS;
@@ -104,25 +48,7 @@ export class EditOrderRecipientInfos implements Action {
     // console.log('in actions get customer payload= ',payload);
   }
 }
-
-export const EDIT_ORDER_RECIPIENT_INFOS_SUCCESS = 'Edit Order Recipient Infos Success';
-export class EditOrderRecipientInfosSuccess implements Action {
-  readonly type = EDIT_ORDER_RECIPIENT_INFOS_SUCCESS;
-  constructor(public payload: any) {
-    // console.log('in actions get customer payload= ',payload);
-  }
-}
-
-export const EDIT_ORDER_RECIPIENT_INFOS_FAIL = 'Edit Order Recipient Infos Fail';
-export class EditOrderRecipientInfosFail implements Action {
-  readonly type = EDIT_ORDER_RECIPIENT_INFOS_FAIL;
-  constructor(public payload: string) {
-    // console.log('in actions get customer payload= ',payload);
-  }
-}
-
 //=================== options ================================
-
 export const EDIT_ORDER_OPTION = 'Edit Order option';
 export class EditOrderOption implements Action {
   readonly type = EDIT_ORDER_OPTION;
@@ -130,25 +56,7 @@ export class EditOrderOption implements Action {
     // console.log('in actions get customer payload= ',payload);
   }
 }
-
-export const EDIT_ORDER_OPTION_SUCCESS = 'Edit Order option Success';
-export class EditOrderOptionSuccess implements Action {
-  readonly type = EDIT_ORDER_OPTION_SUCCESS;
-  constructor(public payload: PurchasseOrder) {
-    // console.log('in actions get customer payload= ',payload);
-  }
-}
-
-export const EDIT_ORDER_OPTION_FAIL = 'Edit Order option Fail';
-export class EditOrderOptionFail implements Action {
-  readonly type = EDIT_ORDER_OPTION_FAIL;
-  constructor(public payload: string) {
-    // console.log('in actions get customer payload= ',payload);
-  }
-}
-
 //================= save order ==================================
-
 export const SAVE_ORDER = 'Save Order';
 export class SaveOrder implements Action {
   readonly type = SAVE_ORDER;
@@ -174,25 +82,13 @@ export type All =
       InitOrder
     | InitOrderSuccess
 
-    | EditOrderOption
-    | EditOrderOptionSuccess
-    | EditOrderOptionFail
-
     | EditOrderRemoval
-    | EditOrderRemovalSuccess
-    | EditOrderRemovalFail
-
     | EditOrderRecipient
-    | EditOrderRecipientSuccess
-    | EditOrderRecipientFail
 
     | EditOrderRemovalInfos
-    | EditOrderRemovalInfosSuccess
-    | EditOrderRemovalInfosFail
-
     | EditOrderRecipientInfos
-    | EditOrderRecipientInfosSuccess
-    | EditOrderRecipientInfosFail
+
+    | EditOrderOption
 
     | SaveOrder
     | SaveOrderSuccess

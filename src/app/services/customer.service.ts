@@ -20,10 +20,11 @@ export class CustomerService {
     // return res;
   }
 
-  setCustomer(data): Observable<any> {
-    console.log('in customer service set new customer to db with this data-> ', data.payload);
+  saveCustomer(data): Observable<any> {
+    console.log('in customer service set new customer to db with this data-> ', data);
     let url = 'http://localhost/expressDB/php//update.php';
-    return this.http.post(url,data.payload);
+    return this.http.post(url,data)
+      .catch(error => Observable.throw('error in service save customer with message from server -> '+ error));
   }
 
   isLoggedIn(): boolean {

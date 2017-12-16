@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {Component, OnInit, ViewEncapsulation, OnDestroy} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {DataForm} from "../../../models/DataForm";
 import {Observable} from "rxjs";
 import {AppState} from "../../appState";
 import {Store} from "@ngrx/store";
 import * as CustomerActions  from '../../../actions/customer.actions';
+import * as _ from "lodash";
 
 @Component({
   selector: 'app-profile',
@@ -12,11 +13,12 @@ import * as CustomerActions  from '../../../actions/customer.actions';
   styleUrls: ['./profile.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
 
   display: boolean = false;
   customer$: Observable<DataForm>;
   formCustomer: FormGroup;
+  private formValueChanges$;
 
   customer: any;
   customerId = 1;
@@ -30,6 +32,16 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.storeDispatch();
+    this.onValueCustomerChanged();
+  }
+  ngOnDestroy() {
+    this.formValueChanges$.unsubscribe();
+  }
+
+  onValueCustomerChanged() {
+    this.formValueChanges$ = this.formCustomer.valueChanges.subscribe(val => {
+      this.store.dispatch(new CustomerActions.EditCustomer(val));
+    });
   }
 
   showDialog() {
@@ -43,9 +55,9 @@ export class ProfileComponent implements OnInit {
     this.store.dispatch(new CustomerActions.GetCustomer(this.customerId));
   }
 
-  onValueCustomerUpdated(data: DataForm): void {
+  saveCustomer(): void {
     // console.log('on customer value  changed: ', data);
-    this.store.dispatch(new CustomerActions.EditCustomer(data));
+    this.store.dispatch(new CustomerActions.SaveCustomer());
   }
 
   initFormsCustomer(): void {

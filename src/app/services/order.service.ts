@@ -12,7 +12,7 @@ export class OrderService {
   constructor(private http: HttpClient) { }
 
   saveOrder(data): Observable<any>{
-    // console.log('in order service save new order to db with this data-> ', data);
+    console.log('in order service save new order to db with this data-> ', data);
     let url = 'http://localhost/expressDB/php//addOrder.php';
     // let resp$ =  this.http.post(url,data.payload);
     // resp$.subscribe(data => console.log("order service save order responce: ",data));
