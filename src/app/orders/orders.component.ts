@@ -77,31 +77,33 @@ export class OrdersComponent implements OnInit, OnDestroy {
       // console.log('eeeeeeeeeeeeee');
       for(let i=0; i< Object.keys(this.datasOrders).length; i++) {
         // console.log('datasRecipients: ', this.datasRecipients);
-        const orderId = this.datasOrders[i].fk_removal_id;
-        const removal = _.find(this.datasRemovals,['id', orderId]);
+
+        const removalId = this.datasOrders[i].fk_removal_id;
+        const removal = _.find(this.datasRemovals,['id', removalId]);
+
         const recipientId = this.datasOrders[i].fk_recipient_id;
         const recipient = _.find(this.datasRecipients,['id', recipientId]);
-        // console.log('recipientId: ', recipientId, ' recipient: ', recipient);
+
          _.merge(this.datasOrders[i],
            {
-             'order_address': removal.address,
-             'order_cp': removal.cp,
-             'order_name': removal.name,
-             'order_number': removal.number,
-             'order_phone': removal.phone,
-             'order_state': removal.state,
-             'order_info1': removal.infos.info1,
-             'order_info2': removal.infos.info2,
+             'removal_address': removal.address,
+             'removal_cp': removal.cp,
+             'removal_name': removal.name,
+             'removal_number': removal.number,
+             'removal_phone': removal.phone,
+             'removal_state': removal.state,
+             'removal_info1': removal.infos.info1,
+             'removal_info2': removal.infos.info2,
            },
            {
-             'recipient_address': removal.address,
-             'recipient_cp': removal.cp,
-             'recipient_name': removal.name,
-             'recipient_number': removal.number,
-             'recipient_phone': removal.phone,
-             'recipient_state': removal.state,
-             'recipient_info1': removal.infos.info1,
-             'recipient_info2': removal.infos.info2,
+             'recipient_address': recipient.address,
+             'recipient_cp': recipient.cp,
+             'recipient_name': recipient.name,
+             'recipient_number': recipient.number,
+             'recipient_phone': recipient.phone,
+             'recipient_state': recipient.state,
+             'recipient_info1': recipient.infos.info1,
+             'recipient_info2': recipient.infos.info2,
            });
       }
       // console.log('this.datasOrders: ', this.datasOrders);
@@ -110,6 +112,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
       this.dataSource.sort = this.sort;
     }
   }
+
   storeSelect() {
     this.orders$ = this.store.select('orders');
     this.removals$ = this.store.select('removals');
