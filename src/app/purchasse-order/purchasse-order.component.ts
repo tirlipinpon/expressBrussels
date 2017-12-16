@@ -79,32 +79,52 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
   onValueOrderChanged() {
     this.valueRemovalChanges$ = this.formRemoval.get('id').valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderRemoval(val));
-      this.markAsDirty();
+      this.chackIsFormAsValue(val);
     });
-
     this.valueRecipientChanges$ = this.formRecipient.get('id').valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderRecipient(val));
-      this.markAsDirty();
+      this.chackIsFormAsValue(val);
     });
     this.valueOptionsChanges$ = this.formOptions.valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderOption(val));
-      this.markAsDirty();
+      this.chackIsFormAsValue(val);
     });
     this.valueRemovalInfosChanges$ = this.formRemoval.get('infos').valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderRemovalInfos(val));
-      this.markAsDirty();
+      this.chackIsFormAsValue(val.info1, val.info2);
     });
     this.valueRecipientInfosChanges$ = this.formRecipient.get('infos').valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderRecipientInfos(val));
-      this.markAsDirty();
+      this.chackIsFormAsValue(val.info1, val.info2);
     });
   }
 
+  chackIsFormAsValue(...val) {
+    // console.log('form as value', val);
+    if(!this.arrayAsValue(val)) {
+      this.markAsPristine();
+    }else{
+      this.markAsDirty();
+    }
+  }
+
+  arrayAsValue(array): number {
+    return array.filter(v => {
+      return v.length;
+    }).length
+  }
+
   markAsDirty() {
+    console.log('** dirty');
     this.formRecipient.markAsDirty();
     this.formRemoval.markAsDirty();
   }
 
+  markAsPristine() {
+    console.log('** pristine');
+    this.formRemoval.markAsPristine();
+    this.formRecipient.markAsPristine();
+  }
 
   initFormsRemoval(): void {
     this.formRemoval = this.fb.group({
@@ -155,7 +175,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
   }
 
   canDeactivate(): boolean {
-    // console.log("canDeactivate : is form formRemoval.pristine :" + this.formRemoval.pristine );
+    console.log("canDeactivate : is form formRemoval.pristine :" + this.formRemoval.pristine );
     // console.log("canDeactivate : is form formRecipient.pristine :" + this.formRecipient.pristine );
     return  this.formRemoval.pristine && this.formRecipient.pristine;
   }
@@ -163,9 +183,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
     return  this.formRemoval.valid && this.formRecipient.valid;
   }
   resetOrder(){
-    // console.log('reset order');
-    // this.isformCompleted = 0;
     this.store.dispatch(new OrderActions.InitOrder(this.customerId));
+    this.markAsPristine();
   }
   recapOrder() {
     this.store.dispatch(new OrderActions.SaveOrder());

@@ -69,8 +69,12 @@
   <mat-paginator #paginator [pageSizeOptions]="[25, 50, 100]"></mat-paginator>
 </div>
 
-<pre>
-  {{datasOrders | json}}
-</pre>
+<!--<pre>-->
+  <!--{{datasOrders | json}}-->
+<!--</pre>-->
+
+<p-confirmDialog header="Confirmation"
+                 icon="fa fa-question-circle" width="400">
+</p-confirmDialog>
 
 

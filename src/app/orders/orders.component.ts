@@ -32,6 +32,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
   displayedColumns = ['id', 'date', 'fk_removal_id', 'fk_recipient_id', 'options'];
   dataSource: MatTableDataSource<PurchasseOrder>;
+  private filterValueEmpty = true;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -133,9 +134,20 @@ export class OrdersComponent implements OnInit, OnDestroy {
     this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10+2)); // (id + type)  eg: id = 69; type=2 fk_type=692
   }
   applyFilter(filterValue: string) {
+    if(filterValue.length !== 0) {
+      this.filterValueEmpty = false;
+    }
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
+  canDeactivate(): boolean {
+    console.log("canDeactivate orders:" );
+    return  this.filterValueEmpty;
+  }
+  resetOrder() {
+    this.filterValueEmpty = true;
+  }
+
 
 }

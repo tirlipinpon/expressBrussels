@@ -38,11 +38,12 @@ import {MatTableModule} from '@angular/material/table';
 import {MatFormFieldModule, MatSortModule} from '@angular/material';
 import {MatPaginatorModule} from '@angular/material';
 import {MatInputModule} from '@angular/material';
+import {CanDeactivateFormGuardService} from "./services/can-deactivate-form-guard.service";
 
 const appRoutes: Routes = [
   { path: '', redirectTo: 'order', pathMatch: 'full'},
-  { path: 'order',                component: PurchasseOrderComponent,canActivate: [AlwaysAuthGuardService], canDeactivate: [UnsearchedTermGuard] },
-  { path: 'orders',               component: OrdersComponent,canActivate: [AlwaysAuthGuardService] },
+  { path: 'order',                component: PurchasseOrderComponent,canActivate: [AlwaysAuthGuardService], canDeactivate: [CanDeactivateFormGuardService] },
+  { path: 'orders',               component: OrdersComponent,canActivate: [AlwaysAuthGuardService], canDeactivate: [CanDeactivateFormGuardService] },
   { path: 'removals',             component: RemovalsComponent, canActivate: [AlwaysAuthGuardService],},
   { path: 'recipients',           component: RecipientsComponent, canActivate: [AlwaysAuthGuardService],},
   { path: '**',                   component: PurchasseOrderComponent, canActivate: [AlwaysAuthGuardService],}
@@ -111,6 +112,7 @@ const appRoutes: Routes = [
     UnsearchedTermGuard,
     MessageService,
     NotificationService,
+    CanDeactivateFormGuardService
   ],
   bootstrap: [AppComponent]
 })
