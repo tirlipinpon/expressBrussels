@@ -66,20 +66,22 @@ export class FormComponent implements OnInit, OnDestroy {
   }
   // auto completion
   toogleDropDown() {
-    // console.log('toogleDropDown showDropDown = '+  this.showDropDown);
     this.showDropDown = !this.showDropDown;
   }
   getSearchValue() {
     return this.formGroup.value.name;
   }
   initSelectdedValue(value) {
-    // this.formGroup.patchValue({"name":this.datas[value].name});
-    // console.log('initSelectdedValue');
     this._initData(this.getByValue(value));
     this.toogleDropDown();
+    this.formGroup.markAsDirty();
   }
   getByValue(value): DataForm {
     let arrayWithElem = this._user.filter(elem => elem.name === value);
     return arrayWithElem[0];
+  }
+  resetForm(formGroup: FormGroup): void {
+    formGroup.reset();
+    this.formGroup.markAsPristine();
   }
 }

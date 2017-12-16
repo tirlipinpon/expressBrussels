@@ -24,16 +24,12 @@ export class OrdersComponent implements OnInit, OnDestroy {
   orders$: Observable<PurchasseOrder[]>;
   removals$: Observable<DataForm[]>;
   recipients$: Observable<DataForm[]>;
-
   customerId = 1;
   datasOrders:  PurchasseOrder[] = [];
   datasRemovals:  DataForm[];
   datasRecipients:  DataForm[];
-
   displayedColumns = ['id', 'date', 'fk_removal_id', 'fk_recipient_id', 'options'];
   dataSource: MatTableDataSource<PurchasseOrder>;
-  private filterValueEmpty = true;
-
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -44,6 +40,8 @@ export class OrdersComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.storeDispatch();
     this.getDatas();
+  }
+  ngOnDestroy(){
   }
 
   getDatas() {
@@ -73,23 +71,17 @@ export class OrdersComponent implements OnInit, OnDestroy {
       }
     });
   }
-
   isDataLoaded() {
 
     if(this.datasRemovals && this.datasRecipients && this.datasOrders.length) {
       // console.log('eeeeeeeeeeeeee');
-
       for(let i=0; i< Object.keys(this.datasOrders).length; i++) {
-
         // console.log('datasRecipients: ', this.datasRecipients);
-
         const orderId = this.datasOrders[i].fk_removal_id;
         const removal = _.find(this.datasRemovals,['id', orderId]);
-
         const recipientId = this.datasOrders[i].fk_recipient_id;
         const recipient = _.find(this.datasRecipients,['id', recipientId]);
         // console.log('recipientId: ', recipientId, ' recipient: ', recipient);
-
          _.merge(this.datasOrders[i],
            {
              'order_address': removal.address,
@@ -112,16 +104,11 @@ export class OrdersComponent implements OnInit, OnDestroy {
              'recipient_info2': removal.infos.info2,
            });
       }
-
       // console.log('this.datasOrders: ', this.datasOrders);
-
       this.dataSource = new MatTableDataSource(this.datasOrders);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     }
-  }
-
-  ngOnDestroy(){
   }
   storeSelect() {
     this.orders$ = this.store.select('orders');
@@ -134,20 +121,8 @@ export class OrdersComponent implements OnInit, OnDestroy {
     this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10+2)); // (id + type)  eg: id = 69; type=2 fk_type=692
   }
   applyFilter(filterValue: string) {
-    if(filterValue.length !== 0) {
-      this.filterValueEmpty = false;
-    }
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
-  canDeactivate(): boolean {
-    console.log("canDeactivate orders:" );
-    return  this.filterValueEmpty;
-  }
-  resetOrder() {
-    this.filterValueEmpty = true;
-  }
-
-
 }

@@ -13,6 +13,7 @@ import {AppState} from "../shared/appState";
 import {FormBuilder, Validators, FormGroup} from "@angular/forms";
 import {PurchasseOrder} from "../models/PurchasseOrder";
 import {NotificationService} from "../services/notification.service";
+import * as _ from "lodash";
 
 @Component({
   selector: 'app-purchasse-order',
@@ -28,6 +29,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
   formRemoval: FormGroup;
   formRecipient: FormGroup;
   formOptions: FormGroup;
+  private allFormGroup: FormGroup[] = [];
 
   private valueRemovalChanges$;
   private valueRecipientChanges$;
@@ -53,7 +55,9 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.storeDispatch();
+    this.allFormGroup = this.pushAllForms(this.allFormGroup);
     this.onValueOrderChanged();
+
   }
   ngOnDestroy() {
     this.valueRemovalChanges$.unsubscribe();
@@ -75,55 +79,76 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
     this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10+2)); // (id + type)  eg: id = 69; type=2 fk_type=692
   }
 
+  pushAllForms(allFormGroup: FormGroup[]): FormGroup[] {
+    allFormGroup.push(this.formRemoval);
+    allFormGroup.push(this.formRecipient);
+    allFormGroup.push(this.formOptions);
+    return allFormGroup;
+  }
 
   onValueOrderChanged() {
     this.valueRemovalChanges$ = this.formRemoval.get('id').valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderRemoval(val));
-      this.chackIsFormAsValue(val);
     });
     this.valueRecipientChanges$ = this.formRecipient.get('id').valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderRecipient(val));
-      this.chackIsFormAsValue(val);
     });
     this.valueOptionsChanges$ = this.formOptions.valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderOption(val));
-      this.chackIsFormAsValue(val);
     });
     this.valueRemovalInfosChanges$ = this.formRemoval.get('infos').valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderRemovalInfos(val));
-      this.chackIsFormAsValue(val.info1, val.info2);
     });
     this.valueRecipientInfosChanges$ = this.formRecipient.get('infos').valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderRecipientInfos(val));
-      this.chackIsFormAsValue(val.info1, val.info2);
+    });
+    this.formRemoval.valueChanges.subscribe(val => {
+      this.chackIsFormAsValue(this.formRemoval, val);
+    });
+    this.formRecipient.valueChanges.subscribe(val => {
+      this.chackIsFormAsValue(this.formRecipient, val);
     });
   }
 
-  chackIsFormAsValue(...val) {
-    // console.log('form as value', val);
-    if(!this.arrayAsValue(val)) {
-      this.markAsPristine();
-    }else{
-      this.markAsDirty();
+  chackIsFormAsValue(form, ...val) {
+    const flattenObject = this.flattenObject(form.value);
+    if(!this.isChangedValuesIsNotEmpty(flattenObject)) {
+      this.markAsPristine(form);
     }
   }
-
-  arrayAsValue(array): number {
-    return array.filter(v => {
-      return v.length;
-    }).length
+  flattenObject(ob) {
+    let toReturn = {};
+    for (let i in ob) {
+      if (!ob.hasOwnProperty(i)) continue;
+      if ((typeof ob[i]) == 'object') {
+        let flatObject = this.flattenObject(ob[i]);
+        for (let x in flatObject) {
+          if (!flatObject.hasOwnProperty(x)) continue;
+          // toReturn[i + '.' + x] = flatObject[x];
+          toReturn[x] = flatObject[x];
+        }
+      } else {
+        toReturn[i] = ob[i];
+      }
+    }
+    return toReturn;
+  };
+  isChangedValuesIsNotEmpty(object): boolean {
+    let asValue = false;
+      for (let prop in object) {
+        if(object[prop]) {
+          if(object[prop].length) {
+            asValue = true;
+          }
+        }
+    }
+    // console.log('as value= ', asValue);
+    return asValue;
   }
-
-  markAsDirty() {
-    console.log('** dirty');
-    this.formRecipient.markAsDirty();
-    this.formRemoval.markAsDirty();
-  }
-
-  markAsPristine() {
-    console.log('** pristine');
-    this.formRemoval.markAsPristine();
-    this.formRecipient.markAsPristine();
+  markAsPristine(form: FormGroup) {
+    // console.log('** pristine && untouched');
+    form.markAsPristine();
+    form.markAsUntouched();
   }
 
   initFormsRemoval(): void {
@@ -146,7 +171,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
       fk_type: ['', Validators.required],
     });
   }
-
   initFormsRecipient(): void {
     this.formRecipient = this.fb.group({
       id: ['', Validators.required],
@@ -175,16 +199,25 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
   }
 
   canDeactivate(): boolean {
-    console.log("canDeactivate : is form formRemoval.pristine :" + this.formRemoval.pristine );
-    // console.log("canDeactivate : is form formRecipient.pristine :" + this.formRecipient.pristine );
-    return  this.formRemoval.pristine && this.formRecipient.pristine;
+    let canDeactive = true;
+    this.allFormGroup.forEach( form => {
+      if(form.dirty && form.touched) {
+        canDeactive = false;
+      }
+    });
+    return canDeactive;
   }
-  isFormsValide(): boolean {
-    return  this.formRemoval.valid && this.formRecipient.valid;
+  isFormsValide():boolean {
+    let valid = true;
+    this.allFormGroup.forEach( form => {
+      if(!form.valid) {
+        valid = false;
+      }
+    });
+    return valid;
   }
   resetOrder(){
     this.store.dispatch(new OrderActions.InitOrder(this.customerId));
-    this.markAsPristine();
   }
   recapOrder() {
     this.store.dispatch(new OrderActions.SaveOrder());
@@ -195,18 +228,15 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
     // });
     //   //
   }
-
   success() {
     this.notificationsService.notify('success', 'some alert', 'push was called!');
   }
-
   info() {
     this.notificationsService.notify('info', 'some alert', 'push was called!');
   }
   warn() {
     this.notificationsService.notify('warn', 'some alert', 'push was called!');
   }
-
   error() {
     this.notificationsService.notify('error', 'some alert', 'push was called!');
   }

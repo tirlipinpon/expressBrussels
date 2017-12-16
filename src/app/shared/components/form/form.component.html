@@ -18,7 +18,8 @@
 <form  *ngIf="!isCustomer"  novalidate [formGroup]="formGroup">
 
   <div class="pos-rel">
-    <input id="search" (click)="toogleDropDown()" type="text" formControlName="name" >
+    <input id="search" (click)="toogleDropDown()" type="text" formControlName="name" autocomplete="off" >
+    <button (click)="resetForm(formGroup)">reset: {{ nameForm }}</button>
     <div clickOutside  (clickOutside)="toogleDropDown()" *ngIf="showDropDown" class="state-container-dropdown">
       <div>
         <div (click)="initSelectdedValue(d.name)" class="state" *ngFor="let d of _user | searchFilter:getSearchValue();  let index=index">

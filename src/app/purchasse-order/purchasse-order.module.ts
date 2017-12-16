@@ -17,12 +17,9 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-
     SharedModule,
-
   ],
   exports: [
-
   ],
   declarations: [
     PurchasseOrderComponent
