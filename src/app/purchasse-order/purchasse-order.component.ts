@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit, OnDestroy, HostListener} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
@@ -53,11 +53,20 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
     this.initFormsOptions();
   }
 
+  @HostListener('window:beforeunload', ['$event'])
+  doSomething(e) {
+    if(!this.canDeactivate()) {
+      let confirmationMessage = "\o/";
+      console.log("cond");
+      e.returnValue = confirmationMessage;     // Gecko, Trident, Chrome 34+
+      return confirmationMessage;              // Gecko, WebKit, Chrome <34
+    }
+  }
+
   ngOnInit() {
     this.storeDispatch();
     this.allFormGroup = this.pushAllForms(this.allFormGroup);
     this.onValueOrderChanged();
-
   }
   ngOnDestroy() {
     this.valueRemovalChanges$.unsubscribe();

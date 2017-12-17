@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable, HostListener} from '@angular/core';
 import { CanDeactivate } from '@angular/router';
 import {Observer, Observable} from "rxjs";
 import {ConfirmationService} from "primeng/components/common/confirmationservice";
@@ -15,6 +15,8 @@ export class CanDeactivateFormGuardService implements CanDeactivate<ComponentDea
   canDeactivate(component: ComponentDeactivable): boolean {
     return component.canDeactivate ? this.actionConfirm(component) : true;
   }
+
+
 
   actionConfirm(component): boolean {
     if(component.canDeactivate()) {
