@@ -12,7 +12,7 @@
   </div>
   <input type="text" formControlName="created">
   <input type="hidden" formControlName="fk_type">
-  <button  type="button" [disabled]="!formGroup.valid || formGroup.pristine" (click)="saveDataCustomer()">save</button>
+  <button  type="button"  (click)="saveDataCustomer()">save</button>
 </form>
 
 <form  *ngIf="!isCustomer"  novalidate [formGroup]="formGroup">

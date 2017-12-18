@@ -1,7 +1,6 @@
 import { Action } from '@ngrx/store';
 import {DataForm} from "../models/DataForm";
 
-
 export const GET_CUSTOMER = 'Get Customer';
 export class GetCustomer implements Action {
   readonly type = GET_CUSTOMER;
@@ -14,7 +13,7 @@ export const GET_CUSTOMER_SUCCESS = 'Get Customer Success';
 export class GetCustomerSuccess implements Action {
   readonly type = GET_CUSTOMER_SUCCESS;
   constructor(public payload: DataForm) {
-    // console.log('in actions get customer payload= ',payload);
+    console.log('in actions get customer success payload= ',payload);
   }
 }
 
@@ -54,7 +53,6 @@ export class SaveCustomerFail implements Action {
     // console.log('in actions get customer payload= ',payload);
   }
 }
-
 
 export type All =
       GetCustomer

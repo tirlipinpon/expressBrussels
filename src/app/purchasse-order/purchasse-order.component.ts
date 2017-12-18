@@ -14,13 +14,16 @@ import {FormBuilder, Validators, FormGroup} from "@angular/forms";
 import {PurchasseOrder} from "../models/PurchasseOrder";
 import {NotificationService} from "../services/notification.service";
 import * as _ from "lodash";
+import {Observer} from "rxjs";
+import {ConfirmationService} from "primeng/components/common/confirmationservice";
+import {ComponentDeactivable} from "../services/can-deactivate-form-guard.service";
 
 @Component({
   selector: 'app-purchasse-order',
   templateUrl: './purchasse-order.component.html',
   styleUrls: ['./purchasse-order.component.css']
 })
-export class PurchasseOrderComponent implements OnInit, OnDestroy {
+export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeactivable {
 
   removals$: Observable<DataForm[]>;
   recipients$: Observable<DataForm[]>;
@@ -41,10 +44,11 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
   datas: any;
   nameForm = ['removal','recipient'];
 
-  constructor(
+  constructor (
     private store: Store<AppState>,
     private fb: FormBuilder,
-    private notificationsService: NotificationService)
+    private notificationsService: NotificationService,
+    private confirmationService: ConfirmationService)
   {
     this.storeSelect();
 
@@ -53,15 +57,41 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
     this.initFormsOptions();
   }
 
-  @HostListener('window:beforeunload', ['$event'])
-  doSomething(e) {
-    if(!this.canDeactivate()) {
-      let confirmationMessage = "\o/";
-      console.log("cond");
-      e.returnValue = confirmationMessage;     // Gecko, Trident, Chrome 34+
-      return confirmationMessage;              // Gecko, WebKit, Chrome <34
-    }
-  }
+  // @HostListener('window:beforeunload', ['$event'])
+  // beforeunload(event) {
+  //   console.log('1', event);
+  //   if (!this.canDeactivate()) {
+  //     console.log('2', event);
+  //
+  //     let confirmationMessage = "Les modifications que vous avez apportées ne seront peut-être pas enregistrées.";
+  //     event.returnValue = confirmationMessage;     // Gecko, Trident, Chrome 34+
+  //     return confirmationMessage;                  // Gecko, WebKit, Chrome <34
+  //     history.go(0);
+  //
+  //     return Observable.create((observer: Observer<string>) => {
+  //
+  //       this.confirmationService.confirm({
+  //         message: 'You have unsaved changes. Are you sure you want to leave this page?',
+  //         accept: (event) => {
+  //           console.log('3', event);
+  //           let confirmationMessage = "Les modifications que vous avez apportées ne seront peut-être pas enregistrées.";
+  //           event.returnValue = confirmationMessage;
+  //           observer.next(confirmationMessage);
+  //           observer.complete();
+  //         },
+  //         reject: (event) => {
+  //           console.log('4', event);
+  //           let confirmationMessage = "Les modifications que vous avez apportées ne seront peut-être pas enregistrées.";
+  //           event.returnValue = confirmationMessage;
+  //           observer.next(confirmationMessage);
+  //           observer.complete();
+  //         }
+  //       });
+  //
+  //     });
+  //
+  //   }
+  // }
 
   ngOnInit() {
     this.storeDispatch();
@@ -207,6 +237,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy {
     });
   }
 
+  @HostListener('window:beforeunload')
   canDeactivate(): boolean {
     let canDeactive = true;
     this.allFormGroup.forEach( form => {
