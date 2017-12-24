@@ -50,8 +50,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     private notificationsService: NotificationService,
     private confirmationService: ConfirmationService)
   {
-    this.storeSelect();
-
+    this.storeDispatch();
     this.initFormsRemoval();
     this.initFormsRecipient();
     this.initFormsOptions();
@@ -94,7 +93,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   // }
 
   ngOnInit() {
-    this.storeDispatch();
+    this.storeSelect();
     this.allFormGroup = this.pushAllForms(this.allFormGroup);
     this.onValueOrderChanged();
   }
@@ -105,7 +104,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.valueRemovalInfosChanges$.unsubscribe();
     this.valueRecipientInfosChanges$.unsubscribe();
   }
-
   storeSelect() {
     this.removals$ = this.store.select('removals');
     this.recipients$ = this.store.select('recipients');
@@ -268,6 +266,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     // });
     //   //
   }
+
   success() {
     this.notificationsService.notify('success', 'some alert', 'push was called!');
   }
