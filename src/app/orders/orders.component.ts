@@ -25,6 +25,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
   removals$: Observable<DataForm[]>;
   recipients$: Observable<DataForm[]>;
   customerId = 1;
+  isReferenceClient = false;
   datasOrders:  PurchasseOrder[] = [];
   datasRemovals:  DataForm[];
   datasRecipients:  DataForm[];
@@ -46,22 +47,23 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
   getDatas() {
     this.removals$.subscribe(data => {
-      if(data) {
-        // console.log('data removals', data);
+      // console.log('data removals: ', data);
+      if(data.length) {
         this.datasRemovals = data;
         this.isDataLoaded();
       }
     });
     this.recipients$.subscribe(data => {
-      if(data) {
-        // console.log('data recipients', data);
+      // console.log('data recipients: ', data);
+      if(data.length) {
         this.datasRecipients = data;
         this.isDataLoaded();
       }
 
     });
     this.orders$.subscribe( (data: any) =>  {
-      if(data) {
+      // console.log('data orders: ', data);
+      if(!!data) {
         for(let i=0; i< Object.keys(data).length; i++) {
           // console.log('datasOrders:  ',data);
           this.datasOrders.push(data[i]);
@@ -71,9 +73,17 @@ export class OrdersComponent implements OnInit, OnDestroy {
       }
     });
   }
+  isExistReferenceClient(ref_removal: string, ref_recipient: string): boolean {
+    if(ref_removal || ref_recipient) {
+      return true;
+    }
+    return false;
+  }
   isDataLoaded() {
 
-    if(this.datasRemovals && this.datasRecipients && this.datasOrders.length) {
+    if(this.datasRemovals
+      && this.datasRecipients
+      && this.datasOrders) {
       // console.log('eeeeeeeeeeeeee');
       for(let i=0; i< Object.keys(this.datasOrders).length; i++) {
         // console.log('datasRecipients: ', this.datasRecipients);
@@ -84,11 +94,14 @@ export class OrdersComponent implements OnInit, OnDestroy {
         const recipientId = this.datasOrders[i].fk_recipient_id;
         const recipient = _.find(this.datasRecipients,['id', recipientId]);
 
+        this.isReferenceClient = this.isExistReferenceClient(removal.ref_client, recipient.ref_client);
+
          _.merge(this.datasOrders[i],
            {
              'removal_address': removal.address,
              'removal_cp': removal.cp,
              'removal_name': removal.name,
+             'removal_ref_client': removal.ref_client,
              'removal_number': removal.number,
              'removal_phone': removal.phone,
              'removal_state': removal.state,
@@ -99,6 +112,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
              'recipient_address': recipient.address,
              'recipient_cp': recipient.cp,
              'recipient_name': recipient.name,
+             'recipient_ref_client': recipient.ref_client,
              'recipient_number': recipient.number,
              'recipient_phone': recipient.phone,
              'recipient_state': recipient.state,
