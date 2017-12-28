@@ -2,7 +2,7 @@ import {Component, OnInit, ViewEncapsulation, OnDestroy} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {DataForm} from "../../../models/DataForm";
 import {Observable} from "rxjs";
-import {AppState} from "../../appState";
+import * as fromRoot  from "../../appState";
 import {Store} from "@ngrx/store";
 import * as CustomerActions  from '../../../actions/customer.actions';
 import * as _ from "lodash";
@@ -25,7 +25,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   datas: any;
   nameForm = ['customer'];
 
-  constructor(private store: Store<AppState>, private fb: FormBuilder) {
+  constructor(private store: Store<fromRoot.AppState>, private fb: FormBuilder) {
     this.storeSelect();
     this.initFormsCustomer();
   }
@@ -49,7 +49,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   storeSelect(){
-    this.customer$ = this.store.select((s: AppState) => s.customer);
+    this.customer$ = this.store.select(fromRoot.selectors.getCustomer);
   }
   storeDispatch() {
     this.store.dispatch(new CustomerActions.GetCustomer(this.customerId));

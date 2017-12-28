@@ -9,7 +9,7 @@ import * as RemovalActions  from '../actions/removal.actions';
 import * as RecipientActions  from '../actions/recipient.actions';
 import * as OrderActions  from '../actions/purchasseOrder.actions';
 
-import {DataDataFormState}from '../models/DataForm';
+import {DataDataFormState, DataForm}from '../models/DataForm';
 import {PurchasseOrder} from "../models/PurchasseOrder";
 import {NotificationService} from "../services/notification.service";
 import {ComponentDeactivable} from "../services/can-deactivate-form-guard.service";
@@ -22,8 +22,8 @@ import * as fromRoot from "../shared/appState";
 })
 export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeactivable {
 
-  removals$: Observable<DataDataFormState>;
-  recipients$: Observable<DataDataFormState>;
+  removals$: Observable<DataForm[]>;
+  recipients$: Observable<DataForm[]>;
   order$: Observable<PurchasseOrder>;
 
   formRemoval: FormGroup;

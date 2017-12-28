@@ -7,9 +7,9 @@ import {
 } from "../reducers/all.reducer";
 
 export interface AppState {
-  customer: DataDataFormState;
+  customer: DataForm[];
   removals: DataDataFormState;
-  recipients: DataForm[];
+  recipients: DataDataFormState;
   order: PurchasseOrder;
   orders: PurchasseOrder[];
 }
