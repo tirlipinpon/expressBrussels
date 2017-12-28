@@ -4,7 +4,7 @@ import * as RecipientActions  from '../actions/recipient.actions';
 import * as PurchasseOrderActions  from '../actions/purchasseOrder.actions';
 import * as OrdersActions from '../actions/orders.actions';
 
-import {DataForm} from "../models/DataForm";
+import {DataForm, DataDataForm} from "../models/DataForm";
 import {PurchasseOrder} from "../models/PurchasseOrder";
 
 export type ActionCustomer = CustomerActions.All;
@@ -49,7 +49,7 @@ export function customerReducer(state: DataForm, action: ActionCustomer): DataFo
   }
 }
 
-export function removalReducer(state: DataForm[], action: ActionRemoval): DataForm[] {
+export function removalReducer(state: DataDataForm, action: ActionRemoval): DataDataForm {
   // console.log('2 - Reducer customer :', action.type, state);
   switch (action.type) {
     case RemovalActions.GET_REMOVALS_SUCCESS:
@@ -65,7 +65,7 @@ export function removalReducer(state: DataForm[], action: ActionRemoval): DataFo
   }
 }
 
-export function recipientReducer(state: DataForm[], action: ActionRecipient): DataForm[] {
+export function recipientReducer(state: DataDataForm, action: ActionRecipient): DataDataForm {
   // console.log('2 - Reducer customer :', action.type, state);
   switch (action.type) {
     case RecipientActions.GET_RECIPIENTS_SUCCESS:

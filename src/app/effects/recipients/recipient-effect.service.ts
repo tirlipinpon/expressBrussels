@@ -15,8 +15,8 @@ export class RecipientEffectService {
 
   @Effect() getRecipients: Observable<Action> = this.action$
     .ofType(RecipientActions.GET_RECIPIENTS)
-    .switchMap(action =>
-      this.removalService.getRemovals(action)
+    .switchMap(fk_type =>
+      this.removalService.getRemovals(fk_type)
         .map((payload) => {
         let data = payload;
         // console.log('in effect getRecipients retrieve data from service =', data);

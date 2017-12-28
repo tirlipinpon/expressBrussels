@@ -7,7 +7,7 @@ import * as RemovalActions  from '../actions/removal.actions';
 import * as RecipientActions  from '../actions/recipient.actions';
 import * as OrderActions  from '../actions/purchasseOrder.actions';
 
-import { DataForm }from '../models/DataForm';
+import {DataForm, DataDataForm}from '../models/DataForm';
 import 'rxjs/add/operator/map';
 import {AppState} from "../shared/appState";
 import {FormBuilder, Validators, FormGroup} from "@angular/forms";
@@ -25,8 +25,8 @@ import {ComponentDeactivable} from "../services/can-deactivate-form-guard.servic
 })
 export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeactivable {
 
-  removals$: Observable<DataForm[]>;
-  recipients$: Observable<DataForm[]>;
+  removals$: Observable<DataDataForm>;
+  recipients$: Observable<DataDataForm>;
   order$: Observable<PurchasseOrder>;
 
   formRemoval: FormGroup;

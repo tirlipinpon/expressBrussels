@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormGroup } from "@angular/forms";
-import {DataForm} from "../../../models/DataForm";
+import {DataForm, DataDataForm} from "../../../models/DataForm";
 
 
 @Component({
@@ -15,7 +15,8 @@ export class FormComponent implements OnInit, OnDestroy {
   @Input('isCustomer') isCustomer: boolean;
   @Input('formGroup') formGroup: FormGroup;
   @Input('nameForm') nameForm: string;
-  @Input('datas') set data(value: DataForm[]) {
+  @Input('datas') set data(value: DataDataForm) {
+    console.log('set value: ', value);
     if (!!value) {
       if (this.isCustomer) {
         if(!this.test){
@@ -25,8 +26,8 @@ export class FormComponent implements OnInit, OnDestroy {
 
       }else{
         if(this._user.length == 0) {
-          for(let i=0; i< Object.keys(value).length; i++){
-            this._user.push(value[i]);
+          for(let i=0; i< Object.keys(value.data).length; i++){
+            this._user.push(value.data[i]);
             // console.log("this._user "+ this.nameForm + " = ", this._user);
           }
         }
@@ -45,7 +46,7 @@ export class FormComponent implements OnInit, OnDestroy {
   ngOnDestroy() {}
 
   private _initData(data): void {
-    // console.log("init data : ", data);
+    console.log("init data : ", data);
     this.formGroup.patchValue({
       id: data.id,
       name: data.name,
