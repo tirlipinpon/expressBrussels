@@ -1,22 +1,19 @@
 import {Component, OnInit, OnDestroy, HostListener} from '@angular/core';
+import {FormBuilder, Validators, FormGroup} from "@angular/forms";
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
+import {ConfirmationService} from "primeng/components/common/confirmationservice";
+import 'rxjs/add/operator/map';
 
-import * as CustomerActions  from '../actions/customer.actions';
 import * as RemovalActions  from '../actions/removal.actions';
 import * as RecipientActions  from '../actions/recipient.actions';
 import * as OrderActions  from '../actions/purchasseOrder.actions';
 
-import {DataForm, DataDataForm}from '../models/DataForm';
-import 'rxjs/add/operator/map';
-import {AppState} from "../shared/appState";
-import {FormBuilder, Validators, FormGroup} from "@angular/forms";
+import {DataDataFormState}from '../models/DataForm';
 import {PurchasseOrder} from "../models/PurchasseOrder";
 import {NotificationService} from "../services/notification.service";
-import * as _ from "lodash";
-import {Observer} from "rxjs";
-import {ConfirmationService} from "primeng/components/common/confirmationservice";
 import {ComponentDeactivable} from "../services/can-deactivate-form-guard.service";
+import * as fromRoot from "../shared/appState";
 
 @Component({
   selector: 'app-purchasse-order',
@@ -25,8 +22,8 @@ import {ComponentDeactivable} from "../services/can-deactivate-form-guard.servic
 })
 export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeactivable {
 
-  removals$: Observable<DataDataForm>;
-  recipients$: Observable<DataDataForm>;
+  removals$: Observable<DataDataFormState>;
+  recipients$: Observable<DataDataFormState>;
   order$: Observable<PurchasseOrder>;
 
   formRemoval: FormGroup;
@@ -45,7 +42,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   nameForm = ['removal','recipient'];
 
   constructor (
-    private store: Store<AppState>,
+    private store: Store<fromRoot.AppState>,
     private fb: FormBuilder,
     private notificationsService: NotificationService,
     private confirmationService: ConfirmationService)
@@ -105,9 +102,9 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.valueRecipientInfosChanges$.unsubscribe();
   }
   storeSelect() {
-    this.removals$ = this.store.select('removals');
-    this.recipients$ = this.store.select('recipients');
-    this.order$ = this.store.select('order');
+    this.removals$ = this.store.select(fromRoot.selectors.getRemovalsData);
+    this.recipients$ = this.store.select(fromRoot.selectors.getRecipientsData);
+    this.order$ = this.store.select(fromRoot.selectors.getOrder);
   }
   storeDispatch() {
     //this.store.dispatch({type: CustomerActions.GET_CUSTOMER, payload: this.customerId });

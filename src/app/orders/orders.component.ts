@@ -1,7 +1,7 @@
 import {  Component, OnInit, ViewEncapsulation, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import {PurchasseOrder} from "../models/PurchasseOrder";
 import {Observable} from "rxjs";
-import {AppState} from "../shared/appState";
+import * as fromRoot from "../shared/appState";
 import {Store} from "@ngrx/store";
 
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
@@ -33,7 +33,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<fromRoot.AppState>) {
     this.storeSelect();
   }
 
@@ -114,9 +114,10 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
 
   storeSelect() {
-    this.orders$ = this.store.select('orders');
-    this.removals$ = this.store.select('removals');
-    this.recipients$ = this.store.select('recipients');
+    this.removals$ = this.store.select(fromRoot.selectors.getRemovalsData);
+    this.recipients$ = this.store.select(fromRoot.selectors.getRecipientsData);
+    this.orders$ = this.store.select(fromRoot.selectors.getOrders);
+
   }
   storeDispatch() {
     this.store.dispatch(new OrdersActions.GetOrders(this.customerId));

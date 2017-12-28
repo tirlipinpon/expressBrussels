@@ -75,25 +75,7 @@ const appRoutes: Routes = [
     RemovalsEditModule,
     SharedModule,
 
-    EffectsModule.forRoot([
-      CustomerService,
-      RemovalService,
-      OrderService, // + orders
 
-      RecipientEffectService,
-      CustomerEffectService,
-      RemovalEffectService,
-      PurchasseOrderEffectService,
-      OrdersEffectService
-    ]),
-    // StoreModule.forFeature('todo', customerReducer)
-    StoreModule.forRoot({
-      customer: customerReducer,
-      removals: removalReducer,
-      recipients: recipientReducer,
-      order: purchasseOrderReducer,
-      orders: ordersReducer
-    }),
 
     RouterModule.forRoot(
       appRoutes,
@@ -108,6 +90,7 @@ const appRoutes: Routes = [
   providers: [
     CustomerService,
     OrderService,
+    RemovalService,
     AlwaysAuthGuardService,
     UnsearchedTermGuard,
     MessageService,

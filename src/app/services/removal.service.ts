@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
-import {DataForm, DataDataForm} from "../models/DataForm";
+import {DataForm, DataDataFormState} from "../models/DataForm";
 
 @Injectable()
 export class RemovalService {
 
   constructor(private http: HttpClient) { }
 
-  getRemovals(data): Observable<DataDataForm> {
+  getRemovals(data): Observable<DataDataFormState> {
     // console.log('fk_type from service: ', data.payload);
     let url = 'http://localhost/expressDB/php//read.php?fk_type='+data.payload;
     return  this.http.get(url).catch(error => Observable.throw('error in service get removals with message from server -> '+ error));

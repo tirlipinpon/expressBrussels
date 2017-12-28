@@ -17,7 +17,7 @@ export interface DataForm {
   fk_type: number
 }
 
-export interface DataDataForm {
+export interface DataDataFormState {
   data: DataForm[],
   count: number
 }

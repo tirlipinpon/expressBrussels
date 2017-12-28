@@ -4,7 +4,7 @@ import * as RecipientActions  from '../actions/recipient.actions';
 import * as PurchasseOrderActions  from '../actions/purchasseOrder.actions';
 import * as OrdersActions from '../actions/orders.actions';
 
-import {DataForm, DataDataForm} from "../models/DataForm";
+import {DataForm, DataDataFormState} from "../models/DataForm";
 import {PurchasseOrder} from "../models/PurchasseOrder";
 
 export type ActionCustomer = CustomerActions.All;
@@ -13,26 +13,9 @@ export type ActionRecipient = RecipientActions.All;
 export type ActionPurchasseOrder = PurchasseOrderActions.All;
 export type ActionOrders = OrdersActions.All;
 
-const orderInitOrder: PurchasseOrder =
-    {
-      id: 0,
-      fk_customer_id: 0,
-      fk_removal_id: 0,
-      fk_recipient_id: 0,
-
-      contact_removal: '',
-      message_removal: '',
-
-      contact_recipient: '',
-      message_recipient: '',
-
-      date: new Date(),
-      price: 0,
-      options: 'express',
-      tomorrow: false
-    };
-
-
+//======================================================
+// customer reducer
+//======================================================
 export function customerReducer(state: DataForm, action: ActionCustomer): DataForm {
   // console.log('2 - Reducer customer :', action.type, state);
   switch (action.type) {
@@ -48,8 +31,18 @@ export function customerReducer(state: DataForm, action: ActionCustomer): DataFo
       return state;
   }
 }
+export const CustomerSelector = {
+  customer: (state: DataForm) => { return state; }
+};
 
-export function removalReducer(state: DataDataForm, action: ActionRemoval): DataDataForm {
+//======================================================
+// removal reducer
+//======================================================
+const initRemoval: DataDataFormState = {
+  data: [],
+  count: 0
+};
+export function removalReducer(state = initRemoval, action: ActionRemoval): DataDataFormState {
   // console.log('2 - Reducer customer :', action.type, state);
   switch (action.type) {
     case RemovalActions.GET_REMOVALS_SUCCESS:
@@ -64,8 +57,19 @@ export function removalReducer(state: DataDataForm, action: ActionRemoval): Data
       return state;
   }
 }
+export const RemovalSelectors = {
+  data: (state: DataDataFormState) => { return state.data },
+  count: (state: DataDataFormState) => { return state.count }
+};
 
-export function recipientReducer(state: DataDataForm, action: ActionRecipient): DataDataForm {
+//======================================================
+// recipient reducer
+//======================================================
+const initRecipient: DataDataFormState = {
+  data: [],
+  count: 0
+};
+export function recipientReducer(state = initRecipient, action: ActionRecipient): DataDataFormState {
   // console.log('2 - Reducer customer :', action.type, state);
   switch (action.type) {
     case RecipientActions.GET_RECIPIENTS_SUCCESS:
@@ -80,7 +84,32 @@ export function recipientReducer(state: DataDataForm, action: ActionRecipient): 
       return state;
   }
 }
+export const RecipientSelectors = {
+  data: (state: DataDataFormState) => { return state.data },
+  count: (state: DataDataFormState) => { return state.count }
+};
 
+//======================================================
+// purchasse order reducer
+//======================================================
+const orderInitOrder: PurchasseOrder =
+  {
+    id: 0,
+    fk_customer_id: 0,
+    fk_removal_id: 0,
+    fk_recipient_id: 0,
+
+    contact_removal: '',
+    message_removal: '',
+
+    contact_recipient: '',
+    message_recipient: '',
+
+    date: new Date(),
+    price: 0,
+    options: 'express',
+    tomorrow: false
+  };
 export function purchasseOrderReducer(state: PurchasseOrder = orderInitOrder, action: ActionPurchasseOrder): PurchasseOrder {
   // console.log('2 - Reducer order :', action.type, state);
   switch (action.type) {
@@ -134,7 +163,13 @@ export function purchasseOrderReducer(state: PurchasseOrder = orderInitOrder, ac
   }
 
 }
+export const PurchasseOrderSelector = {
+  order: (state: PurchasseOrder) => { return state; }
+};
 
+//======================================================
+// orders reducer
+//======================================================
 export function ordersReducer(state: PurchasseOrder[], action: ActionOrders): PurchasseOrder[] {
   switch(action.type){
     case OrdersActions.GET_ORDERS_SUCCESS:
@@ -145,3 +180,6 @@ export function ordersReducer(state: PurchasseOrder[], action: ActionOrders): Pu
       return state;
   }
 }
+export const OrderSelector = {
+  orders: (state: PurchasseOrder[]) => { return state; }
+};

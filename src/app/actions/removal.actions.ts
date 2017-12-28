@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import {DataForm, DataDataForm} from "../models/DataForm";
+import {DataForm, DataDataFormState} from "../models/DataForm";
 
 
 export const GET_REMOVALS = 'Get Removals';
@@ -13,7 +13,7 @@ export class GetRemovals implements Action {
 export const GET_REMOVALS_SUCCESS = 'Get Removals Success';
 export class GetRemovalsSuccess implements Action {
   readonly type = GET_REMOVALS_SUCCESS;
-  constructor(public payload: DataDataForm) {
+  constructor(public payload: DataDataFormState) {
     // console.log('in actions get customer payload= ',payload);
   }
 }

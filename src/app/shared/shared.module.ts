@@ -17,6 +17,17 @@ import { ProfileComponent } from './components/profile/profile.component';
 import {DialogModule} from "primeng/components/dialog/dialog";
 import {ConfirmDialogModule} from "primeng/components/confirmdialog/confirmdialog";
 import {ConfirmationService} from "primeng/components/common/confirmationservice";
+import {
+  removalReducer, customerReducer, recipientReducer, purchasseOrderReducer,
+  ordersReducer
+} from "../reducers/all.reducer";
+import {StoreModule} from "@ngrx/store";
+import {OrdersEffectService} from "../effects/orders/orders-effect.service";
+import {PurchasseOrderEffectService} from "../effects/order/purchasse-order-effect.service";
+import {RemovalEffectService} from "../effects/removals/removal-effect.service";
+import {CustomerEffectService} from "../effects/customer/customer-effect.service";
+import {RecipientEffectService} from "../effects/recipients/recipient-effect.service";
+import {EffectsModule} from "@ngrx/effects";
 
 
 @NgModule({
@@ -31,7 +42,23 @@ import {ConfirmationService} from "primeng/components/common/confirmationservice
     CommonModule,
     GrowlModule,
     DialogModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+
+    EffectsModule.forRoot([
+      RecipientEffectService,
+      CustomerEffectService,
+      RemovalEffectService,
+      PurchasseOrderEffectService,
+      OrdersEffectService
+    ]),
+    // StoreModule.forFeature('todo', customerReducer)
+    StoreModule.forRoot({
+      customer: customerReducer,
+      removals: removalReducer,
+      recipients: recipientReducer,
+      order: purchasseOrderReducer,
+      orders: ordersReducer
+    }),
   ],
   exports: [
     GrowlModule,
