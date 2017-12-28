@@ -18,12 +18,22 @@
 <form  *ngIf="!isCustomer"  novalidate [formGroup]="formGroup">
 
   <div class="pos-rel">
-    <input id="search" (click)="toogleDropDown()" type="text" formControlName="name" autocomplete="off" >
-    <button (click)="resetForm(formGroup)">reset: {{ nameForm }}</button>
-    <div clickOutside  (clickOutside)="toogleDropDown()" *ngIf="showDropDown" class="state-container-dropdown">
+    <input id="search" (click)="toogleDropDown('name')" type="text" formControlName="name" autocomplete="off" >
+    <div clickOutside  (clickOutside)="toogleDropDown('name')" *ngIf="showDropDown" class="state-container-dropdown">
       <div>
-        <div (click)="initSelectdedValue(d.name)" class="state" *ngFor="let d of _user | searchFilter:getSearchValue();  let index=index">
+        <div (click)="setSelectdedValue('name', d.name)" class="state" *ngFor="let d of _user | searchFilter:getSearchValue('name');  let index=index">
           {{index}} {{d.name}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pos-rel">
+    <input id="searchRef" (click)="toogleDropDown('ref_client')" type="text" formControlName="ref_client" autocomplete="off" >
+    <div clickOutside  (clickOutside)="toogleDropDown('ref_client')" *ngIf="showDropDownRef" class="state-container-dropdown">
+      <div>
+        <div (click)="setSelectdedValue('ref_client', d.ref_client)" class="state" *ngFor="let d of _user | searchFilter:getSearchValue('ref_client');  let index=index">
+           {{d.ref_client}}
         </div>
       </div>
     </div>
@@ -35,10 +45,10 @@
   <input type="text" formControlName="cp" [readonly]="true">
   <input type="text" formControlName="state" [readonly]="true">
   <input type="text" formControlName="phone" [readonly]="true">
-
   <app-info [formGroup]="formGroup.get('infos')"></app-info>
-
   <input type="text" formControlName="created" [readonly]="true">
+  <button (click)="resetForm(formGroup)">reset: {{ nameForm }}</button>
+
   <input type="hidden" formControlName="fk_type" [readonly]="true">
 
 </form>

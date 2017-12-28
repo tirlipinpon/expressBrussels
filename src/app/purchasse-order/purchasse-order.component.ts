@@ -9,7 +9,7 @@ import * as RemovalActions  from '../actions/removal.actions';
 import * as RecipientActions  from '../actions/recipient.actions';
 import * as OrderActions  from '../actions/purchasseOrder.actions';
 
-import {DataDataFormState, DataForm}from '../models/DataForm';
+import {DataForm}from '../models/DataForm';
 import {PurchasseOrder} from "../models/PurchasseOrder";
 import {NotificationService} from "../services/notification.service";
 import {ComponentDeactivable} from "../services/can-deactivate-form-guard.service";
@@ -53,41 +53,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.initFormsOptions();
   }
 
-  // @HostListener('window:beforeunload', ['$event'])
-  // beforeunload(event) {
-  //   console.log('1', event);
-  //   if (!this.canDeactivate()) {
-  //     console.log('2', event);
-  //
-  //     let confirmationMessage = "Les modifications que vous avez apportées ne seront peut-être pas enregistrées.";
-  //     event.returnValue = confirmationMessage;     // Gecko, Trident, Chrome 34+
-  //     return confirmationMessage;                  // Gecko, WebKit, Chrome <34
-  //     history.go(0);
-  //
-  //     return Observable.create((observer: Observer<string>) => {
-  //
-  //       this.confirmationService.confirm({
-  //         message: 'You have unsaved changes. Are you sure you want to leave this page?',
-  //         accept: (event) => {
-  //           console.log('3', event);
-  //           let confirmationMessage = "Les modifications que vous avez apportées ne seront peut-être pas enregistrées.";
-  //           event.returnValue = confirmationMessage;
-  //           observer.next(confirmationMessage);
-  //           observer.complete();
-  //         },
-  //         reject: (event) => {
-  //           console.log('4', event);
-  //           let confirmationMessage = "Les modifications que vous avez apportées ne seront peut-être pas enregistrées.";
-  //           event.returnValue = confirmationMessage;
-  //           observer.next(confirmationMessage);
-  //           observer.complete();
-  //         }
-  //       });
-  //
-  //     });
-  //
-  //   }
-  // }
 
   ngOnInit() {
     this.storeSelect();
@@ -189,6 +154,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.formRemoval = this.fb.group({
       id: ['', Validators.required],
       name: ['', Validators.required],
+      ref_client: [''],
       address: ['', Validators.required],
       number: ['', Validators.required],
       cp: ['', Validators.required],
@@ -209,6 +175,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.formRecipient = this.fb.group({
       id: ['', Validators.required],
       name: ['', Validators.required],
+      ref_client: [''],
       address: ['', Validators.required],
       number: ['', Validators.required],
       cp: ['', Validators.required],
@@ -256,12 +223,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   }
   recapOrder() {
     this.store.dispatch(new OrderActions.SaveOrder());
-    // let orderSave$ = this.store.select((s: AppState) => s.order).subscribe(s =>   {
-    //   console.log("-----------",s);
-    //   this.store.dispatch(new OrderActions.SaveOrder(s));
-    //   // orderSave$.unsubscribe();
-    // });
-    //   //
   }
 
   success() {

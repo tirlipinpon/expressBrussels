@@ -1,6 +1,7 @@
 export interface DataForm {
   id: number,
   name: string,
+  ref_client: string,
   address: string,
   number: string,
   cp: number,

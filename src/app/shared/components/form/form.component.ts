@@ -39,6 +39,7 @@ export class FormComponent implements OnInit, OnDestroy {
   @Output() updateDataForm = new EventEmitter();
 
   private showDropDown = false;
+  private showDropDownRef = false;
   private _user: DataForm[] = [];
 
   constructor() {}
@@ -50,6 +51,7 @@ export class FormComponent implements OnInit, OnDestroy {
     this.formGroup.patchValue({
       id: data.id,
       name: data.name,
+      ref_client: data.ref_client? data.ref_client : 'none',
       address: data.address,
       number: data.number,
       cp: data.cp,
@@ -72,19 +74,40 @@ export class FormComponent implements OnInit, OnDestroy {
     this.updateDataForm.emit();
   }
   // auto completion
-  toogleDropDown() {
-    this.showDropDown = !this.showDropDown;
+  toogleDropDown(value: string) {
+    if (value === 'name') {
+      this.showDropDown = !this.showDropDown;
+    } else if (value === 'ref_client') {
+      this.showDropDownRef = !this.showDropDownRef;
+    }else{
+      this.showDropDown = !this.showDropDown;
+      this.showDropDownRef = !this.showDropDownRef;
+    }
   }
-  getSearchValue() {
-    return this.formGroup.value.name;
+  getSearchValue(value: string): string {
+    if (value === 'name') {
+      return this.formGroup.value.name;
+    } else if (value === 'ref_client') {
+      return this.formGroup.value.ref_client;
+    }
+
   }
-  initSelectdedValue(value) {
-    this._initData(this.getByValue(value));
+  setSelectdedValue(value: string,  data: string): void {
+    if (value === 'name') {
+      this._initData(this.getByData(value, data));
+    } else if (value === 'ref_client') {
+      this._initData(this.getByData(value, data));
+    }
     this.toogleDropDown();
     this.formGroup.markAsDirty();
   }
-  getByValue(value): DataForm {
-    let arrayWithElem = this._user.filter(elem => elem.name === value);
+  getByData(value, data): DataForm {
+    let arrayWithElem;
+    if (value === 'name') {
+      arrayWithElem = this._user.filter(elem => elem.name === data);
+    } else if (value === 'ref_client') {
+      arrayWithElem = this._user.filter(elem => elem.ref_client === data);
+    }
     return arrayWithElem[0];
   }
   resetForm(formGroup: FormGroup): void {

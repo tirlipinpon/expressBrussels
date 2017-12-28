@@ -1,11 +1,14 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import {DataForm} from "../../models/DataForm";
 
 @Pipe({
   name: 'searchFilter'
 })
 export class SearchFilterPipe implements PipeTransform {
 
-  transform(value: any, search: any): any {
+  transform(value: DataForm[], search: any): any {
+    console.log('value -> ', value);
+    console.log('search -> ', search);
     if(!search) { return value; }
     let solution = value.filter(v =>{
       let val = v.name.toLowerCase();

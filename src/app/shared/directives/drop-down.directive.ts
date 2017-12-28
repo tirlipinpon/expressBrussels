@@ -10,7 +10,8 @@ export class DropDownDirective {
   @HostListener('document:click',['$event.target'])
   public onClick(targetElement) {
 
-    if(targetElement.id === 'search') { return; }
+    if(targetElement.id === 'search'
+      || targetElement.id === 'searchRef' ) { return; }
 
     const isClickedInside = this._elementRef.nativeElement.contains(targetElement);
     if(!isClickedInside) {
