@@ -1,4 +1,7 @@
-import {  Component, OnInit, ViewEncapsulation, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
+import {
+  Component, OnInit, ViewEncapsulation, OnDestroy, ViewChild, AfterViewInit, ViewChildren,
+  ViewContainerRef, QueryList, Attribute
+} from '@angular/core';
 import {PurchasseOrder} from "../models/PurchasseOrder";
 import {Observable} from "rxjs";
 import * as fromRoot from "../shared/appState";
@@ -34,7 +37,9 @@ export class OrdersComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private store: Store<fromRoot.AppState>) {
+  @ViewChildren('mati') matInput: QueryList<any>
+
+  constructor(private store: Store<fromRoot.AppState>,@Attribute('type') type) {
     this.storeSelect();
   }
 
@@ -138,7 +143,15 @@ export class OrdersComponent implements OnInit, OnDestroy {
     this.store.dispatch(new RemovalActions.GetRemovals(this.customerId*10+1)); // (id + type)  eg: id = 69; type=1 fk_type=691
     this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10+2)); // (id + type)  eg: id = 69; type=2 fk_type=692
   }
-  applyFilter(filterValue: string) {
+  resetNotCurrentFilter(current: any): void {
+    this.matInput.forEach(elem => {
+      if(elem.nativeElement.id !== current.id) {
+        elem.nativeElement.value = '';
+      }
+    });
+  }
+  applyFilter(filterValue: string, target: any): void {
+    this.resetNotCurrentFilter(target);
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
