@@ -29,11 +29,11 @@
   </div>
 
   <div class="pos-rel">
-    <input id="searchRef" (click)="toogleDropDown('ref_client')" type="text" formControlName="ref_client" autocomplete="off" >
+    <input id="searchRef" *ngIf="formGroup.get('ref_client')!=='NULL'" (click)="toogleDropDown('ref_client')" type="text" formControlName="ref_client" autocomplete="off" >
     <div clickOutside  (clickOutside)="toogleDropDown('ref_client')" *ngIf="showDropDownRef" class="state-container-dropdown">
       <div>
         <div (click)="setSelectdedValue('ref_client', d.ref_client)" class="state" *ngFor="let d of _user | searchFilter:getSearchValue('ref_client');  let index=index">
-           {{d.ref_client}}
+          <span *ngIf="d.ref_client!=='NULL'">{{d.ref_client}}</span>
         </div>
       </div>
     </div>
@@ -52,3 +52,4 @@
   <input type="hidden" formControlName="fk_type" [readonly]="true">
 
 </form>
+

@@ -51,7 +51,7 @@ export class FormComponent implements OnInit, OnDestroy {
     this.formGroup.patchValue({
       id: data.id,
       name: data.name,
-      ref_client: data.ref_client? data.ref_client : 'none',
+      ref_client: data.ref_client!=='NULL' ? data.ref_client : '',
       address: data.address,
       number: data.number,
       cp: data.cp,
@@ -74,11 +74,13 @@ export class FormComponent implements OnInit, OnDestroy {
     this.updateDataForm.emit();
   }
   // auto completion
-  toogleDropDown(value: string) {
+  toogleDropDown(value?: string) {
     if (value === 'name') {
       this.showDropDown = !this.showDropDown;
+      this.showDropDownRef = false;
     } else if (value === 'ref_client') {
       this.showDropDownRef = !this.showDropDownRef;
+      this.showDropDown = false;
     }else{
       this.showDropDown = !this.showDropDown;
       this.showDropDownRef = !this.showDropDownRef;
@@ -90,7 +92,6 @@ export class FormComponent implements OnInit, OnDestroy {
     } else if (value === 'ref_client') {
       return this.formGroup.value.ref_client;
     }
-
   }
   setSelectdedValue(value: string,  data: string): void {
     if (value === 'name') {
