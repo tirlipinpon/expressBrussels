@@ -49,13 +49,21 @@ export function removalReducer(state = initRemoval, action: ActionRemoval): Data
       // console.log('in removal reducer getRemoval payload = ',action.payload);
       return Object.assign({}, state, action.payload ); //{...state, ...action.payload};
     case RemovalActions.EDIT_REMOVAL_SUCCESS:
-      // console.log('in customer reducer editCustomer payload = ',action.payload);
-      return Object.assign({}, state, action.payload ); // {...state, ...action.payload};
-    // case CustomerActions.VALID_CUSTOMER:
-    //   return state;
+      return handleRemovalState(state, action);
+    case RemovalActions.ADD_REMOVAL_SUCCESS:
+      return handleRemovalState(state, action);
     default:
       return state;
   }
+}
+function handleRemovalState(state: any, action: ActionRemoval): DataDataFormState {
+  console.log('payload:', action.payload);
+  console.log('state:', state.data[0]);
+  const newState = {
+      data:  state.data.map(item => item.id == action.payload.id ? Object.assign({}, item, action.payload ) : item ),
+      count: state.count
+  };
+  return newState;
 }
 export const RemovalSelectors = {
   data: (state: DataDataFormState) => { return state.data },

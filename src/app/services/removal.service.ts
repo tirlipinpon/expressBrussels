@@ -24,4 +24,10 @@ export class RemovalService {
     return this.http.post(url,data.payload);
   }
 
+  addRemoval(data): Observable<any> {
+    // console.log('in removal service set new removal to db with this data-> ', data.payload);
+    let url = 'http://localhost/expressDB/php//add.php';
+    return this.http.post(url,data.payload);
+  }
+
 }
