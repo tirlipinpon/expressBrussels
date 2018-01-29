@@ -46,27 +46,41 @@ export function removalReducer(state = initRemoval, action: ActionRemoval): Data
   // console.log('2 - Reducer customer :', action.type, state);
   switch (action.type) {
     case RemovalActions.GET_REMOVALS_SUCCESS:
-      // console.log('in removal reducer getRemoval payload = ',action.payload);
       return Object.assign({}, state, action.payload ); //{...state, ...action.payload};
     case RemovalActions.EDIT_REMOVAL_SUCCESS:
       return handleRemovalState(state, action);
-    case RemovalActions.ADD_REMOVAL_SUCCESS:
-      return handleRemovalState(state, action);
+    // case RemovalActions.ADD_REMOVAL_SUCCESS:
+    //   return handleRemovalState(state, action);
+    case RemovalActions.GET_LAST_REMOVAL_SUCCESS:
+      return handleAddRemovalState(state, action);
     default:
       return state;
   }
 }
-function handleRemovalState(state: any, action: ActionRemoval): DataDataFormState {
-  console.log('payload:', action.payload);
-  console.log('state:', state.data[0]);
+function handleAddRemovalState(state: DataDataFormState, action: ActionRemoval): DataDataFormState {
+  const data =  [...state.data, ...action.payload];
   const newState = {
-      data:  state.data.map(item => item.id == action.payload.id ? Object.assign({}, item, action.payload ) : item ),
-      count: state.count
+    data: data,
+    count: ++state.count
   };
   return newState;
 }
+function handleRemovalState(state: any, action: ActionRemoval): DataDataFormState {
+  console.log('--- state', state);
+
+  const newState = {
+      data:  state.data.map(item => console.log(item) ),
+      count: state.count
+  };
+  console.log('--- state', newState);
+  // item.id == action.payload.id ? Object.assign({}, item, action.payload ) : item
+  return newState;
+}
 export const RemovalSelectors = {
-  data: (state: DataDataFormState) => { return state.data },
+  data: (state: DataDataFormState) => {
+    const res =  state.data
+    return res
+  },
   count: (state: DataDataFormState) => { return state.count }
 };
 

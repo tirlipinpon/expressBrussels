@@ -7,20 +7,20 @@ import {
 } from "../reducers/all.reducer";
 
 export interface AppState {
-  customer: DataForm[];
+  customer: DataForm;
   removals: DataDataFormState;
   recipients: DataDataFormState;
   order: PurchasseOrder;
   orders: PurchasseOrder[];
 }
 
-// export const reducers: ActionReducerMap<AppState> = {
-//   customer: customerReducer,
-//   removals: removalReducer,
-//   recipients: recipientReducer,
-//   order: purchasseOrderReducer,
-//   orders: ordersReducer
-// };
+export const reducers: ActionReducerMap<AppState> = {
+  customer: customerReducer,
+  removals: removalReducer,
+  recipients: recipientReducer,
+  order: purchasseOrderReducer,
+  orders: ordersReducer
+};
 
 const getCustomerState = createFeatureSelector('customer');
 const getRemovalsState = createFeatureSelector('removals');

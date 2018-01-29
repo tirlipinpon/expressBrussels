@@ -75,15 +75,13 @@ const appRoutes: Routes = [
     RemovalsEditModule,
     SharedModule,
 
-
-
     RouterModule.forRoot(
       appRoutes,
       {useHash: true}
       // { enableTracing: true } // <-- debugging purposes only
     ),
     StoreDevtoolsModule.instrument({
-      maxAge: 10
+      maxAge: 50
     })
 
   ],

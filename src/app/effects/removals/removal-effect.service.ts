@@ -51,8 +51,8 @@ export class RemovalEffectService {
     .switchMap(action =>
       this.removalService.addRemoval(action)
         .map((payload) => {
-          console.log('in effect add removal retrieved id from service =', payload);
-          return new RemovalActions.GetLastRemoval(payload);
+          // console.log('in effect add removal retrieved id from service =', payload);
+          return new RemovalActions.GetLastRemovalSuccess(payload);
         })
         .catch(err => {
           // console.log('error in effect EDIT removal with error -> ',err);
@@ -60,20 +60,20 @@ export class RemovalEffectService {
         })
     );
 
-  @Effect() getLastRemoval: Observable<Action> = this.action$
-    .ofType(RemovalActions.GET_LAST_REMOVAL)
-    .switchMap(action =>
-      this.removalService.getRemovals(action)
-        .map((payload) => {
-          let data = payload;
-          // console.log('in effect getRemovals retrieve data from service =', data);
-          return new RemovalActions.GetLastRemovalSuccess(data);
-        })
-        .catch(err => {
-          // console.log('error in effect get removals');
-          return Observable.of(new RemovalActions.GetLastRemovalFail(err))
-        })
-    );
+  // @Effect() getLastRemoval: Observable<Action> = this.action$
+  //   .ofType(RemovalActions.GET_LAST_REMOVAL)
+  //   .switchMap(action =>
+  //     this.removalService.getRemovals(action)
+  //       .map((payload) => {
+  //         let data = payload;
+  //         // console.log('in effect getRemovals retrieve data from service =', data);
+  //         return new RemovalActions.GetLastRemovalSuccess(data);
+  //       })
+  //       .catch(err => {
+  //         // console.log('error in effect get removals');
+  //         return Observable.of(new RemovalActions.GetLastRemovalFail(err))
+  //       })
+  //   );
 
 
 }

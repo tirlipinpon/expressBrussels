@@ -56,7 +56,7 @@ export const ADD_REMOVAL = 'Add Removal';
 export class AddRemoval implements Action {
   readonly type = ADD_REMOVAL;
   constructor(public payload: DataForm) {
-    console.log('in actions add removal payload= ',payload);
+    // console.log('in actions add removal payload= ',payload);
   }
 }
 
@@ -64,7 +64,7 @@ export const ADD_REMOVAL_SUCCESS = 'Add Removal Success';
 export class AddRemovalSuccess implements Action {
   readonly type = ADD_REMOVAL_SUCCESS;
   constructor(public payload: number) {
-    console.log('in actions add removal success payload= ',payload);
+    // console.log('in actions add removal success payload= ',payload);
   }
 }
 
@@ -79,16 +79,16 @@ export class AddRemovalFail implements Action {
 export const GET_LAST_REMOVAL = 'Get last Removal';
 export class GetLastRemoval implements Action {
   readonly type = GET_LAST_REMOVAL;
-  constructor(public payload: number) {
-    // console.log('in actions get customer payload= ',payload);
+  constructor(public payload: DataForm) {
+     // console.log('in actions get removal payload= ',payload);
   }
 }
 
 export const GET_LAST_REMOVAL_SUCCESS = 'Get Last Removal Success';
 export class GetLastRemovalSuccess implements Action {
   readonly type = GET_LAST_REMOVAL_SUCCESS;
-  constructor(public payload: DataDataFormState) {
-    // console.log('in actions get customer payload= ',payload);
+  constructor(public payload: DataForm) {
+    // console.log('in actions get last removal success payload= ',payload);
   }
 }
 

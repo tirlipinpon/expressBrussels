@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Store} from "@ngrx/store";
 import {Observable} from "rxjs";
@@ -12,7 +12,8 @@ import {DataForm} from "../../models/DataForm";
 @Component({
   selector: 'app-removals',
   templateUrl: './removals.component.html',
-  styleUrls: ['./removals.component.css']
+  styleUrls: ['./removals.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RemovalsComponent implements OnInit, OnDestroy {
 
@@ -22,6 +23,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<fromRoot.AppState>,
               private fb: FormBuilder,
+              private cd: ChangeDetectorRef,
               private notificationsService: NotificationService) {
     this.storeDispatch();
   }
@@ -42,16 +44,23 @@ export class RemovalsComponent implements OnInit, OnDestroy {
   }
   initFormsRemoval(): void {
     this.removals$.subscribe(data => {
-      // console.log('data: ', data);
-      if(data.length && this.formRemoval.length===1) {
-        data.forEach(elem => {
-          this.formRemoval.push(this.initData(elem));
+      this.cd.markForCheck();
+      if(data.length ) {
+        // premiere inittialisation des données
+        if(this.formRemoval.length === 1) {
+          data.forEach(elem => {
+            this.formRemoval.push(this.initData(elem));
           });
-        console.log('this.formRemova:', this.formRemoval);
+        //  ajout de données suplementaires
+        }else if(this.formRemoval.length > 1) {
+          this.formRemoval.push(this.initData(data[data.length-1]));
+          this.cd.markForCheck();
+        }
       }
-
-    })
+    });
+    this.cd.markForCheck();
   }
+
   createFormRemoval(): FormGroup {
     return this.fb.group({
       id: [''],
@@ -99,25 +108,11 @@ export class RemovalsComponent implements OnInit, OnDestroy {
     form.markAsUntouched();
     form.markAsPristine();
   }
-  add(form: FormGroup): void{
-    // const val = {
-    //   id: null,
-    //   active   :   1,
-    //   address    :        "removal 1 addr ",
-    //   cp        :        1040,
-    //   created        :        null,
-    //   fk_client        :        1,
-    //   fk_type        :        11,
-    //   infos        :
-    //     {info1: "", info2: ""},
-    //   name        :        "removal1",
-    //   number        :        "83",
-    //   phone        :        "0472475507",
-    //   ref_client        :        "21remove",
-    //   state        :        "Etterbeek",
-    //   type        :        1
-    // };
+  add(form: FormGroup): void {
     this.store.dispatch(new RemovalActions.AddRemoval(form.value));
+    this.formRemoval[0].reset();
+    this.formRemoval[0].markAsUntouched();
+    this.formRemoval[0].markAsPristine();
   }
 
 }
