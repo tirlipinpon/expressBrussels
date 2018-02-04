@@ -29,11 +29,10 @@ export class RemovalsComponent implements OnInit, OnDestroy {
   }
   ngOnInit() {
     this.storeSelect();
+    this.formRemoval.push(this.createFormRemoval(null));
     this.initFormsRemoval();
-    this.formRemoval.push(this.createFormRemoval());
   }
-  ngOnDestroy() {
-  }
+  ngOnDestroy() {  }
   storeDispatch() {
     //this.store.dispatch({type: CustomerActions.GET_CUSTOMER, payload: this.customerId });
     // this.store.dispatch(new OrderActions.InitOrder(this.customerId));
@@ -46,40 +45,73 @@ export class RemovalsComponent implements OnInit, OnDestroy {
     this.removals$.subscribe(data => {
       this.cd.markForCheck();
       if(data.length ) {
-        // premiere inittialisation des données
+        // init data
         if(this.formRemoval.length === 1) {
           data.forEach(elem => {
-            this.formRemoval.push(this.initData(elem));
+            this.formRemoval.push(this.createFormRemoval(elem));
+            this.cd.markForCheck();
           });
-        //  ajout de données suplementaires
-        }else if(this.formRemoval.length > 1) {
-          this.formRemoval.push(this.initData(data[data.length-1]));
+        //  add data
+        }else if(this.formRemoval.length-1 < data.length) {
+          this.formRemoval.push(this.createFormRemoval(data[data.length-1]));
           this.cd.markForCheck();
-        }
+        //  update data
+        }else { }
+        this.disableForm();
+      }
+    });
+  }
+
+  disableForm() {
+    this.formRemoval.forEach(elem => {
+      const ctrl = elem.controls;
+      if(ctrl.active.value === '0') {
+        ctrl.name.disable();
+        ctrl.ref_client.disable();
+        ctrl.address.disable();
+        ctrl.number.disable();
+        ctrl.cp.disable();
+        ctrl.state.disable();
+        ctrl.phone.disable();
+        ctrl.phone.disable();
+      }else if(ctrl.active.value === '1'){
+        ctrl.name.enable();
+        ctrl.ref_client.enable();
+        ctrl.address.enable();
+        ctrl.number.enable();
+        ctrl.cp.enable();
+        ctrl.state.enable();
+        ctrl.phone.enable();
+        ctrl.phone.enable();
       }
     });
     this.cd.markForCheck();
   }
-
-  createFormRemoval(): FormGroup {
+  createFormRemoval(data?: DataForm): FormGroup {
+    let active;
+    if(!data){
+      active = 1;
+    }else{
+      active = data.active;
+    }
     return this.fb.group({
-      id: [''],
-      name: ['', Validators.required],
-      ref_client: [''],
-      address: ['', Validators.required],
-      number: ['', Validators.required],
-      cp: ['', Validators.required],
-      state: ['', Validators.required],
-      phone: ['', Validators.required],
+      id: [data ? data.id : ''],
+      name: [data? data.name : '', Validators.required],
+      ref_client: [data ? data.ref_client : ''],
+      address: [data ? data.address : '', Validators.required],
+      number: [data ? data.number : '', Validators.required],
+      cp: [data? data.cp : '', Validators.required],
+      state: [data? data.state : '', Validators.required],
+      phone: [data ? data.phone : '', Validators.required],
       infos: this.fb.group({
         info1: [''],
         info2: [''],
       }),
-      type: [1, Validators.required],
-      fk_client: [1],
-      active: [1],
+      type: [data ? data.type : 1],
+      fk_client: [data ? data.fk_client : this.customerId],
+      active: [data ? active : 1],
       created: [''],
-      fk_type: [11],
+      fk_type: [data ? data.fk_type : this.customerId+''+1],
     });
   }
   initData(data): FormGroup {
@@ -94,11 +126,9 @@ export class RemovalsComponent implements OnInit, OnDestroy {
       cp: data.cp,
       state: data.state,
       phone: data.phone,
-      type: data.type,
       fk_client: data.fk_client,
       active: data.active,
-      created: data.created,
-      fk_type: data.fk_type
+      created: data.created
     });
     return formGroup;
   }
@@ -108,11 +138,19 @@ export class RemovalsComponent implements OnInit, OnDestroy {
     form.markAsUntouched();
     form.markAsPristine();
   }
+  delete(form: FormGroup): void {
+    // console.log('form update:', form.value);
+    if( form.get('active').value == 1){
+      form.get('active').setValue(0);
+    }else{
+      form.get('active').setValue(1);
+    }
+    this.store.dispatch(new RemovalActions.DeleteRemoval(form.get('id').value));
+  }
   add(form: FormGroup): void {
     this.store.dispatch(new RemovalActions.AddRemoval(form.value));
     this.formRemoval[0].reset();
     this.formRemoval[0].markAsUntouched();
     this.formRemoval[0].markAsPristine();
   }
-
 }

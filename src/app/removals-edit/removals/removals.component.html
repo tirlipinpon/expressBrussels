@@ -16,21 +16,23 @@
 
     </form>
   </div>
-  <div class="formRemoval" *ngFor="let removal of formRemoval | slice:1" let index="index">
-    <form  novalidate [formGroup]="removal">
-      <input type="text" formControlName="id" >
-      <input type="text" formControlName="name" autocomplete="off">
-      <input type="text" formControlName="ref_client" autocomplete="off">
-      <input type="text" formControlName="address">
-      <input type="text" formControlName="number">
-      <input type="text" formControlName="cp">
-      <input type="text" formControlName="state">
-      <input type="text" formControlName="phone">
-      <input type="text" formControlName="created" >
-      <input type="hidden" formControlName="fk_type">
-      <button [disabled]="!removal.dirty" (click)="update(removal)"> update </button>
-    </form>
+  <div class="formRemoval"  *ngFor="let removal of formRemoval | slice:1" let index="index" >
+      <form  novalidate [formGroup]="removal" >
+        <input type="hidden" formControlName="id" >
+        <input type="text" formControlName="name" autocomplete="off" >
+        <input type="text" formControlName="ref_client" autocomplete="off">
+        <input type="text" formControlName="address">
+        <input type="text" formControlName="number">
+        <input type="text" formControlName="cp">
+        <input type="text" formControlName="state">
+        <input type="text" formControlName="phone">
+        <input type="text" formControlName="created" >
+        <input type="hidden" formControlName="fk_type">
+        <button [disabled]="!removal.dirty" (click)="update(removal)"> update </button>
+        <button [disabled]="removal.dirty" (click)="delete(removal)"> {{removal.get('active').value==1?'desactive':'active'}} </button>
+      </form>
   </div>
+
 
 </div>
 

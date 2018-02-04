@@ -57,30 +57,29 @@ export function removalReducer(state = initRemoval, action: ActionRemoval): Data
       return state;
   }
 }
-function handleAddRemovalState(state: DataDataFormState, action: ActionRemoval): DataDataFormState {
-  const data =  [...state.data, ...action.payload];
+function handleAddRemovalState(state: DataDataFormState, action: ActionRemoval): any {
+  const data =  [...state.data, ...[action.payload]];
   const newState = {
     data: data,
     count: ++state.count
   };
   return newState;
 }
-function handleRemovalState(state: any, action: ActionRemoval): DataDataFormState {
-  console.log('--- state', state);
-
+function handleRemovalState(state: DataDataFormState, action: ActionRemoval): any {
+  const data =  state.data.map(item => {
+    if(item.id == action.payload['id']) {
+      return action.payload;
+    }
+    return item;
+  });
   const newState = {
-      data:  state.data.map(item => console.log(item) ),
+      data:  data,
       count: state.count
   };
-  console.log('--- state', newState);
-  // item.id == action.payload.id ? Object.assign({}, item, action.payload ) : item
   return newState;
 }
 export const RemovalSelectors = {
-  data: (state: DataDataFormState) => {
-    const res =  state.data
-    return res
-  },
+  data: (state: DataDataFormState) => { return state.data },
   count: (state: DataDataFormState) => { return state.count }
 };
 

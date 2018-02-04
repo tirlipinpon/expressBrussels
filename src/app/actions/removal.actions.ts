@@ -31,7 +31,7 @@ export const EDIT_REMOVAL = 'Edit Removal';
 export class EditRemoval implements Action {
   readonly type = EDIT_REMOVAL;
   constructor(public payload: DataForm) {
-    // console.log('in actions edit removal payload= ',payload);
+    console.log('in actions edit removal payload= ',payload);
   }
 }
 
@@ -99,6 +99,32 @@ export class GetLastRemovalFail implements Action {
     // console.log('in actions get customer payload= ',payload);
   }
 }
+
+//===================================================
+export const DELETE_REMOVAL = 'DELETE  Removal';
+export class DeleteRemoval implements Action {
+  readonly type = DELETE_REMOVAL;
+  constructor(public payload: number) {
+    // console.log('in actions get removal payload= ',payload);
+  }
+}
+
+export const DELETE_REMOVAL_SUCCESS = 'DELETE Removal Success';
+export class DeleteRemovalSuccess implements Action {
+  readonly type = DELETE_REMOVAL_SUCCESS;
+  constructor(public payload: DataForm) {
+    // console.log('in actions get last removal success payload= ',payload);
+  }
+}
+
+export const DELETE_REMOVAL_FAIL = 'DELETE Removal Fail';
+export class DeleteRemovalFail implements Action {
+  readonly type = DELETE_REMOVAL_FAIL;
+  constructor(public payload: string) {
+    // console.log('in actions get customer payload= ',payload);
+  }
+}
+
 export type All =
       GetRemovals
     | GetRemovalsSuccess
@@ -114,5 +140,9 @@ export type All =
 
     | GetLastRemoval
     | GetLastRemovalSuccess
-    | GetLastRemovalFail;
+    | GetLastRemovalFail
+
+    | DeleteRemoval
+    | DeleteRemovalSuccess
+    | DeleteRemovalFail;
 

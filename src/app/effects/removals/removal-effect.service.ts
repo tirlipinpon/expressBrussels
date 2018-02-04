@@ -37,7 +37,7 @@ export class RemovalEffectService {
     .switchMap(action =>
       this.removalService.setRemoval(action)
         .map((payload) => {
-          // console.log('in effect EDIT removal retrieved data from service =', payload);
+          console.log('in effect SET removal payload =', payload);
           return new RemovalActions.EditRemovalSuccess(payload);
         })
         .catch(err => {
@@ -57,6 +57,21 @@ export class RemovalEffectService {
         .catch(err => {
           // console.log('error in effect EDIT removal with error -> ',err);
           return Observable.of(new RemovalActions.AddRemovalFail(err))
+        })
+    );
+
+  @Effect() deleteRemoval: Observable<Action> = this.action$
+    .ofType(RemovalActions.GET_REMOVALS)
+    .switchMap(action =>
+      this.removalService.setRemoval(action)
+        .map((payload) => {
+          let data = payload;
+           console.log('in effect DeleteRemoval  from service =', data);
+          return new RemovalActions.DeleteRemovalSuccess(data);
+        })
+        .catch(err => {
+          // console.log('error in effect get removals');
+          return Observable.of(new RemovalActions.DeleteRemovalFail(err))
         })
     );
 
