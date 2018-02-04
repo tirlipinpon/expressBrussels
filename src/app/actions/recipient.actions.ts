@@ -25,7 +25,6 @@ export class GetRecipientsFail implements Action {
     // console.log('in actions get Recipients payload= ',payload);
   }
 }
-
 //===================================================
 
 export const EDIT_RECIPIENT = 'Edit Recipient';
@@ -52,6 +51,82 @@ export class EditRecipientFail implements Action {
   }
 }
 
+//===================================================
+export const ADD_RECIPIENT = 'Add Recipient';
+export class AddRecipient implements Action {
+  readonly type = ADD_RECIPIENT;
+  constructor(public payload: DataForm) {
+    // console.log('in actions add Recipient payload= ',payload);
+  }
+}
+
+export const ADD_RECIPIENT_SUCCESS = 'Add Recipient Success';
+export class AddRecipientSuccess implements Action {
+  readonly type = ADD_RECIPIENT_SUCCESS;
+  constructor(public payload: number) {
+    // console.log('in actions add Recipient success payload= ',payload);
+  }
+}
+
+export const ADD_RECIPIENT_FAIL = 'Add Recipient Fail';
+export class AddRecipientFail implements Action {
+  readonly type = ADD_RECIPIENT_FAIL;
+  constructor(public payload: string) {
+    // console.log('in actions add Recipient payload= ',payload);
+  }
+}
+
+//===================================================
+export const GET_LAST_RECIPIENT = 'Get last Recipient';
+export class GetLastRecipient implements Action {
+  readonly type = GET_LAST_RECIPIENT;
+  constructor(public payload: DataForm) {
+    // console.log('in actions get Recipient payload= ',payload);
+  }
+}
+
+export const GET_LAST_RECIPIENT_SUCCESS = 'Get Last Recipient Success';
+export class GetLastRecipientSuccess implements Action {
+  readonly type = GET_LAST_RECIPIENT_SUCCESS;
+  constructor(public payload: DataForm) {
+    // console.log('in actions get last Recipient success payload= ',payload);
+  }
+}
+
+export const GET_LAST_RECIPIENT_FAIL = 'Get Last Recipient Fail';
+export class GetLastRecipientFail implements Action {
+  readonly type = GET_LAST_RECIPIENT_FAIL;
+  constructor(public payload: string) {
+    // console.log('in actions get Recipient payload= ',payload);
+  }
+}
+
+//===================================================
+export const DELETE_RECIPIENT = 'DELETE  Recipient';
+export class DeleteRecipient implements Action {
+  readonly type = DELETE_RECIPIENT;
+  constructor(public payload: DataForm) {
+    // console.log('in actions get removal payload= ',payload);
+  }
+}
+
+export const DELETE_RECIPIENT_SUCCESS = 'DELETE Recipient Success';
+export class DeleteRecipientSuccess implements Action {
+  readonly type = DELETE_RECIPIENT_SUCCESS;
+  constructor(public payload: DataForm) {
+    // console.log('in actions get last removal success payload= ',payload);
+  }
+}
+
+export const DELETE_RECIPIENT_FAIL = 'DELETE Recipient Fail';
+export class DeleteRecipientFail implements Action {
+  readonly type = DELETE_RECIPIENT_FAIL;
+  constructor(public payload: string) {
+    // console.log('in actions get customer payload= ',payload);
+  }
+}
+
+
 export type All =
   GetRecipients
     | GetRecipientsSuccess
@@ -59,4 +134,16 @@ export type All =
 
     | EditRecipient
     | EditRecipientSuccess
-    | EditRecipientFail;
+    | EditRecipientFail
+
+    | AddRecipient
+    | AddRecipientSuccess
+    | AddRecipientFail
+
+    | GetLastRecipient
+    | GetLastRecipientSuccess
+    | GetLastRecipientFail
+
+    | DeleteRecipient
+    | DeleteRecipientSuccess
+    | DeleteRecipientFail;

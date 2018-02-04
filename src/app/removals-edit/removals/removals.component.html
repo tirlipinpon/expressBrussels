@@ -1,22 +1,21 @@
 <div class="container">
   <div class="formRemoval" >
-    <form  novalidate [formGroup]="formRemoval[0]">
+    <form  novalidate [formGroup]="formGroupAr[0]">
 
       <input type="hidden" formControlName="id">
       <input type="text" formControlName="name" autocomplete="off" placeholder="name">
       <input type="text" formControlName="ref_client" autocomplete="off" placeholder="ref_client">
       <input type="text" formControlName="address" placeholder="address">
       <input type="text" formControlName="number" placeholder="number">
-      <input type="text" formControlName="cp" placeholder="cp">
+      <input type="number" formControlName="cp" placeholder="cp">
       <input type="text" formControlName="state" placeholder="state">
       <input type="text" formControlName="phone" placeholder="phone">
-      <input type="text" formControlName="created" placeholder="created" >
       <input type="hidden" formControlName="fk_type">
-      <button  (click)="add(formRemoval[0])"> add </button>
+      <button  (click)="add(formGroupAr[0])"> add </button>
 
     </form>
   </div>
-  <div class="formRemoval"  *ngFor="let removal of formRemoval | slice:1" let index="index" >
+  <div class="formRemoval" *ngFor="let removal of formGroupAr | slice:1" let index="index" >
       <form  novalidate [formGroup]="removal" >
         <input type="hidden" formControlName="id" >
         <input type="text" formControlName="name" autocomplete="off" >
@@ -26,10 +25,10 @@
         <input type="number" formControlName="cp">
         <input type="text" formControlName="state">
         <input type="text" formControlName="phone">
-        <input type="text" formControlName="created" >
+        <input type="text" formControlName="created">
         <input type="hidden" formControlName="fk_type">
         <button [disabled]="!removal.dirty" (click)="update(removal)"> update </button>
-        <button (click)="delete(removal)"> {{removal.get('active').value==1 ? 'desactive' : 'active'}} {{removal.get('active').value}} </button>
+        <button (click)="delete(removal)"> {{removal.get('active').value==1 ? 'desactive' : 'active'}} </button>
       </form>
   </div>
 

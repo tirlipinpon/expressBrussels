@@ -50,8 +50,8 @@ export class EditRemovalFail implements Action {
     // console.log('in actions get removal payload= ',payload);
   }
 }
-//===================================================
 
+//===================================================
 export const ADD_REMOVAL = 'Add Removal';
 export class AddRemoval implements Action {
   readonly type = ADD_REMOVAL;
@@ -75,6 +75,7 @@ export class AddRemovalFail implements Action {
     // console.log('in actions add removal payload= ',payload);
   }
 }
+
 //===================================================
 export const GET_LAST_REMOVAL = 'Get last Removal';
 export class GetLastRemoval implements Action {

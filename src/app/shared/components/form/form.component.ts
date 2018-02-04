@@ -16,7 +16,7 @@ export class FormComponent implements OnInit, OnDestroy {
   @Input('formGroup') formGroup: FormGroup;
   @Input('nameForm') nameForm: string;
   @Input('datas') set data(value: DataForm[]) {
-    console.log('set value: ', value);
+    // console.log('set value: ', value);
     if (!!value) {
       if (this.isCustomer) {
         if(!this.test){
@@ -47,7 +47,7 @@ export class FormComponent implements OnInit, OnDestroy {
   ngOnDestroy() {}
 
   private _initData(data): void {
-    console.log("init data : ", data);
+    // console.log("init data : ", data);
     this.formGroup.patchValue({
       id: data.id,
       name: data.name,

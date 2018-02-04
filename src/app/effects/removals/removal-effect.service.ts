@@ -15,19 +15,17 @@ export class RemovalEffectService {
 
   constructor(
     private action$: Actions,
-    private removalService: RemovalService) { }
+    private service: RemovalService) { }
 
   @Effect() getRemovals: Observable<Action> = this.action$
     .ofType(RemovalActions.GET_REMOVALS)
     .switchMap(action =>
-      this.removalService.getRemovals(action)
+      this.service.getRemovals(action)
         .map((payload) => {
         let data = payload;
-        // console.log('in effect getRemovals retrieve data from service =', data);
         return new RemovalActions.GetRemovalsSuccess(data);
       })
         .catch(err => {
-          // console.log('error in effect get removals');
           return Observable.of(new RemovalActions.GetRemovalsFail(err))
         })
     );
@@ -35,7 +33,7 @@ export class RemovalEffectService {
   @Effect() editRemoval: Observable<Action> = this.action$
     .ofType(RemovalActions.EDIT_REMOVAL)
     .switchMap(action =>
-      this.removalService.setRemoval(action)
+      this.service.setRemoval(action)
         .map((payload) => {
           console.log('in effect SET removal payload =', payload);
           return new RemovalActions.EditRemovalSuccess(payload);
@@ -49,7 +47,7 @@ export class RemovalEffectService {
   @Effect() addRemoval: Observable<Action> = this.action$
     .ofType(RemovalActions.ADD_REMOVAL)
     .switchMap(action =>
-      this.removalService.addRemoval(action)
+      this.service.addRemoval(action)
         .map((payload) => {
           // console.log('in effect add removal retrieved id from service =', payload);
           return new RemovalActions.GetLastRemovalSuccess(payload);
@@ -63,7 +61,7 @@ export class RemovalEffectService {
   @Effect() deleteRemoval: Observable<Action> = this.action$
     .ofType(RemovalActions.DELETE_REMOVAL)
     .switchMap(action =>
-      this.removalService.setRemoval(action)
+      this.service.setRemoval(action)
         .map((payload) => {
           let data = payload;
            console.log('in effect DeleteRemoval  from service =', data);
@@ -78,7 +76,7 @@ export class RemovalEffectService {
   // @Effect() getLastRemoval: Observable<Action> = this.action$
   //   .ofType(RemovalActions.GET_LAST_REMOVAL)
   //   .switchMap(action =>
-  //     this.removalService.getRemovals(action)
+  //     this.service.getRemovals(action)
   //       .map((payload) => {
   //         let data = payload;
   //         // console.log('in effect getRemovals retrieve data from service =', data);

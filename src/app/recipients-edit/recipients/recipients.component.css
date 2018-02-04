@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+.formRemoval {
+  display: flex;
+  border: 1px solid red;
+  margin: 5px;
+  flex: 0 0 10%;
+}
+.formRemoval form {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid blue;
+  flex: 1;
+}
+.formRemoval form input {
+  padding: 5px;
+}
+input[type="text"]:disabled, input[type="number"]:disabled, input[type="date"]:disabled    {
+  background-color: #ccc;
+}

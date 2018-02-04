@@ -101,9 +101,19 @@ export function recipientReducer(state = initRecipient, action: ActionRecipient)
       return Object.assign({}, state, action.payload ); //{...state, ...action.payload}; //
     // case CustomerActions.VALID_CUSTOMER:
     //   return state;
+    case RecipientActions.GET_LAST_RECIPIENT_SUCCESS:
+      return handleAddRecipientState(state, action);
     default:
       return state;
   }
+}
+function handleAddRecipientState(state: DataDataFormState, action: ActionRecipient): any {
+  const data =  [...state.data, ...[action.payload]];
+  const newState = {
+    data: data,
+    count: ++state.count
+  };
+  return newState;
 }
 export const RecipientSelectors = {
   data: (state: DataDataFormState) => { return state.data },
