@@ -104,7 +104,7 @@ export class GetLastRemovalFail implements Action {
 export const DELETE_REMOVAL = 'DELETE  Removal';
 export class DeleteRemoval implements Action {
   readonly type = DELETE_REMOVAL;
-  constructor(public payload: number) {
+  constructor(public payload: DataForm) {
     // console.log('in actions get removal payload= ',payload);
   }
 }

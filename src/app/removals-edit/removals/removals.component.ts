@@ -2,12 +2,11 @@ import {Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Store} from "@ngrx/store";
 import {Observable} from "rxjs";
-
 import {NotificationService} from "../../services/notification.service";
 import * as RemovalActions  from '../../actions/removal.actions';
 import * as fromRoot from "../../shared/appState";
-
 import {DataForm} from "../../models/DataForm";
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-removals',
@@ -31,6 +30,8 @@ export class RemovalsComponent implements OnInit, OnDestroy {
     this.storeSelect();
     this.formRemoval.push(this.createFormRemoval(null));
     this.initFormsRemoval();
+    let now = moment(); // add this 2 of 4
+    console.log('hello world', now.format()); // add this 3 of 4
   }
   ngOnDestroy() {  }
   storeDispatch() {
@@ -74,6 +75,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
         ctrl.state.disable();
         ctrl.phone.disable();
         ctrl.phone.disable();
+        ctrl.created.disable();
       }else if(ctrl.active.value === '1'){
         ctrl.name.enable();
         ctrl.ref_client.enable();
@@ -83,6 +85,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
         ctrl.state.enable();
         ctrl.phone.enable();
         ctrl.phone.enable();
+        ctrl.created.enable();
       }
     });
     this.cd.markForCheck();
@@ -110,27 +113,9 @@ export class RemovalsComponent implements OnInit, OnDestroy {
       type: [data ? data.type : 1],
       fk_client: [data ? data.fk_client : this.customerId],
       active: [data ? active : 1],
-      created: [''],
+      created: [data ? moment(data.created).format('DD-MM-YYYY') : ''],
       fk_type: [data ? data.fk_type : this.customerId+''+1],
     });
-  }
-  initData(data): FormGroup {
-    // console.log("init data : ", data);
-    let formGroup = this.createFormRemoval();
-    formGroup.patchValue({
-      id: data.id,
-      name: data.name,
-      ref_client:  data.ref_client,
-      address: data.address,
-      number: data.number,
-      cp: data.cp,
-      state: data.state,
-      phone: data.phone,
-      fk_client: data.fk_client,
-      active: data.active,
-      created: data.created
-    });
-    return formGroup;
   }
   update(form: FormGroup): void {
     // console.log('form update:', form.value);
@@ -139,14 +124,17 @@ export class RemovalsComponent implements OnInit, OnDestroy {
     form.markAsPristine();
   }
   delete(form: FormGroup): void {
-    // console.log('form update:', form.value);
-    if( form.get('active').value == 1){
-      form.get('active').setValue(0);
-    }else{
-      form.get('active').setValue(1);
+    const activeValue =  form.get('active').value;
+    if(activeValue === "1") {
+      form.get('active').setValue("0");
+      form.disable();
+    }else if( activeValue === "0"){
+      form.get('active').setValue("1");
+      form.enable();
     }
-    this.store.dispatch(new RemovalActions.DeleteRemoval(form.get('id').value));
+    this.store.dispatch(new RemovalActions.DeleteRemoval(<DataForm>form.value));
   }
+
   add(form: FormGroup): void {
     this.store.dispatch(new RemovalActions.AddRemoval(form.value));
     this.formRemoval[0].reset();

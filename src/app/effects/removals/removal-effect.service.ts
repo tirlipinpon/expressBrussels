@@ -61,7 +61,7 @@ export class RemovalEffectService {
     );
 
   @Effect() deleteRemoval: Observable<Action> = this.action$
-    .ofType(RemovalActions.GET_REMOVALS)
+    .ofType(RemovalActions.DELETE_REMOVAL)
     .switchMap(action =>
       this.removalService.setRemoval(action)
         .map((payload) => {

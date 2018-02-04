@@ -5,7 +5,6 @@ import {Observable} from "rxjs";
 import * as fromRoot  from "../../appState";
 import {Store} from "@ngrx/store";
 import * as CustomerActions  from '../../../actions/customer.actions';
-import * as _ from "lodash";
 
 @Component({
   selector: 'app-profile',

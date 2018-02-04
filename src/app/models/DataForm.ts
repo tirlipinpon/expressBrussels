@@ -14,7 +14,7 @@ export interface DataForm {
   type: number,
   fk_client: number,
   active:  number,
-  created: Date,
+  created: any,
   fk_type: number
 }
 
