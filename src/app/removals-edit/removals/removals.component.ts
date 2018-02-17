@@ -19,6 +19,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
   private customerId = 1;
   private typeDataForm = 1;
   storeData$: Observable<DataForm[]>;
+  customerId$: Observable<number>;
   formGroupAr: FormGroup[] = [];
 
   constructor(private store: Store<fromRoot.AppState>,
@@ -37,6 +38,8 @@ export class RemovalsComponent implements OnInit, OnDestroy {
     this.store.dispatch(new actions.GetRemovals(this.customerId*10+1)); // (id + type)  eg: id = 69; type=1 fk_type=691
   }
   storeSelect() {
+    // this.customerId$ = this.store.select(fromRoot.selectors.getCustomerId);
+    // this.customerId$.subscribe(data => this.customerId = data );
     this.storeData$ = this.store.select(fromRoot.selectors.getRemovalsData);
   }
   initFormsRemoval(): void {

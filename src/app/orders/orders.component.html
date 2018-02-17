@@ -20,14 +20,12 @@
     <!-- ID Column -->
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef mat-sort-header> numero </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+      <mat-cell *matCellDef="let row">
+        <p>{{row.id}}</p>
+        <p>{{row.date | date:'d-MM-y'}}</p>
+      </mat-cell>
     </ng-container>
 
-    <!-- date Column -->
-    <ng-container matColumnDef="date">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> date </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.date | date:'d-MM-y'}} </mat-cell>
-    </ng-container>
 
     <!-- removal Column -->
     <ng-container matColumnDef="fk_removal_id">
@@ -61,10 +59,9 @@
       <mat-cell *matCellDef="let row">
         <p>{{ row.options }}</p>
         <p *ngIf="row.tomorrow!=0">tomorrow</p>
+        <p>{{row.price}}€</p>
       </mat-cell>
     </ng-container>
-
-
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;">

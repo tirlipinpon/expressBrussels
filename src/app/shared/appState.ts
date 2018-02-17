@@ -38,6 +38,7 @@ const getOrdersState = createFeatureSelector('orders');
 
 export interface Selectors {
   getCustomer: MemoizedSelector<AppState, DataForm>;
+  getCustomerId: MemoizedSelector<AppState, DataForm>;
 
   getRemovalsData: MemoizedSelector<AppState, DataForm[]>;
   getRemovalsCount: MemoizedSelector<AppState, number>;
@@ -51,6 +52,7 @@ export interface Selectors {
 
 export const selectors: Selectors = {
   getCustomer: createSelector(getCustomerState, CustomerSelector.customer ),
+  getCustomerId: createSelector(getCustomerState, CustomerSelector.customer ),
 
   getRemovalsData: createSelector(getRemovalsState, RemovalSelectors.data ),
   getRemovalsCount: createSelector(getRemovalsState, RemovalSelectors.count ),

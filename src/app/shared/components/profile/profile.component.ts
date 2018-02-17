@@ -63,6 +63,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.formCustomer = this.fb.group({
       id: ['', [Validators.required]],
       name: ['', Validators.required],
+      ref_client: [''],
       address: ['', Validators.required],
       number: ['', Validators.required],
       cp: ['', Validators.required],

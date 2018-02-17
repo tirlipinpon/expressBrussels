@@ -25,6 +25,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   removals$: Observable<DataForm[]>;
   recipients$: Observable<DataForm[]>;
   order$: Observable<PurchasseOrder>;
+  customerId$: Observable<number>;
 
   formRemoval: FormGroup;
   formRecipient: FormGroup;
@@ -67,6 +68,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.valueRecipientInfosChanges$.unsubscribe();
   }
   storeSelect() {
+    // this.customerId$ = this.store.select(fromRoot.selectors.getCustomerId);
+    // this.customerId$.subscribe(data => this.customerId = data );
     this.removals$ = this.store.select(fromRoot.selectors.getRemovalsData);
     this.recipients$ = this.store.select(fromRoot.selectors.getRecipientsData);
     this.order$ = this.store.select(fromRoot.selectors.getOrder);

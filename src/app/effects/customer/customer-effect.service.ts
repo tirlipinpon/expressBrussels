@@ -17,18 +17,18 @@ export class CustomerEffectService {
     private store: Store<AppState>,
     private action$: Actions,
     private customerService: CustomerService,
-    private notificationsService: NotificationService) { }
+    private notif: NotificationService) { }
 
   @Effect() getCustomer$: Observable<Action> = this.action$
     .ofType(CustomerActions.GET_CUSTOMER)
     .switchMap(action =>
       this.customerService.getCustomer(action)
         .map((payload) => {
-          this.notificationsService.notify('info', 'get customer', 'data ok');
+          this.notif.notify('info', 'get customer', 'data ok');
           return new CustomerActions.GetCustomerSuccess(payload);
       })
         .catch(err => {
-          this.notificationsService.notify('error', 'Get customers', err);
+          this.notif.notify('error', 'Get customers', err);
           return Observable.of(new CustomerActions.GetCustomerFail(err))
         })
     );
@@ -40,12 +40,12 @@ export class CustomerEffectService {
       this.customerService.saveCustomer(action[1])
         .map((payload) => {
           console.log('in effect SAVE Customer retrieved data from service =', payload);
-          this.notificationsService.notify('success', 'some alert', 'data custome saved');
+          this.notif.notify('success', 'some alert', 'data custome saved');
           return new CustomerActions.SaveCustomerSuccess(payload);
         })
         .catch(err => {
           // console.log('error in effect EDIT customer with error -> ',err);
-          this.notificationsService.notify('error', 'some alert', err);
+          this.notif.notify('error', 'some alert', err);
           return Observable.of(new CustomerActions.SaveCustomerFail(err))
         })
     );

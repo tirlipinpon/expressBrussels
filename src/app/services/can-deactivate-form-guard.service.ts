@@ -15,9 +15,6 @@ export class CanDeactivateFormGuardService implements CanDeactivate<ComponentDea
   canDeactivate(component: ComponentDeactivable): boolean {
     return component.canDeactivate ? this.actionConfirm(component) : true;
   }
-
-
-
   actionConfirm(component): boolean {
     if(component.canDeactivate()) {
       // console.log('component.canDeactivate() 1', component.canDeactivate());

@@ -1,6 +1,5 @@
 import {
-  Component, OnInit, ViewEncapsulation, OnDestroy, ViewChild, AfterViewInit, ViewChildren,
-  ViewContainerRef, QueryList, Attribute
+  Component, OnInit, ViewEncapsulation, OnDestroy, ViewChild, ViewChildren, QueryList, Attribute
 } from '@angular/core';
 import {PurchasseOrder} from "../models/PurchasseOrder";
 import {Observable} from "rxjs";
@@ -27,12 +26,13 @@ export class OrdersComponent implements OnInit, OnDestroy {
   orders$: Observable<PurchasseOrder[]>;
   removals$: Observable<DataForm[]>;
   recipients$: Observable<DataForm[]>;
+  customerId$: Observable<number>;
   customerId = 1;
   isReferenceClient = false;
   datasOrders:  PurchasseOrder[] = [];
   datasRemovals:  DataForm[];
   datasRecipients:  DataForm[];
-  displayedColumns = ['id', 'date', 'fk_removal_id', 'fk_recipient_id', 'options'];
+  displayedColumns = ['id', 'fk_removal_id', 'fk_recipient_id', 'options'];
   dataSource: MatTableDataSource<PurchasseOrder>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -88,8 +88,8 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
     if(this.datasRemovals
       && this.datasRecipients
-      && this.datasOrders) {
-      // console.log('eeeeeeeeeeeeee');
+      && this.datasOrders.length) {
+
       for(let i=0; i< Object.keys(this.datasOrders).length; i++) {
         // console.log('datasRecipients: ', this.datasRecipients);
 
@@ -99,31 +99,34 @@ export class OrdersComponent implements OnInit, OnDestroy {
         const recipientId = this.datasOrders[i].fk_recipient_id;
         const recipient = _.find(this.datasRecipients,['id', recipientId]);
 
-        this.isReferenceClient = this.isExistReferenceClient(removal.ref_client, recipient.ref_client);
+        if(removal || recipient) {
+          this.isReferenceClient = this.isExistReferenceClient(removal.ref_client, recipient.ref_client);
+          _.merge(this.datasOrders[i],
+            {
+              'removal_address': removal.address,
+              'removal_cp': removal.cp,
+              'removal_name': removal.name,
+              'removal_ref_client': removal.ref_client,
+              'removal_number': removal.number,
+              'removal_phone': removal.phone,
+              'removal_state': removal.state,
+              'removal_info1': removal.infos.info1,
+              'removal_info2': removal.infos.info2,
+            },
+            {
+              'recipient_address': recipient.address,
+              'recipient_cp': recipient.cp,
+              'recipient_name': recipient.name,
+              'recipient_ref_client': recipient.ref_client,
+              'recipient_number': recipient.number,
+              'recipient_phone': recipient.phone,
+              'recipient_state': recipient.state,
+              'recipient_info1': recipient.infos.info1,
+              'recipient_info2': recipient.infos.info2,
+            });
+        }
 
-         _.merge(this.datasOrders[i],
-           {
-             'removal_address': removal.address,
-             'removal_cp': removal.cp,
-             'removal_name': removal.name,
-             'removal_ref_client': removal.ref_client,
-             'removal_number': removal.number,
-             'removal_phone': removal.phone,
-             'removal_state': removal.state,
-             'removal_info1': removal.infos.info1,
-             'removal_info2': removal.infos.info2,
-           },
-           {
-             'recipient_address': recipient.address,
-             'recipient_cp': recipient.cp,
-             'recipient_name': recipient.name,
-             'recipient_ref_client': recipient.ref_client,
-             'recipient_number': recipient.number,
-             'recipient_phone': recipient.phone,
-             'recipient_state': recipient.state,
-             'recipient_info1': recipient.infos.info1,
-             'recipient_info2': recipient.infos.info2,
-           });
+
       }
       // console.log('this.datasOrders: ', this.datasOrders);
       this.dataSource = new MatTableDataSource(this.datasOrders);
@@ -133,6 +136,8 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
 
   storeSelect() {
+    // this.customerId$ = this.store.select(fromRoot.selectors.getCustomerId);
+    // this.customerId$.subscribe(data => this.customerId = data );
     this.removals$ = this.store.select(fromRoot.selectors.getRemovalsData);
     this.recipients$ = this.store.select(fromRoot.selectors.getRecipientsData);
     this.orders$ = this.store.select(fromRoot.selectors.getOrders);

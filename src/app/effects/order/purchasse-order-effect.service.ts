@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import {Actions, Effect } from "@ngrx/effects";
 import {Observable} from "rxjs/Observable";
 import {Action, Store} from "@ngrx/store";
-
+import * as fromRoot from "../../shared/appState";
 import {AppState} from "../../shared/appState";
-import {PurchasseOrder} from "../../models/PurchasseOrder";
+
 import {OrderService} from "../../services/order.service";
 import {NotificationService} from "../../services/notification.service";
 
-import 'rxjs/add/operator/mergeMap'
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/withLatestFrom';
 
 import * as OrderActions  from '../../actions/purchasseOrder.actions';
@@ -39,11 +40,12 @@ export class PurchasseOrderEffectService {
 
   @Effect() saveOrder$: Observable<Action> = this.action$
     .ofType(OrderActions.SAVE_ORDER)
-    .withLatestFrom(  this.store.select('order')  )
+    .do(() => {  console.log('- DO log saveOrder$ !'); } )
+    .withLatestFrom(  this.store.select('order')   )
     .switchMap(action =>
-      this.orderService.saveOrder(action[1])
+      this.orderService.saveOrder(action[1], 1)
         .map((payload) => {
-          // console.log('in effect Save Order retrieved data from service =', payload);
+           console.log('in effect Save Order retrieved data from service =', payload);
           this.notificationsService.notify('success', 'some alert', payload.message);
           return new OrderActions.SaveOrderSuccess(payload);
         })
@@ -52,6 +54,9 @@ export class PurchasseOrderEffectService {
           this.notificationsService.notify('error', 'some alert', err);
           return Observable.of(new OrderActions.SaveOrderFail(err))
         })
-    );
+    ) .catch((error, caught) => {
+      console.log('error saveOrder$ ! error: ', error +' caught: ', caught);
+      return caught;
+    });
 
 }
