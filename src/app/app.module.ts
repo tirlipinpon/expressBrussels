@@ -10,8 +10,7 @@ import { SortByValuePipe } from './shared/pipe/sort-by-value.pipe';
 import { RecipientsComponent } from './recipients-edit/recipients/recipients.component';
 import { RemovalsComponent } from './removals-edit/removals/removals.component';
 import { AlwaysAuthGuardService } from "./services/always-auth-guard.service";
-import { UnsearchedTermGuard } from "./shared/UnseavedTermGuard";
-import { OnBlurDirective } from './shared/directives/on-blur.directive';
+import { UnsearchedTermGuard } from "./services/UnseavedTermGuard";
 import {CustomerService} from "./services/customer.service";
 import {OrderService} from "./services/order.service";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
@@ -22,38 +21,33 @@ import {SharedModule} from "./shared/shared.module";
 import {HttpClientModule} from "@angular/common/http";
 import {RecipientsEditModule} from "./recipients-edit/recipients-edit.module";
 import {RemovalsEditModule} from "./removals-edit/removals-edit.module";
-import {StoreModule} from "@ngrx/store";
-import {CustomerEffectService} from "./effects/customer/customer-effect.service";
-import {EffectsModule} from "@ngrx/effects";
-import {PurchasseOrderEffectService} from "./effects/order/purchasse-order-effect.service";
-import {RemovalEffectService} from "./effects/removals/removal-effect.service";
 import {RemovalService} from "./services/removal.service";
-import {RecipientEffectService} from "./effects/recipients/recipient-effect.service";
-
-import {customerReducer, removalReducer, recipientReducer, purchasseOrderReducer, ordersReducer} from "./reducers/all.reducer";
 import { OrdersComponent } from './orders/orders.component';
-import {OrdersEffectService} from "./effects/orders/orders-effect.service";
-
 import {MatTableModule} from '@angular/material/table';
 import {MatFormFieldModule, MatSortModule} from '@angular/material';
 import {MatPaginatorModule} from '@angular/material';
 import {MatInputModule} from '@angular/material';
 import {CanDeactivateFormGuardService} from "./services/can-deactivate-form-guard.service";
+import { LoginComponent } from './login/login.component';
+import {AuthenticationService} from "./services/authentication.service";
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: 'order', pathMatch: 'full'},
-  { path: 'order',                component: PurchasseOrderComponent,canActivate: [AlwaysAuthGuardService], canDeactivate: [CanDeactivateFormGuardService] },
-  { path: 'orders',               component: OrdersComponent,canActivate: [AlwaysAuthGuardService], canDeactivate: [CanDeactivateFormGuardService] },
+  { path: 'login',                component: LoginComponent },
+  { path: '',                     component: PurchasseOrderComponent, canActivate: [AlwaysAuthGuardService], canDeactivate: [CanDeactivateFormGuardService] },
+  { path: 'order',                component: PurchasseOrderComponent, canActivate: [AlwaysAuthGuardService], canDeactivate: [CanDeactivateFormGuardService] },
+  { path: 'orders',               component: OrdersComponent, canActivate: [AlwaysAuthGuardService], canDeactivate: [CanDeactivateFormGuardService] },
   { path: 'removals',             component: RemovalsComponent, canActivate: [AlwaysAuthGuardService],},
   { path: 'recipients',           component: RecipientsComponent, canActivate: [AlwaysAuthGuardService],},
-  { path: '**',                   component: PurchasseOrderComponent, canActivate: [AlwaysAuthGuardService],}
+  // otherwise redirect to home
+  { path: '**',                   redirectTo: ''}
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
     SortByValuePipe,
-    OrdersComponent
+    OrdersComponent,
+    LoginComponent
   ],
   exports: [ AppComponent ],
   imports: [
@@ -93,7 +87,8 @@ const appRoutes: Routes = [
     UnsearchedTermGuard,
     MessageService,
     NotificationService,
-    CanDeactivateFormGuardService
+    CanDeactivateFormGuardService,
+    AuthenticationService
   ],
   bootstrap: [AppComponent]
 })

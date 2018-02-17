@@ -11,8 +11,8 @@ export class CustomerService {
 
   constructor(private http: HttpClient) {}
 
-  getCustomer(data): Observable<DataForm> {
-    // console.log('id from service: ', data.payload);
+  getCustomer(data: any): Observable<DataForm> {
+     console.log('id from service: ', data.payload);
     let url = this.apiUrl+'php//read_one.php?id='+data.payload;
     return this.http.get(url)
       .catch(error => Observable.throw('error in service get customer with message from server -> '+ error));
