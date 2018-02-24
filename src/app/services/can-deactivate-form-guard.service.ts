@@ -1,7 +1,7 @@
 import {Injectable, HostListener} from '@angular/core';
 import { CanDeactivate } from '@angular/router';
-import {Observer, Observable} from "rxjs";
-import {ConfirmationService} from "primeng/components/common/confirmationservice";
+import {Observer, Observable} from 'rxjs';
+import {ConfirmationService} from 'primeng/components/common/confirmationservice';
 
 export interface ComponentDeactivable {
   canDeactivate: () => boolean;

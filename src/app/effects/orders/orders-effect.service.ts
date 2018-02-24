@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import {Observable} from "rxjs";
-import { Action} from "@ngrx/store";
-import { Actions, Effect } from "@ngrx/effects";
-import {OrderService} from "../../services/order.service";
-import {NotificationService} from "../../services/notification.service";
+import {Observable} from 'rxjs';
+import { Action} from '@ngrx/store';
+import { Actions, Effect } from '@ngrx/effects';
+import {OrderService} from '../../services/order.service';
+import {NotificationService} from '../../services/notification.service';
 
 import * as OrdersActions from '../../actions/orders.actions';
 

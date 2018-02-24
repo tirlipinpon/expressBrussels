@@ -4,8 +4,8 @@ import * as RecipientActions  from '../actions/recipient.actions';
 import * as PurchasseOrderActions  from '../actions/purchasseOrder.actions';
 import * as OrdersActions from '../actions/orders.actions';
 
-import {DataForm, DataDataFormState} from "../models/DataForm";
-import {PurchasseOrder} from "../models/PurchasseOrder";
+import {DataForm, DataDataFormState} from '../models/DataForm';
+import {PurchasseOrder} from '../models/PurchasseOrder';
 
 export type ActionCustomer = CustomerActions.All;
 export type ActionRemoval = RemovalActions.All;

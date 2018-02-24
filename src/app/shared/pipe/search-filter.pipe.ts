@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import {DataForm} from "../../models/DataForm";
+import {DataForm} from '../../models/DataForm';
 
 @Pipe({
   name: 'searchFilter'

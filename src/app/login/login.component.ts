@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import {DataForm} from "../models/DataForm";
+import {AuthenticationService} from '../services/authentication.service';
 import {Router} from "@angular/router";
-import {AuthenticationService} from "../services/authentication.service";
+import {FormBuilder, Validators, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-login',
@@ -9,18 +9,25 @@ import {AuthenticationService} from "../services/authentication.service";
   styleUrls: ['./login.component.css'],
   encapsulation: ViewEncapsulation.None
 })
+
+
 export class LoginComponent implements OnInit {
-  model: any = {
-    mail: 'test',
-    password: 'test'
-  };
+  form: FormGroup;
   loading = false;
   error = '';
+  TOKEN_NAME: string = 'jwt_token';
+
 
   constructor(
-    private router: Router,
-    private authenticationService: AuthenticationService
-    ) {}
+    private fb:FormBuilder,
+    private authenticationService: AuthenticationService,
+    private router: Router
+  ) {
+    this.form = this.fb.group({
+      email: ['test',Validators.required],
+      password: ['test',Validators.required]
+    });
+  }
 
   ngOnInit() {
     // reset login status
@@ -28,18 +35,22 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
+    const val = this.form.value;
     this.loading = true;
-    // this.router.navigate(['/']);
-    this.authenticationService.login(this.model.mail, this.model.password)
-      .subscribe(result => {
-        if (result === true) {
-          // login successful
-          this.router.navigate(['/']);
-        } else {
-          // login failed
-          this.error = 'Username or password is incorrect';
-          this.loading = false;
-        }
-      });
+    if (val.email && val.password) {
+      this.authenticationService.login(val.email, val.password)
+        .subscribe(data => {
+          if (data) {
+            console.log('LoginComponent login OK:', data);
+            this.router.navigateByUrl('/');
+            this.error = '';
+          }else{
+            console.log('LoginComponent login KO:');
+            this.error = 'error';
+          }
+        });
+    }
+
+
   }
 }

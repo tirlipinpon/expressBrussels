@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import {DataForm, DataDataFormState} from "../models/DataForm";
+import {DataForm, DataDataFormState} from '../models/DataForm';
 
 
 export const GET_RECIPIENTS = 'Get Recipients';

@@ -15,7 +15,7 @@ export class DropDownDirective {
 
     const isClickedInside = this._elementRef.nativeElement.contains(targetElement);
     if(!isClickedInside) {
-      // console.log("emit null");
+      // console.log('emit null');
       this.clickOutside.emit(null);
     }
   }

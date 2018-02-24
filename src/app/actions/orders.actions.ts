@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import {PurchasseOrder} from "../models/PurchasseOrder";
+import {PurchasseOrder} from '../models/PurchasseOrder';
 
 export const GET_ORDERS = 'Get Orders';
 export class GetOrders implements Action {

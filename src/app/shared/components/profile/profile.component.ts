@@ -1,9 +1,9 @@
 import {Component, OnInit, ViewEncapsulation, OnDestroy} from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from "@angular/forms";
-import {DataForm} from "../../../models/DataForm";
-import {Observable} from "rxjs";
-import * as fromRoot  from "../../appState";
-import {Store} from "@ngrx/store";
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {DataForm} from '../../../models/DataForm';
+import {Observable} from 'rxjs';
+import * as fromRoot  from '../../appState';
+import {Store} from '@ngrx/store';
 import * as CustomerActions  from '../../../actions/customer.actions';
 
 @Component({

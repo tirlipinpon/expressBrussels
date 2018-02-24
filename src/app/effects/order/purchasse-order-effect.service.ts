@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import {Actions, Effect } from "@ngrx/effects";
-import {Observable} from "rxjs/Observable";
-import {Action, Store} from "@ngrx/store";
-import * as fromRoot from "../../shared/appState";
-import {AppState} from "../../shared/appState";
+import {Actions, Effect } from '@ngrx/effects';
+import {Observable} from 'rxjs/Observable';
+import {Action, Store} from '@ngrx/store';
+import * as fromRoot from '../../shared/appState';
+import {AppState} from '../../shared/appState';
 
-import {OrderService} from "../../services/order.service";
-import {NotificationService} from "../../services/notification.service";
+import {OrderService} from '../../services/order.service';
+import {NotificationService} from '../../services/notification.service';
 
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/do';

@@ -1,11 +1,11 @@
 import {Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Store} from "@ngrx/store";
-import {Observable} from "rxjs";
-import {NotificationService} from "../../services/notification.service";
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Store} from '@ngrx/store';
+import {Observable} from 'rxjs';
+import {NotificationService} from '../../services/notification.service';
 import * as actions  from '../../actions/recipient.actions';
-import * as fromRoot from "../../shared/appState";
-import {DataForm} from "../../models/DataForm";
+import * as fromRoot from '../../shared/appState';
+import {DataForm} from '../../models/DataForm';
 import * as moment from 'moment';
 
 @Component({
@@ -125,12 +125,12 @@ export class RecipientsComponent implements OnInit, OnDestroy {
   }
   delete(form: FormGroup): void {
     const activeValue =  form.get('active').value;
-    if(activeValue === "1") {
-      form.get('active').setValue("0");
+    if(activeValue === '1') {
+      form.get('active').setValue('0');
       form.disable();
       form.get('created').disable();
-    }else if( activeValue === "0"){
-      form.get('active').setValue("1");
+    }else if( activeValue === '0'){
+      form.get('active').setValue('1');
       form.enable();
       form.get('created').disable();
     }

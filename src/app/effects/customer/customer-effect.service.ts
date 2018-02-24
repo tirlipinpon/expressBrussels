@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Action, Store} from "@ngrx/store";
-import { Actions, Effect } from "@ngrx/effects";
-import { CustomerService } from "../../services/customer.service";
-import { Observable } from "rxjs/Observable";
+import { Action, Store} from '@ngrx/store';
+import { Actions, Effect } from '@ngrx/effects';
+import { CustomerService } from '../../services/customer.service';
+import { Observable } from 'rxjs/Observable';
 import * as CustomerActions  from '../../actions/customer.actions';
-import {NotificationService} from "../../services/notification.service";
-import {AppState} from "../../shared/appState";
+import {NotificationService} from '../../services/notification.service';
+import {AppState} from '../../shared/appState';
 
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/of';

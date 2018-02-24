@@ -1,10 +1,10 @@
-import {DataForm, DataDataFormState} from "../models/DataForm";
-import {PurchasseOrder} from "../models/purchasseOrder";
-import {createSelector, ActionReducerMap, createFeatureSelector, MemoizedSelector} from "@ngrx/store";
+import {DataForm, DataDataFormState} from '../models/DataForm';
+import {PurchasseOrder} from '../models/purchasseOrder';
+import {createSelector, ActionReducerMap, createFeatureSelector, MemoizedSelector} from '@ngrx/store';
 import {
   ordersReducer, purchasseOrderReducer, recipientReducer, removalReducer,
   customerReducer, CustomerSelector, RemovalSelectors, RecipientSelectors, PurchasseOrderSelector, OrderSelector
-} from "../reducers/all.reducer";
+} from '../reducers/all.reducer';
 
 export interface AppState {
   customer: DataForm;

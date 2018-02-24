@@ -1,19 +1,22 @@
 import { Injectable } from '@angular/core';
-import {CanActivate, Router} from "@angular/router";
-import {CustomerService} from "./customer.service";
+import {CanActivate, Router} from '@angular/router';
+import {CustomerService} from './customer.service';
+import {AuthenticationService} from './authentication.service';
 
 @Injectable()
 export class AlwaysAuthGuardService implements CanActivate {
 
   // constructor(private customerService: CustomerService) { }
-  constructor(private router: Router) { }
+  constructor(private router: Router, private authenticationService: AuthenticationService) { }
 
   canActivate() {
-    // console.log("AlwaysAuthGuard");
-    if (localStorage.getItem('currentUser')) {
+    // console.log('AlwaysAuthGuard');
+    if (!this.authenticationService.isTokenExpired()) {
+      console.log('canActivate: ', true);
       // logged in so return true
       return true;
     }
+    console.log('canActivate: ', false);
     // not logged in so redirect to login page
     this.router.navigate(['/login']);
     return false;

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs/Observable";
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/share';
 import 'rxjs/add/operator/first';
-import {PurchasseOrder} from "../models/PurchasseOrder";
+import {PurchasseOrder} from '../models/PurchasseOrder';
 import { environment } from '../../environments/environment';
 
 @Injectable()

@@ -1,19 +1,19 @@
 import {
   Component, OnInit, ViewEncapsulation, OnDestroy, ViewChild, ViewChildren, QueryList, Attribute
 } from '@angular/core';
-import {PurchasseOrder} from "../models/PurchasseOrder";
-import {Observable} from "rxjs";
-import * as fromRoot from "../shared/appState";
-import {Store} from "@ngrx/store";
+import {PurchasseOrder} from '../models/PurchasseOrder';
+import {Observable} from 'rxjs';
+import * as fromRoot from '../shared/appState';
+import {Store} from '@ngrx/store';
 
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 
 import * as OrdersActions  from '../actions/orders.actions';
 import * as RemovalActions  from '../actions/removal.actions';
 import * as RecipientActions  from '../actions/recipient.actions';
-import {DataForm} from "../models/DataForm";
+import {DataForm} from '../models/DataForm';
 
-import * as _ from "lodash";
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-orders',
