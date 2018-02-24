@@ -2,7 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/map'
 import {environment} from '../../environments/environment';
-import * as jwt_decode from 'jwt-decode';
+// import * as jwt_decode from 'jwt-decode';
+import jwt_decode from "jwt-decode"
 import * as moment from "moment";
 import {Observable} from "rxjs";
 import {DataForm} from "../models/DataForm";
@@ -62,26 +63,27 @@ export class AuthenticationService {
     return moment(expiresAt);
   }
 
-  login(email: string, password: string): Observable<DataForm> {
-    let url = this.apiUrl + 'php//read_login.php?username=test&password=test';
-    let data = {email, password};
+  login(value): Observable<any> {
+    let url = this.apiUrl + 'php//read_login.php';
+    let data = value;
     console.log('AuthenticationService url: ', url);
     // this is just the HTTP call,
     // we still need to handle the reception of the token
     // shareReplay: prevent the receiver of this Observable from accidentally triggering multiple POST requests due to multiple subscriptions.
-    return this.http.get<DataForm>(url)
+    return this.http.post(url, data)
       .do(res => this.setSession(res))
       // .shareReplay()
-      .catch(error => Observable.throw('error in service get customer with message from server -> '+ error));
+      .catch(error => Observable.throw('error in service login  with message from server -> ', error));
   }
   private setSession(authResult) {
-    console.log('setSession:', authResult );
-    const expiresAt = moment().add(authResult.expiresIn,'second');
-    localStorage.setItem(TOKEN_NAME, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6InRvbnkiLCJhZG1pbiI6dHJ1ZX0.TCEGcUevfL_ugzQjoE3RTA1MNzpw4M5CovGEOTJXBfM'); // authResult.idToken);
-    localStorage.setItem("expires_at", JSON.stringify('1504699256'.valueOf()) ); // JSON.stringify(expiresAt.valueOf()) );
-
-    const decoded = jwt_decode(this.getToken());
-    console.log(decoded);
+    if(authResult !== 'error') {
+      console.log('setSession:', authResult );
+      const expiresAt = moment().add(authResult.expiresIn,'second');
+      localStorage.setItem(TOKEN_NAME, authResult); // authResult.idToken);
+      localStorage.setItem("expires_at", JSON.stringify('1504699256'.valueOf()) ); // JSON.stringify(expiresAt.valueOf()) );
+      const decoded = jwt_decode(this.getToken());
+      console.log(decoded);
+    }
   }
   logout(): void {
     // clear token remove user from local storage to log user out

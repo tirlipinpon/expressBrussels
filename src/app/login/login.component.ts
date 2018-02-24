@@ -15,8 +15,6 @@ export class LoginComponent implements OnInit {
   form: FormGroup;
   loading = false;
   error = '';
-  TOKEN_NAME: string = 'jwt_token';
-
 
   constructor(
     private fb:FormBuilder,
@@ -24,8 +22,8 @@ export class LoginComponent implements OnInit {
     private router: Router
   ) {
     this.form = this.fb.group({
-      email: ['test',Validators.required],
-      password: ['test',Validators.required]
+      email: ['',Validators.required],
+      password: ['',Validators.required]
     });
   }
 
@@ -38,15 +36,18 @@ export class LoginComponent implements OnInit {
     const val = this.form.value;
     this.loading = true;
     if (val.email && val.password) {
-      this.authenticationService.login(val.email, val.password)
+      this.authenticationService.login(val)
         .subscribe(data => {
-          if (data) {
+          console.log('LoginComponent data:', data);
+          if (data && data !== 'error') {
             console.log('LoginComponent login OK:', data);
             this.router.navigateByUrl('/');
             this.error = '';
+            this.loading = false;
           }else{
             console.log('LoginComponent login KO:');
             this.error = 'error';
+            this.loading = false;
           }
         });
     }

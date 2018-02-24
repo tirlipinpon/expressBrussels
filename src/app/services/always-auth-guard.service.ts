@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import {CanActivate, Router} from '@angular/router';
-import {CustomerService} from './customer.service';
 import {AuthenticationService} from './authentication.service';
 
 @Injectable()
@@ -11,7 +10,7 @@ export class AlwaysAuthGuardService implements CanActivate {
 
   canActivate() {
     // console.log('AlwaysAuthGuard');
-    if (!this.authenticationService.isTokenExpired()) {
+    if (this.authenticationService.getToken()) {
       console.log('canActivate: ', true);
       // logged in so return true
       return true;
@@ -21,5 +20,4 @@ export class AlwaysAuthGuardService implements CanActivate {
     this.router.navigate(['/login']);
     return false;
   }
-
 }
