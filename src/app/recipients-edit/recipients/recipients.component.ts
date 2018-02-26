@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
+import {Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, HostListener} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
@@ -7,30 +7,28 @@ import * as actions  from '../../actions/recipient.actions';
 import * as fromRoot from '../../shared/appState';
 import {DataForm} from '../../models/DataForm';
 import * as moment from 'moment';
+import {ConfirmationService} from "primeng/components/common/confirmationservice";
 
 @Component({
   selector: 'app-recipients',
   templateUrl: './recipients.component.html',
-  styleUrls: ['./recipients.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./recipients.component.css']
 })
 export class RecipientsComponent implements OnInit, OnDestroy {
 
   private customerId = 1;
   private typeDataForm = 2;
   storeData$: Observable<DataForm[]>;
-  customerId$: Observable<number>;
-  formGroupAr: FormGroup[] = [];
+  allFormGroup: FormGroup[] = [];
 
   constructor(private store: Store<fromRoot.AppState>,
               private fb: FormBuilder,
-              private cd: ChangeDetectorRef,
-              private notificationsService: NotificationService) {
+              private cd: ChangeDetectorRef) {
     this.storeDispatch();
   }
   ngOnInit() {
     this.storeSelect();
-    this.formGroupAr.push(this.createFormGroup(null));
+    this.allFormGroup.push(this.createFormGroup(null));
     this.initFormsRemoval();
   }
   ngOnDestroy() {  }
@@ -47,14 +45,14 @@ export class RecipientsComponent implements OnInit, OnDestroy {
       this.cd.markForCheck();
       if(data.length ) {
         // init data
-        if(this.formGroupAr.length === 1) {
+        if(this.allFormGroup.length === 1) {
           data.forEach(elem => {
-            this.formGroupAr.push(this.createFormGroup(elem));
+            this.allFormGroup.push(this.createFormGroup(elem));
             this.cd.markForCheck();
           });
           //  add data
-        }else if(this.formGroupAr.length-1 < data.length) {
-          this.formGroupAr.push(this.createFormGroup(data[data.length-1]));
+        }else if(this.allFormGroup.length-1 < data.length) {
+          this.allFormGroup.push(this.createFormGroup(data[data.length-1]));
           this.cd.markForCheck();
           //  update data
         }else { }
@@ -64,7 +62,7 @@ export class RecipientsComponent implements OnInit, OnDestroy {
   }
 
   disableForm() {
-    this.formGroupAr.forEach(elem => {
+    this.allFormGroup.forEach(elem => {
       const ctrl = elem.controls;
       if(ctrl.active.value === '0') {
         ctrl.name.disable();
@@ -139,9 +137,20 @@ export class RecipientsComponent implements OnInit, OnDestroy {
 
   add(form: FormGroup): void {
     this.store.dispatch(new actions.AddRecipient(form.value));
-    this.formGroupAr[0].reset();
-    this.formGroupAr[0].markAsUntouched();
-    this.formGroupAr[0].markAsPristine();
+    this.allFormGroup[0].reset();
+    this.allFormGroup[0].markAsUntouched();
+    this.allFormGroup[0].markAsPristine();
+  }
+
+  @HostListener('window:beforeunload')
+  canDeactivate(): boolean {
+    let canDeactive = true;
+    this.allFormGroup.forEach( form => {
+      if(form.dirty && form.touched) {
+        canDeactive = false;
+      }
+    });
+    return canDeactive;
   }
 
 }

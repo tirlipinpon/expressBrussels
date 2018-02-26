@@ -22,8 +22,8 @@ export class LoginComponent implements OnInit {
     private router: Router
   ) {
     this.form = this.fb.group({
-      email: ['',Validators.required],
-      password: ['',Validators.required]
+      email: ['test',Validators.required],
+      password: ['test',Validators.required]
     });
   }
 
@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
           console.log('LoginComponent data:', data);
           if (data && data !== 'error') {
             console.log('LoginComponent login OK:', data);
-            this.router.navigateByUrl('/');
+            this.router.navigateByUrl('/menu');
             this.error = '';
             this.loading = false;
           }else{

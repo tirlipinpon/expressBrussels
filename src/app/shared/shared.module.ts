@@ -65,7 +65,6 @@ import {reducers} from './appState';
   ],
   declarations: [
     NotificationComponent,
-
     FormComponent,
     DropDownDirective,
     OnBlurDirective,

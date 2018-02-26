@@ -25,7 +25,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   removals$: Observable<DataForm[]>;
   recipients$: Observable<DataForm[]>;
   order$: Observable<PurchasseOrder>;
-  customerId$: Observable<number>;
 
   formRemoval: FormGroup;
   formRecipient: FormGroup;
@@ -44,16 +43,13 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
 
   constructor (
     private store: Store<fromRoot.AppState>,
-    private fb: FormBuilder,
-    private notificationsService: NotificationService,
-    private confirmationService: ConfirmationService)
+    private fb: FormBuilder)
   {
     this.storeDispatch();
     this.initFormsRemoval();
     this.initFormsRecipient();
     this.initFormsOptions();
   }
-
 
   ngOnInit() {
     this.storeSelect();
@@ -87,7 +83,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     allFormGroup.push(this.formOptions);
     return allFormGroup;
   }
-
   onValueOrderChanged() {
     this.valueRemovalChanges$ = this.formRemoval.get('id').valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderRemoval(val));
@@ -111,7 +106,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       this.chackIsFormAsValue(this.formRecipient, val);
     });
   }
-
   chackIsFormAsValue(form, ...val) {
     const flattenObject = this.flattenObject(form.value);
     if(!this.isChangedValuesIsNotEmpty(flattenObject)) {
@@ -228,17 +222,17 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.store.dispatch(new OrderActions.SaveOrder());
   }
 
-  success() {
-    this.notificationsService.notify('success', 'some alert', 'push was called!');
-  }
-  info() {
-    this.notificationsService.notify('info', 'some alert', 'push was called!');
-  }
-  warn() {
-    this.notificationsService.notify('warn', 'some alert', 'push was called!');
-  }
-  error() {
-    this.notificationsService.notify('error', 'some alert', 'push was called!');
-  }
+  // success() {
+  //   this.notificationsService.notify('success', 'some alert', 'push was called!');
+  // }
+  // info() {
+  //   this.notificationsService.notify('info', 'some alert', 'push was called!');
+  // }
+  // warn() {
+  //   this.notificationsService.notify('warn', 'some alert', 'push was called!');
+  // }
+  // error() {
+  //   this.notificationsService.notify('error', 'some alert', 'push was called!');
+  // }
 
 }

@@ -30,14 +30,49 @@ import {MatInputModule} from '@angular/material';
 import {CanDeactivateFormGuardService} from './services/can-deactivate-form-guard.service';
 import { LoginComponent } from './login/login.component';
 import {AuthenticationService} from './services/authentication.service';
+import { MenuComponent } from './menu/menu.component';
 
 const appRoutes: Routes = [
   { path: 'login',                component: LoginComponent },
-  { path: '',                     component: PurchasseOrderComponent, canActivate: [AlwaysAuthGuardService], canDeactivate: [CanDeactivateFormGuardService] },
-  { path: 'order',                component: PurchasseOrderComponent, canActivate: [AlwaysAuthGuardService], canDeactivate: [CanDeactivateFormGuardService] },
-  { path: 'orders',               component: OrdersComponent, canActivate: [AlwaysAuthGuardService], canDeactivate: [CanDeactivateFormGuardService] },
-  { path: 'removals',             component: RemovalsComponent, canActivate: [AlwaysAuthGuardService],},
-  { path: 'recipients',           component: RecipientsComponent, canActivate: [AlwaysAuthGuardService],},
+  {
+    path: '',
+    component: LoginComponent
+  },
+  {
+    path: 'menu',
+    component: MenuComponent,
+    canActivate: [AlwaysAuthGuardService],
+    children: [
+      {
+        path: '',
+        component: PurchasseOrderComponent
+      },
+      {
+        path: 'order',
+        component: PurchasseOrderComponent,
+        canActivate: [AlwaysAuthGuardService],
+        canDeactivate: [CanDeactivateFormGuardService]
+      },
+      {
+        path: 'orders',
+        component: OrdersComponent,
+        canActivate: [AlwaysAuthGuardService],
+        canDeactivate: [CanDeactivateFormGuardService]
+      },
+      {
+        path: 'removals',
+        component: RemovalsComponent,
+        canActivate: [AlwaysAuthGuardService],
+        canDeactivate: [CanDeactivateFormGuardService]
+      },
+      {
+        path: 'recipients',
+        component: RecipientsComponent,
+        canActivate: [AlwaysAuthGuardService],
+        canDeactivate: [CanDeactivateFormGuardService]
+      },
+    ]
+  },
   // otherwise redirect to home
   { path: '**',                   redirectTo: ''}
 ];
@@ -47,7 +82,8 @@ const appRoutes: Routes = [
     AppComponent,
     SortByValuePipe,
     OrdersComponent,
-    LoginComponent
+    LoginComponent,
+    MenuComponent
   ],
   exports: [ AppComponent ],
   imports: [
