@@ -2,18 +2,18 @@ import {Component, OnInit, OnDestroy, HostListener} from '@angular/core';
 import {FormBuilder, Validators, FormGroup} from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import {ConfirmationService} from 'primeng/components/common/confirmationservice';
 import 'rxjs/add/operator/map';
 
 import * as RemovalActions  from '../actions/removal.actions';
 import * as RecipientActions  from '../actions/recipient.actions';
 import * as OrderActions  from '../actions/purchasseOrder.actions';
+import * as ClientZonesActions  from '../actions/clientZones.actions';
 
 import {DataForm}from '../models/DataForm';
 import {PurchasseOrder} from '../models/PurchasseOrder';
-import {NotificationService} from '../services/notification.service';
 import {ComponentDeactivable} from '../services/can-deactivate-form-guard.service';
 import * as fromRoot from '../shared/appState';
+import {MyClientZones} from "../models/my-client-zones";
 
 @Component({
   selector: 'app-purchasse-order',
@@ -25,6 +25,9 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   removals$: Observable<DataForm[]>;
   recipients$: Observable<DataForm[]>;
   order$: Observable<PurchasseOrder>;
+  clientZones$: Observable<MyClientZones[]>;
+  clientZoneRemoval$: Observable<number>;
+  clientZoneRecipient$: Observable<number>;
 
   formRemoval: FormGroup;
   formRecipient: FormGroup;
@@ -69,12 +72,14 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.removals$ = this.store.select(fromRoot.selectors.getRemovalsData);
     this.recipients$ = this.store.select(fromRoot.selectors.getRecipientsData);
     this.order$ = this.store.select(fromRoot.selectors.getOrder);
+    this.clientZones$ = this.store.select(fromRoot.selectors.getClientZonesData);
   }
   storeDispatch() {
     //this.store.dispatch({type: CustomerActions.GET_CUSTOMER, payload: this.customerId });
     // this.store.dispatch(new OrderActions.InitOrder(this.customerId));
     this.store.dispatch(new RemovalActions.GetRemovals(this.customerId*10+1)); // (id + type)  eg: id = 69; type=1 fk_type=691
     this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10+2)); // (id + type)  eg: id = 69; type=2 fk_type=692
+    this.store.dispatch(new ClientZonesActions.GetClientZones());
   }
 
   pushAllForms(allFormGroup: FormGroup[]): FormGroup[] {

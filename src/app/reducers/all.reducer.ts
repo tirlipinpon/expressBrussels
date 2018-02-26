@@ -3,15 +3,18 @@ import * as RemovalActions  from '../actions/removal.actions';
 import * as RecipientActions  from '../actions/recipient.actions';
 import * as PurchasseOrderActions  from '../actions/purchasseOrder.actions';
 import * as OrdersActions from '../actions/orders.actions';
+import * as ClientZonesActions from '../actions/clientZones.actions';
 
 import {DataForm, DataDataFormState} from '../models/DataForm';
 import {PurchasseOrder} from '../models/PurchasseOrder';
+import {MyClientZones, MyClientZonesState} from "../models/my-client-zones";
 
 export type ActionCustomer = CustomerActions.All;
 export type ActionRemoval = RemovalActions.All;
 export type ActionRecipient = RecipientActions.All;
 export type ActionPurchasseOrder = PurchasseOrderActions.All;
 export type ActionOrders = OrdersActions.All;
+export type ActionClientZones = ClientZonesActions.All;
 
 //======================================================
 // customer reducer
@@ -213,4 +216,26 @@ export function ordersReducer(state: PurchasseOrder[], action: ActionOrders): Pu
 }
 export const OrderSelector = {
   orders: (state: PurchasseOrder[]) => { return state; }
+};
+
+//======================================================
+// orders reducer
+//======================================================
+const clientZoneInit: MyClientZonesState =
+  {  data: [],
+    count: 0
+  };
+export function clientZonesReducer(state = clientZoneInit, action: ActionClientZones): MyClientZonesState {
+  switch(action.type){
+    case ClientZonesActions.GET_CLIENT_ZONES_SUCCESS:
+      // console.log('in orders reducer get orders by fk_customer_id',action.payload);
+      return Object.assign({}, state, action.payload);
+    // return [...state, ...action.payload];
+    default:
+      return state;
+  }
+}
+export const ClientZonesSelector = {
+  data: (state: MyClientZonesState) => { return state.data },
+  count: (state: MyClientZonesState) => { return state.count }
 };

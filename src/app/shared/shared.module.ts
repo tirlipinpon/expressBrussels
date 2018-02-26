@@ -29,6 +29,7 @@ import {CustomerEffectService} from '../effects/customer/customer-effect.service
 import {RecipientEffectService} from '../effects/recipients/recipient-effect.service';
 import {EffectsModule} from '@ngrx/effects';
 import {reducers} from './appState';
+import {ClientZonesEffectService} from "../effects/client-zones/client-zones-effect.service";
 
 
 @NgModule({
@@ -50,10 +51,11 @@ import {reducers} from './appState';
       CustomerEffectService,
       RemovalEffectService,
       PurchasseOrderEffectService,
-      OrdersEffectService
+      OrdersEffectService,
+      ClientZonesEffectService
     ]),
     // StoreModule.forFeature('todo', customerReducer)
-    StoreModule.forRoot(reducers, {}),
+    StoreModule.forRoot(reducers),
   ],
   exports: [
     GrowlModule,

@@ -9,13 +9,15 @@ import {Observable} from 'rxjs/Observable';
 import  'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/of';
+import {NotificationService} from "../../services/notification.service";
 
 @Injectable()
 export class RemovalEffectService {
 
   constructor(
     private action$: Actions,
-    private service: RemovalService) { }
+    private service: RemovalService,
+    private notif: NotificationService) { }
 
   @Effect() getRemovals: Observable<Action> = this.action$
     .ofType(RemovalActions.GET_REMOVALS)
@@ -23,6 +25,7 @@ export class RemovalEffectService {
       this.service.getRemovals(action)
         .map((payload) => {
         let data = payload;
+          this.notif.notify('info', 'get Removal OK ', payload.count+'/total');
         return new RemovalActions.GetRemovalsSuccess(data);
       })
         .catch(err => {

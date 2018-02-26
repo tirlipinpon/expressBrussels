@@ -31,6 +31,8 @@ import {CanDeactivateFormGuardService} from './services/can-deactivate-form-guar
 import { LoginComponent } from './login/login.component';
 import {AuthenticationService} from './services/authentication.service';
 import { MenuComponent } from './menu/menu.component';
+import {ClientZonesEffectService} from "./effects/client-zones/client-zones-effect.service";
+import {ClientZonesService} from "./services/client-zones.service";
 
 const appRoutes: Routes = [
   { path: 'login',                component: LoginComponent },
@@ -124,7 +126,8 @@ const appRoutes: Routes = [
     MessageService,
     NotificationService,
     CanDeactivateFormGuardService,
-    AuthenticationService
+    AuthenticationService,
+    ClientZonesService
   ],
   bootstrap: [AppComponent]
 })

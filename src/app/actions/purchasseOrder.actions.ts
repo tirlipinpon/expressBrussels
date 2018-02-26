@@ -77,6 +77,30 @@ export class SaveOrderFail implements Action {
     // console.log('in actions get customer payload= ',payload);
   }
 }
+// =================== client zone ===========================================
+export const GET_CLIENT_ZONE = 'Get client Zone';
+export class GetClientZone implements Action {
+  readonly type = GET_CLIENT_ZONE;
+  constructor(public payload: number) {
+    console.log('in actions get client zone:', payload);
+  }
+}
+
+export const GET_CLIENT_ZONE_SUCCESS = 'Get client Zone Success';
+export class GetClientZoneSuccess implements Action {
+  readonly type = GET_CLIENT_ZONE_SUCCESS;
+  constructor(public payload: number) {
+    console.log('in actions get client zone success payload= ',payload);
+  }
+}
+
+export const GET_CLIENT_ZONE_FAIL = 'Get client Zone Fail';
+export class GetClientZoneFail implements Action {
+  readonly type = GET_CLIENT_ZONE_FAIL;
+  constructor(public payload: string) {
+    console.log('in actions get client zone fail payload= ',payload);
+  }
+}
 
 export type All =
       InitOrder
@@ -92,4 +116,8 @@ export type All =
 
     | SaveOrder
     | SaveOrderSuccess
-    | SaveOrderFail;
+    | SaveOrderFail
+
+    | GetClientZone
+    | GetClientZoneSuccess
+    | GetClientZoneFail;

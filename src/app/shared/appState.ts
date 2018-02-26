@@ -3,8 +3,10 @@ import {PurchasseOrder} from '../models/purchasseOrder';
 import {createSelector, ActionReducerMap, createFeatureSelector, MemoizedSelector} from '@ngrx/store';
 import {
   ordersReducer, purchasseOrderReducer, recipientReducer, removalReducer,
-  customerReducer, CustomerSelector, RemovalSelectors, RecipientSelectors, PurchasseOrderSelector, OrderSelector
+  customerReducer, CustomerSelector, RemovalSelectors, RecipientSelectors, PurchasseOrderSelector, OrderSelector,
+  clientZonesReducer, ClientZonesSelector
 } from '../reducers/all.reducer';
+import {MyClientZones, MyClientZonesState} from "../models/my-client-zones";
 
 export interface AppState {
   customer: DataForm;
@@ -12,6 +14,7 @@ export interface AppState {
   recipients: DataDataFormState;
   order: PurchasseOrder;
   orders: PurchasseOrder[];
+  clientZones: MyClientZonesState;
 }
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -19,7 +22,8 @@ export const reducers: ActionReducerMap<AppState> = {
   removals: removalReducer,
   recipients: recipientReducer,
   order: purchasseOrderReducer,
-  orders: ordersReducer
+  orders: ordersReducer,
+  clientZones: clientZonesReducer
 };
 
 const getCustomerState = createFeatureSelector('customer');
@@ -27,6 +31,7 @@ const getRemovalsState = createFeatureSelector('removals');
 const getRecipientsState = createFeatureSelector('recipients');
 const getOrderState = createFeatureSelector('order');
 const getOrdersState = createFeatureSelector('orders');
+const getClientZonesState = createFeatureSelector('clientZones');
 
 // export const rootSelectors = {
 //   customer: createSelector(getCustomerState, (state: AppState) => { return state.customer}),
@@ -48,6 +53,9 @@ export interface Selectors {
 
   getOrder: MemoizedSelector<AppState, PurchasseOrder>;
   getOrders: MemoizedSelector<AppState, PurchasseOrder[]>;
+
+  getClientZonesData: MemoizedSelector<AppState, MyClientZones[]>;
+  getClientZonesCount: MemoizedSelector<AppState, number>;
 }
 
 export const selectors: Selectors = {
@@ -62,4 +70,8 @@ export const selectors: Selectors = {
 
   getOrder: createSelector(getOrderState, PurchasseOrderSelector.order ),
   getOrders: createSelector(getOrdersState, OrderSelector.orders ),
+
+  getClientZonesData: createSelector(getClientZonesState, ClientZonesSelector.data ),
+  getClientZonesCount: createSelector(getClientZonesState, ClientZonesSelector.count ),
+
 }
