@@ -9,7 +9,8 @@ import {FormGroup} from "@angular/forms";
 })
 export class InputAutocompletionComponent implements OnInit {
 
-  @Input() name: string;
+  @Input() propName: string;
+  @Input() propType: string;
   @Input() data: any;
   @Input() formGroup: FormGroup;
   private showDropDown = false;
@@ -23,12 +24,12 @@ export class InputAutocompletionComponent implements OnInit {
     this.showDropDown = action;
   }
   getSearchValue(value: string): string {
-    return this.formGroup.value.cp;
+    return this.formGroup.get(this.propName).value;
   }
   private _initData(data: any): void {
     this.formGroup.patchValue({
       cp: data.cp,
-      state: data.ville
+      state: data.state
     });
   }
   setSelectdedValue(value: string,  data: string): void {

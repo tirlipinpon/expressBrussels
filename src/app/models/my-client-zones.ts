@@ -1,7 +1,7 @@
 export interface MyClientZones {
   id: number;
   cp: number;
-  ville: string;
+  state: string;
   zone: number;
 }
 

@@ -5,16 +5,20 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class ClientCpPipe implements PipeTransform {
 
-  transform(value: any, search: any): any {
-    console.log('value -> ', value);
-    console.log('value.cp -> ', value.cp);
+  transform(data: any, search: any, propName: string, propType: string): any {
+    console.log('data -> ', data);
+    console.log('propName -> ', propName);
+    console.log('propType -> ', propType);
     console.log('search -> ', search);
-    if(!search) { return value; }
-    let solution = value.filter(v =>{
-      let val = v.cp;
-      if(!val){ return; }
-      return val.startsWith(search);
-      // return val.indexOf(search) !== -1;
+    if(!search) { return data; }
+    let solution = data.filter(v =>{
+      let val = v[propName];
+      if (!val){ return; }
+      if ( propType === 'number') {
+        return val.startsWith(search);
+      }else if ( propType === 'string') {
+          return val.indexOf(search) !== -1;
+      }
     });
     return solution;
   }

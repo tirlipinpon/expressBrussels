@@ -1,11 +1,13 @@
 <div class="pos-rel">
   <form  novalidate [formGroup]="formGroup">
-    <input id="{{name}}" (focus)="toogleDropDown(name, true)" type="number" formControlName="{{name}}" autocomplete="off" placeholder="{{name}}" >
+    <input id="{{propName}}" (focus)="toogleDropDown(propName, true)" type="{{type}}" formControlName="{{propName}}" autocomplete="off" placeholder="{{propName}}" >
   </form>
-  <div clickOutside [myId]="name" (clickOutside)="toogleDropDown('name', false)" *ngIf="showDropDown" class="state-container-dropdown">
+  <div clickOutside [myId]="propName" (clickOutside)="toogleDropDown(propName, false)" *ngIf="showDropDown" class="state-container-dropdown">
     <div>
-      <div (click)="setSelectdedValue(name, d.cp)" class="state" *ngFor="let d of data | clientCp:getSearchValue(name);  let index=index">
-        {{index}} {{d.cp}}
+      <div (click)="setSelectdedValue(propName, d[propName])"
+           class="state"
+           *ngFor="let d of data | clientCp:getSearchValue(propName):propName:propType;  let index=index">
+      {{d[propName]}}
       </div>
     </div>
   </div>
