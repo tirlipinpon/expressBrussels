@@ -25,8 +25,7 @@ export class InputAutocompletionComponent implements OnInit {
   getSearchValue(value: string): string {
     return this.formGroup.value.cp;
   }
-  private _initData(data): void {
-    // console.log('init data : ', data);
+  private _initData(data: any): void {
     this.formGroup.patchValue({
       cp: data.cp,
       state: data.ville
@@ -37,9 +36,11 @@ export class InputAutocompletionComponent implements OnInit {
     this.toogleDropDown();
     this.formGroup.markAsDirty();
   }
-  getByData(value, data): any {
+  getByData(value: string, data: any): any {
     let arrayWithElem;
-    arrayWithElem = this.data.filter(elem => elem.cp === data);
+    arrayWithElem = this.data.filter(elem => {
+      return elem[value] === data
+    });
     return arrayWithElem[0];
   }
 

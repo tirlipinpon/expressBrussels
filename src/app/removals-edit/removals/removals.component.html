@@ -27,7 +27,8 @@
         <input type="text" formControlName="ref_client" autocomplete="off">
         <input type="text" formControlName="address">
         <input type="text" formControlName="number">
-        <input type="number" formControlName="cp">
+        <!-- directive input autocompletion -->
+        <app-input-autocompletion [name]="'cp'" [data]="clientZones" [formGroup]="removal"></app-input-autocompletion>
         <input type="text" formControlName="state">
         <input type="number" formControlName="clientZone">
         <input type="text" formControlName="phone">
