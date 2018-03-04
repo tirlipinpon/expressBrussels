@@ -17,27 +17,30 @@
 
 <form  *ngIf="!isCustomer"  novalidate [formGroup]="formGroup">
 
-  <div class="pos-rel">
-    <input id="search" (click)="toogleDropDown('name')" type="text" formControlName="name" autocomplete="off" >
-    <div clickOutside  (clickOutside)="toogleDropDown('name')" *ngIf="showDropDown" class="state-container-dropdown">
-      <div>
-        <div (click)="setSelectdedValue('name', d.name)" class="state" *ngFor="let d of _user | searchFilter:getSearchValue('name');  let index=index">
-          {{index}} {{d.name}}
-        </div>
-      </div>
-    </div>
-  </div>
+  <!--<div class="pos-rel">-->
+    <!--<input id="search" (click)="toogleDropDown('name')" type="text" formControlName="name" autocomplete="off" >-->
+    <!--<div clickOutside  (clickOutside)="toogleDropDown('name')" *ngIf="showDropDown" class="state-container-dropdown">-->
+      <!--<div>-->
+        <!--<div (click)="setSelectdedValue('name', d.name)" class="state" *ngFor="let d of _user | searchFilter:getSearchValue('name');  let index=index">-->
+          <!--{{index}} {{d.name}}-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
 
-  <div class="pos-rel">
-    <input id="searchRef" *ngIf="formGroup.get('ref_client')!=='NULL'" (click)="toogleDropDown('ref_client')" type="text" formControlName="ref_client" autocomplete="off" >
-    <div clickOutside  (clickOutside)="toogleDropDown('ref_client')" *ngIf="showDropDownRef" class="state-container-dropdown">
-      <div>
-        <div (click)="setSelectdedValue('ref_client', d.ref_client)" class="state" *ngFor="let d of _user | searchFilter:getSearchValue('ref_client');  let index=index">
-          <span *ngIf="d.ref_client!=='NULL'">{{d.ref_client}}</span>
-        </div>
-      </div>
-    </div>
-  </div>
+  <app-input-autocompletion [propName]="'name'" [data]="_user" [propType]="'string'" [witchForm]="1"  [formGroup]="formGroup"></app-input-autocompletion>
+  <app-input-autocompletion [propName]="'ref_client'" [data]="_user" [propType]="'string'" [witchForm]="1"   [formGroup]="formGroup"></app-input-autocompletion>
+
+  <!--<div class="pos-rel">-->
+    <!--<input id="searchRef" *ngIf="formGroup.get('ref_client')!=='NULL'" (click)="toogleDropDown('ref_client')" type="text" formControlName="ref_client" autocomplete="off" >-->
+    <!--<div clickOutside  (clickOutside)="toogleDropDown('ref_client')" *ngIf="showDropDownRef" class="state-container-dropdown">-->
+      <!--<div>-->
+        <!--<div (click)="setSelectdedValue('ref_client', d.ref_client)" class="state" *ngFor="let d of _user | searchFilter:getSearchValue('ref_client');  let index=index">-->
+          <!--<span *ngIf="d.ref_client!=='NULL'">{{d.ref_client}}</span>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
 
   <input type="hidden" formControlName="id">
   <input type="text" formControlName="address" [readonly]="true">

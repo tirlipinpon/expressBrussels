@@ -11,8 +11,8 @@
       <input type="text" formControlName="ref_client" autocomplete="off" placeholder="ref_client">
       <input type="text" formControlName="address" placeholder="address">
       <input type="text" formControlName="number" placeholder="number">
-      <input type="number" formControlName="cp" placeholder="cp">
-      <input type="text" formControlName="state" placeholder="state">
+      <app-input-autocompletion [propName]="'cp'" [data]="clientZones" [propType]="'number'" [witchForm]="2"  [formGroup]="allFormGroup[0]"></app-input-autocompletion>
+      <app-input-autocompletion [propName]="'state'" [data]="clientZones" [propType]="'string'" [witchForm]="2"  [formGroup]="allFormGroup[0]"></app-input-autocompletion>
       <input type="text" formControlName="phone" placeholder="phone">
       <input type="hidden" formControlName="fk_type">
       <button  (click)="add(allFormGroup[0])"> add </button>
@@ -26,8 +26,8 @@
       <input type="text" formControlName="ref_client" autocomplete="off">
       <input type="text" formControlName="address">
       <input type="text" formControlName="number">
-      <input type="number" formControlName="cp">
-      <input type="text" formControlName="state">
+      <app-input-autocompletion [propName]="'cp'" [data]="clientZones" [propType]="'number'" [witchForm]="2"  [formGroup]="removal"></app-input-autocompletion>
+      <app-input-autocompletion [propName]="'state'" [data]="clientZones" [propType]="'string'" [witchForm]="2"  [formGroup]="removal"></app-input-autocompletion>
       <input type="number" formControlName="clientZone">
       <input type="text" formControlName="phone">
       <input type="text" formControlName="created">
