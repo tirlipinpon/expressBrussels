@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, EventEmitter, Output, SimpleChanges, OnChanges} from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 
 @Component({

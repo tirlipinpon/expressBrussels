@@ -25,8 +25,6 @@ export class RemovalsComponent implements OnInit, OnDestroy {
   clientZones$: Observable<MyClientZones[]>;
   clientZones: MyClientZones[];
 
-  private showDropDown = false;
-
   constructor(private store: Store<fromRoot.AppState>,
               private fb: FormBuilder,
               private cd: ChangeDetectorRef,
@@ -174,28 +172,5 @@ export class RemovalsComponent implements OnInit, OnDestroy {
     return canDeactive;
   }
 
-  // auto completion
-  toogleDropDown(value?: string) {
-      this.showDropDown = !this.showDropDown;
-  }
-  getSearchValue(value: string): string {
-      return this.allFormGroup[0].value.cp;
-  }
-  private _initData(data): void {
-    // console.log('init data : ', data);
-    this.allFormGroup[0].patchValue({
-      cp: data.cp,
-      state: data.ville
-    });
-  }
-  setSelectdedValue(value: string,  data: string): void {
-    this._initData(this.getByData(value, data));
-    this.toogleDropDown();
-    this.allFormGroup[0].markAsDirty();
-  }
-  getByData(value, data): any {
-    let arrayWithElem;
-    arrayWithElem = this.clientZones.filter(elem => elem.cp === data);
-    return arrayWithElem[0];
-  }
+
 }

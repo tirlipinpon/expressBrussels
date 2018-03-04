@@ -4,7 +4,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HttpClientModule} from '@angular/common/http';
 import {ReactiveFormsModule, FormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
-
 import {NotificationComponent} from './components/notification/notification.component';
 import {GrowlModule} from 'primeng/components/growl/growl';
 import {SearchFilterPipe} from './pipe/search-filter.pipe';
@@ -31,6 +30,7 @@ import {EffectsModule} from '@ngrx/effects';
 import {reducers} from './appState';
 import {ClientZonesEffectService} from "../effects/client-zones/client-zones-effect.service";
 import { ClientCpPipe } from './pipe/client-cp.pipe';
+import { InputAutocompletionComponent } from './components/form/input-completion/input-autocompletion.component';
 
 
 @NgModule({
@@ -65,7 +65,8 @@ import { ClientCpPipe } from './pipe/client-cp.pipe';
     OptionComponent,
     ProfileComponent,
     ConfirmDialogModule,
-    ClientCpPipe
+    ClientCpPipe,
+    InputAutocompletionComponent
   ],
   declarations: [
     NotificationComponent,
@@ -76,7 +77,8 @@ import { ClientCpPipe } from './pipe/client-cp.pipe';
     OptionComponent,
     SearchFilterPipe,
     ProfileComponent,
-    ClientCpPipe
+    ClientCpPipe,
+    InputAutocompletionComponent
   ],
   providers: [
     ConfirmationService

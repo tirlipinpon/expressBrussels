@@ -10,19 +10,9 @@
       <input type="text" formControlName="ref_client" autocomplete="off" placeholder="ref_client">
       <input type="text" formControlName="address" placeholder="address">
       <input type="text" formControlName="number" placeholder="number">
-      <!--<input type="number" formControlName="cp" placeholder="cp">-->
       <input type="text" formControlName="state" placeholder="state">
       <!-- directive input autocompletion -->
-      <div class="pos-rel">
-        <input (click)="toogleDropDown('cp')" type="number" formControlName="cp" autocomplete="off" placeholder="cp" >
-        <div clickOutside  (clickOutside)="toogleDropDown('name')" *ngIf="showDropDown" class="state-container-dropdown">
-          <div>
-            <div (click)="setSelectdedValue('cp', d.cp)" class="state" *ngFor="let d of clientZones | clientCp:getSearchValue('cp');  let index=index">
-              {{index}} {{d.cp}}
-            </div>
-          </div>
-        </div>
-      </div>
+      <app-input-autocompletion [name]="'cp'" [data]="clientZones" [formGroup]="allFormGroup[0]"></app-input-autocompletion>
       <input type="text" formControlName="phone" placeholder="phone">
       <input type="hidden" formControlName="fk_type">
       <input type="hidden" formControlName="clientZone">
@@ -37,17 +27,7 @@
         <input type="text" formControlName="ref_client" autocomplete="off">
         <input type="text" formControlName="address">
         <input type="text" formControlName="number">
-        <!-- directive input autocompletion -->
-        <div class="pos-rel">
-          <input (click)="toogleDropDown('cp')" type="number" formControlName="cp" autocomplete="off" placeholder="cp" >
-          <div clickOutside  (clickOutside)="toogleDropDown('name')" *ngIf="showDropDown" class="state-container-dropdown">
-            <div>
-              <div (click)="setSelectdedValue('cp', d.cp)" class="state" *ngFor="let d of clientZones | clientCp:getSearchValue('cp');  let index=index">
-                {{index}} {{d.cp}}
-              </div>
-            </div>
-          </div>
-        </div>
+        <input type="number" formControlName="cp">
         <input type="text" formControlName="state">
         <input type="number" formControlName="clientZone">
         <input type="text" formControlName="phone">
