@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewEncapsulation, Input} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation, Input, OnDestroy} from '@angular/core';
 import {FormGroup} from "@angular/forms";
 
 @Component({
@@ -7,7 +7,7 @@ import {FormGroup} from "@angular/forms";
   styleUrls: ['input-autocompletion.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class InputAutocompletionComponent implements OnInit {
+export class InputAutocompletionComponent implements OnInit, OnDestroy {
 
   @Input() propName: string;
   @Input() propType: string;
@@ -15,10 +15,18 @@ export class InputAutocompletionComponent implements OnInit {
   @Input() witchForm: number;
   @Input() formGroup: FormGroup;
   private showDropDown = false;
+  disabled = false;
+  private valueNameChanges$: any;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.subscribeNameChanges();
+  }
+
+  ngOnDestroy() {
+    this.valueNameChanges$.unsubscribe();
+  }
 
   // auto completion
   toogleDropDown(value?: string, action: boolean) {
@@ -32,7 +40,7 @@ export class InputAutocompletionComponent implements OnInit {
     this.formGroup.patchValue({
       id: data.id,
       name: data.name,
-      ref_client: data.ref_client!=='NULL' ? data.ref_client : '',
+      ref_client: data.ref_client ? data.ref_client : '',
       address: data.address,
       number: data.number,
       cp: data.cp,
@@ -63,6 +71,7 @@ export class InputAutocompletionComponent implements OnInit {
     }
     this.toogleDropDown();
     this.formGroup.markAsDirty();
+    this.isDisabled();
   }
   getByData(value: string, data: any): any {
     let arrayWithElem;
@@ -71,5 +80,21 @@ export class InputAutocompletionComponent implements OnInit {
     });
     return arrayWithElem[0];
   }
-
+  // form purchasse order case
+  subscribeNameChanges(): void {
+    this.valueNameChanges$ = this.formGroup.get('name').valueChanges.subscribe(val => {
+      if ((!val || val == '') && this.formGroup.dirty) {
+        this.formGroup.get('ref_client').enable();
+        this.formGroup.reset();
+        this.formGroup.markAsPristine();
+      }
+    });
+  }
+  isDisabled(): boolean {
+    if (this.formGroup.get('ref_client') && this.formGroup.get('name').value && this.formGroup.get('ref_client').value!==null && this.formGroup.get('ref_client').value!=='') {
+      this.formGroup.get('ref_client').enable();
+    } else {
+      this.formGroup.get('ref_client').disable();
+    }
+  }
 }

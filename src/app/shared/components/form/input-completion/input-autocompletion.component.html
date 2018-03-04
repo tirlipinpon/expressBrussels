@@ -4,9 +4,7 @@
   </form>
   <div clickOutside [myId]="propName" (clickOutside)="toogleDropDown(propName, false)" *ngIf="showDropDown" class="state-container-dropdown">
     <div>
-      <div (click)="setSelectdedValue(propName, d[propName])"
-           class="state"
-           *ngFor="let d of data | clientCp:getSearchValue(propName):propName:propType;  let index=index">
+      <div (click)="setSelectdedValue(propName, d[propName])" class="state" *ngFor="let d of data | clientCp:getSearchValue(propName):propName:propType;  let index=index">
       {{d[propName]}}
       </div>
     </div>
