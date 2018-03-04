@@ -6,6 +6,7 @@ export interface DataForm {
   number: string;
   cp: number;
   state: string;
+  clientZone: number;
   phone: string;
   infos: {
     info1: string;

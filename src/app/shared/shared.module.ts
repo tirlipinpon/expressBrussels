@@ -30,6 +30,7 @@ import {RecipientEffectService} from '../effects/recipients/recipient-effect.ser
 import {EffectsModule} from '@ngrx/effects';
 import {reducers} from './appState';
 import {ClientZonesEffectService} from "../effects/client-zones/client-zones-effect.service";
+import { ClientCpPipe } from './pipe/client-cp.pipe';
 
 
 @NgModule({
@@ -63,7 +64,8 @@ import {ClientZonesEffectService} from "../effects/client-zones/client-zones-eff
     FormComponent,
     OptionComponent,
     ProfileComponent,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    ClientCpPipe
   ],
   declarations: [
     NotificationComponent,
@@ -73,7 +75,8 @@ import {ClientZonesEffectService} from "../effects/client-zones/client-zones-eff
     InfoComponent,
     OptionComponent,
     SearchFilterPipe,
-    ProfileComponent
+    ProfileComponent,
+    ClientCpPipe
   ],
   providers: [
     ConfirmationService

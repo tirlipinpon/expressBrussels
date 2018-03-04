@@ -72,14 +72,14 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.removals$ = this.store.select(fromRoot.selectors.getRemovalsData);
     this.recipients$ = this.store.select(fromRoot.selectors.getRecipientsData);
     this.order$ = this.store.select(fromRoot.selectors.getOrder);
-    this.clientZones$ = this.store.select(fromRoot.selectors.getClientZonesData);
+    // this.clientZones$ = this.store.select(fromRoot.selectors.getClientZonesData);
   }
   storeDispatch() {
     //this.store.dispatch({type: CustomerActions.GET_CUSTOMER, payload: this.customerId });
     // this.store.dispatch(new OrderActions.InitOrder(this.customerId));
     this.store.dispatch(new RemovalActions.GetRemovals(this.customerId*10+1)); // (id + type)  eg: id = 69; type=1 fk_type=691
     this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10+2)); // (id + type)  eg: id = 69; type=2 fk_type=692
-    this.store.dispatch(new ClientZonesActions.GetClientZones());
+    // this.store.dispatch(new ClientZonesActions.GetClientZones());
   }
 
   pushAllForms(allFormGroup: FormGroup[]): FormGroup[] {

@@ -8,6 +8,8 @@ import * as fromRoot from '../../shared/appState';
 import {DataForm} from '../../models/DataForm';
 import * as moment from 'moment';
 import {ConfirmationService} from "primeng/components/common/confirmationservice";
+import * as ClientZonesActions  from '../../actions/clientZones.actions';
+import {MyClientZones} from "../../models/my-client-zones";
 
 @Component({
   selector: 'app-removals',
@@ -20,6 +22,10 @@ export class RemovalsComponent implements OnInit, OnDestroy {
   private typeDataForm = 1;
   storeData$: Observable<DataForm[]>;
   allFormGroup: FormGroup[] = [];
+  clientZones$: Observable<MyClientZones[]>;
+  clientZones: MyClientZones[];
+
+  private showDropDown = false;
 
   constructor(private store: Store<fromRoot.AppState>,
               private fb: FormBuilder,
@@ -35,11 +41,16 @@ export class RemovalsComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy() {  }
   storeDispatch() {
+    this.store.dispatch(new ClientZonesActions.GetClientZones());
     this.store.dispatch(new actions.GetRemovals(this.customerId*10+1)); // (id + type)  eg: id = 69; type=1 fk_type=691
   }
   storeSelect() {
     // this.customerId$ = this.store.select(fromRoot.selectors.getCustomerId);
     // this.customerId$.subscribe(data => this.customerId = data );
+    this.clientZones$ = this.store.select(fromRoot.selectors.getClientZonesData);
+    this.clientZones$.subscribe(data => {
+      this.clientZones = data;
+    });
     this.storeData$ = this.store.select(fromRoot.selectors.getRemovalsData);
   }
   initFormsRemoval(): void {
@@ -105,6 +116,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
       number: [data ? data.number : '', Validators.required],
       cp: [data? data.cp : '', Validators.required],
       state: [data? data.state : '', Validators.required],
+      clientZone: [data? data.clientZone : ''],
       phone: [data ? data.phone : '', Validators.required],
       infos: this.fb.group({
         info1: [''],
@@ -138,10 +150,17 @@ export class RemovalsComponent implements OnInit, OnDestroy {
   }
 
   add(form: FormGroup): void {
+    this.setClientZone(form);
     this.store.dispatch(new actions.AddRemoval(form.value));
     this.allFormGroup[0].reset();
     this.allFormGroup[0].markAsUntouched();
     this.allFormGroup[0].markAsPristine();
+  }
+  setClientZone(form: FormGroup) {
+    const cp = form.get('cp').value;
+    console.log('cp: ', cp);
+    form.get('clientZone').setValue(1);
+    console.log('clientZone:', form.get('clientZone').value);
   }
 
   @HostListener('window:beforeunload')
@@ -153,5 +172,30 @@ export class RemovalsComponent implements OnInit, OnDestroy {
       }
     });
     return canDeactive;
+  }
+
+  // auto completion
+  toogleDropDown(value?: string) {
+      this.showDropDown = !this.showDropDown;
+  }
+  getSearchValue(value: string): string {
+      return this.allFormGroup[0].value.cp;
+  }
+  private _initData(data): void {
+    // console.log('init data : ', data);
+    this.allFormGroup[0].patchValue({
+      cp: data.cp,
+      state: data.ville
+    });
+  }
+  setSelectdedValue(value: string,  data: string): void {
+    this._initData(this.getByData(value, data));
+    this.toogleDropDown();
+    this.allFormGroup[0].markAsDirty();
+  }
+  getByData(value, data): any {
+    let arrayWithElem;
+    arrayWithElem = this.clientZones.filter(elem => elem.cp === data);
+    return arrayWithElem[0];
   }
 }

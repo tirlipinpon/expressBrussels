@@ -20,6 +20,7 @@ export class RecipientsComponent implements OnInit, OnDestroy {
   private typeDataForm = 2;
   storeData$: Observable<DataForm[]>;
   allFormGroup: FormGroup[] = [];
+  clientZones$: Observable<number>;
 
   constructor(private store: Store<fromRoot.AppState>,
               private fb: FormBuilder,
@@ -33,12 +34,14 @@ export class RecipientsComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy() {  }
   storeDispatch() {
+    // this.store.dispatch(new ClientZonesActions.GetClientZones());// TODO: use webworker
     this.store.dispatch(new actions.GetRecipients(this.customerId*10+2)); // (id + type)  eg: id = 69; type=1 fk_type=691
   }
   storeSelect() {
     // this.customerId$ = this.store.select(fromRoot.selectors.getCustomerId);
     // this.customerId$.subscribe(data => this.customerId = data );
     this.storeData$ = this.store.select(fromRoot.selectors.getRecipientsData);
+    // this.clientZones$ = this.store.select(fromRoot.selectors.getClientZonesData);
   }
   initFormsRemoval(): void {
     this.storeData$.subscribe(data => {
@@ -103,6 +106,7 @@ export class RecipientsComponent implements OnInit, OnDestroy {
       number: [data ? data.number : '', Validators.required],
       cp: [data? data.cp : '', Validators.required],
       state: [data? data.state : '', Validators.required],
+      clientZone: [data? data.clientZone : ''],
       phone: [data ? data.phone : '', Validators.required],
       infos: this.fb.group({
         info1: [''],
@@ -116,7 +120,6 @@ export class RecipientsComponent implements OnInit, OnDestroy {
     });
   }
   update(form: FormGroup): void {
-
     this.store.dispatch(new actions.EditRecipient(form.value));
     form.markAsUntouched();
     form.markAsPristine();
@@ -141,7 +144,6 @@ export class RecipientsComponent implements OnInit, OnDestroy {
     this.allFormGroup[0].markAsUntouched();
     this.allFormGroup[0].markAsPristine();
   }
-
   @HostListener('window:beforeunload')
   canDeactivate(): boolean {
     let canDeactive = true;
