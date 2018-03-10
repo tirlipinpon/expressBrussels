@@ -33,6 +33,8 @@ import {AuthenticationService} from './services/authentication.service';
 import { MenuComponent } from './menu/menu.component';
 import {ClientZonesEffectService} from "./effects/client-zones/client-zones-effect.service";
 import {ClientZonesService} from "./services/client-zones.service";
+import { CascadeComponent } from './cascade/cascade.component';
+import {CascadeModule} from "./cascade/cascade.module";
 
 const appRoutes: Routes = [
   { path: 'login',                component: LoginComponent },
@@ -106,6 +108,7 @@ const appRoutes: Routes = [
     RecipientsEditModule,
     RemovalsEditModule,
     SharedModule,
+    CascadeModule,
 
     RouterModule.forRoot(
       appRoutes,

@@ -25,9 +25,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   removals$: Observable<DataForm[]>;
   recipients$: Observable<DataForm[]>;
   order$: Observable<PurchasseOrder>;
-  clientZones$: Observable<MyClientZones[]>;
-  clientZoneRemoval$: Observable<number>;
-  clientZoneRecipient$: Observable<number>;
 
   formRemoval: FormGroup;
   formRecipient: FormGroup;
