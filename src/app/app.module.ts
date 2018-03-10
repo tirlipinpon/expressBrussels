@@ -75,6 +75,12 @@ const appRoutes: Routes = [
         canActivate: [AlwaysAuthGuardService],
         canDeactivate: [CanDeactivateFormGuardService]
       },
+      {
+        path: 'cascade',
+        component: CascadeComponent,
+        canActivate: [AlwaysAuthGuardService],
+        canDeactivate: [CanDeactivateFormGuardService]
+      },
     ]
   },
   // otherwise redirect to home
