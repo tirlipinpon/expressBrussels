@@ -21,15 +21,19 @@ export class InputAutocompletionComponent implements OnInit, OnDestroy {
   constructor() {}
 
   ngOnInit() {
-    this.subscribeNameChanges();
+    if (this.witchForm === 1) {
+      this.subscribeNameChanges();
+    }
   }
 
   ngOnDestroy() {
-    this.valueNameChanges$.unsubscribe();
+    if (this.witchForm === 1) {
+      this.valueNameChanges$.unsubscribe();
+    }
   }
 
   // auto completion
-  toogleDropDown(value?: string, action: boolean) {
+  toogleDropDown(action: boolean) {
     this.showDropDown = action;
   }
   getSearchValue(value: string): string {
@@ -69,9 +73,11 @@ export class InputAutocompletionComponent implements OnInit, OnDestroy {
     }else if (this.witchForm === 2) {
       this._initData2(this.getByData(value, data));
     }
-    this.toogleDropDown();
+    this.toogleDropDown(false);
     this.formGroup.markAsDirty();
-    this.isDisabled();
+    if (this.witchForm === 1) {
+      this.isDisabled();
+    }
   }
   getByData(value: string, data: any): any {
     let arrayWithElem;
@@ -82,15 +88,16 @@ export class InputAutocompletionComponent implements OnInit, OnDestroy {
   }
   // form purchasse order case
   subscribeNameChanges(): void {
-    this.valueNameChanges$ = this.formGroup.get('name').valueChanges.subscribe(val => {
-      if ((!val || val == '') && this.formGroup.dirty) {
-        this.formGroup.get('ref_client').enable();
-        this.formGroup.reset();
-        this.formGroup.markAsPristine();
-      }
-    });
+      this.valueNameChanges$ = this.formGroup.get('name').valueChanges.subscribe(val => {
+        if ((!val || val == '') && this.formGroup.dirty) {
+          this.formGroup.get('ref_client').enable();
+          this.formGroup.reset();
+          this.formGroup.markAsPristine();
+        }
+      });
+
   }
-  isDisabled(): boolean {
+  isDisabled(): void {
     if (this.formGroup.get('ref_client') && this.formGroup.get('name').value && this.formGroup.get('ref_client').value!==null && this.formGroup.get('ref_client').value!=='') {
       this.formGroup.get('ref_client').enable();
     } else {

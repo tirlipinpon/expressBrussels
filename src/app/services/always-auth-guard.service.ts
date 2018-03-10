@@ -11,7 +11,7 @@ export class AlwaysAuthGuardService implements CanActivate {
   canActivate() {
     // console.log('AlwaysAuthGuard');
     if (this.authenticationService.getToken()) {
-      console.log('canActivate: ', true);
+      // console.log('canActivate: ', true);
       // logged in so return true
       return true;
     }

@@ -12,7 +12,7 @@ export class ClientCpPipe implements PipeTransform {
     // console.log('search -> ', search);
     if(!search) { return data; }
     let solution = data.filter(v =>{
-      const val = v[propName];
+      let val = v[propName];
       if (!val){ return; }
       if ( propType === 'number') {
         return val.startsWith(search);

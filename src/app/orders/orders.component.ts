@@ -58,6 +58,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
         this.isDataLoaded();
       }
     });
+
     this.recipients$.subscribe(data => {
       // console.log('data recipients: ', data);
       if(data.length) {

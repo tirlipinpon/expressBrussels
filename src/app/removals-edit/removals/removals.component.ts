@@ -1,7 +1,10 @@
-import {Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, HostListener} from '@angular/core';
+import {
+  Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, HostListener,
+  AfterViewInit
+} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Store} from '@ngrx/store';
-import {Observable} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {NotificationService} from '../../services/notification.service';
 import * as actions  from '../../actions/removal.actions';
 import * as fromRoot from '../../shared/appState';
@@ -10,6 +13,8 @@ import * as moment from 'moment';
 import {ConfirmationService} from "primeng/components/common/confirmationservice";
 import * as ClientZonesActions  from '../../actions/clientZones.actions';
 import {MyClientZones} from "../../models/my-client-zones";
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
 
 @Component({
   selector: 'app-removals',
@@ -67,7 +72,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
           this.cd.markForCheck();
         //  update data
         }else { }
-        this.disableForm();
+        // this.disableForm();
       }
     });
   }

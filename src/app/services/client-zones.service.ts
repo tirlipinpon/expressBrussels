@@ -11,7 +11,7 @@ export class ClientZonesService {
   constructor(private http: HttpClient) { }
 
   getClientZones(): Observable<MyClientZonesState> {
-    console.log('in service client zones');
+    // console.log('in service client zones');
     let url = this.apiUrl+'php//read_client_zones.php';
     return this.http.get(url)
       .catch(error => Observable.throw('error in service get client zones with message from server -> ', error));

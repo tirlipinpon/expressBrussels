@@ -7,7 +7,7 @@
 
       <input type="hidden" formControlName="id">
       <input type="text" formControlName="name" autocomplete="off" placeholder="name">
-      <input type="text" formControlName="ref_client" autocomplete="off" placeholder="ref_client">
+      <input type="text"  formControlName="ref_client" autocomplete="off" placeholder="ref_client">
       <input type="text" formControlName="address" placeholder="address">
       <input type="text" formControlName="number" placeholder="number">
       <!-- directive input autocompletion -->
@@ -15,6 +15,7 @@
       <app-input-autocompletion [propName]="'state'" [data]="clientZones" [propType]="'string'" [witchForm]="2"  [formGroup]="allFormGroup[0]"></app-input-autocompletion>
       <input type="text" formControlName="phone" placeholder="phone">
       <input type="hidden" formControlName="fk_type">
+        <input type="hidden" formControlName="active" value="1">
       <input type="hidden" formControlName="clientZone">
       <button  (click)="add(allFormGroup[0])"> add </button>
 
