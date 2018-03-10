@@ -15,8 +15,7 @@ import {CascadeComponent} from "./cascade.component";
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    SharedModule,
-    CommonModule
+    SharedModule
   ],
   declarations: [
     CascadeComponent
