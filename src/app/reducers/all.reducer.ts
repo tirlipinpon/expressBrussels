@@ -142,7 +142,8 @@ const orderInitOrder: PurchasseOrder =
     date: new Date(),
     price: 0,
     options: 'express',
-    tomorrow: false
+    tomorrow: false,
+    cascades: false
   };
 export function purchasseOrderReducer(state: PurchasseOrder = orderInitOrder, action: ActionPurchasseOrder): PurchasseOrder {
   // console.log('2 - Reducer order :', action.type, state);

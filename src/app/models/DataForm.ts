@@ -16,7 +16,7 @@ export interface DataForm {
   fk_client: number;
   active:  number;
   created: any;
-  fk_type: number
+  fk_type: number;
 }
 
 export interface DataDataFormState {

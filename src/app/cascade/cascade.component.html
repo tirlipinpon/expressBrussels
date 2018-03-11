@@ -3,7 +3,6 @@
 </p-confirmDialog>
 
 <div class="conatinerFormData">
-
   <app-form
     [nameForm]="nameForm[0]"
     [datas]="removals$ | async"
@@ -11,20 +10,23 @@
     [formGroup]="formRemoval"
   >
   </app-form>
-
-  <app-form
-    [nameForm]="nameForm[1]"
-    [datas]="recipients$ | async"
-    [isCustomer]="false"
-    [formGroup]="formRecipient"
-  >
-  </app-form>
-
-  <app-option
-    [formGroup]="formOptions"
-  >
+  <form  [formGroup]="formRecipientCascade">
+    <div formArrayName="items"
+         *ngFor="let item of formRecipientCascade.get('items').controls; let i = index;">
+      <app-form
+        [nameForm]="nameForm[1]"
+        [datas]="recipients$ | async"
+        [isCustomer]="false"
+        [formGroup]="item"
+      >
+      </app-form>
+    </div>
+    <button (click)="addItem()">+</button>
+  </form>
+  <app-option [formGroup]="formOptions">
   </app-option>
-
   <button *ngIf="isFormsValide()" (click)="recapOrder()">Send order </button>
-
 </div>
+
+
+
