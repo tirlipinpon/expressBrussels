@@ -11,12 +11,12 @@ export class FormComponent implements OnInit, OnDestroy {
 
   private test = false;
 
-  @Input('isCustomer') isCustomer: boolean;
+  @Input('isCustomer') isCustomer: string;
   @Input('formGroup') formGroup: FormGroup;
   @Input('nameForm') nameForm: string;
   @Input('datas') set data(value: DataForm[]) {
     if (!!value) {
-      if (this.isCustomer) {
+      if (this.isCustomer === 'customer') {
         if(!this.test){
           this._initData(value);
           this.test = true;

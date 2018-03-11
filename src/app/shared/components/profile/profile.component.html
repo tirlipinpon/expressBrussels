@@ -3,7 +3,7 @@
   <app-form
   [nameForm]="nameForm[0]"
   [datas]="customer$ | async"
-  [isCustomer]="true"
+  [isCustomer]="'customer'"
   [formGroup]="formCustomer"
   (updateDataForm)="saveCustomer()"
   >

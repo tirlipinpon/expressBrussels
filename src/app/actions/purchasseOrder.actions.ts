@@ -28,7 +28,15 @@ export class EditOrderRemoval implements Action {
 export const EDIT_ORDER_RECIPIENT = 'Edit Order Recipient';
 export class EditOrderRecipient implements Action {
   readonly type = EDIT_ORDER_RECIPIENT;
-  constructor(public payload: number) {
+  constructor(public payload: string[]) {
+    // console.log('in actions get customer payload= ',payload);
+  }
+}
+//==================== recipient cascades ===============================
+export const EDIT_ORDER_RECIPIENT_CASCADES = 'Edit Order Recipient cascades';
+export class EditOrderRecipientCascades implements Action {
+  readonly type = EDIT_ORDER_RECIPIENT_CASCADES;
+  constructor(public payload: string[]) {
     // console.log('in actions get customer payload= ',payload);
   }
 }
@@ -45,7 +53,15 @@ export const EDIT_ORDER_RECIPIENT_INFOS = 'Edit Order Recipient Infos';
 export class EditOrderRecipientInfos implements Action {
   readonly type = EDIT_ORDER_RECIPIENT_INFOS;
   constructor(public payload: any) {
-    // console.log('in actions get customer payload= ',payload);
+    // console.log('in actions get recipients infos  payload= ',payload);
+  }
+}
+//==================== recipient infos cascades ===============================
+export const EDIT_ORDER_RECIPIENT_INFOS_CASCADES = 'Edit Order Recipient Infos Cascades';
+export class EditOrderRecipientInfosCascades implements Action {
+  readonly type = EDIT_ORDER_RECIPIENT_INFOS_CASCADES;
+  constructor(public payload: Array<string>) {
+    console.log('in actions get recipients infos cascades  payload= ',payload);
   }
 }
 //=================== options ================================
@@ -109,8 +125,12 @@ export type All =
     | EditOrderRemoval
     | EditOrderRecipient
 
+    | EditOrderRecipientCascades
+
     | EditOrderRemovalInfos
     | EditOrderRecipientInfos
+
+    | EditOrderRecipientInfosCascades
 
     | EditOrderOption
 

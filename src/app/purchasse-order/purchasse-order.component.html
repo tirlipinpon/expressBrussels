@@ -11,7 +11,7 @@
   <app-form
     [nameForm]="nameForm[0]"
     [datas]="removals$ | async"
-    [isCustomer]="false"
+    [isCustomer]="'notCascades'"
     [formGroup]="formRemoval"
   >
   </app-form>
@@ -19,7 +19,7 @@
   <app-form
     [nameForm]="nameForm[1]"
     [datas]="recipients$ | async"
-    [isCustomer]="false"
+    [isCustomer]="'notCascades'"
     [formGroup]="formRecipient"
   >
   </app-form>

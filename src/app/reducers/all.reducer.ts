@@ -168,6 +168,15 @@ export function purchasseOrderReducer(state: PurchasseOrder = orderInitOrder, ac
         message_recipient: null
       });
 
+    case PurchasseOrderActions.EDIT_ORDER_RECIPIENT_CASCADES:
+      // console.log('in order reducer edit Order Recipient payload = ',action.payload);
+      return Object.assign({}, state, {
+        fk_recipient_id: JSON.stringify(action.payload),
+        contact_recipient: null,
+        message_recipient: null,
+        cascades: 1
+      });
+
     case PurchasseOrderActions.EDIT_ORDER_REMOVAL_INFOS:
       // console.log('in order reducer edit Order Removal Infos payload = ',action.payload);
       return Object.assign({}, state, {
@@ -180,6 +189,20 @@ export function purchasseOrderReducer(state: PurchasseOrder = orderInitOrder, ac
       return Object.assign({}, state, {
         contact_recipient: action.payload.info1,
         message_recipient: action.payload.info2,
+      });
+
+    case PurchasseOrderActions.EDIT_ORDER_RECIPIENT_INFOS_CASCADES:
+      console.log('in order reducer edit Order Recipient Infos cascades payload = ',action.payload);
+      let contact_recipient_info1: Array<string> = [];
+      let contact_recipient_info2: Array<string> = [];
+      action.payload.forEach( item => {
+        console.log(item['info1']);
+        contact_recipient_info1.push(item['info1']);
+        contact_recipient_info2.push(item['info2']);
+      });
+      return Object.assign({}, state, {
+        contact_recipient: JSON.stringify(contact_recipient_info1),
+        message_recipient: JSON.stringify(contact_recipient_info2)
       });
 
     case PurchasseOrderActions.EDIT_ORDER_OPTION:
