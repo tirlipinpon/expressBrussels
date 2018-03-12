@@ -220,7 +220,8 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
   initFormsOptions(): void {
     this.formOptions = this.fb.group({
       options: ['express', Validators.required],
-      tomorrow: [false, Validators.required]
+      tomorrow: [false, Validators.required],
+      transport: ['moto', Validators.required],
     });
   }
   @HostListener('window:beforeunload')

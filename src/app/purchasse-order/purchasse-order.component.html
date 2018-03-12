@@ -24,10 +24,7 @@
   >
   </app-form>
 
-  <app-option
-    [formGroup]="formOptions"
-  >
-  </app-option>
+  <app-option [formGroup]="formOptions"></app-option>
 
   <button *ngIf="isFormsValide()" (click)="recapOrder()">Send order </button>
 

@@ -143,6 +143,7 @@ const orderInitOrder: PurchasseOrder =
     price: 0,
     options: 'express',
     tomorrow: false,
+    transport: 'moto',
     cascades: false
   };
 export function purchasseOrderReducer(state: PurchasseOrder = orderInitOrder, action: ActionPurchasseOrder): PurchasseOrder {
@@ -208,7 +209,8 @@ export function purchasseOrderReducer(state: PurchasseOrder = orderInitOrder, ac
       // console.log('in order reducer edit Order option payload = ',action.payload);
       return Object.assign({}, state, {
         options: action.payload.options,
-        tomorrow: action.payload.tomorrow
+        tomorrow: action.payload.tomorrow,
+        transport: action.payload.transport
       });
 
     case PurchasseOrderActions.SAVE_ORDER_SUCCESS:

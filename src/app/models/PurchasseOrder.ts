@@ -14,6 +14,7 @@ export interface PurchasseOrder {
   price: number;
   options: string;
   tomorrow: boolean;
+  transport: string;
 
   cascades: boolean
 }
