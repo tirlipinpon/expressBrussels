@@ -2,7 +2,7 @@
                  icon="fa fa-question-circle" width="400">
 </p-confirmDialog>
 
-<div class="conatinerFormData">
+<div  class="conatinerFormData">
   <app-form
     [nameForm]="nameForm[0]"
     [datas]="removals$ | async"
@@ -20,13 +20,15 @@
         [formGroup]="item"
       >
       </app-form>
+      <button  *ngIf="i > 0" (click)="removeItemCascade(i)">-</button>
     </div>
-    <button (click)="addItem()">+</button>
+    <button (click)="addItemCascade()">+</button>
   </form>
   <app-option [formGroup]="formOptions">
   </app-option>
   <button *ngIf="isFormsValide()" (click)="recapOrder()">Send order </button>
 </div>
+valid :{{ isFormsValide() }}
 
 
 

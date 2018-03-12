@@ -1,4 +1,6 @@
-<form  *ngIf="isCustomer==='customer'"  novalidate [formGroup]="formGroup">
+{{formGroup?.valid}}
+<!--  customer  -->
+<form  *ngIf="isCustomer==='customer'"   novalidate [formGroup]="formGroup">
   <input type="hidden" formControlName="id">
   <input type="text" formControlName="name">
   <input type="text" formControlName="address">
@@ -14,8 +16,8 @@
   <input type="hidden" formControlName="fk_type">
   <button  type="button"  (click)="saveDataCustomer()">save</button>
 </form>
-
-<form  *ngIf="isCustomer==='notCascades'"  novalidate [formGroup]="formGroup">
+<!--  notCascades  -->
+<form *ngIf="isCustomer==='notCascades'"  novalidate [formGroup]="formGroup">
   <app-input-autocompletion [propName]="'name'" [data]="_user" [propType]="'string'" [witchForm]="1"  [formGroup]="formGroup"></app-input-autocompletion>
   <app-input-autocompletion [propName]="'ref_client'" [data]="_user" [propType]="'string'" [witchForm]="1"   [formGroup]="formGroup"></app-input-autocompletion>
   <input type="hidden" formControlName="id">
@@ -26,16 +28,16 @@
   <input type="text" formControlName="phone" [readonly]="true">
   <app-info [formGroup]="formGroup.get('infos')"></app-info>
   <input type="text" formControlName="created" [readonly]="true">
-  <button (click)="resetForm(formGroup)">reset: {{ nameForm }}</button>
+  <!--<button (click)="resetForm(formGroup)">reset: {{ nameForm }}</button>-->
   <input type="hidden" formControlName="fk_type" [readonly]="true">
 </form>
-
-<form  *ngIf="isCustomer==='cascades'"  novalidate [formGroup]="formGroup">
+<!--  cascades  -->
+<form [ngClass]="{ 'notValid': !formGroup.valid }"  *ngIf="isCustomer==='cascades'"  novalidate [formGroup]="formGroup">
   <app-input-autocompletion [propName]="'name'" [data]="_user" [propType]="'string'" [witchForm]="1"  [formGroup]="formGroup"></app-input-autocompletion>
   <app-input-autocompletion [propName]="'ref_client'" [data]="_user" [propType]="'string'" [witchForm]="1"   [formGroup]="formGroup"></app-input-autocompletion>
   <input type="hidden" formControlName="id">
   <app-info [formGroup]="formGroup.get('infos')"></app-info>
   <input type="text" formControlName="created" [readonly]="true">
-  <button (click)="resetForm(formGroup)">reset: {{ nameForm }}</button>
+  <!--<button (click)="resetForm(formGroup)">reset: {{ nameForm }}</button>-->
   <input type="hidden" formControlName="fk_type" [readonly]="true">
 </form>

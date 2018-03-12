@@ -1,5 +1,5 @@
 form{
-  border: 1px solid red;
+  /*border: 1px solid red;*/
   margin:1px;
   padding:1px;
   display: flex;
@@ -26,3 +26,11 @@ form{
 .state:hover{
   background-color: #000;
 }
+
+form {
+  border: 1px solid #2c8ac5;
+}
+.notValid {
+  border: 3px solid red!important;
+}
+

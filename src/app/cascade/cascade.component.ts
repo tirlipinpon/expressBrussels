@@ -13,28 +13,23 @@ import * as fromRoot from '../shared/appState';
 @Component({
   selector: 'app-cascade',
   templateUrl: 'cascade.component.html',
-  styleUrls: ['cascade.component.css'],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['cascade.component.css']
 })
 export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable {
 
   removals$: Observable<DataForm[]>;
   recipients$: Observable<DataForm[]>;
   order$: Observable<PurchasseOrder>;
-
   formRemoval: FormGroup;
   formOptions: FormGroup;
   private allFormGroup: FormGroup[] = [];
-
   formRecipientCascade: FormGroup;
-  items: FormArray;
-
+  itemsCascade: FormArray;
   private valueRemovalChanges$: Subscription;
   private valueRecipientChanges$: Subscription;
   private valueOptionsChanges$: Subscription;
   private valueRemovalInfosChanges$: Subscription;
   private valueRecipientInfosChanges$: Subscription;
-
   customerId = 1;
   datas: any;
   nameForm = ['removal','recipient'];
@@ -80,14 +75,15 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
       cascades: [1, Validators.required],
     });
   }
-  addItem(): void {
-    this.items = this.formRecipientCascade.get('items') as FormArray;
-    this.items.push(this.createItemCascade());
+  addItemCascade(): void {
+    this.itemsCascade = this.formRecipientCascade.get('items') as FormArray;
+    this.itemsCascade.push(this.createItemCascade());
   }
-  removeItem(): void {
-    // this.formRecipientCascade.get('items').removeAt(this.formRecipientCascade.get('items').length);
+  removeItemCascade(index: number): void {
+    if (this.itemsCascade.length > 0) {
+      this.itemsCascade.removeAt(index);
+    }
   }
-
   ngOnDestroy() {
     this.valueRemovalChanges$.unsubscribe();
     // this.valueRecipientChanges$.unsubscribe();
@@ -110,7 +106,6 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
     this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10+2)); // (id + type)  eg: id = 69; type=2 fk_type=692
     // this.store.dispatch(new ClientZonesActions.GetClientZones());
   }
-
   pushAllForms(allFormGroup: FormGroup[]): FormGroup[] {
     allFormGroup.push(this.formRemoval);
     allFormGroup.push(this.formRecipientCascade);
@@ -118,20 +113,10 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
     return allFormGroup;
   }
   onValueOrderChanged() {
-
     this.valueRecipientInfosChanges$ = this.formRecipientCascade.valueChanges.subscribe(val => {
-      console.log(val);
       let id: Array<string> = [];
       let infos: Array<any> = [];
-      val.items.forEach(item => {
-        if(this.fb.group(item).get('id').value) {
-          id.push(this.fb.group(item).get('id').value);
-        }
-
-        if(this.fb.group(item).get('infos').value) {
-          infos.push(this.fb.group(item).get('infos').value);
-        }
-      });
+      this.pushRecipientsValueInArray(val, id, infos);
       if (id.length) {
         this.store.dispatch(new OrderActions.EditOrderRecipientCascades(id));
       }
@@ -139,8 +124,6 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
         this.store.dispatch(new OrderActions.EditOrderRecipientInfosCascades(infos));
       }
     });
-
-
     this.valueRemovalChanges$ = this.formRemoval.get('id').valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderRemoval(val));
     });
@@ -157,6 +140,19 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
       val.items.forEach(item => {
         this.chackIsFormAsValue(this.fb.group(item), val);
       })
+    });
+  }
+  pushRecipientsValueInArray(val, id, infos) {
+    val.items.forEach(item => {
+      if(this.fb.group(item).get('id').value) {
+        id.push(this.fb.group(item).get('id').value);
+      }
+      const infosDatas = this.fb.group(item).get('infos').value;
+      const infosData1 = this.fb.group(infosDatas).get('info1').value;
+      const infosData2 = this.fb.group(infosDatas).get('info2').value;
+      if(infosData1 && infosData2) {
+        infos.push(this.fb.group(item).get('infos').value);
+      }
     });
   }
   chackIsFormAsValue(form, ...val) {
@@ -199,7 +195,6 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
     form.markAsPristine();
     form.markAsUntouched();
   }
-
   initFormsRemoval(): void {
     this.formRemoval = this.fb.group({
       id: ['', Validators.required],
@@ -227,7 +222,6 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
       tomorrow: [false, Validators.required]
     });
   }
-
   @HostListener('window:beforeunload')
   canDeactivate(): boolean {
     let canDeactive = true;
@@ -241,9 +235,9 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
   isFormsValide():boolean {
     let valid = true;
     this.allFormGroup.forEach( form => {
-      if(!form.valid) {
-        valid = false;
-      }
+        if(!form.valid) {
+          valid = false;
+        }
     });
     return valid;
   }

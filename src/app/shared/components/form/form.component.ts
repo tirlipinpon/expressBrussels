@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import {FormGroup, FormBuilder} from '@angular/forms';
 import {DataForm, DataDataFormState} from '../../../models/DataForm';
 
 @Component({
   selector: 'app-form',
   templateUrl: 'form.component.html',
-  styleUrls: ['form.component.css']
+  styleUrls: ['form.component.css'],
+
 })
 export class FormComponent implements OnInit, OnDestroy {
 
@@ -35,10 +36,15 @@ export class FormComponent implements OnInit, OnDestroy {
   @Output() updateDataForm = new EventEmitter();
   private _user: DataForm[] = [];
 
-  constructor() {}
+  constructor(private fb: FormBuilder) {}
   ngOnInit() {}
   ngOnDestroy() {}
 
+  resetForm(formGroup: FormGroup): void {
+    formGroup.reset();
+  }
+
+  // for customer
   private _initData(data): void {
     this.formGroup.patchValue({
       id: data.id,
@@ -60,13 +66,7 @@ export class FormComponent implements OnInit, OnDestroy {
       fk_type: data.fk_type
     });
   }
-  // for customer
   saveDataCustomer(): void {
     this.updateDataForm.emit();
-  }
-
-  resetForm(formGroup: FormGroup): void {
-    formGroup.reset();
-    this.formGroup.markAsPristine();
   }
 }

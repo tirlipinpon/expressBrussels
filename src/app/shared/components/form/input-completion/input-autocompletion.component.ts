@@ -4,8 +4,7 @@ import {FormGroup} from "@angular/forms";
 @Component({
   selector: 'app-input-autocompletion',
   templateUrl: 'input-autocompletion.component.html',
-  styleUrls: ['input-autocompletion.component.css'],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['input-autocompletion.component.css']
 })
 export class InputAutocompletionComponent implements OnInit, OnDestroy {
 
@@ -74,10 +73,10 @@ export class InputAutocompletionComponent implements OnInit, OnDestroy {
       this._initData2(this.getByData(value, data));
     }
     this.toogleDropDown(false);
-    this.formGroup.markAsDirty();
     if (this.witchForm === 1) {
       this.isDisabled();
     }
+    this.formGroup.markAsDirty();
   }
   getByData(value: string, data: any): any {
     let arrayWithElem;
@@ -88,8 +87,8 @@ export class InputAutocompletionComponent implements OnInit, OnDestroy {
   }
   // form purchasse order case
   subscribeNameChanges(): void {
-      this.valueNameChanges$ = this.formGroup.get('name').valueChanges.subscribe(val => {
-        if ((!val || val == '') && this.formGroup.dirty) {
+      this.valueNameChanges$ = this.formGroup.get('name').valueChanges.debounceTime(700).subscribe(val => {
+        if ((!val || !val.length) && this.formGroup.dirty) {
           this.formGroup.get('ref_client').enable();
           this.formGroup.reset();
           this.formGroup.markAsPristine();

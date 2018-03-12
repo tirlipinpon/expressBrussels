@@ -192,11 +192,10 @@ export function purchasseOrderReducer(state: PurchasseOrder = orderInitOrder, ac
       });
 
     case PurchasseOrderActions.EDIT_ORDER_RECIPIENT_INFOS_CASCADES:
-      console.log('in order reducer edit Order Recipient Infos cascades payload = ',action.payload);
+      // console.log('in order reducer edit Order Recipient Infos cascades payload = ',action.payload);
       let contact_recipient_info1: Array<string> = [];
       let contact_recipient_info2: Array<string> = [];
       action.payload.forEach( item => {
-        console.log(item['info1']);
         contact_recipient_info1.push(item['info1']);
         contact_recipient_info2.push(item['info2']);
       });
