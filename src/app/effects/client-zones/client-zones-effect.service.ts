@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
-import {NotificationService} from "../../services/notification.service";
-import {Actions, Effect} from "@ngrx/effects";
-import {Action, Store} from "@ngrx/store";
-import {AppState} from "../../shared/appState";
+import {NotificationService} from '../../services/notification.service';
+import {Actions, Effect} from '@ngrx/effects';
+import {Action, Store} from '@ngrx/store';
+import {AppState} from '../../shared/appState';
 import { Observable } from 'rxjs/Observable';
 import * as ClientZonesActions  from '../../actions/clientZones.actions';
-import {ClientZonesService} from "../../services/client-zones.service";
+import {ClientZonesService} from '../../services/client-zones.service';
 
 @Injectable()
 export class ClientZonesEffectService {

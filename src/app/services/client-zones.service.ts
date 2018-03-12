@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import {environment} from "../../environments/environment";
-import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {MyClientZones, MyClientZonesState} from "../models/my-client-zones";
+import {environment} from '../../environments/environment';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs/Observable';
+import {MyClientZonesState} from '../models/my-client-zones';
 
 @Injectable()
 export class ClientZonesService {

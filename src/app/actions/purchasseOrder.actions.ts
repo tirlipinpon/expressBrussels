@@ -16,7 +16,7 @@ export class InitOrderSuccess implements Action {
     // console.log('in actions get customer payload= ',payload);
   }
 }
-//===================== removal ==============================
+// ===================== removal ==============================
 export const EDIT_ORDER_REMOVAL = 'Edit Order Removal';
 export class EditOrderRemoval implements Action {
   readonly type = EDIT_ORDER_REMOVAL;
@@ -24,7 +24,7 @@ export class EditOrderRemoval implements Action {
     // console.log('in actions get customer payload= ',payload);
   }
 }
-//==================== recipient ===============================
+// ==================== recipient ===============================
 export const EDIT_ORDER_RECIPIENT = 'Edit Order Recipient';
 export class EditOrderRecipient implements Action {
   readonly type = EDIT_ORDER_RECIPIENT;
@@ -32,7 +32,7 @@ export class EditOrderRecipient implements Action {
     // console.log('in actions get customer payload= ',payload);
   }
 }
-//==================== recipient cascades ===============================
+// ==================== recipient cascades ===============================
 export const EDIT_ORDER_RECIPIENT_CASCADES = 'Edit Order Recipient cascades';
 export class EditOrderRecipientCascades implements Action {
   readonly type = EDIT_ORDER_RECIPIENT_CASCADES;
@@ -40,7 +40,7 @@ export class EditOrderRecipientCascades implements Action {
     // console.log('in actions get customer payload= ',payload);
   }
 }
-//==================== removal infos ===============================
+// ==================== removal infos ===============================
 export const EDIT_ORDER_REMOVAL_INFOS = 'Edit Order Removal Infos';
 export class EditOrderRemovalInfos implements Action {
   readonly type = EDIT_ORDER_REMOVAL_INFOS;
@@ -48,7 +48,7 @@ export class EditOrderRemovalInfos implements Action {
     // console.log('in actions get customer payload= ',payload);
   }
 }
-//==================== recipient infos ===============================
+// ==================== recipient infos ===============================
 export const EDIT_ORDER_RECIPIENT_INFOS = 'Edit Order Recipient Infos';
 export class EditOrderRecipientInfos implements Action {
   readonly type = EDIT_ORDER_RECIPIENT_INFOS;
@@ -56,7 +56,7 @@ export class EditOrderRecipientInfos implements Action {
     // console.log('in actions get recipients infos  payload= ',payload);
   }
 }
-//==================== recipient infos cascades ===============================
+// ==================== recipient infos cascades ===============================
 export const EDIT_ORDER_RECIPIENT_INFOS_CASCADES = 'Edit Order Recipient Infos Cascades';
 export class EditOrderRecipientInfosCascades implements Action {
   readonly type = EDIT_ORDER_RECIPIENT_INFOS_CASCADES;
@@ -64,7 +64,7 @@ export class EditOrderRecipientInfosCascades implements Action {
     // console.log('in actions get recipients infos cascades  payload= ',payload);
   }
 }
-//=================== options ================================
+// =================== options ================================
 export const EDIT_ORDER_OPTION = 'Edit Order option';
 export class EditOrderOption implements Action {
   readonly type = EDIT_ORDER_OPTION;
@@ -72,7 +72,7 @@ export class EditOrderOption implements Action {
     // console.log('in actions get customer payload= ',payload);
   }
 }
-//================= save order ==================================
+// ================= save order ==================================
 export const SAVE_ORDER = 'Save Order';
 export class SaveOrder implements Action {
   readonly type = SAVE_ORDER;

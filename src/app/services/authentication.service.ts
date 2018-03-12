@@ -3,10 +3,9 @@ import {HttpClient, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/map'
 import {environment} from '../../environments/environment';
 // import * as jwt_decode from 'jwt-decode';
-import jwt_decode from "jwt-decode"
-import * as moment from "moment";
-import {Observable} from "rxjs";
-import {DataForm} from "../models/DataForm";
+import jwt_decode from 'jwt-decode'
+import * as moment from 'moment';
+import {Observable} from 'rxjs/Observable';
 
 export const TOKEN_NAME: string = 'jwt_token';
 // const httpOptions = {
@@ -58,7 +57,7 @@ export class AuthenticationService {
     return !this.isLoggedIn();
   }
   getExpiration() {
-    const expiration = localStorage.getItem("expires_at");
+    const expiration = localStorage.getItem('expires_at');
     const expiresAt = JSON.parse(expiration);
     return moment(expiresAt);
   }
@@ -76,11 +75,11 @@ export class AuthenticationService {
       .catch(error => Observable.throw('error in service login  with message from server -> ', error));
   }
   private setSession(authResult) {
-    if(authResult !== 'error') {
+    if (authResult !== 'error') {
       console.log('setSession:', authResult );
       const expiresAt = moment().add(authResult.expiresIn,'second');
       localStorage.setItem(TOKEN_NAME, authResult); // authResult.idToken);
-      localStorage.setItem("expires_at", JSON.stringify('1504699256'.valueOf()) ); // JSON.stringify(expiresAt.valueOf()) );
+      localStorage.setItem('expires_at', JSON.stringify('1504699256'.valueOf()) ); // JSON.stringify(expiresAt.valueOf()) );
       const decoded = jwt_decode(this.getToken());
       console.log(decoded);
     }
@@ -88,7 +87,7 @@ export class AuthenticationService {
   logout(): void {
     // clear token remove user from local storage to log user out
     this.token = null;
-    localStorage.removeItem("id_token");
-    localStorage.removeItem("expires_at");
+    localStorage.removeItem('id_token');
+    localStorage.removeItem('expires_at');
   }
 }

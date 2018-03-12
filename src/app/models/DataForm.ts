@@ -21,6 +21,6 @@ export interface DataForm {
 
 export interface DataDataFormState {
   data: DataForm[];
-  count: number
+  count: number;
 }
 

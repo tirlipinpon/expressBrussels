@@ -2,15 +2,15 @@ import {
   Component, OnInit, ViewEncapsulation, OnDestroy, ViewChild, ViewChildren, QueryList, Attribute
 } from '@angular/core';
 import {PurchasseOrder} from '../models/PurchasseOrder';
-import {Observable} from 'rxjs';
+import {Observable} from 'rxjs/Observable';
 import * as fromRoot from '../shared/appState';
 import {Store} from '@ngrx/store';
 
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 
-import * as OrdersActions  from '../actions/orders.actions';
-import * as RemovalActions  from '../actions/removal.actions';
-import * as RecipientActions  from '../actions/recipient.actions';
+import * as OrdersActions from '../actions/orders.actions';
+import * as RemovalActions from '../actions/removal.actions';
+import * as RecipientActions from '../actions/recipient.actions';
 import {DataForm} from '../models/DataForm';
 
 import * as _ from 'lodash';
@@ -53,7 +53,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
   getDatas() {
     this.removals$.subscribe(data => {
       // console.log('data removals: ', data);
-      if(data.length) {
+      if (data.length) {
         this.datasRemovals = data;
         this.isDataLoaded();
       }
@@ -61,7 +61,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
     this.recipients$.subscribe(data => {
       // console.log('data recipients: ', data);
-      if(data.length) {
+      if (data.length) {
         this.datasRecipients = data;
         this.isDataLoaded();
       }
@@ -69,7 +69,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
     });
     this.orders$.subscribe( (data: any) =>  {
       // console.log('data orders: ', data);
-      if(!!data) {
+      if (!!data) {
         for(let i=0; i< Object.keys(data).length; i++) {
           // console.log('datasOrders:  ',data);
           this.datasOrders.push(data[i]);
@@ -80,14 +80,14 @@ export class OrdersComponent implements OnInit, OnDestroy {
     });
   }
   isExistReferenceClient(ref_removal: string, ref_recipient: string): boolean {
-    if(ref_removal || ref_recipient) {
+    if (ref_removal || ref_recipient) {
       return true;
     }
     return false;
   }
   isDataLoaded() {
 
-    if(this.datasRemovals
+    if (this.datasRemovals
       && this.datasRecipients
       && this.datasOrders.length) {
 
@@ -100,7 +100,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
         const recipientId = this.datasOrders[i].fk_recipient_id;
         const recipient = _.find(this.datasRecipients,['id', recipientId]);
 
-        if(removal || recipient) {
+        if (removal || recipient) {
           this.isReferenceClient = this.isExistReferenceClient(removal.ref_client, recipient.ref_client);
           _.merge(this.datasOrders[i],
             {
@@ -151,7 +151,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
   resetNotCurrentFilter(current: any): void {
     this.matInput.forEach(elem => {
-      if(elem.nativeElement.id !== current.id) {
+      if (elem.nativeElement.id !== current.id) {
         elem.nativeElement.value = '';
       }
     });

@@ -1,6 +1,7 @@
-import {Injectable, HostListener} from '@angular/core';
+import {Injectable} from '@angular/core';
 import { CanDeactivate } from '@angular/router';
-import {Observer, Observable} from 'rxjs';
+import {Observer} from 'rxjs/Observer';
+import { Observable} from 'rxjs/Observable';
 import {ConfirmationService} from 'primeng/components/common/confirmationservice';
 
 export interface ComponentDeactivable {
@@ -16,10 +17,10 @@ export class CanDeactivateFormGuardService implements CanDeactivate<ComponentDea
     return component.canDeactivate ? this.actionConfirm(component) : true;
   }
   actionConfirm(component): boolean {
-    if(component.canDeactivate()) {
+    if (component.canDeactivate()) {
       // console.log('component.canDeactivate() 1', component.canDeactivate());
       return true;
-    }else{
+    }else {
       console.log('component.canDeactivate() 2 ', component.canDeactivate());
 
       return Observable.create((observer: Observer<boolean>) => {

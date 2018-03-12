@@ -9,7 +9,7 @@ import {Observable} from 'rxjs/Observable';
 import  'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/of';
-import {NotificationService} from "../../services/notification.service";
+import {NotificationService} from '../../services/notification.service';
 
 @Injectable()
 export class RemovalEffectService {

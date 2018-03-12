@@ -1,18 +1,17 @@
-{{formGroup?.valid}}
 <!--  customer  -->
 <form  *ngIf="isCustomer==='customer'"   novalidate [formGroup]="formGroup">
   <input type="hidden" formControlName="id">
-  <input type="text" formControlName="name">
-  <input type="text" formControlName="address">
-  <input type="text" formControlName="number">
-  <input type="number" formControlName="cp">
-  <input type="text" formControlName="state">
-  <input type="text" formControlName="phone">
+  <input type="text" formControlName="name" placeholder="name">
+  <input type="text" formControlName="address" placeholder="address">
+  <input type="text" formControlName="number" placeholder="number">
+  <input type="number" formControlName="cp" placeholder="cp">
+  <input type="text" formControlName="state" placeholder="state">
+  <input type="text" formControlName="phone" placeholder="phone">
   <div formGroupName="infos">
-    <input type="text" formControlName="info1" >
-    <input type="text" formControlName="info2">
+    <input type="text" formControlName="info1" placeholder="mail">
+    <input type="text" formControlName="info2" placeholder="mdp">
   </div>
-  <input type="text" formControlName="created">
+  <input type="hidden" formControlName="created">
   <input type="hidden" formControlName="fk_type">
   <button  type="button"  (click)="saveDataCustomer()">save</button>
 </form>
@@ -21,13 +20,13 @@
   <app-input-autocompletion [propName]="'name'" [data]="_user" [propType]="'string'" [witchForm]="1"  [formGroup]="formGroup"></app-input-autocompletion>
   <app-input-autocompletion [propName]="'ref_client'" [data]="_user" [propType]="'string'" [witchForm]="1"   [formGroup]="formGroup"></app-input-autocompletion>
   <input type="hidden" formControlName="id">
-  <input type="text" formControlName="address" [readonly]="true">
-  <input type="text" formControlName="number" [readonly]="true">
-  <input type="text" formControlName="cp" [readonly]="true">
-  <input type="text" formControlName="state" [readonly]="true">
-  <input type="text" formControlName="phone" [readonly]="true">
+  <input type="text" formControlName="address" [readonly]="true" placeholder="address">
+  <input type="text" formControlName="number" [readonly]="true" placeholder="number">
+  <input type="text" formControlName="cp" [readonly]="true" placeholder="cp">
+  <input type="text" formControlName="state" [readonly]="true" placeholder="state">
+  <input type="text" formControlName="phone" [readonly]="true" placeholder="phone">
   <app-info [formGroup]="formGroup.get('infos')"></app-info>
-  <input type="text" formControlName="created" [readonly]="true">
+  <input type="hidden" formControlName="created" [readonly]="true">
   <!--<button (click)="resetForm(formGroup)">reset: {{ nameForm }}</button>-->
   <input type="hidden" formControlName="fk_type" [readonly]="true">
 </form>
@@ -37,7 +36,7 @@
   <app-input-autocompletion [propName]="'ref_client'" [data]="_user" [propType]="'string'" [witchForm]="1"   [formGroup]="formGroup"></app-input-autocompletion>
   <input type="hidden" formControlName="id">
   <app-info [formGroup]="formGroup.get('infos')"></app-info>
-  <input type="text" formControlName="created" [readonly]="true">
+  <input type="hidden" formControlName="created" [readonly]="true">
   <!--<button (click)="resetForm(formGroup)">reset: {{ nameForm }}</button>-->
   <input type="hidden" formControlName="fk_type" [readonly]="true">
 </form>

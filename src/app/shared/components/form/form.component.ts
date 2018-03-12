@@ -18,13 +18,13 @@ export class FormComponent implements OnInit, OnDestroy {
   @Input('datas') set data(value: DataForm[]) {
     if (!!value) {
       if (this.isCustomer === 'customer') {
-        if(!this.test){
+        if (!this.test){
           this._initData(value);
           this.test = true;
         }
       }else{
-        if(this._user.length == 0) {
-          for(let i=0; i< Object.keys(value).length; i++){
+        if (this._user.length == 0) {
+          for (let i=0; i< Object.keys(value).length; i++){
             this._user.push(value[i]);
           }
         }

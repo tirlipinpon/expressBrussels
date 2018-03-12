@@ -12,12 +12,12 @@ export class DropDownDirective {
   public onClick(targetElement) {
     // console.log('myId: ', this.myId)
 
-    if(targetElement.id === this.myId
+    if (targetElement.id === this.myId
       || targetElement.id === 'searchRef'
       || targetElement.id === 'search') { return; }
 
     const isClickedInside = this._elementRef.nativeElement.contains(targetElement);
-    if(!isClickedInside) {
+    if (!isClickedInside) {
       // console.log('emit null');
       this.clickOutside.emit(null);
     }

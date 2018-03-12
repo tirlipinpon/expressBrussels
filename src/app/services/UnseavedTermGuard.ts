@@ -1,7 +1,8 @@
 import {CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
 import {PurchasseOrderComponent} from '../purchasse-order/purchasse-order.component';
 import {ConfirmationService} from 'primeng/components/common/confirmationservice';
-import { Observer, Observable} from 'rxjs';
+import { Observer} from 'rxjs/Observer';
+import { Observable} from 'rxjs/Observable';
 import {Injectable} from '@angular/core';
 
 @Injectable()
@@ -17,7 +18,7 @@ export class UnsearchedTermGuard implements CanDeactivate<PurchasseOrderComponen
     // console.log('route.params: ', route.params);
     // console.log('state.url: '+state.url);
 
-    if(component.canDeactivate()) {
+    if (component.canDeactivate()) {
       console.log('component.canDeactivate() 1', component.canDeactivate());
       return true;
     }else{

@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewEncapsulation, Input, OnDestroy} from '@angular/core';
-import {FormGroup} from "@angular/forms";
+import {FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-input-autocompletion',

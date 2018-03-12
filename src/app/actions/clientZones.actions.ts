@@ -1,5 +1,5 @@
-import {Action} from "@ngrx/store";
-import {MyClientZonesState} from "../models/my-client-zones";
+import {Action} from '@ngrx/store';
+import {MyClientZonesState} from '../models/my-client-zones';
 
 export const GET_CLIENT_ZONES = 'Get client Zones';
 export class GetClientZones implements Action {
@@ -25,7 +25,7 @@ export class GetClientZonesFail implements Action {
   }
 }
 
-//=============================================================
+// =============================================================
 
 export type All =
   GetClientZones

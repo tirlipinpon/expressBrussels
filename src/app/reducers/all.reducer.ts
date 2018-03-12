@@ -7,7 +7,7 @@ import * as ClientZonesActions from '../actions/clientZones.actions';
 
 import {DataForm, DataDataFormState} from '../models/DataForm';
 import {PurchasseOrder} from '../models/PurchasseOrder';
-import {MyClientZones, MyClientZonesState} from "../models/my-client-zones";
+import {MyClientZones, MyClientZonesState} from '../models/my-client-zones';
 
 export type ActionCustomer = CustomerActions.All;
 export type ActionRemoval = RemovalActions.All;
@@ -16,9 +16,9 @@ export type ActionPurchasseOrder = PurchasseOrderActions.All;
 export type ActionOrders = OrdersActions.All;
 export type ActionClientZones = ClientZonesActions.All;
 
-//======================================================
+// ======================================================
 // customer reducer
-//======================================================
+// ======================================================
 export function customerReducer(state: DataForm, action: ActionCustomer): DataForm {
   // console.log('2 - Reducer customer :', action.type, state);
   switch (action.type) {
@@ -38,9 +38,9 @@ export const CustomerSelector = {
   customer: (state: DataForm) => { return state; }
 };
 
-//======================================================
+// ======================================================
 // removal reducer
-//======================================================
+// ======================================================
 const initRemoval: DataDataFormState = {
   data: [],
   count: 0
@@ -70,7 +70,7 @@ function handleAddRemovalState(state: DataDataFormState, action: ActionRemoval):
 }
 function handleRemovalState(state: DataDataFormState, action: ActionRemoval): any {
   const data =  state.data.map(item => {
-    if(item.id == action.payload['id']) {
+    if (item.id == action.payload['id']) {
       return action.payload;
     }
     return item;
@@ -86,9 +86,9 @@ export const RemovalSelectors = {
   count: (state: DataDataFormState) => { return state.count }
 };
 
-//======================================================
+// ======================================================
 // recipient reducer
-//======================================================
+// ======================================================
 const initRecipient: DataDataFormState = {
   data: [],
   count: 0
@@ -123,9 +123,9 @@ export const RecipientSelectors = {
   count: (state: DataDataFormState) => { return state.count }
 };
 
-//======================================================
+// ======================================================
 // purchasse order reducer
-//======================================================
+// ======================================================
 const orderInitOrder: PurchasseOrder =
   {
     id: 0,
@@ -224,9 +224,9 @@ export const PurchasseOrderSelector = {
   order: (state: PurchasseOrder) => { return state; }
 };
 
-//======================================================
+// ======================================================
 // orders reducer
-//======================================================
+// ======================================================
 export function ordersReducer(state: PurchasseOrder[], action: ActionOrders): PurchasseOrder[] {
   switch(action.type){
     case OrdersActions.GET_ORDERS_SUCCESS:
@@ -241,9 +241,9 @@ export const OrderSelector = {
   orders: (state: PurchasseOrder[]) => { return state; }
 };
 
-//======================================================
+// ======================================================
 // orders reducer
-//======================================================
+// ======================================================
 const clientZoneInit: MyClientZonesState =
   {  data: [],
     count: 0

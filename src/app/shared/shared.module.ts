@@ -28,7 +28,7 @@ import {CustomerEffectService} from '../effects/customer/customer-effect.service
 import {RecipientEffectService} from '../effects/recipients/recipient-effect.service';
 import {EffectsModule} from '@ngrx/effects';
 import {reducers} from './appState';
-import {ClientZonesEffectService} from "../effects/client-zones/client-zones-effect.service";
+import {ClientZonesEffectService} from '../effects/client-zones/client-zones-effect.service';
 import { ClientCpPipe } from './pipe/client-cp.pipe';
 import { InputAutocompletionComponent } from './components/form/input-completion/input-autocompletion.component';
 

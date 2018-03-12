@@ -10,8 +10,8 @@ export class ClientCpPipe implements PipeTransform {
     // console.log('propName -> ', propName);
     // console.log('propType -> ', propType);
     // console.log('search -> ', search);
-    if(!data) { return null; }
-    if(!search) { return data; }
+    if (!data) { return null; }
+    if (!search) { return data; }
     let solution = data.filter(v =>{
       let val = v[propName];
       if (!val){ return; }

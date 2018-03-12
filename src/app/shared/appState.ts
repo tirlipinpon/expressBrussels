@@ -6,7 +6,7 @@ import {
   customerReducer, CustomerSelector, RemovalSelectors, RecipientSelectors, PurchasseOrderSelector, OrderSelector,
   clientZonesReducer, ClientZonesSelector
 } from '../reducers/all.reducer';
-import {MyClientZones, MyClientZonesState} from "../models/my-client-zones";
+import {MyClientZones, MyClientZonesState} from '../models/my-client-zones';
 
 export interface AppState {
   customer: DataForm;
@@ -34,11 +34,11 @@ const getOrdersState = createFeatureSelector('orders');
 const getClientZonesState = createFeatureSelector('clientZones');
 
 // export const rootSelectors = {
-//   customer: createSelector(getCustomerState, (state: AppState) => { return state.customer}),
-//   removals: createSelector(getRemovalsState, (state: AppState) => { return state.removals}),
-//   recipients: createSelector(getRecipientsState, (state: AppState) => { return state.recipients}),
-//   order: createSelector(getOrderState, (state: AppState) => { return state.order}),
-//   orders: createSelector(getOrdersState, (state: AppState) => { return state.orders}),
+// customer: createSelector(getCustomerState, (state: AppState) => { return state.customer}),
+// removals: createSelector(getRemovalsState, (state: AppState) => { return state.removals}),
+// recipients: createSelector(getRecipientsState, (state: AppState) => { return state.recipients}),
+// order: createSelector(getOrderState, (state: AppState) => { return state.order}),
+// orders: createSelector(getOrdersState, (state: AppState) => { return state.orders}),
 // };
 
 export interface Selectors {

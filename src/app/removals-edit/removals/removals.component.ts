@@ -1,18 +1,17 @@
 import {
-  Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, HostListener,
-  AfterViewInit
+  Component, OnInit, OnDestroy, ChangeDetectorRef, HostListener
 } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Store} from '@ngrx/store';
-import {Observable, Subscription} from 'rxjs';
+import {Observable} from 'rxjs/Observable';
 import {NotificationService} from '../../services/notification.service';
 import * as actions  from '../../actions/removal.actions';
 import * as fromRoot from '../../shared/appState';
 import {DataForm} from '../../models/DataForm';
 import * as moment from 'moment';
-import {ConfirmationService} from "primeng/components/common/confirmationservice";
+import {ConfirmationService} from 'primeng/components/common/confirmationservice';
 import * as ClientZonesActions  from '../../actions/clientZones.actions';
-import {MyClientZones} from "../../models/my-client-zones";
+import {MyClientZones} from '../../models/my-client-zones';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 
@@ -59,15 +58,15 @@ export class RemovalsComponent implements OnInit, OnDestroy {
   initFormsRemoval(): void {
     this.storeData$.subscribe(data => {
       this.cd.markForCheck();
-      if(data.length ) {
+      if (data.length ) {
         // init data
-        if(this.allFormGroup.length === 1) {
+        if (this.allFormGroup.length === 1) {
           data.forEach(elem => {
             this.allFormGroup.push(this.createFormGroup(elem));
             this.cd.markForCheck();
           });
         //  add data
-        }else if(this.allFormGroup.length-1 < data.length) {
+        }else if (this.allFormGroup.length-1 < data.length) {
           this.allFormGroup.push(this.createFormGroup(data[data.length-1]));
           this.cd.markForCheck();
         //  update data
@@ -80,7 +79,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
   disableForm() {
     this.allFormGroup.forEach(elem => {
       const ctrl = elem.controls;
-      if(ctrl.active.value === '0') {
+      if (ctrl.active.value === '0') {
         ctrl.name.disable();
         ctrl.ref_client.disable();
         ctrl.address.disable();
@@ -90,7 +89,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
         ctrl.phone.disable();
         ctrl.phone.disable();
         ctrl.created.disable();
-      }else if(ctrl.active.value === '1'){
+      }else if (ctrl.active.value === '1'){
         ctrl.name.enable();
         ctrl.ref_client.enable();
         ctrl.address.enable();
@@ -106,7 +105,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
   }
   createFormGroup(data?: DataForm): FormGroup {
     let active;
-    if(!data){
+    if (!data){
       active = 1;
     }else{
       active = data.active;
@@ -140,11 +139,11 @@ export class RemovalsComponent implements OnInit, OnDestroy {
   }
   delete(form: FormGroup): void {
     const activeValue =  form.get('active').value;
-    if(activeValue === '1') {
+    if (activeValue === '1') {
       form.get('active').setValue('0');
       form.disable();
       form.get('created').disable();
-    }else if( activeValue === '0'){
+    }else if ( activeValue === '0'){
       form.get('active').setValue('1');
       form.enable();
       form.get('created').disable();
@@ -170,7 +169,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
   canDeactivate(): boolean {
     let canDeactive = true;
     this.allFormGroup.forEach( form => {
-      if(form.dirty && form.touched) {
+      if (form.dirty && form.touched) {
         canDeactive = false;
       }
     });

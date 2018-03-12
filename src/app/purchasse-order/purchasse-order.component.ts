@@ -4,16 +4,14 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
-import * as RemovalActions  from '../actions/removal.actions';
-import * as RecipientActions  from '../actions/recipient.actions';
-import * as OrderActions  from '../actions/purchasseOrder.actions';
-import * as ClientZonesActions  from '../actions/clientZones.actions';
+import * as RemovalActions from '../actions/removal.actions';
+import * as RecipientActions from '../actions/recipient.actions';
+import * as OrderActions from '../actions/purchasseOrder.actions';
 
-import {DataForm}from '../models/DataForm';
+import {DataForm} from '../models/DataForm';
 import {PurchasseOrder} from '../models/PurchasseOrder';
 import {ComponentDeactivable} from '../services/can-deactivate-form-guard.service';
 import * as fromRoot from '../shared/appState';
-import {MyClientZones} from "../models/my-client-zones";
 
 @Component({
   selector: 'app-purchasse-order',
@@ -110,7 +108,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   }
   chackIsFormAsValue(form, ...val) {
     const flattenObject = this.flattenObject(form.value);
-    if(!this.isChangedValuesIsNotEmpty(flattenObject)) {
+    if (!this.isChangedValuesIsNotEmpty(flattenObject)) {
       this.markAsPristine(form);
     }
   }
@@ -134,8 +132,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   isChangedValuesIsNotEmpty(object): boolean {
     let asValue = false;
       for (let prop in object) {
-        if(object[prop]) {
-          if(object[prop].length) {
+        if (object[prop]) {
+          if (object[prop].length) {
             asValue = true;
           }
         }
@@ -202,7 +200,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   canDeactivate(): boolean {
     let canDeactive = true;
     this.allFormGroup.forEach( form => {
-      if(form.dirty && form.touched) {
+      if (form.dirty && form.touched) {
         canDeactive = false;
       }
     });
@@ -211,7 +209,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   isFormsValide():boolean {
     let valid = true;
     this.allFormGroup.forEach( form => {
-      if(!form.valid) {
+      if (!form.valid) {
         valid = false;
       }
     });

@@ -5,5 +5,6 @@
 
 export const environment = {
   production: false,
+  // apiUrl: "http://teatime.be/expressbrussels/"
   apiUrl: "http://localhost/expressDB/"
 };

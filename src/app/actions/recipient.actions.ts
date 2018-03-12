@@ -25,7 +25,7 @@ export class GetRecipientsFail implements Action {
     // console.log('in actions get Recipients payload= ',payload);
   }
 }
-//===================================================
+// ===================================================
 
 export const EDIT_RECIPIENT = 'Edit Recipient';
 export class EditRecipient implements Action {
@@ -51,7 +51,7 @@ export class EditRecipientFail implements Action {
   }
 }
 
-//===================================================
+// ===================================================
 export const ADD_RECIPIENT = 'Add Recipient';
 export class AddRecipient implements Action {
   readonly type = ADD_RECIPIENT;
@@ -76,7 +76,7 @@ export class AddRecipientFail implements Action {
   }
 }
 
-//===================================================
+// ===================================================
 export const GET_LAST_RECIPIENT = 'Get last Recipient';
 export class GetLastRecipient implements Action {
   readonly type = GET_LAST_RECIPIENT;
@@ -101,7 +101,7 @@ export class GetLastRecipientFail implements Action {
   }
 }
 
-//===================================================
+// ===================================================
 export const DELETE_RECIPIENT = 'DELETE  Recipient';
 export class DeleteRecipient implements Action {
   readonly type = DELETE_RECIPIENT;

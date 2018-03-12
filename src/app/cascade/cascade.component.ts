@@ -1,10 +1,11 @@
 import {Component, OnInit, ViewEncapsulation, HostListener, OnDestroy} from '@angular/core';
-import {ComponentDeactivable} from "../services/can-deactivate-form-guard.service";
-import {PurchasseOrder} from "../models/PurchasseOrder";
-import {DataForm} from "../models/DataForm";
-import {Observable, Subscription} from "rxjs";
-import {FormBuilder, FormGroup, Validators, FormArray} from "@angular/forms";
-import {Store} from "@ngrx/store";
+import {ComponentDeactivable} from '../services/can-deactivate-form-guard.service';
+import {PurchasseOrder} from '../models/PurchasseOrder';
+import {DataForm} from '../models/DataForm';
+import {Observable} from 'rxjs/Observable';
+import {Subscription} from 'rxjs/Subscription';
+import {FormBuilder, FormGroup, Validators, FormArray} from '@angular/forms';
+import {Store} from '@ngrx/store';
 import * as RemovalActions  from '../actions/removal.actions';
 import * as RecipientActions  from '../actions/recipient.actions';
 import * as OrderActions  from '../actions/purchasseOrder.actions';
@@ -32,7 +33,7 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
   private valueRecipientInfosChanges$: Subscription;
   customerId = 1;
   datas: any;
-  nameForm = ['removal','recipient'];
+  nameForm = ['removal', 'recipient'];
 
   constructor (
     private store: Store<fromRoot.AppState>,
@@ -102,8 +103,8 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
   storeDispatch() {
     //this.store.dispatch({type: CustomerActions.GET_CUSTOMER, payload: this.customerId });
     // this.store.dispatch(new OrderActions.InitOrder(this.customerId));
-    this.store.dispatch(new RemovalActions.GetRemovals(this.customerId*10+1)); // (id + type)  eg: id = 69; type=1 fk_type=691
-    this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10+2)); // (id + type)  eg: id = 69; type=2 fk_type=692
+    this.store.dispatch(new RemovalActions.GetRemovals(this.customerId*10 + 1)); // (id + type)  eg: id = 69; type=1 fk_type=691
+    this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10 + 2)); // (id + type)  eg: id = 69; type=2 fk_type=692
     // this.store.dispatch(new ClientZonesActions.GetClientZones());
   }
   pushAllForms(allFormGroup: FormGroup[]): FormGroup[] {
@@ -144,20 +145,20 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
   }
   pushRecipientsValueInArray(val, id, infos) {
     val.items.forEach(item => {
-      if(this.fb.group(item).get('id').value) {
+      if (this.fb.group(item).get('id').value) {
         id.push(this.fb.group(item).get('id').value);
       }
       const infosDatas = this.fb.group(item).get('infos').value;
       const infosData1 = this.fb.group(infosDatas).get('info1').value;
       const infosData2 = this.fb.group(infosDatas).get('info2').value;
-      if(infosData1 && infosData2) {
+      if (infosData1 && infosData2) {
         infos.push(this.fb.group(item).get('infos').value);
       }
     });
   }
   chackIsFormAsValue(form, ...val) {
     const flattenObject = this.flattenObject(form.value);
-    if(!this.isChangedValuesIsNotEmpty(flattenObject)) {
+    if (!this.isChangedValuesIsNotEmpty(flattenObject)) {
       this.markAsPristine(form);
     }
   }
@@ -165,7 +166,7 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
     let toReturn = {};
     for (let i in ob) {
       if (!ob.hasOwnProperty(i)) continue;
-      if ((typeof ob[i]) == 'object') {
+      if ((typeof ob[i]) === 'object') {
         let flatObject = this.flattenObject(ob[i]);
         for (let x in flatObject) {
           if (!flatObject.hasOwnProperty(x)) continue;
@@ -181,8 +182,8 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
   isChangedValuesIsNotEmpty(object): boolean {
     let asValue = false;
     for (let prop in object) {
-      if(object[prop]) {
-        if(object[prop].length) {
+      if (object[prop]) {
+        if (object[prop].length) {
           asValue = true;
         }
       }
@@ -226,7 +227,7 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
   canDeactivate(): boolean {
     let canDeactive = true;
     this.allFormGroup.forEach( form => {
-      if(form.dirty && form.touched) {
+      if (form.dirty && form.touched) {
         canDeactive = false;
       }
     });
@@ -235,7 +236,7 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
   isFormsValide():boolean {
     let valid = true;
     this.allFormGroup.forEach( form => {
-        if(!form.valid) {
+        if (!form.valid) {
           valid = false;
         }
     });

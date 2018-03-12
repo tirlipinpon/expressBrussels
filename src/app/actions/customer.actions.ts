@@ -24,7 +24,7 @@ export class GetCustomerFail implements Action {
     // console.log('in actions get customer payload= ',payload);
   }
 }
-//===================================================
+// ===================================================
 export const EDIT_CUSTOMER = 'Edit Customer';
 export class EditCustomer implements Action {
   readonly type = EDIT_CUSTOMER;
@@ -32,7 +32,7 @@ export class EditCustomer implements Action {
      // console.log('in actions edit customer payload= ',payload);
   }
 }
-//===================================================
+// ===================================================
 export const SAVE_CUSTOMER = 'Save Customer';
 export class SaveCustomer implements Action {
   readonly type = SAVE_CUSTOMER;

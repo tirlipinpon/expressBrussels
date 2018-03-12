@@ -26,7 +26,7 @@ export class GetRemovalsFail implements Action {
   }
 }
 
-//===================================================
+// ===================================================
 export const EDIT_REMOVAL = 'Edit Removal';
 export class EditRemoval implements Action {
   readonly type = EDIT_REMOVAL;
@@ -51,7 +51,7 @@ export class EditRemovalFail implements Action {
   }
 }
 
-//===================================================
+// ===================================================
 export const ADD_REMOVAL = 'Add Removal';
 export class AddRemoval implements Action {
   readonly type = ADD_REMOVAL;
@@ -76,7 +76,7 @@ export class AddRemovalFail implements Action {
   }
 }
 
-//===================================================
+// ===================================================
 export const GET_LAST_REMOVAL = 'Get last Removal';
 export class GetLastRemoval implements Action {
   readonly type = GET_LAST_REMOVAL;
@@ -101,7 +101,7 @@ export class GetLastRemovalFail implements Action {
   }
 }
 
-//===================================================
+// ===================================================
 export const DELETE_REMOVAL = 'DELETE  Removal';
 export class DeleteRemoval implements Action {
   readonly type = DELETE_REMOVAL;
