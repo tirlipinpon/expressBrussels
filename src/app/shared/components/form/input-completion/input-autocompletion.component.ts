@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewEncapsulation, Input, OnDestroy} from '@angular/core';
+import {Component, OnInit, Input, OnDestroy} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 
 @Component({
@@ -24,13 +24,11 @@ export class InputAutocompletionComponent implements OnInit, OnDestroy {
       this.subscribeNameChanges();
     }
   }
-
   ngOnDestroy() {
     if (this.witchForm === 1) {
       this.valueNameChanges$.unsubscribe();
     }
   }
-
   // auto completion
   toogleDropDown(action: boolean) {
     this.showDropDown = action;
@@ -63,7 +61,8 @@ export class InputAutocompletionComponent implements OnInit, OnDestroy {
   private _initData2(data: any): void {
     this.formGroup.patchValue({
       cp: data.cp,
-      state: data.state
+      state: data.state,
+      clientZone: data.zone,
     });
   }
   setSelectdedValue(value: string,  data: string): void {
@@ -81,7 +80,7 @@ export class InputAutocompletionComponent implements OnInit, OnDestroy {
   getByData(value: string, data: any): any {
     let arrayWithElem;
     arrayWithElem = this.data.filter(elem => {
-      return elem[value] === data
+      return elem[value].toLowerCase() === data.toLowerCase()
     });
     return arrayWithElem[0];
   }

@@ -31,6 +31,8 @@ import {reducers} from './appState';
 import {ClientZonesEffectService} from '../effects/client-zones/client-zones-effect.service';
 import { ClientCpPipe } from './pipe/client-cp.pipe';
 import { InputAutocompletionComponent } from './components/form/input-completion/input-autocompletion.component';
+import { AutocompleteGoogleComponent } from './components/form/autocomplete-google/autocomplete-google.component';
+import { AddressComponent } from './components/form/address/address.component';
 
 
 @NgModule({
@@ -66,7 +68,9 @@ import { InputAutocompletionComponent } from './components/form/input-completion
     ProfileComponent,
     ConfirmDialogModule,
     ClientCpPipe,
-    InputAutocompletionComponent
+    InputAutocompletionComponent,
+    AutocompleteGoogleComponent,
+    AddressComponent
   ],
   declarations: [
     NotificationComponent,
@@ -78,7 +82,9 @@ import { InputAutocompletionComponent } from './components/form/input-completion
     SearchFilterPipe,
     ProfileComponent,
     ClientCpPipe,
-    InputAutocompletionComponent
+    InputAutocompletionComponent,
+    AutocompleteGoogleComponent,
+    AddressComponent
   ],
   providers: [
     ConfirmationService

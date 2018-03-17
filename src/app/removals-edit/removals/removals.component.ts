@@ -1,5 +1,5 @@
 import {
-  Component, OnInit, OnDestroy, ChangeDetectorRef, HostListener
+  Component, OnInit, OnDestroy, ChangeDetectorRef, HostListener, ElementRef, ViewChild, NgZone
 } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Store} from '@ngrx/store';
@@ -14,6 +14,7 @@ import * as ClientZonesActions  from '../../actions/clientZones.actions';
 import {MyClientZones} from '../../models/my-client-zones';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
+
 
 @Component({
   selector: 'app-removals',
@@ -132,7 +133,6 @@ export class RemovalsComponent implements OnInit, OnDestroy {
     });
   }
   update(form: FormGroup): void {
-
     this.store.dispatch(new actions.EditRemoval(form.value));
     form.markAsUntouched();
     form.markAsPristine();
@@ -150,7 +150,6 @@ export class RemovalsComponent implements OnInit, OnDestroy {
     }
     this.store.dispatch(new actions.DeleteRemoval(<DataForm>form.value));
   }
-
   add(form: FormGroup): void {
     this.setClientZone(form);
     this.store.dispatch(new actions.AddRemoval(form.value));
@@ -160,8 +159,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
   }
   setClientZone(form: FormGroup) {
     const cp = form.get('cp').value;
-    console.log('cp: ', cp);
-    form.get('clientZone').setValue(1);
+    form.get('clientZone').setValue(1); // TODO: set clientZone
     console.log('clientZone:', form.get('clientZone').value);
   }
 
@@ -175,6 +173,5 @@ export class RemovalsComponent implements OnInit, OnDestroy {
     });
     return canDeactive;
   }
-
 
 }

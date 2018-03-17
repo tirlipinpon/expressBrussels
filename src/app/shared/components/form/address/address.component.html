@@ -1,0 +1,8 @@
+<form  novalidate [formGroup]="formGroup">
+<app-autocomplete-google [refInputAutoComplete]="refInputAutoComplete" [formGroup]="formGroup"></app-autocomplete-google>
+<input type="text" formControlName="number">
+<!-- directive input autocompletion -->
+<app-input-autocompletion [propName]="'cp'" [data]="clientZones" [propType]="'number'" [witchForm]="2"  [formGroup]="formGroup"></app-input-autocompletion>
+<app-input-autocompletion #refInputAutoComplete [propName]="'state'" [data]="clientZones" [propType]="'string'" [witchForm]="2"  [formGroup]="formGroup"></app-input-autocompletion>
+<input type="number" formControlName="clientZone">
+</form>

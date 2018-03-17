@@ -35,6 +35,7 @@ import {ClientZonesEffectService} from './effects/client-zones/client-zones-effe
 import {ClientZonesService} from './services/client-zones.service';
 import { CascadeComponent } from './cascade/cascade.component';
 import {CascadeModule} from './cascade/cascade.module';
+import { AgmCoreModule } from '@agm/core';
 
 const appRoutes: Routes = [
   { path: 'login',                component: LoginComponent },
@@ -115,6 +116,11 @@ const appRoutes: Routes = [
     RemovalsEditModule,
     SharedModule,
     CascadeModule,
+
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyCdhzqNNDkWkbpqgajvi_66wx1dLoGoac0',
+      libraries: ["places"]
+    }),
 
     RouterModule.forRoot(
       appRoutes,

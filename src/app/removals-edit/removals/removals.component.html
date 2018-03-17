@@ -8,11 +8,9 @@
       <input type="hidden" formControlName="id">
       <input type="text" formControlName="name" autocomplete="off" placeholder="name">
       <input type="text"  formControlName="ref_client" autocomplete="off" placeholder="ref_client">
-      <input type="text" formControlName="address" placeholder="address">
-      <input type="text" formControlName="number" placeholder="number">
-      <!-- directive input autocompletion -->
-      <app-input-autocompletion [propName]="'cp'" [data]="clientZones" [propType]="'number'" [witchForm]="2"  [formGroup]="allFormGroup[0]"></app-input-autocompletion>
-      <app-input-autocompletion [propName]="'state'" [data]="clientZones" [propType]="'string'" [witchForm]="2"  [formGroup]="allFormGroup[0]"></app-input-autocompletion>
+
+      <app-address [formGroup]="allFormGroup[0]" [data]="clientZones"></app-address>
+
       <input type="text" formControlName="phone" placeholder="phone">
       <input type="hidden" formControlName="fk_type">
         <input type="hidden" formControlName="active" value="1">
@@ -26,18 +24,22 @@
         <input type="hidden" formControlName="id" >
         <input type="text" formControlName="name" autocomplete="off" >
         <input type="text" formControlName="ref_client" autocomplete="off">
-        <input type="text" formControlName="address">
-        <input type="text" formControlName="number">
-        <!-- directive input autocompletion -->
-        <app-input-autocompletion [propName]="'cp'" [data]="clientZones" [propType]="'number'" [witchForm]="2"  [formGroup]="removal"></app-input-autocompletion>
-        <app-input-autocompletion [propName]="'state'" [data]="clientZones" [propType]="'string'" [witchForm]="2"  [formGroup]="removal"></app-input-autocompletion>
-        <input type="number" formControlName="clientZone">
+
+        <app-address [formGroup]="removal" [data]="clientZones"></app-address>
+
+
         <input type="text" formControlName="phone">
         <input type="text" formControlName="created">
         <input type="hidden" formControlName="fk_type">
         <button [disabled]="!removal.dirty" (click)="update(removal)"> update </button>
         <button (click)="delete(removal)"> {{removal.get('active').value==1 ? 'desactive' : 'active'}} </button>
       </form>
+  </div>
+</div>
+
+<div class="container">
+  <div class="form-group">
+    <!--<input type="text" style="width: 300px;" placeholder="location" autocorrect="off" autocapitalize="off" spellcheck="off" class="form-control" #search>-->
   </div>
 </div>
 
