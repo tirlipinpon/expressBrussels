@@ -18,20 +18,22 @@ export class CanDeactivateFormGuardService implements CanDeactivate<ComponentDea
   }
   actionConfirm(component): boolean {
     if (component.canDeactivate()) {
-      // console.log('component.canDeactivate() 1', component.canDeactivate());
+      console.log('component.canDeactivate() 1', component.canDeactivate());
       return true;
     }else {
       console.log('component.canDeactivate() 2 ', component.canDeactivate());
 
       return Observable.create((observer: Observer<boolean>) => {
+        console.log('component.canDeactivate() 3 ', component.canDeactivate());
         this.confirmationService.confirm({
           message: 'You have unsaved changes. Are you sure you want to leave this page?',
           accept: () => {
-            // component.resetOrder();
+            console.log('component.canDeactivate() 4 ', component.canDeactivate());
             observer.next(true);
             observer.complete();
           },
           reject: () => {
+            console.log('component.canDeactivate() 5 ', component.canDeactivate());
             observer.next(false);
             observer.complete();
           }

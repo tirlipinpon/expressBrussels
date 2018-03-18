@@ -1,4 +1,7 @@
-import {Component, OnInit, OnDestroy, HostListener, NgZone} from '@angular/core';
+import {
+  Component, OnInit, OnDestroy, HostListener, NgZone, ChangeDetectionStrategy,
+  ChangeDetectorRef
+} from '@angular/core';
 import {FormBuilder, Validators, FormGroup} from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
@@ -12,15 +15,15 @@ import {DataForm} from '../models/DataForm';
 import {PurchasseOrder} from '../models/PurchasseOrder';
 import {ComponentDeactivable} from '../services/can-deactivate-form-guard.service';
 import * as fromRoot from '../shared/appState';
-import { MapsAPILoader} from '@agm/core';
 import {} from '@types/googlemaps';
-import {Address} from "../models/address";
-import {GetDistanceMatrixService} from "../shared/services/google/get-distance-matrix.service";
+import {GetDistanceMatrixService} from "../services/google/get-distance-matrix.service";
+import {Distance} from "../models/distance";
 
 @Component({
   selector: 'app-purchasse-order',
   templateUrl: './purchasse-order.component.html',
-  styleUrls: ['./purchasse-order.component.css']
+  styleUrls: ['./purchasse-order.component.css'],
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeactivable {
 
@@ -40,6 +43,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   private valueRecipientInfosChanges$;
 
   resp: any;
+  distance: Distance;
 
   customerId = 1;
   datas: any;
@@ -48,7 +52,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   constructor (
     private store: Store<fromRoot.AppState>,
     private fb: FormBuilder,
-    private getDistanceMatrixService: GetDistanceMatrixService)
+    private getDistanceMatrixService: GetDistanceMatrixService,
+    private cdr: ChangeDetectorRef)
   {
     this.storeDispatch();
     this.initFormsRemoval();
@@ -211,35 +216,14 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     });
     return canDeactive;
   }
-  isFormsValide():boolean {
+  isFormsValide(): boolean {
     let valid = true;
     this.allFormGroup.forEach( form => {
       if (!form.valid) {
         valid = false;
       }
     });
-    if (valid) {
-      this.resp = this.getDistanceMatrixService.googleMapDistanceMatrixService(
-        {
-        address: 'Rue Gérard',
-        number: 83,
-        cp: 1040,
-        state: 'Etterbeek',
-        city: 'Belgique'
-        },
-        {
-          address: 'Rue Homborch',
-          number: 69,
-          cp: 1180,
-          state: 'Uccle',
-          city: 'Belgium'
-        });
-
-      // console.log(this.resp);
-      this.resp
-        .then(result => console.log('result: ',result))
-        .catch(error => console.log('error: ', error));
-    }
+    this.setDistance(valid);
     return valid;
   }
   resetOrder() {
@@ -247,6 +231,45 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   }
   recapOrder() {
     this.store.dispatch(new OrderActions.SaveOrder());
+  }
+
+  setDistance(valid: boolean): void {
+    if (valid) {
+      this.resp = this.getDistanceMatrixService.googleMapDistanceMatrixService(
+        {
+          address: this.allFormGroup[0].get('address').value,
+          number: this.allFormGroup[0].get('number').value,
+          cp: this.allFormGroup[0].get('cp').value,
+          state: this.allFormGroup[0].get('state').value,
+          city: 'Belgique'
+        },
+        {
+          address: this.allFormGroup[1].get('address').value,
+          number: this.allFormGroup[1].get('number').value,
+          cp: this.allFormGroup[1].get('cp').value,
+          state: this.allFormGroup[1].get('state').value,
+          city: 'Belgium'
+        });
+
+      // console.log(this.resp);
+       this.resp
+        .then(result =>
+        {
+          if (result) {
+            this.distance = {
+              distanceText: result.distance.rows["0"].elements["0"].distance.text,
+              distanceValue: result.distance.rows["0"].elements["0"].distance.value,
+              durationText: result.distance.rows["0"].elements["0"].duration.text,
+              durationValue: result.distance.rows["0"].elements["0"].duration.value,
+              status: result.distance.rows["0"].elements["0"].status
+            };
+            this.cdr.markForCheck();
+          }
+        })
+        .catch(error => {
+          console.log('error: ', error);
+        });
+    }
   }
 
   // success() {

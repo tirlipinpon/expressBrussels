@@ -18,8 +18,7 @@ import * as _ from 'lodash';
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.component.html',
-  styleUrls: ['./orders.component.css'],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./orders.component.css']
 })
 export class OrdersComponent implements OnInit, OnDestroy {
 

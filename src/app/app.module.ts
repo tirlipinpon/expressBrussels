@@ -36,6 +36,7 @@ import {ClientZonesService} from './services/client-zones.service';
 import { CascadeComponent } from './cascade/cascade.component';
 import {CascadeModule} from './cascade/cascade.module';
 import { AgmCoreModule } from '@agm/core';
+import {GetDistanceMatrixService} from "./services/google/get-distance-matrix.service";
 
 const appRoutes: Routes = [
   { path: 'login',                component: LoginComponent },
@@ -142,7 +143,8 @@ const appRoutes: Routes = [
     NotificationService,
     CanDeactivateFormGuardService,
     AuthenticationService,
-    ClientZonesService
+    ClientZonesService,
+    GetDistanceMatrixService
   ],
   bootstrap: [AppComponent]
 })

@@ -24,9 +24,19 @@
   >
   </app-form>
 
-  <app-option [formGroup]="formOptions"></app-option>
+  <div class="options-distance">
+    <app-option [formGroup]="formOptions"></app-option>
+
+    <div *ngIf="distance">
+      <span>distance: {{ distance?.distanceText }}</span>
+      <br>
+      <span>time: {{ distance?.durationText }}</span>
+    </div>
+  </div>
+
 
   <button *ngIf="isFormsValide()" (click)="recapOrder()">Send order </button>
+
 
 </div>
 
