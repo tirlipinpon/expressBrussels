@@ -33,6 +33,7 @@ import { ClientCpPipe } from './pipe/client-cp.pipe';
 import { InputAutocompletionComponent } from './components/form/input-completion/input-autocompletion.component';
 import { AutocompleteGoogleComponent } from './components/form/autocomplete-google/autocomplete-google.component';
 import { AddressComponent } from './components/form/address/address.component';
+import {GetDistanceMatrixService} from "./services/google/get-distance-matrix.service";
 
 
 @NgModule({
@@ -87,7 +88,8 @@ import { AddressComponent } from './components/form/address/address.component';
     AddressComponent
   ],
   providers: [
-    ConfirmationService
+    ConfirmationService,
+    GetDistanceMatrixService
   ]
 })
 export class SharedModule {}

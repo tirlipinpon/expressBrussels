@@ -14,6 +14,8 @@ import {ComponentDeactivable} from '../services/can-deactivate-form-guard.servic
 import * as fromRoot from '../shared/appState';
 import { MapsAPILoader} from '@agm/core';
 import {} from '@types/googlemaps';
+import {Address} from "../models/address";
+import {GetDistanceMatrixService} from "../shared/services/google/get-distance-matrix.service";
 
 @Component({
   selector: 'app-purchasse-order',
@@ -37,15 +39,16 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   private valueRemovalInfosChanges$;
   private valueRecipientInfosChanges$;
 
+  resp: any;
+
   customerId = 1;
   datas: any;
   nameForm = ['removal','recipient'];
 
   constructor (
-    private mapsAPILoader: MapsAPILoader,
-    private ngZone: NgZone,
     private store: Store<fromRoot.AppState>,
-    private fb: FormBuilder)
+    private fb: FormBuilder,
+    private getDistanceMatrixService: GetDistanceMatrixService)
   {
     this.storeDispatch();
     this.initFormsRemoval();
@@ -80,7 +83,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10+2)); // (id + type)  eg: id = 69; type=2 fk_type=692
     // this.store.dispatch(new ClientZonesActions.GetClientZones());
   }
-
   pushAllForms(allFormGroup: FormGroup[]): FormGroup[] {
     allFormGroup.push(this.formRemoval);
     allFormGroup.push(this.formRecipient);
@@ -150,7 +152,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     form.markAsPristine();
     form.markAsUntouched();
   }
-
   initFormsRemoval(): void {
     this.formRemoval = this.fb.group({
       id: ['', Validators.required],
@@ -200,7 +201,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       transport: ['moto', Validators.required]
     });
   }
-
   @HostListener('window:beforeunload')
   canDeactivate(): boolean {
     let canDeactive = true;
@@ -218,9 +218,31 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
         valid = false;
       }
     });
+    if (valid) {
+      this.resp = this.getDistanceMatrixService.googleMapDistanceMatrixService(
+        {
+        address: 'Rue Gérard',
+        number: 83,
+        cp: 1040,
+        state: 'Etterbeek',
+        city: 'Belgique'
+        },
+        {
+          address: 'Rue Homborch',
+          number: 69,
+          cp: 1180,
+          state: 'Uccle',
+          city: 'Belgium'
+        });
+
+      // console.log(this.resp);
+      this.resp
+        .then(result => console.log('result: ',result))
+        .catch(error => console.log('error: ', error));
+    }
     return valid;
   }
-  resetOrder(){
+  resetOrder() {
     this.store.dispatch(new OrderActions.InitOrder(this.customerId));
   }
   recapOrder() {

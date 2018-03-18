@@ -27,16 +27,13 @@ export class AutocompleteGoogleComponent implements OnInit {
         };
         let autocomplete = new google.maps.places.Autocomplete(this.searchElement.nativeElement, options);
 
-        autocomplete.addListener("place_changed", () => {
-          this.ngZone.run(() => {
+        autocomplete.addListener('place_changed', () => {
+            this.ngZone.run(() => {
             let place: google.maps.places.PlaceResult =  autocomplete.getPlace();
             if(place.geometry === undefined || place.geometry === null) {
               console.log('address not exist:', place);
               return;
-            }else{
-              console.log(place);
-              // console.log(place.name);
-              // console.log(place.vicinity);
+            }else {
               this.refInputAutoComplete.setSelectdedValue('state', place.vicinity);
               this.formGroup.patchValue({
                 address: place.name
@@ -46,12 +43,5 @@ export class AutocompleteGoogleComponent implements OnInit {
         });
       }
     )
-
-
-
-
   }
-
-
-
 }
