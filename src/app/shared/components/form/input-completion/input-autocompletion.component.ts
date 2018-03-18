@@ -78,6 +78,7 @@ export class InputAutocompletionComponent implements OnInit, OnDestroy {
     this.formGroup.markAsDirty();
   }
   getByData(value: string, data: any): any {
+    console.log(value, ' ' , data)
     let arrayWithElem;
     arrayWithElem = this.data.filter(elem => {
       return elem[value].toLowerCase() === data.toLowerCase()

@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy, HostListener} from '@angular/core';
+import {Component, OnInit, OnDestroy, HostListener, NgZone} from '@angular/core';
 import {FormBuilder, Validators, FormGroup} from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
@@ -12,6 +12,8 @@ import {DataForm} from '../models/DataForm';
 import {PurchasseOrder} from '../models/PurchasseOrder';
 import {ComponentDeactivable} from '../services/can-deactivate-form-guard.service';
 import * as fromRoot from '../shared/appState';
+import { MapsAPILoader} from '@agm/core';
+import {} from '@types/googlemaps';
 
 @Component({
   selector: 'app-purchasse-order',
@@ -40,6 +42,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   nameForm = ['removal','recipient'];
 
   constructor (
+    private mapsAPILoader: MapsAPILoader,
+    private ngZone: NgZone,
     private store: Store<fromRoot.AppState>,
     private fb: FormBuilder)
   {

@@ -18,7 +18,7 @@ export class AutocompleteGoogleComponent implements OnInit {
   constructor(private mapsAPILoader: MapsAPILoader, private ngZone: NgZone) { }
 
   ngOnInit() {
-    console.log(this.formGroup)
+    // console.log(this.formGroup)
     this.mapsAPILoader.load().then(
       () => {
         let options = {
@@ -35,8 +35,8 @@ export class AutocompleteGoogleComponent implements OnInit {
               return;
             }else{
               console.log(place);
-              console.log(place.name);
-              console.log(place.vicinity);
+              // console.log(place.name);
+              // console.log(place.vicinity);
               this.refInputAutoComplete.setSelectdedValue('state', place.vicinity);
               this.formGroup.patchValue({
                 address: place.name

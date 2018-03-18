@@ -4,19 +4,15 @@
 <div class="container">
   <div class="formRemoval" >
     <form  novalidate [formGroup]="allFormGroup[0]">
-
       <input type="hidden" formControlName="id">
       <input type="text" formControlName="name" autocomplete="off" placeholder="name">
       <input type="text"  formControlName="ref_client" autocomplete="off" placeholder="ref_client">
-
       <app-address [formGroup]="allFormGroup[0]" [data]="clientZones"></app-address>
-
       <input type="text" formControlName="phone" placeholder="phone">
       <input type="hidden" formControlName="fk_type">
-        <input type="hidden" formControlName="active" value="1">
+      <input type="hidden" formControlName="active" value="1">
       <input type="hidden" formControlName="clientZone">
       <button  (click)="add(allFormGroup[0])"> add </button>
-
     </form>
   </div>
   <div class="formRemoval" *ngFor="let removal of allFormGroup | slice:1" let index="index" >
@@ -24,10 +20,7 @@
         <input type="hidden" formControlName="id" >
         <input type="text" formControlName="name" autocomplete="off" >
         <input type="text" formControlName="ref_client" autocomplete="off">
-
         <app-address [formGroup]="removal" [data]="clientZones"></app-address>
-
-
         <input type="text" formControlName="phone">
         <input type="text" formControlName="created">
         <input type="hidden" formControlName="fk_type">

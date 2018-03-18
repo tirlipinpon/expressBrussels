@@ -1,22 +1,18 @@
 <p-confirmDialog header="Confirmation"
                  icon="fa fa-question-circle" width="400">
 </p-confirmDialog>
-
 <div class="container">
   <div class="formRemoval" >
     <form  novalidate [formGroup]="allFormGroup[0]">
-
       <input type="hidden" formControlName="id">
       <input type="text" formControlName="name" autocomplete="off" placeholder="name">
       <input type="text" formControlName="ref_client" autocomplete="off" placeholder="ref_client">
-      <input type="text" formControlName="address" placeholder="address">
-      <input type="text" formControlName="number" placeholder="number">
-      <app-input-autocompletion [propName]="'cp'" [data]="clientZones" [propType]="'number'" [witchForm]="2"  [formGroup]="allFormGroup[0]"></app-input-autocompletion>
-      <app-input-autocompletion [propName]="'state'" [data]="clientZones" [propType]="'string'" [witchForm]="2"  [formGroup]="allFormGroup[0]"></app-input-autocompletion>
+      <app-address [formGroup]="allFormGroup[0]" [data]="clientZones"></app-address>
       <input type="text" formControlName="phone" placeholder="phone">
       <input type="hidden" formControlName="fk_type">
+      <input type="hidden" formControlName="active" value="1">
+      <input type="hidden" formControlName="clientZone">
       <button  (click)="add(allFormGroup[0])"> add </button>
-
     </form>
   </div>
   <div class="formRemoval" *ngFor="let removal of allFormGroup | slice:1" let index="index" >
@@ -24,11 +20,7 @@
       <input type="hidden" formControlName="id" >
       <input type="text" formControlName="name" autocomplete="off" >
       <input type="text" formControlName="ref_client" autocomplete="off">
-      <input type="text" formControlName="address">
-      <input type="text" formControlName="number">
-      <app-input-autocompletion [propName]="'cp'" [data]="clientZones" [propType]="'number'" [witchForm]="2"  [formGroup]="removal"></app-input-autocompletion>
-      <app-input-autocompletion [propName]="'state'" [data]="clientZones" [propType]="'string'" [witchForm]="2"  [formGroup]="removal"></app-input-autocompletion>
-      <input type="number" formControlName="clientZone">
+      <app-address [formGroup]="removal" [data]="clientZones"></app-address>
       <input type="text" formControlName="phone">
       <input type="text" formControlName="created">
       <input type="hidden" formControlName="fk_type">

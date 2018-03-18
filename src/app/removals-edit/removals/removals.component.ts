@@ -32,9 +32,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<fromRoot.AppState>,
               private fb: FormBuilder,
-              private cd: ChangeDetectorRef,
-              private confirmationService: ConfirmationService,
-              private notificationsService: NotificationService) {
+              private cd: ChangeDetectorRef) {
     this.storeDispatch();
   }
   ngOnInit() {
@@ -50,11 +48,11 @@ export class RemovalsComponent implements OnInit, OnDestroy {
   storeSelect() {
     // this.customerId$ = this.store.select(fromRoot.selectors.getCustomerId);
     // this.customerId$.subscribe(data => this.customerId = data );
+    this.storeData$ = this.store.select(fromRoot.selectors.getRemovalsData);
     this.clientZones$ = this.store.select(fromRoot.selectors.getClientZonesData);
     this.clientZones$.subscribe(data => {
       this.clientZones = data;
     });
-    this.storeData$ = this.store.select(fromRoot.selectors.getRemovalsData);
   }
   initFormsRemoval(): void {
     this.storeData$.subscribe(data => {
@@ -151,16 +149,10 @@ export class RemovalsComponent implements OnInit, OnDestroy {
     this.store.dispatch(new actions.DeleteRemoval(<DataForm>form.value));
   }
   add(form: FormGroup): void {
-    this.setClientZone(form);
     this.store.dispatch(new actions.AddRemoval(form.value));
     this.allFormGroup[0].reset();
     this.allFormGroup[0].markAsUntouched();
     this.allFormGroup[0].markAsPristine();
-  }
-  setClientZone(form: FormGroup) {
-    const cp = form.get('cp').value;
-    form.get('clientZone').setValue(1); // TODO: set clientZone
-    console.log('clientZone:', form.get('clientZone').value);
   }
 
   @HostListener('window:beforeunload')

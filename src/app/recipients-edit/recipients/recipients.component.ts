@@ -6,6 +6,9 @@ import * as actions  from '../../actions/recipient.actions';
 import * as fromRoot from '../../shared/appState';
 import {DataForm} from '../../models/DataForm';
 import * as moment from 'moment';
+import {MyClientZones} from "../../models/my-client-zones";
+import * as ClientZonesActions  from '../../actions/clientZones.actions';
+
 
 @Component({
   selector: 'app-recipients',
@@ -18,7 +21,8 @@ export class RecipientsComponent implements OnInit, OnDestroy {
   private typeDataForm = 2;
   storeData$: Observable<DataForm[]>;
   allFormGroup: FormGroup[] = [];
-  clientZones$: Observable<number>;
+  clientZones$: Observable<MyClientZones[]>;
+  clientZones: MyClientZones[];
 
   constructor(private store: Store<fromRoot.AppState>,
               private fb: FormBuilder,
@@ -32,14 +36,17 @@ export class RecipientsComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy() {  }
   storeDispatch() {
-    // this.store.dispatch(new ClientZonesActions.GetClientZones());// TODO: use webworker
+    this.store.dispatch(new ClientZonesActions.GetClientZones());
     this.store.dispatch(new actions.GetRecipients(this.customerId*10+2)); // (id + type)  eg: id = 69; type=1 fk_type=691
   }
   storeSelect() {
     // this.customerId$ = this.store.select(fromRoot.selectors.getCustomerId);
     // this.customerId$.subscribe(data => this.customerId = data );
     this.storeData$ = this.store.select(fromRoot.selectors.getRecipientsData);
-    // this.clientZones$ = this.store.select(fromRoot.selectors.getClientZonesData);
+    this.clientZones$ = this.store.select(fromRoot.selectors.getClientZonesData);
+    this.clientZones$.subscribe(data => {
+      this.clientZones = data;
+    });
   }
   initFormsRemoval(): void {
     this.storeData$.subscribe(data => {
@@ -57,7 +64,7 @@ export class RecipientsComponent implements OnInit, OnDestroy {
           this.cd.markForCheck();
           //  update data
         }else { }
-        this.disableForm();
+        // this.disableForm();
       }
     });
   }
