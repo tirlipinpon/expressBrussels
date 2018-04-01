@@ -18,6 +18,7 @@ import * as fromRoot from '../shared/appState';
 import {} from '@types/googlemaps';
 import {GetDistanceMatrixService} from "../services/google/get-distance-matrix.service";
 import {Distance} from "../models/distance";
+import {stringDistance} from "codelyzer/util/utils";
 
 @Component({
   selector: 'app-purchasse-order',
@@ -34,6 +35,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   formRemoval: FormGroup;
   formRecipient: FormGroup;
   formOptions: FormGroup;
+  formDistance: FormGroup;
   private allFormGroup: FormGroup[] = [];
 
   private valueRemovalChanges$;
@@ -44,10 +46,10 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
 
   resp: any;
   distance: Distance;
-
   customerId = 1;
   datas: any;
   nameForm = ['removal','recipient'];
+  private isDistance = false;
 
   constructor (
     private store: Store<fromRoot.AppState>,
@@ -59,6 +61,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.initFormsRemoval();
     this.initFormsRecipient();
     this.initFormsOptions();
+    this.initFormsDistance();
   }
 
   ngOnInit() {
@@ -92,6 +95,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     allFormGroup.push(this.formRemoval);
     allFormGroup.push(this.formRecipient);
     allFormGroup.push(this.formOptions);
+    // allFormGroup.push(this.formDistance);
     return allFormGroup;
   }
   onValueOrderChanged() {
@@ -176,6 +180,10 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       active: ['', Validators.required],
       created: ['', Validators.required],
       fk_type: ['', Validators.required],
+
+      price: [''],
+      distance: [''],
+      elapse_time: [''],
     });
   }
   initFormsRecipient(): void {
@@ -206,6 +214,13 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       transport: ['moto', Validators.required]
     });
   }
+  initFormsDistance(): void {
+    this.formDistance = this.fb.group({
+      price: [{value: null, disabled: true}, Validators.required],
+      distance: [{value: null, disabled: true}, Validators.required],
+      elapse_time: [{value: null, disabled: true}, Validators.required]
+    });
+  }
   @HostListener('window:beforeunload')
   canDeactivate(): boolean {
     let canDeactive = true;
@@ -233,30 +248,15 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.store.dispatch(new OrderActions.SaveOrder());
   }
 
+  // distance
   setDistance(valid: boolean): void {
-    if (valid) {
-      this.resp = this.getDistanceMatrixService.googleMapDistanceMatrixService(
-        {
-          address: this.allFormGroup[0].get('address').value,
-          number: this.allFormGroup[0].get('number').value,
-          cp: this.allFormGroup[0].get('cp').value,
-          state: this.allFormGroup[0].get('state').value,
-          city: 'Belgique'
-        },
-        {
-          address: this.allFormGroup[1].get('address').value,
-          number: this.allFormGroup[1].get('number').value,
-          cp: this.allFormGroup[1].get('cp').value,
-          state: this.allFormGroup[1].get('state').value,
-          city: 'Belgium'
-        });
-
-      // console.log(this.resp);
-       this.resp
-        .then(result =>
-        {
+    if (valid && !this.isDistance) {
+      this.resp = this.getRespgoogleMapDistanceMatrix();
+       this.resp.then(result => {
           if (result) {
+            console.log(result);
             this.distance = {
+              price: 5,
               distanceText: result.distance.rows["0"].elements["0"].distance.text,
               distanceValue: result.distance.rows["0"].elements["0"].distance.value,
               durationText: result.distance.rows["0"].elements["0"].duration.text,
@@ -264,12 +264,38 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
               status: result.distance.rows["0"].elements["0"].status
             };
             this.cdr.markForCheck();
+            this.formDistance.setValue({
+              price: this.distance.price,
+              distance: this.distance.distanceValue,
+              elapse_time: this.distance.durationValue
+            });
+            this.cdr.markForCheck();
+            this.isDistance = true;
           }
-        })
-        .catch(error => {
-          console.log('error: ', error);
+        }).catch(error => {
+          this.isDistance = false;
+          console.log('error setDistance: ', error);
         });
+       // due many callback call issue
+
     }
+  }
+  getRespgoogleMapDistanceMatrix(): any {
+    return this.getDistanceMatrixService.googleMapDistanceMatrixService (
+      {
+        address: this.allFormGroup[0].get('address').value,
+        number: this.allFormGroup[0].get('number').value,
+        cp: this.allFormGroup[0].get('cp').value,
+        state: this.allFormGroup[0].get('state').value,
+        city: 'Belgique'
+      },
+      {
+        address: this.allFormGroup[1].get('address').value,
+        number: this.allFormGroup[1].get('number').value,
+        cp: this.allFormGroup[1].get('cp').value,
+        state: this.allFormGroup[1].get('state').value,
+        city: 'Belgium'
+      });
   }
 
   // success() {

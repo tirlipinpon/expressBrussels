@@ -126,8 +126,7 @@ export const RecipientSelectors = {
 // ======================================================
 // purchasse order reducer
 // ======================================================
-const orderInitOrder: PurchasseOrder =
-  {
+const orderInitOrder: PurchasseOrder =  {
     id: 0,
     fk_customer_id: 0,
     fk_removal_id: 0,
@@ -140,7 +139,11 @@ const orderInitOrder: PurchasseOrder =
     message_recipient: '',
 
     date: new Date(),
+
     price: 0,
+    distance: 0,
+    elapse_time: 0,
+
     options: 'express',
     tomorrow: false,
     transport: 'moto',
@@ -244,10 +247,9 @@ export const OrderSelector = {
 };
 
 // ======================================================
-// orders reducer
+// client zones
 // ======================================================
-const clientZoneInit: MyClientZonesState =
-  {  data: [],
+const clientZoneInit: MyClientZonesState =  {  data: [],
     count: 0
   };
 export function clientZonesReducer(state = clientZoneInit, action: ActionClientZones): MyClientZonesState {

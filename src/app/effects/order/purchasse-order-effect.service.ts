@@ -40,7 +40,7 @@ export class PurchasseOrderEffectService {
 
   @Effect() saveOrder$: Observable<Action> = this.action$
     .ofType(OrderActions.SAVE_ORDER)
-    .do(() => {  console.log('- DO log saveOrder$ !'); } )
+    // .do(() => {  console.log('- DO log saveOrder$ !'); } )
     .withLatestFrom(  this.store.select('order')   )
     .switchMap(action =>
       this.orderService.saveOrder(action[1], 1)
