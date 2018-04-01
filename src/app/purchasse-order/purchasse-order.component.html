@@ -28,6 +28,8 @@
     <app-option [formGroup]="formOptions"></app-option>
 
     <div *ngIf="distance">
+      <span>status: {{ distance?.status }}</span>
+      <br>
       <span>distance: {{ distance?.price }}</span>
       <br>
       <span>distance: {{ distance?.distanceText }}</span>
@@ -35,17 +37,19 @@
       <span>time: {{ distance?.durationText }}</span>
     </div>
     <form [formGroup]="formDistance">
-      price: <input type="number" formControlName="price" value="{{distance?.price}}"><br>
-      distance: <input type="number" formControlName="distance" value="{{distance?.distanceValue}}"><br>
-      time: <input type="number" formControlName="elapse_time" value="{{distance?.durationValue}}">
+      <input type="hidden" formControlName="status" value="{{distance?.status}}"><br>
+      <input type="hidden" formControlName="price" value="{{distance?.price}}"><br>
+      <input type="hidden" formControlName="distance" value="{{distance?.distanceValue}}"><br>
+      <input type="hidden" formControlName="elapse_time" value="{{distance?.durationValue}}">
     </form>
   </div>
 
   <button *ngIf="isFormsValide() && isDistance" (click)="recapOrder()">Send order </button>
 </div>
 
-isDistance?= {{isDistance}}
-distance= {{distance | json}}
+isDistance?= {{isDistance}}<br>
+distance= {{distance | json}}<br>
+formDistance= {{formDistance.value | json}}
 
 
 

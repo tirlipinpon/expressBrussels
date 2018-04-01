@@ -17,10 +17,6 @@ export interface DataForm {
   active:  number;
   created: any;
   fk_type: number;
-
-  price: number;
-  distance: number;
-  elapse_time: number;
 }
 
 export interface DataDataFormState {

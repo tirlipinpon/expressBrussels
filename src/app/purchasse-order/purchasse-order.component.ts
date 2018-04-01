@@ -1,7 +1,4 @@
-import {
-  Component, OnInit, OnDestroy, HostListener, NgZone, ChangeDetectionStrategy,
-  ChangeDetectorRef
-} from '@angular/core';
+import {  Component, OnInit, OnDestroy, HostListener, ChangeDetectorRef } from '@angular/core';
 import {FormBuilder, Validators, FormGroup} from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
@@ -18,7 +15,7 @@ import * as fromRoot from '../shared/appState';
 import {} from '@types/googlemaps';
 import {GetDistanceMatrixService} from "../services/google/get-distance-matrix.service";
 import {Distance} from "../models/distance";
-import {stringDistance} from "codelyzer/util/utils";
+import * as CONST from '../models/googleMatrixStatus';
 
 @Component({
   selector: 'app-purchasse-order',
@@ -100,9 +97,11 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   }
   onValueOrderChanged() {
     this.valueRemovalChanges$ = this.formRemoval.get('id').valueChanges.subscribe(val => {
+      this.resetDistance();
       this.store.dispatch(new OrderActions.EditOrderRemoval(val));
     });
     this.valueRecipientChanges$ = this.formRecipient.get('id').valueChanges.subscribe(val => {
+      this.resetDistance();
       this.store.dispatch(new OrderActions.EditOrderRecipient(val));
     });
     this.valueRemovalInfosChanges$ = this.formRemoval.get('infos').valueChanges.subscribe(val => {
@@ -112,6 +111,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       this.store.dispatch(new OrderActions.EditOrderRecipientInfos(val));
     });
     this.valueOptionsChanges$ = this.formOptions.valueChanges.subscribe(val => {
+      this.resetDistance();
       this.store.dispatch(new OrderActions.EditOrderOption(val));
     });
     this.formRemoval.valueChanges.subscribe(val => {
@@ -120,6 +120,16 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.formRecipient.valueChanges.subscribe(val => {
       this.chackIsFormAsValue(this.formRecipient, val);
     });
+    this.formDistance.valueChanges.subscribe(val => {
+      if (val.status && val.status.length) {
+        this.store.dispatch(new OrderActions.EditOrderDistance(val));
+      }
+    });
+  }
+  resetDistance() {
+    this.isDistance = false;
+    this.distance = null;
+    this.formDistance.reset();
   }
   chackIsFormAsValue(form, ...val) {
     const flattenObject = this.flattenObject(form.value);
@@ -218,7 +228,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.formDistance = this.fb.group({
       price: [{value: null, disabled: true}, Validators.required],
       distance: [{value: null, disabled: true}, Validators.required],
-      elapse_time: [{value: null, disabled: true}, Validators.required]
+      elapse_time: [{value: null, disabled: true}, Validators.required],
+      status: [{value: null, disabled: true}, Validators.required]
     });
   }
   @HostListener('window:beforeunload')
@@ -253,8 +264,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     if (valid && !this.isDistance) {
       this.resp = this.getRespgoogleMapDistanceMatrix();
        this.resp.then(result => {
-          if (result) {
-            console.log(result);
+          if (result.distance.rows["0"].elements["0"].status === CONST.DIST_MATRIX_OK) {
             this.distance = {
               price: 5,
               distanceText: result.distance.rows["0"].elements["0"].distance.text,
@@ -264,14 +274,26 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
               status: result.distance.rows["0"].elements["0"].status
             };
             this.cdr.markForCheck();
-            this.formDistance.setValue({
-              price: this.distance.price,
-              distance: this.distance.distanceValue,
-              elapse_time: this.distance.durationValue
-            });
+          }else {
+            this.distance = {
+              price: 0,
+              distanceText: '',
+              distanceValue: 0,
+              durationText: '',
+              durationValue: 0,
+              status: result.distance.rows["0"].elements["0"].status
+            };
             this.cdr.markForCheck();
-            this.isDistance = true;
           }
+         this.formDistance.setValue({
+           price: this.distance.price,
+           distance: this.distance.distanceValue,
+           elapse_time: this.distance.durationValue,
+           status: this.distance.status
+         });
+         this.cdr.markForCheck();
+         this.isDistance = true;
+         this.cdr.markForCheck();
         }).catch(error => {
           this.isDistance = false;
           console.log('error setDistance: ', error);

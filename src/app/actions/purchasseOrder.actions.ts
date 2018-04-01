@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
 import {PurchasseOrder} from '../models/PurchasseOrder';
+import {Distance} from "../models/distance";
 
 export const INIT_ORDER = 'Init Order';
 export class InitOrder implements Action {
@@ -93,6 +94,16 @@ export class SaveOrderFail implements Action {
     // console.log('in actions get customer payload= ',payload);
   }
 }
+// =================== distance ================================
+export const EDIT_ORDER_DISTANCE = 'Edit Order Distance';
+export class EditOrderDistance implements Action {
+  readonly type = EDIT_ORDER_DISTANCE;
+  constructor(public payload: Distance) {
+    console.log('in actions edit order distnace payload= ',payload);
+  }
+}
+
+
 // =================== client zone ===========================================
 export const GET_CLIENT_ZONE = 'Get client Zone';
 export class GetClientZone implements Action {
@@ -133,6 +144,7 @@ export type All =
     | EditOrderRecipientInfosCascades
 
     | EditOrderOption
+    | EditOrderDistance
 
     | SaveOrder
     | SaveOrderSuccess

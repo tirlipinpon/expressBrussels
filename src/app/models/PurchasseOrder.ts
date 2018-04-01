@@ -11,7 +11,12 @@ export interface PurchasseOrder {
   message_recipient: string;
 
   date: Date;
+
   price: number;
+  distance: number;
+  elapse_time: number;
+  status: string
+
   options: string;
   tomorrow: boolean;
   transport: string;

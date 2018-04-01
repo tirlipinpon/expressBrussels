@@ -143,6 +143,7 @@ const orderInitOrder: PurchasseOrder =  {
     price: 0,
     distance: 0,
     elapse_time: 0,
+    status: '',
 
     options: 'express',
     tomorrow: false,
@@ -194,6 +195,16 @@ export function purchasseOrderReducer(state: PurchasseOrder = orderInitOrder, ac
         contact_recipient: action.payload.info1,
         message_recipient: action.payload.info2,
       });
+
+    case PurchasseOrderActions.EDIT_ORDER_DISTANCE:
+      console.log(action.payload['distance']);
+      return Object.assign({}, state, {
+        price: action.payload['price'],
+        distance: action.payload['distance'],
+        elapse_time: action.payload['elapse_time'],
+        status: action.payload['status'],
+      });
+      // return state;
 
     case PurchasseOrderActions.EDIT_ORDER_RECIPIENT_INFOS_CASCADES:
       // console.log('in order reducer edit Order Recipient Infos cascades payload = ',action.payload);
