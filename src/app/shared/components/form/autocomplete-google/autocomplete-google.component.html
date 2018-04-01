@@ -1,5 +1,6 @@
 <form  novalidate [formGroup]="formGroup">
 <input #search
+       (click)="onBlur()"
        type="text"
        formControlName="address"
        placeholder="address"

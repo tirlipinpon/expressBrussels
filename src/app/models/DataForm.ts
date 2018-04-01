@@ -6,6 +6,7 @@ export interface DataForm {
   number: string;
   cp: number;
   state: string;
+  addressValidated: boolean;
   clientZone: number;
   phone: string;
   infos: {

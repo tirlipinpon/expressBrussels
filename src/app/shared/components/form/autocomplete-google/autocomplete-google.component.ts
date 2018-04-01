@@ -30,13 +30,14 @@ export class AutocompleteGoogleComponent implements OnInit {
         autocomplete.addListener('place_changed', () => {
             this.ngZone.run(() => {
             let place: google.maps.places.PlaceResult =  autocomplete.getPlace();
-            if(place.geometry === undefined || place.geometry === null) {
+            if (place.geometry === undefined || place.geometry === null) {
               console.log('address not exist:', place);
               return;
             }else {
               this.refInputAutoComplete.setSelectdedValue('state', place.vicinity);
               this.formGroup.patchValue({
-                address: place.name
+                address: place.name,
+                addressValidated: 1
               });
             }
           });
@@ -44,4 +45,11 @@ export class AutocompleteGoogleComponent implements OnInit {
       }
     )
   }
+  onBlur() {
+    this.formGroup.patchValue({
+      addressValidated: 0
+    });
+    console.log( this.formGroup.value)
+  }
+
 }

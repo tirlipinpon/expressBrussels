@@ -117,6 +117,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
       number: [data ? data.number : '', Validators.required],
       cp: [data? data.cp : '', Validators.required],
       state: [data? data.state : '', Validators.required],
+      addressValidated: [data? data.addressValidated : '', Validators.required],
       clientZone: [data? data.clientZone : ''],
       phone: [data ? data.phone : '', Validators.required],
       infos: this.fb.group({
