@@ -4,14 +4,14 @@
 }
 .formRemoval {
   display: flex;
-  border: 1px solid red;
+  border: 1px solid black;
   margin: 5px;
   flex: 0 0 10%;
 }
 .formRemoval form {
   display: flex;
   flex-direction: column;
-  border: 1px solid blue;
+
   flex: 1;
 }
 .formRemoval form input {
