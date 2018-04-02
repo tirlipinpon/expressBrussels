@@ -6,6 +6,7 @@ import { environment } from '../../environments/environment';
 import {BehaviorSubject} from "rxjs";
 import * as fromRoot from '../shared/appState';
 import {Store} from "@ngrx/store";
+import {AuthenticationService} from "./authentication.service";
 
 @Injectable()
 export class CustomerService {
@@ -15,12 +16,18 @@ export class CustomerService {
   private customerId$: Observable<number>;
   currentCustomerId = this.messageSource.asObservable();
 
-  constructor(private http: HttpClient,  private store: Store<fromRoot.AppState> ) {
+  constructor(private http: HttpClient,
+              private store: Store<fromRoot.AppState>,
+              private authenticationService: AuthenticationService) {
     this.customerId$ = this.store.select(fromRoot.selectors.getCustomerId);
-    this.customerId$.subscribe(data => this.getCustomerId(data) );
+    this.customerId$.subscribe(data => {
+      if (data !== 0) {
+        this.setCustomerId(data)
+      }
+    });
   }
 
-  getCustomerId(message: number) {
+  setCustomerId(message: number) {
     this.messageSource.next(message);
   }
 

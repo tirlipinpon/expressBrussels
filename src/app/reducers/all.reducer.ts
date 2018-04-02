@@ -43,6 +43,9 @@ const initCustomer: DataForm = {
 export function customerReducer(state = initCustomer , action: ActionCustomer): DataForm {
   // console.log('2 - Reducer customer :', action.type, state);
   switch (action.type) {
+    case CustomerActions.SET_CUSTOMER:
+      console.log('in customer reducer setCustomer payload = ',action.payload);
+      return {...state, ...action.payload};
     case CustomerActions.GET_CUSTOMER_SUCCESS:
       //console.log('in customer reducer getCustomer payload = ',action.payload);
       return {...state, ...action.payload};

@@ -5,6 +5,7 @@ import {Observable} from 'rxjs/Observable';
 import * as fromRoot from '../../appState';
 import {Store} from '@ngrx/store';
 import * as CustomerActions from '../../../actions/customer.actions';
+import {CustomerService} from "../../../services/customer.service";
 
 @Component({
   selector: 'app-profile',
@@ -19,11 +20,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private formValueChanges$;
 
   customer: any;
-  customerId = 1;
+  customerId: number;
   datas: any;
   nameForm = ['customer'];
 
-  constructor(private store: Store<fromRoot.AppState>, private fb: FormBuilder) {
+  constructor (private store: Store<fromRoot.AppState>,
+              private customerService: CustomerService,
+              private fb: FormBuilder) {
     this.storeSelect();
     this.initFormsCustomer();
   }
@@ -50,7 +53,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.customer$ = this.store.select(fromRoot.selectors.getCustomer);
   }
   storeDispatch() {
-    this.store.dispatch(new CustomerActions.GetCustomer(this.customerId));
+    // this.store.dispatch(new CustomerActions.GetCustomer(1));
+    this.customerService.currentCustomerId.subscribe(id => {
+      if(id !== 0) {
+        this.customerId = id;
+      }
+    });
   }
 
   saveCustomer(): void {
