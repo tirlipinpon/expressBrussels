@@ -17,8 +17,7 @@ export class CustomerService {
   currentCustomerId = this.messageSource.asObservable();
 
   constructor(private http: HttpClient,
-              private store: Store<fromRoot.AppState>,
-              private authenticationService: AuthenticationService) {
+              private store: Store<fromRoot.AppState>) {
     this.customerId$ = this.store.select(fromRoot.selectors.getCustomerId);
     this.customerId$.subscribe(data => {
       if (data !== 0) {

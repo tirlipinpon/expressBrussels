@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import {CanActivate, Router} from '@angular/router';
 import {AuthenticationService} from './authentication.service';
-import * as jwt_decode from 'jwt-decode';
-import * as CustomerActions from '../actions/customer.actions';
 import {Store} from '@ngrx/store';
 import * as fromRoot from '../shared/appState';
 
@@ -16,9 +14,8 @@ export class AlwaysAuthGuardService implements CanActivate {
 
   canActivate() {
     // console.log('AlwaysAuthGuard');
-    if (this.authenticationService.getToken()) { // TODO: use isLoggedIn()
-      const decoded = jwt_decode(this.authenticationService.getToken());
-      this.store.dispatch(new CustomerActions.SetCustomer(decoded));
+    if (this.authenticationService.isToken() && this.authenticationService.isTokenExpired()) {
+      this.authenticationService.setCustomerDecoded();
       return true;
     }
     console.log('canActivate: ', false);
