@@ -6,7 +6,7 @@ export const SET_CUSTOMER = 'Set Customer';
 export class SetCustomer implements Action {
   readonly type = SET_CUSTOMER;
   constructor(public payload: DataForm) {
-    console.log('in actions set customer payload= ',payload);
+    // console.log('in actions set customer payload= ',payload);
   }
 }
 

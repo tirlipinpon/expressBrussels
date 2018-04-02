@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
   setCustomerDecoded(data): void {
     let decoded = jwt_decode(data);
     this.store.dispatch(new CustomerActions.SetCustomer(decoded));
-    console.log(decoded);
+    // console.log(decoded);
   }
 
 
@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
     if (val.email && val.password) {
       this.authenticationService.login(val)
         .subscribe(data => {
-          console.log('LoginComponent data:', data);
+          // console.log('LoginComponent data:', data);
           this. setCustomerDecoded(data);
           if (data && data !== 'error') {
             // console.log('LoginComponent login OK:', data);
