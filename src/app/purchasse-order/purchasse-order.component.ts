@@ -16,6 +16,7 @@ import {} from '@types/googlemaps';
 import {GetDistanceMatrixService} from "../services/google/get-distance-matrix.service";
 import {Distance} from "../models/distance";
 import * as CONST from '../models/googleMatrixStatus';
+import {CustomerService} from "../services/customer.service";
 
 @Component({
   selector: 'app-purchasse-order',
@@ -40,10 +41,9 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   private valueOptionsChanges$;
   private valueRemovalInfosChanges$;
   private valueRecipientInfosChanges$;
-
+  private customerId: number;
   resp: any;
   distance: Distance;
-  customerId = 1;
   datas: any;
   nameForm = ['removal','recipient'];
   private isDistance = false;
@@ -52,7 +52,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     private store: Store<fromRoot.AppState>,
     private fb: FormBuilder,
     private getDistanceMatrixService: GetDistanceMatrixService,
-    private cdr: ChangeDetectorRef)
+    private cdr: ChangeDetectorRef,
+    private customerService: CustomerService)
   {
     this.storeDispatch();
     this.initFormsRemoval();
@@ -74,18 +75,20 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.valueRecipientInfosChanges$.unsubscribe();
   }
   storeSelect() {
-    // this.customerId$ = this.store.select(fromRoot.selectors.getCustomerId);
-    // this.customerId$.subscribe(data => this.customerId = data );
+    this.customerService.currentCustomerId.subscribe(id => { this.customerId = id; });
     this.removals$ = this.store.select(fromRoot.selectors.getRemovalsData);
     this.recipients$ = this.store.select(fromRoot.selectors.getRecipientsData);
     this.order$ = this.store.select(fromRoot.selectors.getOrder);
     // this.clientZones$ = this.store.select(fromRoot.selectors.getClientZonesData);
   }
   storeDispatch() {
-    //this.store.dispatch({type: CustomerActions.GET_CUSTOMER, payload: this.customerId });
-    // this.store.dispatch(new OrderActions.InitOrder(this.customerId));
-    this.store.dispatch(new RemovalActions.GetRemovals(this.customerId*10+1)); // (id + type)  eg: id = 69; type=1 fk_type=691
-    this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10+2)); // (id + type)  eg: id = 69; type=2 fk_type=692
+    this.customerService.currentCustomerId.subscribe(id => {
+      if(id !== 0) {
+        this.customerId = id;
+        this.store.dispatch(new RemovalActions.GetRemovals(this.customerId*10+1)); // (id + type)  eg: id = 69; type=1 fk_type=691
+        this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10+2)); // (id + type)  eg: id = 69; type=2 fk_type=692
+      }
+    });
     // this.store.dispatch(new ClientZonesActions.GetClientZones());
   }
   pushAllForms(allFormGroup: FormGroup[]): FormGroup[] {

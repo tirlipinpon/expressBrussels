@@ -65,7 +65,7 @@ export class AuthenticationService {
   login(value): Observable<any> {
     let url = this.apiUrl + 'php//read_login.php';
     let data = value;
-    console.log('AuthenticationService url: ', url);
+    // console.log('AuthenticationService url: ', url);
     // this is just the HTTP call,
     // we still need to handle the reception of the token
     // shareReplay: prevent the receiver of this Observable from accidentally triggering multiple POST requests due to multiple subscriptions.
@@ -76,12 +76,12 @@ export class AuthenticationService {
   }
   private setSession(authResult) {
     if (authResult !== 'error') {
-      console.log('setSession:', authResult );
+      // console.log('setSession:', authResult );
       const expiresAt = moment().add(authResult.expiresIn,'second');
       localStorage.setItem(TOKEN_NAME, authResult); // authResult.idToken);
-      localStorage.setItem('expires_at', JSON.stringify('1504699256'.valueOf()) ); // JSON.stringify(expiresAt.valueOf()) );
+      localStorage.setItem('expires_at', JSON.stringify('6054600'.valueOf()) ); // JSON.stringify(expiresAt.valueOf()) );
       const decoded = jwt_decode(this.getToken());
-      console.log(decoded);
+      // console.log(decoded);
     }
   }
   logout(): void {

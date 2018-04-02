@@ -37,9 +37,9 @@ export class LoginComponent implements OnInit {
     if (val.email && val.password) {
       this.authenticationService.login(val)
         .subscribe(data => {
-          console.log('LoginComponent data:', data);
+          // console.log('LoginComponent data:', data);
           if (data && data !== 'error') {
-            console.log('LoginComponent login OK:', data);
+            // console.log('LoginComponent login OK:', data);
             this.router.navigateByUrl('/menu');
             this.error = '';
             this.loading = false;

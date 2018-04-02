@@ -14,6 +14,7 @@ import * as RecipientActions from '../actions/recipient.actions';
 import {DataForm} from '../models/DataForm';
 
 import * as _ from 'lodash';
+import {CustomerService} from "../services/customer.service";
 
 @Component({
   selector: 'app-orders',
@@ -25,8 +26,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
   orders$: Observable<PurchasseOrder[]>;
   removals$: Observable<DataForm[]>;
   recipients$: Observable<DataForm[]>;
-  customerId$: Observable<number>;
-  customerId = 1;
+  private customerId: number;
   isReferenceClient = false;
   datasOrders:  PurchasseOrder[] = [];
   datasRemovals:  DataForm[];
@@ -38,7 +38,11 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
   @ViewChildren('mati') matInput: QueryList<any>
 
-  constructor(private store: Store<fromRoot.AppState>,@Attribute('type') type) {
+  constructor(
+    private store: Store<fromRoot.AppState>,
+    @Attribute('type') type,
+    private customerService: CustomerService) {
+    this.customerService.currentCustomerId.subscribe(id => { this.customerId = id; });
     this.storeSelect();
   }
 

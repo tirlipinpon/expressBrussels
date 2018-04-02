@@ -3,16 +3,29 @@ import { HttpClient  } from '@angular/common/http';
 import {DataForm} from '../models/DataForm';
 import {Observable} from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
+import {BehaviorSubject} from "rxjs";
+import * as fromRoot from '../shared/appState';
+import {Store} from "@ngrx/store";
 
 @Injectable()
 export class CustomerService {
 
   private apiUrl = environment.apiUrl;
+  private messageSource = new BehaviorSubject<number>(0);
+  private customerId$: Observable<number>;
+  currentCustomerId = this.messageSource.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,  private store: Store<fromRoot.AppState> ) {
+    this.customerId$ = this.store.select(fromRoot.selectors.getCustomerId);
+    this.customerId$.subscribe(data => this.getCustomerId(data) );
+  }
+
+  getCustomerId(message: number) {
+    this.messageSource.next(message);
+  }
 
   getCustomer(data: any): Observable<DataForm> {
-     console.log('id from service: ', data.payload);
+     // console.log('id from service: ', data.payload);
     let url = this.apiUrl+'php//read_one.php?id='+data.payload;
     return this.http.get(url)
       .catch(error => Observable.throw('error in service get customer with message from server -> ', error));

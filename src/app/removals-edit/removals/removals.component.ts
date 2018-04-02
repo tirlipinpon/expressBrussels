@@ -14,6 +14,7 @@ import * as ClientZonesActions  from '../../actions/clientZones.actions';
 import {MyClientZones} from '../../models/my-client-zones';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
+import {CustomerService} from "../../services/customer.service";
 
 
 @Component({
@@ -23,7 +24,7 @@ import 'rxjs/add/operator/distinctUntilChanged';
 })
 export class RemovalsComponent implements OnInit, OnDestroy {
 
-  private customerId = 1;
+  private customerId: number;
   private typeDataForm = 1;
   storeData$: Observable<DataForm[]>;
   allFormGroup: FormGroup[] = [];
@@ -32,6 +33,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<fromRoot.AppState>,
               private fb: FormBuilder,
+              private customerService: CustomerService,
               private cd: ChangeDetectorRef) {
     this.storeDispatch();
   }
@@ -43,7 +45,12 @@ export class RemovalsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {  }
   storeDispatch() {
     this.store.dispatch(new ClientZonesActions.GetClientZones());
-    this.store.dispatch(new actions.GetRemovals(this.customerId*10+1)); // (id + type)  eg: id = 69; type=1 fk_type=691
+    this.customerService.currentCustomerId.subscribe(id => {
+      if(id !== 0) {
+        this.customerId = id;
+        this.store.dispatch(new actions.GetRemovals(this.customerId*10+1)); // (id + type)  eg: id = 69; type=1 fk_type=691
+      }
+    });
   }
   storeSelect() {
     // this.customerId$ = this.store.select(fromRoot.selectors.getCustomerId);

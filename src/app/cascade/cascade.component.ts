@@ -10,6 +10,7 @@ import * as RemovalActions  from '../actions/removal.actions';
 import * as RecipientActions  from '../actions/recipient.actions';
 import * as OrderActions  from '../actions/purchasseOrder.actions';
 import * as fromRoot from '../shared/appState';
+import {CustomerService} from "../services/customer.service";
 
 @Component({
   selector: 'app-cascade',
@@ -24,6 +25,7 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
   formRemoval: FormGroup;
   formOptions: FormGroup;
   private allFormGroup: FormGroup[] = [];
+  private customerId: number;
   formRecipientCascade: FormGroup;
   itemsCascade: FormArray;
   private valueRemovalChanges$: Subscription;
@@ -31,13 +33,13 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
   private valueOptionsChanges$: Subscription;
   private valueRemovalInfosChanges$: Subscription;
   private valueRecipientInfosChanges$: Subscription;
-  customerId = 1;
   datas: any;
   nameForm = ['removal', 'recipient'];
 
   constructor (
     private store: Store<fromRoot.AppState>,
-    private fb: FormBuilder)
+    private fb: FormBuilder,
+    private customerService: CustomerService)
   {
     this.storeDispatch();
     this.initFormsRemoval();
@@ -101,10 +103,13 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
     // this.clientZones$ = this.store.select(fromRoot.selectors.getClientZonesData);
   }
   storeDispatch() {
-    //this.store.dispatch({type: CustomerActions.GET_CUSTOMER, payload: this.customerId });
-    // this.store.dispatch(new OrderActions.InitOrder(this.customerId));
-    this.store.dispatch(new RemovalActions.GetRemovals(this.customerId*10 + 1)); // (id + type)  eg: id = 69; type=1 fk_type=691
-    this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10 + 2)); // (id + type)  eg: id = 69; type=2 fk_type=692
+    this.customerService.currentCustomerId.subscribe(id => {
+      if(id !== 0) {
+        this.customerId = id;
+        this.store.dispatch(new RemovalActions.GetRemovals(this.customerId*10 + 1)); // (id + type)  eg: id = 69; type=1 fk_type=691
+        this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10 + 2)); // (id + type)  eg: id = 69; type=2 fk_type=692
+      }
+    });
     // this.store.dispatch(new ClientZonesActions.GetClientZones());
   }
   pushAllForms(allFormGroup: FormGroup[]): FormGroup[] {

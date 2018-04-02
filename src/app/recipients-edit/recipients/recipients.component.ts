@@ -8,6 +8,7 @@ import {DataForm} from '../../models/DataForm';
 import * as moment from 'moment';
 import {MyClientZones} from "../../models/my-client-zones";
 import * as ClientZonesActions  from '../../actions/clientZones.actions';
+import {CustomerService} from "../../services/customer.service";
 
 
 @Component({
@@ -17,7 +18,7 @@ import * as ClientZonesActions  from '../../actions/clientZones.actions';
 })
 export class RecipientsComponent implements OnInit, OnDestroy {
 
-  private customerId = 1;
+  private customerId: number;
   private typeDataForm = 2;
   storeData$: Observable<DataForm[]>;
   allFormGroup: FormGroup[] = [];
@@ -26,7 +27,9 @@ export class RecipientsComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<fromRoot.AppState>,
               private fb: FormBuilder,
+              private customerService: CustomerService,
               private cd: ChangeDetectorRef) {
+
     this.storeDispatch();
   }
   ngOnInit() {
@@ -36,12 +39,17 @@ export class RecipientsComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy() {  }
   storeDispatch() {
+    this.customerService.currentCustomerId.subscribe(id => {
+      if(id !== 0) {
+        this.customerId = id;
+        this.store.dispatch(new actions.GetRecipients(this.customerId*10+2)); // (id + type)  eg: id = 69; type=1 fk_type=691
+      }
+    });
+
     this.store.dispatch(new ClientZonesActions.GetClientZones());
-    this.store.dispatch(new actions.GetRecipients(this.customerId*10+2)); // (id + type)  eg: id = 69; type=1 fk_type=691
+
   }
   storeSelect() {
-    // this.customerId$ = this.store.select(fromRoot.selectors.getCustomerId);
-    // this.customerId$.subscribe(data => this.customerId = data );
     this.storeData$ = this.store.select(fromRoot.selectors.getRecipientsData);
     this.clientZones$ = this.store.select(fromRoot.selectors.getClientZonesData);
     this.clientZones$.subscribe(data => {
@@ -111,6 +119,7 @@ export class RecipientsComponent implements OnInit, OnDestroy {
       number: [data ? data.number : '', Validators.required],
       cp: [data? data.cp : '', Validators.required],
       state: [data? data.state : '', Validators.required],
+      addressValidated: [data? data.addressValidated : '', Validators.required],
       clientZone: [data? data.clientZone : ''],
       phone: [data ? data.phone : '', Validators.required],
       infos: this.fb.group({

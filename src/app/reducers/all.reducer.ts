@@ -19,7 +19,28 @@ export type ActionClientZones = ClientZonesActions.All;
 // ======================================================
 // customer reducer
 // ======================================================
-export function customerReducer(state: DataForm, action: ActionCustomer): DataForm {
+const initCustomer: DataForm = {
+  id: 0,
+  name: '',
+  ref_client: '',
+  address: '',
+  number: '',
+  cp: 0,
+  state: '',
+  addressValidated: false,
+  clientZone: 0,
+  phone: '',
+  infos: {
+    info1: '',
+    info2: ''
+  },
+  type: 0,
+  fk_client: 0,
+  active:  0,
+  created: '',
+  fk_type: 0
+};
+export function customerReducer(state = initCustomer , action: ActionCustomer): DataForm {
   // console.log('2 - Reducer customer :', action.type, state);
   switch (action.type) {
     case CustomerActions.GET_CUSTOMER_SUCCESS:
@@ -35,7 +56,8 @@ export function customerReducer(state: DataForm, action: ActionCustomer): DataFo
   }
 }
 export const CustomerSelector = {
-  customer: (state: DataForm) => { return state; }
+  customer: (state: DataForm) => { return state; },
+  customerId: (state: DataForm) => { return state.id; }
 };
 
 // ======================================================
