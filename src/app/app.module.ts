@@ -37,6 +37,7 @@ import { CascadeComponent } from './cascade/cascade.component';
 import {CascadeModule} from './cascade/cascade.module';
 import { AgmCoreModule } from '@agm/core';
 import {GetDistanceMatrixService} from "./services/google/get-distance-matrix.service";
+import {RouteResolverService} from "./services/route-resolver.service";
 
 const appRoutes: Routes = [
   { path: 'login',                component: LoginComponent },
@@ -51,13 +52,15 @@ const appRoutes: Routes = [
     children: [
       {
         path: '',
-        component: PurchasseOrderComponent
+        component: PurchasseOrderComponent,
+        resolve: { message: RouteResolverService }
       },
       {
         path: 'order',
         component: PurchasseOrderComponent,
         canActivate: [AlwaysAuthGuardService],
-        canDeactivate: [CanDeactivateFormGuardService]
+        canDeactivate: [CanDeactivateFormGuardService],
+        resolve: { message: RouteResolverService }
       },
       {
         path: 'orders',
@@ -144,7 +147,8 @@ const appRoutes: Routes = [
     CanDeactivateFormGuardService,
     AuthenticationService,
     ClientZonesService,
-    GetDistanceMatrixService
+    GetDistanceMatrixService,
+    RouteResolverService
   ],
   bootstrap: [AppComponent]
 })

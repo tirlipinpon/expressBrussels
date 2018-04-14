@@ -17,6 +17,7 @@ import {GetDistanceMatrixService} from "../services/google/get-distance-matrix.s
 import {Distance} from "../models/distance";
 import * as CONST from '../models/googleMatrixStatus';
 import {CustomerService} from "../services/customer.service";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-purchasse-order',
@@ -48,12 +49,15 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   nameForm = ['removal','recipient'];
   private isDistance = false;
 
+  data: any;
+
   constructor (
     private store: Store<fromRoot.AppState>,
     private fb: FormBuilder,
     private getDistanceMatrixService: GetDistanceMatrixService,
     private cdr: ChangeDetectorRef,
-    private customerService: CustomerService)
+    private customerService: CustomerService,
+    private route: ActivatedRoute)
   {
     this.storeDispatch();
     this.initFormsRemoval();
@@ -63,6 +67,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   }
 
   ngOnInit() {
+    this.data = this.route.snapshot.data;
     this.storeSelect();
     this.allFormGroup = this.pushAllForms(this.allFormGroup);
     this.onValueOrderChanged();
@@ -75,7 +80,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.valueRecipientInfosChanges$.unsubscribe();
   }
   storeSelect() {
-    this.customerService.currentCustomerId.subscribe(id => { this.customerId = id; });
     this.removals$ = this.store.select(fromRoot.selectors.getRemovalsData);
     this.recipients$ = this.store.select(fromRoot.selectors.getRecipientsData);
     this.order$ = this.store.select(fromRoot.selectors.getOrder);

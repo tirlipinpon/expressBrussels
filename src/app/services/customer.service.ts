@@ -6,7 +6,6 @@ import { environment } from '../../environments/environment';
 import {BehaviorSubject} from "rxjs";
 import * as fromRoot from '../shared/appState';
 import {Store} from "@ngrx/store";
-import {AuthenticationService} from "./authentication.service";
 
 @Injectable()
 export class CustomerService {
