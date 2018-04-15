@@ -326,9 +326,7 @@ const prixZoneMotoInit: MyPrixZoneState = {
 export function prixZoneMotoReducer(state = prixZoneMotoInit, action: ActionPrixZoneMoto): MyPrixZoneState {
   switch(action.type){
     case PrixZoneMotoActions.GET_PRIX_ZONE_MOTO_SUCCESS:
-      console.log('in orders reducer get prix zone moto by fk_customer_id',action.payload);
       return Object.assign({}, state, action.payload);
-    // return [...state, ...action.payload];
     default:
       return state;
   }
@@ -351,9 +349,7 @@ const prixZoneCamionnetteInit: MyPrixZoneState = {
 export function prixZoneCamionnetteReducer(state = prixZoneCamionnetteInit, action: ActionPrixZoneCamionnette): MyPrixZoneState {
   switch(action.type){
     case PrixZoneCamionnetteActions.GET_PRIX_ZONE_CAMIONNETTE_SUCCESS:
-      console.log('in orders reducer get prix zone camionnette by fk_customer_id',action.payload);
       return Object.assign({}, state, action.payload);
-    // return [...state, ...action.payload];
     default:
       return state;
   }

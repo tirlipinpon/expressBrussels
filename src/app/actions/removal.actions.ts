@@ -31,7 +31,7 @@ export const EDIT_REMOVAL = 'Edit Removal';
 export class EditRemoval implements Action {
   readonly type = EDIT_REMOVAL;
   constructor(public payload: DataForm) {
-    console.log('in actions edit removal payload= ',payload);
+    // console.log('in actions edit removal payload= ',payload);
   }
 }
 

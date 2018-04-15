@@ -19,7 +19,7 @@ export class UnsearchedTermGuard implements CanDeactivate<PurchasseOrderComponen
     // console.log('state.url: '+state.url);
 
     if (component.canDeactivate()) {
-      console.log('component.canDeactivate() 1', component.canDeactivate());
+      // console.log('component.canDeactivate() 1', component.canDeactivate());
       return true;
     }else{
       // console.log('component.canDeactivate() 2 ', component.canDeactivate());

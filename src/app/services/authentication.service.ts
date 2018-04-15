@@ -37,7 +37,7 @@ export class AuthenticationService {
     return localStorage.getItem(TOKEN_NAME);
   }
   setToken(token: string): void {
-    console.log('setToken token:', token);
+    // console.log('setToken token:', token);
     localStorage.setItem(TOKEN_NAME, token);
   }
   public isToken(): boolean {
@@ -50,7 +50,7 @@ export class AuthenticationService {
 
   public isLoggedIn() {
     const isBefore  = moment().isBefore(this.getExpiration());
-    console.log(isBefore);
+    // console.log(isBefore);
     return isBefore;
   }
 

@@ -6,7 +6,7 @@ export const GET_PRIX_ZONE_CAMIONNETTE = 'Get prix zone Camionnette';
 export class GetPrixZoneCamionnette implements Action {
   readonly type = GET_PRIX_ZONE_CAMIONNETTE;
   constructor(public payload: {id: number, table: string}) {
-    console.log('in actions get prix zone Camionnette payload:', payload);
+    // console.log('in actions get prix zone Camionnette payload:', payload);
   }
 }
 

@@ -1,24 +1,22 @@
 import { Injectable } from '@angular/core';
 import {NotificationService} from "../../services/notification.service";
 import {Actions, Effect} from "@ngrx/effects";
-import {AppState} from "../../shared/appState";
-import {Store, Action} from "@ngrx/store";
-import * as PrixZoneCamionnetteActions  from '../../actions/prixZoneCamionnette.actions';
+import {Action} from "@ngrx/store";
 import {Observable} from "rxjs";
 import {GetPrixZoneService} from "../../services/get-prix-zone.service";
+import * as PrixZoneCamionnetteActions  from '../../actions/prixZoneCamionnette.actions';
 
 
 @Injectable()
 export class PrixZoneCamionnetteEffectService {
 
-  constructor(private store: Store<AppState>,
-              private action$: Actions,
+  constructor(private action$: Actions,
               private notif: NotificationService,
               private getPrixZoneService: GetPrixZoneService) { }
 
   @Effect() getPrizZoneCamionnette$: Observable<Action> = this.action$
     .ofType(PrixZoneCamionnetteActions.GET_PRIX_ZONE_CAMIONNETTE)
-    .do(action => console.log(action['payload']))
+    // .do(action => console.log(action['payload']))
     .switchMap(action =>
       this.getPrixZoneService.getPrixZoneByType(action['payload'])
         .map(payload => {

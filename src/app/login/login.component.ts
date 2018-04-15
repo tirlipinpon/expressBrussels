@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
             this.error = '';
             this.loading = false;
           }else{
-            console.log('LoginComponent login KO:');
+            // console.log('LoginComponent login KO:');
             this.error = 'error';
             this.loading = false;
           }

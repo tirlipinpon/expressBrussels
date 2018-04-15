@@ -18,7 +18,7 @@ export class AlwaysAuthGuardService implements CanActivate {
       this.authenticationService.setCustomerDecoded();
       return true;
     }
-    console.log('canActivate: ', false);
+    // console.log('canActivate: ', false);
     // not logged in so redirect to login page
     this.router.navigate(['/login']);
     return false;
