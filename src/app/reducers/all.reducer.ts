@@ -5,6 +5,7 @@ import * as PurchasseOrderActions  from '../actions/purchasseOrder.actions';
 import * as OrdersActions from '../actions/orders.actions';
 import * as ClientZonesActions from '../actions/clientZones.actions';
 import * as PrixZoneMotoActions from '../actions/prixZoneMoto.actions';
+import * as PrixZoneCamionetteActions from '../actions/prixZoneCamionette.actions';
 
 import {DataForm, DataDataFormState} from '../models/DataForm';
 import {PurchasseOrder} from '../models/PurchasseOrder';
@@ -18,6 +19,7 @@ export type ActionPurchasseOrder = PurchasseOrderActions.All;
 export type ActionOrders = OrdersActions.All;
 export type ActionClientZones = ClientZonesActions.All;
 export type ActionPrixZoneMoto = PrixZoneMotoActions.All;
+export type ActionPrixZoneCamionette = PrixZoneCamionetteActions.All;
 
 // ======================================================
 // customer reducer
@@ -323,7 +325,7 @@ const prixZoneMotoInit: MyPrixZoneState = {
 };
 export function prixZoneMotoReducer(state = prixZoneMotoInit, action: ActionPrixZoneMoto): MyPrixZoneState {
   switch(action.type){
-    case PrixZoneMotoActions.GET_PRIX_ZONE_SUCCESS:
+    case PrixZoneMotoActions.GET_PRIX_ZONE_MOTO_SUCCESS:
       console.log('in orders reducer get prix zone moto by fk_customer_id',action.payload);
       return Object.assign({}, state, action.payload);
     // return [...state, ...action.payload];
@@ -332,5 +334,30 @@ export function prixZoneMotoReducer(state = prixZoneMotoInit, action: ActionPrix
   }
 };
 export const PrixZoneMotoSelector = {
+  data: (state: MyPrixZoneState) => { return state.data }
+};
+
+// ======================================================
+// prix zone camionette
+// ======================================================
+const prixZoneCamionetteInit: MyPrixZoneState = {
+  data: {
+    zone1: 0,
+    zone2: 0,
+    zone3: 0,
+    after15h: 0
+  },
+};
+export function prixZoneCamionetteReducer(state = prixZoneCamionetteInit, action: ActionPrixZoneCamionette): MyPrixZoneState {
+  switch(action.type){
+    case PrixZoneCamionetteActions.GET_PRIX_ZONE_CAMIONETTE_SUCCESS:
+      console.log('in orders reducer get prix zone camionette by fk_customer_id',action.payload);
+      return Object.assign({}, state, action.payload);
+    // return [...state, ...action.payload];
+    default:
+      return state;
+  }
+};
+export const PrixZoneCamionetteSelector = {
   data: (state: MyPrixZoneState) => { return state.data }
 };

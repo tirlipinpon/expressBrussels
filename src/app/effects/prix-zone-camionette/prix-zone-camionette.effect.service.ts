@@ -3,32 +3,32 @@ import {NotificationService} from "../../services/notification.service";
 import {Actions, Effect} from "@ngrx/effects";
 import {AppState} from "../../shared/appState";
 import {Store, Action} from "@ngrx/store";
-import * as PrixZoneMotoActions  from '../../actions/prixZoneMoto.actions';
+import * as PrixZoneCamionetteActions  from '../../actions/prixZoneCamionette.actions';
 import {Observable} from "rxjs";
 import {GetPrixZoneService} from "../../services/get-prix-zone.service";
 
 
 @Injectable()
-export class PrixZoneMotoEffectService {
+export class PrixZoneCamionetteEffectService {
 
   constructor(private store: Store<AppState>,
               private action$: Actions,
               private notif: NotificationService,
               private getPrixZoneService: GetPrixZoneService) { }
 
-  @Effect() getPrizZoneMoto$: Observable<Action> = this.action$
-    .ofType(PrixZoneMotoActions.GET_PRIX_ZONE_MOTO)
+  @Effect() getPrizZoneCamionette$: Observable<Action> = this.action$
+    .ofType(PrixZoneCamionetteActions.GET_PRIX_ZONE_CAMIONETTE)
     .do(action => console.log(action['payload']))
     .switchMap(action =>
       this.getPrixZoneService.getPrixZoneByType(action['payload'])
         .map(payload => {
           const data = ' zone1: ' + payload['data']['zone1'] + ' zone2: ' + (payload['data']['zone2']) + ' zone2: ' + (payload['data']['zone1'])
-          this.notif.notify('info', 'get prix zones moto', data);
-          return new PrixZoneMotoActions.GetPrixZoneMotoSuccess(payload);
+          this.notif.notify('info', 'get prix zones Camionette', data);
+          return new PrixZoneCamionetteActions.GetPrixZoneCamionetteSuccess(payload);
         })
         .catch(err => {
-          this.notif.notify('error', 'Get prix zone moto', err);
-          return Observable.of(new PrixZoneMotoActions.GetPrixZoneMotoFail(err))
+          this.notif.notify('error', 'Get prix zone Camionette', err);
+          return Observable.of(new PrixZoneCamionetteActions.GetPrixZoneCamionetteFail(err))
         })
     )
 

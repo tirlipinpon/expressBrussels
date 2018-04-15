@@ -2,9 +2,21 @@ import {DataForm, DataDataFormState} from '../models/DataForm';
 import {PurchasseOrder} from '../models/purchasseOrder';
 import {createSelector, ActionReducerMap, createFeatureSelector, MemoizedSelector} from '@ngrx/store';
 import {
-  ordersReducer, purchasseOrderReducer, recipientReducer, removalReducer,
-  customerReducer, CustomerSelector, RemovalSelectors, RecipientSelectors, PurchasseOrderSelector, OrderSelector,
-  clientZonesReducer, ClientZonesSelector, prixZoneMotoReducer, PrixZoneMotoSelector
+  clientZonesReducer,
+  customerReducer,
+  ordersReducer,
+  purchasseOrderReducer,
+  prixZoneMotoReducer,
+  prixZoneCamionetteReducer,
+  recipientReducer,
+  removalReducer,
+  CustomerSelector,
+  RemovalSelectors,
+  RecipientSelectors,
+  PurchasseOrderSelector,
+  OrderSelector,
+  ClientZonesSelector,
+  PrixZoneMotoSelector, PrixZoneCamionetteSelector
 } from '../reducers/all.reducer';
 import {MyClientZones, MyClientZonesState} from '../models/my-client-zones';
 import {PrixZone, MyPrixZoneState} from "../models/prixZone";
@@ -17,6 +29,7 @@ export interface AppState {
   orders: PurchasseOrder[];
   clientZones: MyClientZonesState;
   prixZoneMoto: MyPrixZoneState;
+  prixZoneCamionette: MyPrixZoneState;
 }
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -26,7 +39,8 @@ export const reducers: ActionReducerMap<AppState> = {
   order: purchasseOrderReducer,
   orders: ordersReducer,
   clientZones: clientZonesReducer,
-  prixZoneMoto: prixZoneMotoReducer
+  prixZoneMoto: prixZoneMotoReducer,
+  prixZoneCamionette: prixZoneCamionetteReducer
 };
 
 const getCustomerState = createFeatureSelector('customer');
@@ -36,6 +50,7 @@ const getOrderState = createFeatureSelector('order');
 const getOrdersState = createFeatureSelector('orders');
 const getClientZonesState = createFeatureSelector('clientZones');
 const getPrixZoneMotoState = createFeatureSelector('prixZoneMoto');
+const getPrixZoneCamionetteState = createFeatureSelector('prixZoneCamionette');
 
 // export const rootSelectors = {
 // customer: createSelector(getCustomerState, (state: AppState) => { return state.customer}),
@@ -62,6 +77,7 @@ export interface Selectors {
   getClientZonesCount: MemoizedSelector<AppState, number>;
 
   getPrixZoneMotoData: MemoizedSelector<AppState, PrixZone>;
+  getPrixZoneCamionetteData: MemoizedSelector<AppState, PrixZone>;
 }
 
 export const selectors: Selectors = {
@@ -81,5 +97,6 @@ export const selectors: Selectors = {
   getClientZonesCount: createSelector(getClientZonesState, ClientZonesSelector.count ),
 
   getPrixZoneMotoData: createSelector(getPrixZoneMotoState, PrixZoneMotoSelector.data ),
+  getPrixZoneCamionetteData: createSelector(getPrixZoneCamionetteState, PrixZoneCamionetteSelector.data ),
 
 }

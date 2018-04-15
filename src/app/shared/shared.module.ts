@@ -30,6 +30,7 @@ import { InputAutocompletionComponent } from './components/form/input-completion
 import { AutocompleteGoogleComponent } from './components/form/autocomplete-google/autocomplete-google.component';
 import { AddressComponent } from './components/form/address/address.component';
 import {PrixZoneMotoEffectService} from "../effects/prix-zone-moto/prix-zone-moto.effect.service";
+import {PrixZoneCamionetteEffectService} from "../effects/prix-zone-camionette/prix-zone-camionette.effect.service";
 
 
 @NgModule({
@@ -40,20 +41,20 @@ import {PrixZoneMotoEffectService} from "../effects/prix-zone-moto/prix-zone-mot
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-
     CommonModule,
     GrowlModule,
     DialogModule,
     ConfirmDialogModule,
 
     EffectsModule.forRoot([
-      RecipientEffectService,
       CustomerEffectService,
-      RemovalEffectService,
-      PurchasseOrderEffectService,
-      OrdersEffectService,
       ClientZonesEffectService,
-      PrixZoneMotoEffectService
+      OrdersEffectService,
+      PurchasseOrderEffectService,
+      PrixZoneMotoEffectService,
+      PrixZoneCamionetteEffectService,
+      RecipientEffectService,
+      RemovalEffectService
     ]),
     // StoreModule.forFeature('todo', customerReducer)
     StoreModule.forRoot(reducers),
