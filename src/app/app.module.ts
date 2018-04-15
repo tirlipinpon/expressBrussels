@@ -38,6 +38,7 @@ import {CascadeModule} from './cascade/cascade.module';
 import { AgmCoreModule } from '@agm/core';
 import {GetDistanceMatrixService} from "./services/google/get-distance-matrix.service";
 import {RouteResolverService} from "./services/route-resolver.service";
+import {GetPrixZoneService} from "./services/get-prix-zone.service";
 
 const appRoutes: Routes = [
   { path: 'login',                component: LoginComponent },
@@ -53,14 +54,14 @@ const appRoutes: Routes = [
       {
         path: '',
         component: PurchasseOrderComponent,
-        resolve: { message: RouteResolverService }
+        resolve: { id: RouteResolverService }
       },
       {
         path: 'order',
         component: PurchasseOrderComponent,
         canActivate: [AlwaysAuthGuardService],
         canDeactivate: [CanDeactivateFormGuardService],
-        resolve: { message: RouteResolverService }
+        resolve: { id: RouteResolverService }
       },
       {
         path: 'orders',
@@ -122,8 +123,9 @@ const appRoutes: Routes = [
     CascadeModule,
 
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyCdhzqNNDkWkbpqgajvi_66wx1dLoGoac0',
-      libraries: ["places"]
+      apiKey: 'AIzaSyCdhzqNNDkWkbpqgajvi_66wx1dLoGoac0&language=fr&region=BE',
+      libraries: ["places"],
+      language: 'fr'
     }),
 
     RouterModule.forRoot(
@@ -148,7 +150,8 @@ const appRoutes: Routes = [
     AuthenticationService,
     ClientZonesService,
     GetDistanceMatrixService,
-    RouteResolverService
+    RouteResolverService,
+    GetPrixZoneService
   ],
   bootstrap: [AppComponent]
 })

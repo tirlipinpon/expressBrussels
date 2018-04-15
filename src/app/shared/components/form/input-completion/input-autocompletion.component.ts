@@ -59,11 +59,11 @@ export class InputAutocompletionComponent implements OnInit, OnDestroy {
     });
   }
   private _initData2(data: any): void {
-    this.formGroup.patchValue({
-      cp: data.cp,
-      state: data.state,
-      clientZone: data.zone,
-    });
+      this.formGroup.patchValue({
+        cp: data?data.cp:'',
+        state: data?data.state:'',
+        clientZone: data?data.zone:'',
+      });
   }
   setSelectdedValue(value: string,  data: string): void {
     if (this.witchForm === 1) {
@@ -78,7 +78,7 @@ export class InputAutocompletionComponent implements OnInit, OnDestroy {
     this.formGroup.markAsDirty();
   }
   getByData(value: string, data: any): any {
-    console.log(value, ' ' , data)
+    // console.log(value, ' ' , data)
     let arrayWithElem;
     arrayWithElem = this.data.filter(elem => {
       return elem[value].toLowerCase() === data.toLowerCase()

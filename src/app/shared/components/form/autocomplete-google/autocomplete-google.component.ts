@@ -45,11 +45,5 @@ export class AutocompleteGoogleComponent implements OnInit {
       }
     )
   }
-  onBlur() {
-    this.formGroup.patchValue({
-      addressValidated: 0
-    });
-    console.log( this.formGroup.value)
-  }
 
 }

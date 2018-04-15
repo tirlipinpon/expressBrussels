@@ -10,10 +10,7 @@ import * as fromRoot from '../shared/appState';
 @Injectable()
 export class RouteResolverService implements Resolve<Observable<any>>{
 
-  private customerId: number;
-
-  constructor(   private customerService: CustomerService,
-                 private store: Store<fromRoot.AppState>,) { }
+  constructor(   private customerService: CustomerService) { }
 
   resolve(route: ActivatedRouteSnapshot) {
     return this.customerService.currentCustomerId

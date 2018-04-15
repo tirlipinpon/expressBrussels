@@ -4,10 +4,12 @@ import * as RecipientActions  from '../actions/recipient.actions';
 import * as PurchasseOrderActions  from '../actions/purchasseOrder.actions';
 import * as OrdersActions from '../actions/orders.actions';
 import * as ClientZonesActions from '../actions/clientZones.actions';
+import * as PrixZoneMotoActions from '../actions/prixZoneMoto.actions';
 
 import {DataForm, DataDataFormState} from '../models/DataForm';
 import {PurchasseOrder} from '../models/PurchasseOrder';
 import {MyClientZones, MyClientZonesState} from '../models/my-client-zones';
+import {PrixZone, MyPrixZoneState} from "../models/prixZone";
 
 export type ActionCustomer = CustomerActions.All;
 export type ActionRemoval = RemovalActions.All;
@@ -15,6 +17,7 @@ export type ActionRecipient = RecipientActions.All;
 export type ActionPurchasseOrder = PurchasseOrderActions.All;
 export type ActionOrders = OrdersActions.All;
 export type ActionClientZones = ClientZonesActions.All;
+export type ActionPrixZoneMoto = PrixZoneMotoActions.All;
 
 // ======================================================
 // customer reducer
@@ -288,7 +291,8 @@ export const OrderSelector = {
 // ======================================================
 // client zones
 // ======================================================
-const clientZoneInit: MyClientZonesState =  {  data: [],
+const clientZoneInit: MyClientZonesState =  {
+    data: [],
     count: 0
   };
 export function clientZonesReducer(state = clientZoneInit, action: ActionClientZones): MyClientZonesState {
@@ -304,4 +308,29 @@ export function clientZonesReducer(state = clientZoneInit, action: ActionClientZ
 export const ClientZonesSelector = {
   data: (state: MyClientZonesState) => { return state.data },
   count: (state: MyClientZonesState) => { return state.count }
+};
+
+// ======================================================
+// prix zone moto
+// ======================================================
+const prixZoneMotoInit: MyPrixZoneState = {
+  data: {
+    zone1: 0,
+    zone2: 0,
+    zone3: 0,
+    after15h: 0
+  },
+};
+export function prixZoneMotoReducer(state = prixZoneMotoInit, action: ActionPrixZoneMoto): MyPrixZoneState {
+  switch(action.type){
+    case PrixZoneMotoActions.GET_PRIX_ZONE_SUCCESS:
+      console.log('in orders reducer get prix zone moto by fk_customer_id',action.payload);
+      return Object.assign({}, state, action.payload);
+    // return [...state, ...action.payload];
+    default:
+      return state;
+  }
+};
+export const PrixZoneMotoSelector = {
+  data: (state: MyPrixZoneState) => { return state.data }
 };

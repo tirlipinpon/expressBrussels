@@ -28,7 +28,6 @@ export class ClientZonesEffectService {
             this.notif.notify('error', 'Get client zones', err);
             return Observable.of(new ClientZonesActions.GetClientZonesFail(err))
           })
-
     );
 
 }

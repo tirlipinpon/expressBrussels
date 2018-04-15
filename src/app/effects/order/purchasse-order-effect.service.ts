@@ -21,22 +21,8 @@ export class PurchasseOrderEffectService {
     private store: Store<AppState>,
     private action$: Actions,
     private orderService: OrderService,
-    private notificationsService: NotificationService) {
+    private notif: NotificationService) {
   }
-
-  // @Effect()
-  // iniOrder$: Observable<Action> = this.action$
-  //   .ofType(OrderActions.INIT_ORDER)
-  //   .map((action: OrderActions.InitOrder) => {
-  //     return new OrderActions.InitOrderSuccess();
-  // });
-
-  // @Effect() editOrderRemoval$: Observable<Action> = this.action$
-  //   .ofType(OrderActions.EDIT_ORDER_REMOVAL)
-  //   .map((action: OrderActions.EditOrderRemoval) => {
-  //     return new OrderActions.EditOrderRemovalSuccess(action.payload);
-  //   });
-
 
   @Effect() saveOrder$: Observable<Action> = this.action$
     .ofType(OrderActions.SAVE_ORDER)
@@ -45,13 +31,11 @@ export class PurchasseOrderEffectService {
     .switchMap(action =>
       this.orderService.saveOrder(action[1], 1)
         .map((payload) => {
-           console.log('in effect Save Order retrieved data from service =', payload);
-          this.notificationsService.notify('success', 'some alert', payload.message);
+          this.notif.notify('success', 'some alert', payload.message);
           return new OrderActions.SaveOrderSuccess(payload);
         })
         .catch(err => {
-          // console.log('error in effect SAVE order with error -> ',err);
-          this.notificationsService.notify('error', 'some alert', err);
+          this.notif.notify('error', 'some alert', err);
           return Observable.of(new OrderActions.SaveOrderFail(err))
         })
     ) .catch((error, caught) => {

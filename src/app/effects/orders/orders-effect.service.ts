@@ -13,7 +13,7 @@ export class OrdersEffectService {
   constructor(
     private actions$: Actions,
     private orderService: OrderService,
-    private notificationsService: NotificationService) {
+    private notif: NotificationService) {
   }
 
   @Effect() getOrders: Observable<Action> = this.actions$
@@ -22,11 +22,11 @@ export class OrdersEffectService {
         // console.log('in effect orders switch map this payload: ', action);
         this.orderService.getOrders(action)
           .map((payload) => {
-            this.notificationsService.notify('info', 'get orders', 'data ok');
+            this.notif.notify('info', 'get orders', 'data ok');
             return new OrdersActions.GetOrdersSuccess(payload);
           })
           .catch(err => {
-            this.notificationsService.notify('error', 'Get orders', err);
+            this.notif.notify('error', 'Get orders', err);
             return Observable.of(new OrdersActions.GetOrdersFail(err))
           })
       // return new OrdersActions.GetOrdersSuccess('');

@@ -16,10 +16,6 @@ import { ProfileComponent } from './components/profile/profile.component';
 import {DialogModule} from 'primeng/components/dialog/dialog';
 import {ConfirmDialogModule} from 'primeng/components/confirmdialog/confirmdialog';
 import {ConfirmationService} from 'primeng/components/common/confirmationservice';
-import {
-  removalReducer, customerReducer, recipientReducer, purchasseOrderReducer,
-  ordersReducer
-} from '../reducers/all.reducer';
 import {StoreModule} from '@ngrx/store';
 import {OrdersEffectService} from '../effects/orders/orders-effect.service';
 import {PurchasseOrderEffectService} from '../effects/order/purchasse-order-effect.service';
@@ -33,6 +29,7 @@ import { ClientCpPipe } from './pipe/client-cp.pipe';
 import { InputAutocompletionComponent } from './components/form/input-completion/input-autocompletion.component';
 import { AutocompleteGoogleComponent } from './components/form/autocomplete-google/autocomplete-google.component';
 import { AddressComponent } from './components/form/address/address.component';
+import {PrixZoneMotoEffectService} from "../effects/prix-zone-moto/prix-zone-moto.effect.service";
 
 
 @NgModule({
@@ -55,7 +52,8 @@ import { AddressComponent } from './components/form/address/address.component';
       RemovalEffectService,
       PurchasseOrderEffectService,
       OrdersEffectService,
-      ClientZonesEffectService
+      ClientZonesEffectService,
+      PrixZoneMotoEffectService
     ]),
     // StoreModule.forFeature('todo', customerReducer)
     StoreModule.forRoot(reducers),

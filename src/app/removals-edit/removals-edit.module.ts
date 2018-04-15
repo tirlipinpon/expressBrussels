@@ -17,7 +17,8 @@ import {HttpClientModule} from '@angular/common/http';
   ],
   declarations: [
     RemovalsComponent
-  ]
+  ],
+  providers: []
 })
 export class RemovalsEditModule {
 }

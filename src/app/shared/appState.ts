@@ -4,9 +4,10 @@ import {createSelector, ActionReducerMap, createFeatureSelector, MemoizedSelecto
 import {
   ordersReducer, purchasseOrderReducer, recipientReducer, removalReducer,
   customerReducer, CustomerSelector, RemovalSelectors, RecipientSelectors, PurchasseOrderSelector, OrderSelector,
-  clientZonesReducer, ClientZonesSelector
+  clientZonesReducer, ClientZonesSelector, prixZoneMotoReducer, PrixZoneMotoSelector
 } from '../reducers/all.reducer';
 import {MyClientZones, MyClientZonesState} from '../models/my-client-zones';
+import {PrixZone, MyPrixZoneState} from "../models/prixZone";
 
 export interface AppState {
   customer: DataForm;
@@ -15,6 +16,7 @@ export interface AppState {
   order: PurchasseOrder;
   orders: PurchasseOrder[];
   clientZones: MyClientZonesState;
+  prixZoneMoto: MyPrixZoneState;
 }
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -23,7 +25,8 @@ export const reducers: ActionReducerMap<AppState> = {
   recipients: recipientReducer,
   order: purchasseOrderReducer,
   orders: ordersReducer,
-  clientZones: clientZonesReducer
+  clientZones: clientZonesReducer,
+  prixZoneMoto: prixZoneMotoReducer
 };
 
 const getCustomerState = createFeatureSelector('customer');
@@ -32,6 +35,7 @@ const getRecipientsState = createFeatureSelector('recipients');
 const getOrderState = createFeatureSelector('order');
 const getOrdersState = createFeatureSelector('orders');
 const getClientZonesState = createFeatureSelector('clientZones');
+const getPrixZoneMotoState = createFeatureSelector('prixZoneMoto');
 
 // export const rootSelectors = {
 // customer: createSelector(getCustomerState, (state: AppState) => { return state.customer}),
@@ -56,6 +60,8 @@ export interface Selectors {
 
   getClientZonesData: MemoizedSelector<AppState, MyClientZones[]>;
   getClientZonesCount: MemoizedSelector<AppState, number>;
+
+  getPrixZoneMotoData: MemoizedSelector<AppState, PrixZone>;
 }
 
 export const selectors: Selectors = {
@@ -73,5 +79,7 @@ export const selectors: Selectors = {
 
   getClientZonesData: createSelector(getClientZonesState, ClientZonesSelector.data ),
   getClientZonesCount: createSelector(getClientZonesState, ClientZonesSelector.count ),
+
+  getPrixZoneMotoData: createSelector(getPrixZoneMotoState, PrixZoneMotoSelector.data ),
 
 }

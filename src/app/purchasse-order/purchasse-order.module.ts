@@ -1,9 +1,6 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { PurchasseOrderComponent } from './purchasse-order.component';
 import {SharedModule} from '../shared/shared.module';
 import {CommonModule} from '@angular/common';
@@ -12,7 +9,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 @NgModule({
   imports: [
     CommonModule,
-    BrowserModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
@@ -24,6 +20,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
   declarations: [
     PurchasseOrderComponent
   ],
-  providers: [],
+  providers: []
 })
 export class PurchasseModule { }

@@ -39,12 +39,10 @@ export class CustomerEffectService {
     .switchMap(action =>
       this.customerService.saveCustomer(action[1])
         .map((payload) => {
-          // console.log('in effect SAVE Customer retrieved data from service =', payload);
           this.notif.notify('success', 'some alert', 'data custome saved');
           return new CustomerActions.SaveCustomerSuccess(payload);
         })
         .catch(err => {
-          // console.log('error in effect EDIT customer with error -> ',err);
           this.notif.notify('error', 'some alert', err);
           return Observable.of(new CustomerActions.SaveCustomerFail(err))
         })

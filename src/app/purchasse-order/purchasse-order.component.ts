@@ -7,6 +7,7 @@ import 'rxjs/add/operator/map';
 import * as RemovalActions from '../actions/removal.actions';
 import * as RecipientActions from '../actions/recipient.actions';
 import * as OrderActions from '../actions/purchasseOrder.actions';
+import * as PrixZoneMotoActions from '../actions/prixZoneMoto.actions';
 
 import {DataForm} from '../models/DataForm';
 import {PurchasseOrder} from '../models/PurchasseOrder';
@@ -18,6 +19,7 @@ import {Distance} from "../models/distance";
 import * as CONST from '../models/googleMatrixStatus';
 import {CustomerService} from "../services/customer.service";
 import {ActivatedRoute} from "@angular/router";
+import {PrixZone} from "../models/prixZone";
 
 @Component({
   selector: 'app-purchasse-order',
@@ -30,6 +32,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   removals$: Observable<DataForm[]>;
   recipients$: Observable<DataForm[]>;
   order$: Observable<PurchasseOrder>;
+  prixZoneMoto$: Observable<PrixZone>;
 
   formRemoval: FormGroup;
   formRecipient: FormGroup;
@@ -49,7 +52,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   nameForm = ['removal','recipient'];
   private isDistance = false;
 
-  data: any;
+  private idClient: any;
 
   constructor (
     private store: Store<fromRoot.AppState>,
@@ -67,7 +70,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   }
 
   ngOnInit() {
-    this.data = this.route.snapshot.data;
+    this.idClient = this.route.snapshot.data.id;
     this.storeSelect();
     this.allFormGroup = this.pushAllForms(this.allFormGroup);
     this.onValueOrderChanged();
@@ -83,6 +86,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.removals$ = this.store.select(fromRoot.selectors.getRemovalsData);
     this.recipients$ = this.store.select(fromRoot.selectors.getRecipientsData);
     this.order$ = this.store.select(fromRoot.selectors.getOrder);
+    this.prixZoneMoto$ = this.store.select(fromRoot.selectors.getPrixZoneMotoData);
     // this.clientZones$ = this.store.select(fromRoot.selectors.getClientZonesData);
   }
   storeDispatch() {
@@ -91,6 +95,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
         this.customerId = id;
         this.store.dispatch(new RemovalActions.GetRemovals(this.customerId*10+1)); // (id + type)  eg: id = 69; type=1 fk_type=691
         this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10+2)); // (id + type)  eg: id = 69; type=2 fk_type=692
+        this.store.dispatch(new PrixZoneMotoActions.GetPrixZoneMoto(this.customerId))
       }
     });
     // this.store.dispatch(new ClientZonesActions.GetClientZones());
