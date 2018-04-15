@@ -51,7 +51,6 @@ export function customerReducer(state = initCustomer , action: ActionCustomer): 
     case CustomerActions.SET_CUSTOMER:
 
       if (state.id===0 || !state.id) {
-        console.log('in customer reducer setCustomer payload = ',action.payload);
         return {...state, ...action.payload};
       }
     case CustomerActions.GET_CUSTOMER_SUCCESS:
@@ -230,7 +229,6 @@ export function purchasseOrderReducer(state: PurchasseOrder = orderInitOrder, ac
       });
 
     case PurchasseOrderActions.EDIT_ORDER_DISTANCE:
-      console.log(action.payload['distance']);
       return Object.assign({}, state, {
         price: action.payload['price'],
         distance: action.payload['distance'],

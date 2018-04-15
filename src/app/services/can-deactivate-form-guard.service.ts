@@ -33,7 +33,7 @@ export class CanDeactivateFormGuardService implements CanDeactivate<ComponentDea
             observer.complete();
           },
           reject: () => {
-            console.log('component.canDeactivate() 5 ', component.canDeactivate());
+            // console.log('component.canDeactivate() 5 ', component.canDeactivate());
             observer.next(false);
             observer.complete();
           }
