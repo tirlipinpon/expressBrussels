@@ -30,7 +30,7 @@ import { InputAutocompletionComponent } from './components/form/input-completion
 import { AutocompleteGoogleComponent } from './components/form/autocomplete-google/autocomplete-google.component';
 import { AddressComponent } from './components/form/address/address.component';
 import {PrixZoneMotoEffectService} from "../effects/prix-zone-moto/prix-zone-moto.effect.service";
-import {PrixZoneCamionetteEffectService} from "../effects/prix-zone-camionette/prix-zone-camionette.effect.service";
+import {PrixZoneCamionnetteEffectService} from "../effects/prix-zone-camionnette/prix-zone-camionnette.effect.service";
 
 
 @NgModule({
@@ -52,7 +52,7 @@ import {PrixZoneCamionetteEffectService} from "../effects/prix-zone-camionette/p
       OrdersEffectService,
       PurchasseOrderEffectService,
       PrixZoneMotoEffectService,
-      PrixZoneCamionetteEffectService,
+      PrixZoneCamionnetteEffectService,
       RecipientEffectService,
       RemovalEffectService
     ]),

@@ -8,7 +8,7 @@ import * as RemovalActions from '../actions/removal.actions';
 import * as RecipientActions from '../actions/recipient.actions';
 import * as OrderActions from '../actions/purchasseOrder.actions';
 import * as PrixZoneMotoActions from '../actions/prixZoneMoto.actions';
-import * as PrixZoneCamionetteActions from '../actions/prixZoneCamionette.actions';
+import * as PrixZoneCamionnetteActions from '../actions/prixZoneCamionnette.actions';
 
 import {DataForm} from '../models/DataForm';
 import {PurchasseOrder} from '../models/PurchasseOrder';
@@ -34,7 +34,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   recipients$: Observable<DataForm[]>;
   order$: Observable<PurchasseOrder>;
   prixZoneMoto$: Observable<PrixZone>;
-  prixZoneCamionette$: Observable<PrixZone>;
+  prixZoneCamionnette$: Observable<PrixZone>;
 
   formRemoval: FormGroup;
   formRecipient: FormGroup;
@@ -89,7 +89,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.recipients$ = this.store.select(fromRoot.selectors.getRecipientsData);
     this.order$ = this.store.select(fromRoot.selectors.getOrder);
     this.prixZoneMoto$ = this.store.select(fromRoot.selectors.getPrixZoneMotoData);
-    this.prixZoneCamionette$ = this.store.select(fromRoot.selectors.getPrixZoneCamionetteData);
+    this.prixZoneCamionnette$ = this.store.select(fromRoot.selectors.getPrixZoneCamionnetteData);
     // this.clientZones$ = this.store.select(fromRoot.selectors.getClientZonesData);
   }
   storeDispatch() {
@@ -99,7 +99,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
         this.store.dispatch(new RemovalActions.GetRemovals(this.customerId*10+1)); // (id + type)  eg: id = 69; type=1 fk_type=691
         this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10+2)); // (id + type)  eg: id = 69; type=2 fk_type=692
         this.store.dispatch(new PrixZoneMotoActions.GetPrixZoneMoto({id: this.customerId, table: 'moto'}))
-        this.store.dispatch(new PrixZoneCamionetteActions.GetPrixZoneCamionette({id: this.customerId, table: 'camionette'}))
+        this.store.dispatch(new PrixZoneCamionnetteActions.GetPrixZoneCamionnette({id: this.customerId, table: 'camionnette'}))
       }
     });
     // this.store.dispatch(new ClientZonesActions.GetClientZones());

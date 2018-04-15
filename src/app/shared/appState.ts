@@ -7,7 +7,7 @@ import {
   ordersReducer,
   purchasseOrderReducer,
   prixZoneMotoReducer,
-  prixZoneCamionetteReducer,
+  prixZoneCamionnetteReducer,
   recipientReducer,
   removalReducer,
   CustomerSelector,
@@ -16,7 +16,7 @@ import {
   PurchasseOrderSelector,
   OrderSelector,
   ClientZonesSelector,
-  PrixZoneMotoSelector, PrixZoneCamionetteSelector
+  PrixZoneMotoSelector, PrixZoneCamionnetteSelector
 } from '../reducers/all.reducer';
 import {MyClientZones, MyClientZonesState} from '../models/my-client-zones';
 import {PrixZone, MyPrixZoneState} from "../models/prixZone";
@@ -29,7 +29,7 @@ export interface AppState {
   orders: PurchasseOrder[];
   clientZones: MyClientZonesState;
   prixZoneMoto: MyPrixZoneState;
-  prixZoneCamionette: MyPrixZoneState;
+  prixZoneCamionnette: MyPrixZoneState;
 }
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -40,7 +40,7 @@ export const reducers: ActionReducerMap<AppState> = {
   orders: ordersReducer,
   clientZones: clientZonesReducer,
   prixZoneMoto: prixZoneMotoReducer,
-  prixZoneCamionette: prixZoneCamionetteReducer
+  prixZoneCamionnette: prixZoneCamionnetteReducer
 };
 
 const getCustomerState = createFeatureSelector('customer');
@@ -50,7 +50,7 @@ const getOrderState = createFeatureSelector('order');
 const getOrdersState = createFeatureSelector('orders');
 const getClientZonesState = createFeatureSelector('clientZones');
 const getPrixZoneMotoState = createFeatureSelector('prixZoneMoto');
-const getPrixZoneCamionetteState = createFeatureSelector('prixZoneCamionette');
+const getPrixZoneCamionnetteState = createFeatureSelector('prixZoneCamionnette');
 
 // export const rootSelectors = {
 // customer: createSelector(getCustomerState, (state: AppState) => { return state.customer}),
@@ -77,7 +77,7 @@ export interface Selectors {
   getClientZonesCount: MemoizedSelector<AppState, number>;
 
   getPrixZoneMotoData: MemoizedSelector<AppState, PrixZone>;
-  getPrixZoneCamionetteData: MemoizedSelector<AppState, PrixZone>;
+  getPrixZoneCamionnetteData: MemoizedSelector<AppState, PrixZone>;
 }
 
 export const selectors: Selectors = {
@@ -97,6 +97,6 @@ export const selectors: Selectors = {
   getClientZonesCount: createSelector(getClientZonesState, ClientZonesSelector.count ),
 
   getPrixZoneMotoData: createSelector(getPrixZoneMotoState, PrixZoneMotoSelector.data ),
-  getPrixZoneCamionetteData: createSelector(getPrixZoneCamionetteState, PrixZoneCamionetteSelector.data ),
+  getPrixZoneCamionnetteData: createSelector(getPrixZoneCamionnetteState, PrixZoneCamionnetteSelector.data ),
 
 }
