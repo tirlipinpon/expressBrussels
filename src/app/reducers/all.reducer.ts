@@ -83,7 +83,7 @@ export function removalReducer(state = initRemoval, action: ActionRemoval): Data
     case RemovalActions.GET_REMOVALS_SUCCESS:
       return Object.assign({}, state, action.payload ); //{...state, ...action.payload};
     case RemovalActions.EDIT_REMOVAL_SUCCESS:
-      return handleRemovalState(state, action);
+      return handleEditRemovalState(state, action);
     // case RemovalActions.ADD_REMOVAL_SUCCESS:
     //   return handleRemovalState(state, action);
     case RemovalActions.GET_LAST_REMOVAL_SUCCESS:
@@ -100,7 +100,7 @@ function handleAddRemovalState(state: DataDataFormState, action: ActionRemoval):
   };
   return newState;
 }
-function handleRemovalState(state: DataDataFormState, action: ActionRemoval): any {
+function handleEditRemovalState(state: DataDataFormState, action: ActionRemoval): any {
   const data =  state.data.map(item => {
     if (item.id == action.payload['id']) {
       return action.payload;
@@ -132,8 +132,7 @@ export function recipientReducer(state = initRecipient, action: ActionRecipient)
       // console.log('in removal reducer getRemoval payload = ',action.payload);
       return {...state, ...action.payload};
     case RecipientActions.EDIT_RECIPIENT_SUCCESS:
-      // console.log('in customer reducer editCustomer payload = ',action.payload);
-      return Object.assign({}, state, action.payload ); //{...state, ...action.payload}; //
+      return handleEditRecipientState(state, action);
     // case CustomerActions.VALID_CUSTOMER:
     //   return state;
     case RecipientActions.GET_LAST_RECIPIENT_SUCCESS:
@@ -147,6 +146,19 @@ function handleAddRecipientState(state: DataDataFormState, action: ActionRecipie
   const newState = {
     data: data,
     count: ++state.count
+  };
+  return newState;
+}
+function handleEditRecipientState(state: DataDataFormState, action: ActionRemoval): any {
+  const data =  state.data.map(item => {
+    if (item.id == action.payload['id']) {
+      return action.payload;
+    }
+    return item;
+  });
+  const newState = {
+    data:  data,
+    count: state.count
   };
   return newState;
 }

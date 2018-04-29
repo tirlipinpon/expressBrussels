@@ -19,6 +19,7 @@
         [isCustomer]="'cascades'"
         [formGroup]="item"
       >
+        valid?= {{item.valid}}
       </app-form>
       <button  *ngIf="i > 0" (click)="removeItemCascade(i)">-</button>
     </div>

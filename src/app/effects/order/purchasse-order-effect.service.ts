@@ -39,7 +39,7 @@ export class PurchasseOrderEffectService {
           return Observable.of(new OrderActions.SaveOrderFail(err))
         })
     ) .catch((error, caught) => {
-      console.log('error saveOrder$ ! error: ', error +' caught: ', caught);
+      console.log('error saveOrder$ ! error: ', error + ' caught: ', caught);
       return caught;
     });
 
