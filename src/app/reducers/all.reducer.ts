@@ -197,9 +197,9 @@ const orderInitOrder: PurchasseOrder =  {
 export function purchasseOrderReducer(state: PurchasseOrder = orderInitOrder, action: ActionPurchasseOrder): PurchasseOrder {
   // console.log('2 - Reducer order :', action.type, state);
   switch (action.type) {
-    // case PurchasseOrderActions.INIT_ORDER_SUCCESS:
-    //   console.log('in order reducer init payload = ', state);
-    //   return {...state, ...orderInitOrder};
+    case PurchasseOrderActions.INIT_ORDER_SUCCESS:
+      console.log('in order reducer init payload = ', state);
+      return {...state, ...orderInitOrder};
 
     case PurchasseOrderActions.EDIT_ORDER_REMOVAL:
       // console.log('in order reducer edit Order removal payload = ',action.payload);
@@ -272,7 +272,7 @@ export function purchasseOrderReducer(state: PurchasseOrder = orderInitOrder, ac
 
     case PurchasseOrderActions.SAVE_ORDER_SUCCESS:
       // console.log('in order reducer saveOrder payload = ', action.payload);
-      return state;
+      return Object.assign({}, orderInitOrder);
 
     default:
       return state;

@@ -140,8 +140,6 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
 
   storeSelect() {
-    // this.customerId$ = this.store.select(fromRoot.selectors.getCustomerId);
-    // this.customerId$.subscribe(data => this.customerId = data );
     this.removals$ = this.store.select(fromRoot.selectors.getRemovalsData);
     this.recipients$ = this.store.select(fromRoot.selectors.getRecipientsData);
     this.orders$ = this.store.select(fromRoot.selectors.getOrders);

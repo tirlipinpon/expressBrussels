@@ -1,4 +1,4 @@
-import {  Component, OnInit, OnDestroy, HostListener, ChangeDetectorRef } from '@angular/core';
+import {Component, OnInit, OnDestroy, HostListener, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, Validators, FormGroup} from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
@@ -26,7 +26,7 @@ import {PrixZone} from "../models/prixZone";
   selector: 'app-purchasse-order',
   templateUrl: './purchasse-order.component.html',
   styleUrls: ['./purchasse-order.component.css'],
-  // changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeactivable {
 
@@ -143,7 +143,9 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   }
   resetDistance() {
     this.isDistance = false;
+    this.cdr.markForCheck();
     this.distance = null;
+    this.cdr.detectChanges();
     this.formDistance.reset();
   }
   chackIsFormAsValue(form, ...val) {
@@ -270,10 +272,16 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     return valid;
   }
   resetOrder() {
+    this.allFormGroup.forEach( form => {
+      form.reset();
+    });
     this.store.dispatch(new OrderActions.InitOrder(this.customerId));
+    this.formDistance.reset();
+    this.resetDistance();
   }
   recapOrder() {
     this.store.dispatch(new OrderActions.SaveOrder());
+    this.resetOrder();
   }
   isAllComplete(): boolean {
     if (this.isFormsValide() && this.isDistance) {
@@ -290,7 +298,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     if (valid && !this.isDistance) {
       this.respGoogleMatrix = this.getRespgoogleMapDistanceMatrix();
        this.respGoogleMatrix.then(result => {
-          if (result.distance.rows["0"].elements["0"].status === CONST.DIST_MATRIX_OK) {
+          if (this.isFormsValide() && result.distance.rows["0"].elements["0"].status === CONST.DIST_MATRIX_OK) {
             this.distance = {
               price: null,
               distanceText: result.distance.rows["0"].elements["0"].distance.text,
@@ -299,6 +307,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
               durationValue: result.distance.rows["0"].elements["0"].duration.value,
               status: result.distance.rows["0"].elements["0"].status
             };
+            this.cdr.markForCheck();
+            this.isDistance = true;
             this.cdr.markForCheck();
           }else {
             this.distance = {
@@ -318,14 +328,15 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
            status: this.distance.status
          });
          this.cdr.markForCheck();
-         this.isDistance = true;
-         this.cdr.markForCheck();
+
         }).catch(error => {
-          this.isDistance = false;
+         // this.resetDistance();
           console.log('error setDistance: ', error);
         });
        // due many callback call issue
 
+    }else{
+      // console.log('not valid distance to reset setDistance: ');
     }
   }
   getRespgoogleMapDistanceMatrix(): any {

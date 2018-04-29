@@ -27,7 +27,7 @@
   <div class="options-distance">
     <app-option [formGroup]="formOptions"></app-option>
 
-    <div *ngIf="distance">
+    <div *ngIf="isDistance">
       <span>status: {{ distance?.status }}</span>
       <br>
       <span>price: {{ distance?.price }}</span>
@@ -51,7 +51,7 @@ isDistance?= {{isDistance}}<br>
 distance= {{distance | json}}<br>
 formDistance= {{formDistance.value | json}}<br>
 
-formRemoval = {{ formRemoval.value | json}}
+<!--formRemoval = {{ formRemoval.value | json}}-->
 
 
 
