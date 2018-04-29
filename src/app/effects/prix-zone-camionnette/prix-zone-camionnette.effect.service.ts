@@ -20,7 +20,7 @@ export class PrixZoneCamionnetteEffectService {
     .switchMap(action =>
       this.getPrixZoneService.getPrixZoneByType(action['payload'])
         .map(payload => {
-          const data = ' zone1: ' + payload['data']['zone1'] + ' zone2: ' + (payload['data']['zone2']) + ' zone2: ' + (payload['data']['zone1'])
+          const data = ' zone1: ' + payload['data']['zone1'] + ' zone2: ' + (payload['data']['zone2']) + ' zone3: ' + (payload['data']['zone3'])
           this.notif.notify('info', 'get prix zones Camionnette', data);
           return new PrixZoneCamionnetteActions.GetPrixZoneCamionnetteSuccess(payload);
         })

@@ -36,24 +36,23 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   prixZoneMoto$: Observable<PrixZone>;
   prixZoneCamionnette$: Observable<PrixZone>;
 
+  distance: Distance;
+  datas: any;
+  nameForm = ['removal','recipient'];
+
   formRemoval: FormGroup;
   formRecipient: FormGroup;
   formOptions: FormGroup;
   formDistance: FormGroup;
   private allFormGroup: FormGroup[] = [];
-
   private valueRemovalChanges$;
   private valueRecipientChanges$;
   private valueOptionsChanges$;
   private valueRemovalInfosChanges$;
   private valueRecipientInfosChanges$;
   private customerId: number;
-  resp: any;
-  distance: Distance;
-  datas: any;
-  nameForm = ['removal','recipient'];
+  private respGoogleMatrix: any;
   private isDistance = false;
-
   private idClient: any;
 
   constructor (
@@ -196,6 +195,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       number: ['', Validators.required],
       cp: ['', Validators.required],
       state: ['', Validators.required],
+      clientZone: [0, Validators.required],
       phone: ['', Validators.required],
       infos: this.fb.group({
         info1: ['', { updateOn: 'blur', validators: [Validators.required]} ],
@@ -221,6 +221,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       number: ['', Validators.required],
       cp: ['', Validators.required],
       state: ['', Validators.required],
+      clientZone: [0, Validators.required],
       phone: ['', Validators.required],
       infos: this.fb.group({
         info1: ['', { updateOn: 'blur', validators: [Validators.required]} ],
@@ -274,15 +275,24 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   recapOrder() {
     this.store.dispatch(new OrderActions.SaveOrder());
   }
+  isAllComplete(): boolean {
+    if (this.isFormsValide() && this.isDistance) {
+      return this.calculPrice();
+    }
+    return false;
+  }
+  calculPrice(): boolean {
+    return true
+  }
 
   // distance
   setDistance(valid: boolean): void {
     if (valid && !this.isDistance) {
-      this.resp = this.getRespgoogleMapDistanceMatrix();
-       this.resp.then(result => {
+      this.respGoogleMatrix = this.getRespgoogleMapDistanceMatrix();
+       this.respGoogleMatrix.then(result => {
           if (result.distance.rows["0"].elements["0"].status === CONST.DIST_MATRIX_OK) {
             this.distance = {
-              price: 5,
+              price: null,
               distanceText: result.distance.rows["0"].elements["0"].distance.text,
               distanceValue: result.distance.rows["0"].elements["0"].distance.value,
               durationText: result.distance.rows["0"].elements["0"].duration.text,

@@ -54,6 +54,7 @@ export class FormComponent implements OnInit, OnDestroy {
       number: data.number,
       cp: data.cp,
       state: data.state,
+      clientZone: data.clientZone,
       phone: data.phone,
       infos: {
         info1: data.infos.info1,

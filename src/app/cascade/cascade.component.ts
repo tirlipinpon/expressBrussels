@@ -65,6 +65,7 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
       number: ['', Validators.required],
       cp: ['', Validators.required],
       state: ['', Validators.required],
+      clientZone: [0, Validators.required],
       phone: ['', Validators.required],
       infos: this.fb.group({
         info1: ['', { updateOn: 'blur', validators: [Validators.required]} ],
@@ -210,6 +211,7 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
       number: ['', Validators.required],
       cp: ['', Validators.required],
       state: ['', Validators.required],
+      clientZone: [0, Validators.required],
       phone: ['', Validators.required],
       infos: this.fb.group({
         info1: ['', { updateOn: 'blur', validators: [Validators.required]} ],

@@ -24,6 +24,7 @@
   <input type="text" formControlName="number" [readonly]="true" placeholder="number">
   <input type="text" formControlName="cp" [readonly]="true" placeholder="cp">
   <input type="text" formControlName="state" [readonly]="true" placeholder="state">
+  <input type="number" formControlName="clientZone" [readonly]="true" placeholder="zone">
   <input type="text" formControlName="phone" [readonly]="true" placeholder="phone">
   <app-info [formGroup]="formGroup.get('infos')"></app-info>
   <input type="hidden" formControlName="created" [readonly]="true">
@@ -36,6 +37,7 @@
   <app-input-autocompletion [propName]="'ref_client'" [data]="_user" [propType]="'string'" [witchForm]="1"   [formGroup]="formGroup"></app-input-autocompletion>
   <input type="hidden" formControlName="id">
   <app-info [formGroup]="formGroup.get('infos')"></app-info>
+  <input type="number" formControlName="clientZone" [readonly]="true" placeholder="zone">
   <input type="hidden" formControlName="created" [readonly]="true">
   <!--<button (click)="resetForm(formGroup)">reset: {{ nameForm }}</button>-->
   <input type="hidden" formControlName="fk_type" [readonly]="true">
