@@ -26,7 +26,7 @@
   <input type="text" formControlName="state" [readonly]="true" placeholder="state">
   <input type="number" formControlName="clientZone" [readonly]="true" placeholder="zone">
   <input type="text" formControlName="phone" [readonly]="true" placeholder="phone">
-  <app-info [formGroup]="formGroup.get('infos')"></app-info>
+  <app-info [contact]="contact | async" [formGroup]="formGroup.get('infos')"></app-info>
   <input type="hidden" formControlName="created" [readonly]="true">
   <!--<button (click)="resetForm(formGroup)">reset: {{ nameForm }}</button>-->
   <input type="hidden" formControlName="fk_type" [readonly]="true">

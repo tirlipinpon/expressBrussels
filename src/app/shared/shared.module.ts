@@ -32,6 +32,7 @@ import { AddressComponent } from './components/form/address/address.component';
 import {PrixZoneMotoEffectService} from "../effects/prix-zone-moto/prix-zone-moto.effect.service";
 import {PrixZoneCamionnetteEffectService} from "../effects/prix-zone-camionnette/prix-zone-camionnette.effect.service";
 import {ContactEffectService} from "../effects/contact/contact-effect.service";
+import {MatAutocompleteModule} from "@angular/material";
 
 
 @NgModule({
@@ -46,6 +47,7 @@ import {ContactEffectService} from "../effects/contact/contact-effect.service";
     GrowlModule,
     DialogModule,
     ConfirmDialogModule,
+    MatAutocompleteModule,
 
     EffectsModule.forRoot([
       CustomerEffectService,

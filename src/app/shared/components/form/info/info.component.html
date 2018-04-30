@@ -1,4 +1,9 @@
 <div [formGroup]="formGroup">
-  <input type="text" formControlName="info1" placeholder="contact">
+  <input type="text" matInput placeholder="contact"  [matAutocomplete]="auto"   formControlName="info1">
+  <mat-autocomplete #auto="matAutocomplete">
+    <mat-option *ngFor="let option of contacts"  [value]="option?.name">
+      {{ option.name }}
+    </mat-option>
+  </mat-autocomplete>
   <textarea  formControlName="info2" placeholder="message"></textarea>
 </div>

@@ -22,7 +22,7 @@ export class ContactEffectService {
     .switchMap(([action, dataForm]) =>
       this.contactService.getContact(dataForm.id)
         .map((payload) => {
-          this.notif.notify('info', 'get Recipients OK ', payload.count+'/total');
+          this.notif.notify('info', 'get contact OK ', payload.count+'/total');
           return new ContactActions.GetContactSuccess(payload);
         })
         .catch(err => {

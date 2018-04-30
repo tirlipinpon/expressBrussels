@@ -24,14 +24,11 @@ import {RemovalsEditModule} from './removals-edit/removals-edit.module';
 import {RemovalService} from './services/removal.service';
 import { OrdersComponent } from './orders/orders.component';
 import {MatTableModule} from '@angular/material/table';
-import {MatFormFieldModule, MatSortModule} from '@angular/material';
-import {MatPaginatorModule} from '@angular/material';
-import {MatInputModule} from '@angular/material';
+import {MatFormFieldModule, MatSortModule, MatPaginatorModule, MatInputModule} from '@angular/material'; // TODO: import refrences
 import {CanDeactivateFormGuardService} from './services/can-deactivate-form-guard.service';
 import { LoginComponent } from './login/login.component';
 import {AuthenticationService} from './services/authentication.service';
 import { MenuComponent } from './menu/menu.component';
-import {ClientZonesEffectService} from './effects/client-zones/client-zones-effect.service';
 import {ClientZonesService} from './services/client-zones.service';
 import { CascadeComponent } from './cascade/cascade.component';
 import {CascadeModule} from './cascade/cascade.module';
@@ -40,6 +37,8 @@ import {GetDistanceMatrixService} from "./services/google/get-distance-matrix.se
 import {RouteResolverService} from "./services/route-resolver.service";
 import {GetPrixZoneService} from "./services/get-prix-zone.service";
 import { ContactService } from './services/contact.service';
+
+
 
 const appRoutes: Routes = [
   { path: 'login',                component: LoginComponent },

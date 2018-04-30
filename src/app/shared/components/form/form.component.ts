@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import {FormGroup, FormBuilder} from '@angular/forms';
 import {DataForm, DataDataFormState} from '../../../models/DataForm';
+import {Contact} from "../../../models/contact";
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-form',
@@ -15,6 +17,7 @@ export class FormComponent implements OnInit, OnDestroy {
   @Input('isCustomer') isCustomer: string;
   @Input('formGroup') formGroup: FormGroup;
   @Input('nameForm') nameForm: string;
+  @Input('contact') contact: Observable<Contact[]>;
   @Input('datas') set data(value: DataForm[]) {
     if (!!value) {
       if (this.isCustomer === 'customer') {

@@ -2,6 +2,7 @@ import {Component, OnInit, OnDestroy, HostListener, ChangeDetectorRef, ChangeDet
 import {FormBuilder, Validators, FormGroup} from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/skipWhile'
 import 'rxjs/add/operator/map';
 
 import * as RemovalActions from '../actions/removal.actions';
@@ -23,6 +24,8 @@ import {CustomerService} from "../services/customer.service";
 import {ActivatedRoute} from "@angular/router";
 import {PrixZone} from "../models/prixZone";
 import {Contact} from "../models/contact";
+
+
 
 @Component({
   selector: 'app-purchasse-order',
@@ -92,7 +95,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.order$ = this.store.select(fromRoot.selectors.getOrder);
     this.prixZoneMoto$ = this.store.select(fromRoot.selectors.getPrixZoneMotoData);
     this.prixZoneCamionnette$ = this.store.select(fromRoot.selectors.getPrixZoneCamionnetteData);
-    // this.clientZones$ = this.store.select(fromRoot.selectors.getClientZonesData);
+    this.contact$ = this.store.select(fromRoot.selectors.getContactData).skipWhile(data => ! data || data.length === 0 );
   }
   storeDispatch() {
     this.customerService.currentCustomerId.subscribe(id => {
