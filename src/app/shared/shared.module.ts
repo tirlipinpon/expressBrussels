@@ -31,6 +31,7 @@ import { AutocompleteGoogleComponent } from './components/form/autocomplete-goog
 import { AddressComponent } from './components/form/address/address.component';
 import {PrixZoneMotoEffectService} from "../effects/prix-zone-moto/prix-zone-moto.effect.service";
 import {PrixZoneCamionnetteEffectService} from "../effects/prix-zone-camionnette/prix-zone-camionnette.effect.service";
+import {ContactEffectService} from "../effects/contact/contact-effect.service";
 
 
 @NgModule({
@@ -54,7 +55,8 @@ import {PrixZoneCamionnetteEffectService} from "../effects/prix-zone-camionnette
       PrixZoneMotoEffectService,
       PrixZoneCamionnetteEffectService,
       RecipientEffectService,
-      RemovalEffectService
+      RemovalEffectService,
+      ContactEffectService
     ]),
     // StoreModule.forFeature('todo', customerReducer)
     StoreModule.forRoot(reducers),

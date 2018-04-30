@@ -6,11 +6,13 @@ import * as OrdersActions from '../actions/orders.actions';
 import * as ClientZonesActions from '../actions/clientZones.actions';
 import * as PrixZoneMotoActions from '../actions/prixZoneMoto.actions';
 import * as PrixZoneCamionnetteActions from '../actions/prixZoneCamionnette.actions';
+import * as ContactActions from '../actions/contact.actions';
 
 import {DataForm, DataDataFormState} from '../models/DataForm';
 import {PurchasseOrder} from '../models/PurchasseOrder';
 import {MyClientZones, MyClientZonesState} from '../models/my-client-zones';
 import {PrixZone, MyPrixZoneState} from "../models/prixZone";
+import {ContactState} from "../models/contact";
 
 export type ActionCustomer = CustomerActions.All;
 export type ActionRemoval = RemovalActions.All;
@@ -20,6 +22,7 @@ export type ActionOrders = OrdersActions.All;
 export type ActionClientZones = ClientZonesActions.All;
 export type ActionPrixZoneMoto = PrixZoneMotoActions.All;
 export type ActionPrixZoneCamionnette = PrixZoneCamionnetteActions.All;
+export type ActionContact = ContactActions.All;
 
 // ======================================================
 // customer reducer
@@ -129,12 +132,9 @@ export function recipientReducer(state = initRecipient, action: ActionRecipient)
   // console.log('2 - Reducer customer :', action.type, state);
   switch (action.type) {
     case RecipientActions.GET_RECIPIENTS_SUCCESS:
-      // console.log('in removal reducer getRemoval payload = ',action.payload);
       return {...state, ...action.payload};
     case RecipientActions.EDIT_RECIPIENT_SUCCESS:
       return handleEditRecipientState(state, action);
-    // case CustomerActions.VALID_CUSTOMER:
-    //   return state;
     case RecipientActions.GET_LAST_RECIPIENT_SUCCESS:
       return handleAddRecipientState(state, action);
     default:
@@ -149,7 +149,7 @@ function handleAddRecipientState(state: DataDataFormState, action: ActionRecipie
   };
   return newState;
 }
-function handleEditRecipientState(state: DataDataFormState, action: ActionRemoval): any {
+function handleEditRecipientState(state: DataDataFormState, action: ActionRecipient): any {
   const data =  state.data.map(item => {
     if (item.id == action.payload['id']) {
       return action.payload;
@@ -366,4 +366,24 @@ export function prixZoneCamionnetteReducer(state = prixZoneCamionnetteInit, acti
 };
 export const PrixZoneCamionnetteSelector = {
   data: (state: MyPrixZoneState) => { return state.data }
+};
+
+// ======================================================
+// contact
+// ======================================================
+const contactInit: ContactState = {
+  data: [],
+  count: 0
+};
+export function contactReducer(state = contactInit, action: ActionContact): ContactState {
+  switch(action.type){
+    case ContactActions.GET_CONTACT_SUCCESS:
+      return Object.assign({}, state, action.payload);
+    default:
+      return state;
+  }
+};
+export const ContactSelector = {
+  data: (state: ContactState) => { return state.data },
+  count: (state: ContactState) => { return state.count }
 };

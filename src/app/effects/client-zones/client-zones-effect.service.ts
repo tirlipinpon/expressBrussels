@@ -13,8 +13,7 @@ export class ClientZonesEffectService {
   constructor(private store: Store<AppState>,
               private action$: Actions,
               private notif: NotificationService,
-              private clientZonesService: ClientZonesService) {
-  }
+              private clientZonesService: ClientZonesService) {}
 
   @Effect() getClientZones$: Observable<Action> = this.action$
     .ofType(ClientZonesActions.GET_CLIENT_ZONES)

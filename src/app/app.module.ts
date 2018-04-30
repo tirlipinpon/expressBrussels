@@ -39,6 +39,7 @@ import { AgmCoreModule } from '@agm/core';
 import {GetDistanceMatrixService} from "./services/google/get-distance-matrix.service";
 import {RouteResolverService} from "./services/route-resolver.service";
 import {GetPrixZoneService} from "./services/get-prix-zone.service";
+import { ContactService } from './services/contact.service';
 
 const appRoutes: Routes = [
   { path: 'login',                component: LoginComponent },
@@ -151,7 +152,8 @@ const appRoutes: Routes = [
     ClientZonesService,
     GetDistanceMatrixService,
     RouteResolverService,
-    GetPrixZoneService
+    GetPrixZoneService,
+    ContactService
   ],
   bootstrap: [AppComponent]
 })
