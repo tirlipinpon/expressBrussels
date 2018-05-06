@@ -330,6 +330,7 @@ const prixZoneMotoInit: MyPrixZoneState = {
     zone1: 0,
     zone2: 0,
     zone3: 0,
+    prixKm: 0,
     after15h: 0
   },
 };
@@ -353,6 +354,7 @@ const prixZoneCamionnetteInit: MyPrixZoneState = {
     zone1: 0,
     zone2: 0,
     zone3: 0,
+    prixKm: 0,
     after15h: 0
   },
 };

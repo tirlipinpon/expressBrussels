@@ -25,7 +25,35 @@ export class GetContactFail implements Action {
   }
 }
 
+
+export const ADD_CONTACT = 'Add CONTACT';
+export class AddContact implements Action {
+  readonly type = ADD_CONTACT;
+  constructor(public payload?: any) {
+    console.log('in actions:' , this.type + ' payload:', this.payload);
+  }
+}
+
+export const ADD_CONTACT_SUCCESS = 'Add CONTACT Success';
+export class AddContactSuccess implements Action {
+  readonly type = ADD_CONTACT_SUCCESS;
+  constructor(public payload: any) {
+    // console.log('in actions:' , this.type + ' payload:', this.payload);
+  }
+}
+
+export const ADD_CONTACT_FAIL = 'Add CONTACT Fail';
+export class AddContactFail implements Action {
+  readonly type = ADD_CONTACT_FAIL;
+  constructor(public payload: string) {
+    console.log('in actions:' , this.type + ' payload:', this.payload);
+  }
+}
+
 export type All =
   GetContact
     | GetContactSuccess
-    | GetContactFail;
+    | GetContactFail
+    | AddContact
+    | AddContactSuccess
+    | AddContactFail;
