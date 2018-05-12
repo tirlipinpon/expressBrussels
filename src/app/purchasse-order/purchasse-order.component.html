@@ -29,14 +29,12 @@
   <div class="options-distance">
     <app-option [formGroup]="formOptions"></app-option>
 
-    <div *ngIf="distances.length===2">
-      <span>status: {{ distance?.status }}</span>
+    <div *ngIf="distances.length === 2">
+      <span>price: {{ formDistance.get('price').value }}</span>
       <br>
-      <span>price: {{ distance?.price }}</span>
+      <span>distance: {{ distances[0]?.distanceText }} + {{ distances[1]?.distanceText }}</span>
       <br>
-      <span>distance: {{ distance?.distanceText }}</span>
-      <br>
-      <span>time: {{ distance?.durationText }}</span>
+      <span>time: {{ distances[0]?.durationText }} + {{ distances[1]?.durationText }}</span>
     </div>
     <form [formGroup]="formDistance">
       <input type="hidden" formControlName="status" value="{{distance?.status}}"><br>
@@ -47,8 +45,7 @@
   </div>
   <button *ngIf="isAllComplete()" (click)="recapOrder()">Send order </button>
 </div>
-
-distances= <pre>{{distances | json}}</pre><br>
+<pre>{{distances | json}}</pre><br>
 formDistance= {{formDistance.value | json}}<br>
 
 <!--formRemoval = {{ formRemoval.value | json}}-->

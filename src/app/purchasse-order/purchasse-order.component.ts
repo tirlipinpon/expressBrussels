@@ -111,7 +111,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     allFormGroup.push(this.formRemoval);
     allFormGroup.push(this.formRecipient);
     allFormGroup.push(this.formOptions);
-    // allFormGroup.push(this.formDistance);
     return allFormGroup;
   }
   onValueOrderChanged() {
@@ -146,8 +145,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     });
   }
   resetDistance() {
-    this.distance = null;
-    this.cdr.detectChanges();
     this.formDistance.reset();
     this.distances = [];
     this.cdr.detectChanges();
@@ -212,11 +209,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       fk_client: ['', Validators.required],
       active: ['', Validators.required],
       created: ['', Validators.required],
-      fk_type: ['', Validators.required],
-
-      price: [''],
-      distance: [''],
-      elapse_time: [''],
+      fk_type: ['', Validators.required]
     });
   }
   initFormsRecipient(): void {
@@ -231,8 +224,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       clientZone: [0, Validators.required],
       phone: ['', Validators.required],
       infos: this.fb.group({
-        info1: ['', { updateOn: 'blur', validators: [Validators.required]} ],
-        info2: ['', { updateOn: 'blur', validators: [Validators.required]} ],
+        info1: ['', { updateOn: 'blur'} ],
+        info2: ['', { updateOn: 'blur'} ],
       }),
       type: ['', Validators.required],
       fk_client: ['', Validators.required],
@@ -244,7 +237,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   initFormsOptions(): void {
     this.formOptions = this.fb.group({
       options: ['express', Validators.required],
-      tomorrow: [false, Validators.required],
+      tomorrow: [false],
       transport: ['moto', Validators.required]
     });
   }
@@ -289,13 +282,13 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   }
   isAllComplete(): boolean {
     if (this.isFormsValide()) {
-      return this.calculPrice();
+      return this.calculDistance();
     }
     return false;
   }
-  calculPrice(): boolean {
+  calculDistance(): boolean {
     if (this.isNational()) {
-     return this.calculPriceNational();
+     return this.calculDistancesNational();
     }else{
      return this.calculPriceBxl();
     }
@@ -305,7 +298,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     return +this.formRemoval.get('clientZone').value === 0 || +this.formRecipient.get('clientZone').value === 0;
   }
 
-  calculPriceNational(): boolean {
+  calculDistancesNational(): boolean {
     if (this.distances.length < 2) {
       this.setDistance(this.getRespgoogleMapDistanceMatrixOrigin(),1);
       this.setDistance(this.getRespgoogleMapDistanceMatrixDestinataire(), 2);
@@ -314,6 +307,55 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   }
   calculPriceBxl(): boolean  {
     return true;
+  }
+  calculPriceNational() {
+  // set distance total +10km *2
+    let distM = 0;
+    this.distances.map(w => {
+      distM += w.distanceValue;
+    });
+    distM += 10000;
+    distM *= 2;
+    let distKm = distM / 1000;
+    //  get transport price
+    let price = distKm;
+    if(this.formOptions.get('transport').value === 'moto') {
+      this.prixZoneMoto$.subscribe(data => {
+        price *= data.prixKm;
+        if(this.formOptions.get('options').value === 'double_express') {
+          price +=  (price * data.double_express / 100);
+        }else if(this.formOptions.get('options').value === 'go_and_back') {
+          price +=  (price * data.go_and_back / 100);
+        }
+      });
+    }else if(this.formOptions.get('transport').value === 'voiture') {
+      this.prixZoneCamionnette$.subscribe(data => {
+        price *= data.prixKm;
+        if(this.formOptions.get('options').value === 'double_express') {
+          price += (price * data.double_express / 100);
+        }else if(this.formOptions.get('options').value === 'go_and_back') {
+          price +=  (price * data.go_and_back / 100);
+        }
+      });
+    }
+  console.log(distKm);
+
+    let time = 0;
+    this.distances.map(w => {
+      time += w.durationValue;
+    });
+
+    let status = '';
+    this.distances.map(w => {
+      status += w.whichForm + ':' + w.status + ' ';
+    });
+
+    this.formDistance.patchValue({
+      price: price.toFixed(2),
+      distance: distKm,
+      elapse_time: time,
+      status: status
+    })
   }
 
   // distance
@@ -331,9 +373,11 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
                status: result.distance.rows["0"].elements["0"].status,
                whichForm: whichForm
              };
-             const respW = this.distances.filter(w => (w.whichForm === whichForm));
-             if (respW.length===0) {
+             if (this.distances.filter(w => (w.whichForm === whichForm)).length === 0) {
                this.distances.push(this.distance);
+               if(this.distances.length === 2) {
+                 this.calculPriceNational();
+               }
                this.cdr.markForCheck();
              }
            };
