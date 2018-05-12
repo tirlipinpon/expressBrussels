@@ -3,5 +3,5 @@ export interface Address {
   number?: string | number;
   cp: number;
   state: string;
-  city?: string;
+  country: string;
 }

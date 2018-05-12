@@ -331,7 +331,9 @@ const prixZoneMotoInit: MyPrixZoneState = {
     zone2: 0,
     zone3: 0,
     prixKm: 0,
-    after15h: 0
+    after15h: 0,
+    double_express: 0,
+    go_and_back: 0
   },
 };
 export function prixZoneMotoReducer(state = prixZoneMotoInit, action: ActionPrixZoneMoto): MyPrixZoneState {
@@ -355,7 +357,9 @@ const prixZoneCamionnetteInit: MyPrixZoneState = {
     zone2: 0,
     zone3: 0,
     prixKm: 0,
-    after15h: 0
+    after15h: 0,
+    double_express: 0,
+    go_and_back: 0
   },
 };
 export function prixZoneCamionnetteReducer(state = prixZoneCamionnetteInit, action: ActionPrixZoneCamionnette): MyPrixZoneState {

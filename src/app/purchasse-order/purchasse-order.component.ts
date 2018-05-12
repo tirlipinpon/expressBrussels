@@ -25,8 +25,6 @@ import {ActivatedRoute} from "@angular/router";
 import {PrixZone} from "../models/prixZone";
 import {Contact} from "../models/contact";
 
-
-
 @Component({
   selector: 'app-purchasse-order',
   templateUrl: './purchasse-order.component.html',
@@ -42,7 +40,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   prixZoneCamionnette$: Observable<PrixZone>;
   contact$: Observable<Contact[]>;
 
-  distance: Distance;
+  private distance: Distance;
+  distances: Distance[] = [];
   datas: any;
   nameForm = ['removal','recipient'];
 
@@ -57,8 +56,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   private valueRemovalInfosChanges$;
   private valueRecipientInfosChanges$;
   private customerId: number;
-  private respGoogleMatrix: any;
-  private isDistance = false;
   private idClient: any;
 
   constructor (
@@ -149,11 +146,12 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     });
   }
   resetDistance() {
-    this.isDistance = false;
-    this.cdr.markForCheck();
     this.distance = null;
     this.cdr.detectChanges();
     this.formDistance.reset();
+    this.distances = [];
+    this.cdr.detectChanges();
+
   }
   chackIsFormAsValue(form, ...val) {
     const flattenObject = this.flattenObject(form.value);
@@ -207,8 +205,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       clientZone: [0, Validators.required],
       phone: ['', Validators.required],
       infos: this.fb.group({
-        info1: ['', { updateOn: 'blur', validators: [Validators.required]} ],
-        info2: ['', { updateOn: 'blur', validators: [Validators.required]} ],
+        info1: ['', { updateOn: 'blur'} ],
+        info2: ['', { updateOn: 'blur'} ],
       }),
       type: ['', Validators.required],
       fk_client: ['', Validators.required],
@@ -275,7 +273,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
         valid = false;
       }
     });
-    this.setDistance(valid);
     return valid;
   }
   resetOrder() {
@@ -291,76 +288,94 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.resetOrder();
   }
   isAllComplete(): boolean {
-    if (this.isFormsValide() && this.isDistance) {
+    if (this.isFormsValide()) {
       return this.calculPrice();
     }
     return false;
   }
   calculPrice(): boolean {
-    return true
+    if (this.isNational()) {
+     return this.calculPriceNational();
+    }else{
+     return this.calculPriceBxl();
+    }
+  }
+
+  isNational(): boolean  {
+    return +this.formRemoval.get('clientZone').value === 0 || +this.formRecipient.get('clientZone').value === 0;
+  }
+
+  calculPriceNational(): boolean {
+    if (this.distances.length < 2) {
+      this.setDistance(this.getRespgoogleMapDistanceMatrixOrigin(),1);
+      this.setDistance(this.getRespgoogleMapDistanceMatrixDestinataire(), 2);
+    }
+    return true;
+  }
+  calculPriceBxl(): boolean  {
+    return true;
   }
 
   // distance
-  setDistance(valid: boolean): void {
-    if (valid && !this.isDistance) {
-      this.respGoogleMatrix = this.getRespgoogleMapDistanceMatrix();
-       this.respGoogleMatrix.then(result => {
-          if (this.isFormsValide() && result.distance.rows["0"].elements["0"].status === CONST.DIST_MATRIX_OK) {
-            this.distance = {
-              price: null,
-              distanceText: result.distance.rows["0"].elements["0"].distance.text,
-              distanceValue: result.distance.rows["0"].elements["0"].distance.value,
-              durationText: result.distance.rows["0"].elements["0"].duration.text,
-              durationValue: result.distance.rows["0"].elements["0"].duration.value,
-              status: result.distance.rows["0"].elements["0"].status
-            };
-            this.cdr.markForCheck();
-            this.isDistance = true;
-            this.cdr.markForCheck();
-          }else {
-            this.distance = {
-              price: 0,
-              distanceText: '',
-              distanceValue: 0,
-              durationText: '',
-              durationValue: 0,
-              status: result.distance.rows["0"].elements["0"].status
-            };
-            this.cdr.markForCheck();
-          }
-         this.formDistance.setValue({
-           price: this.distance.price,
-           distance: this.distance.distanceValue,
-           elapse_time: this.distance.durationValue,
-           status: this.distance.status
-         });
-         this.cdr.markForCheck();
-
+  setDistance(respGoogleMatrix: any, whichForm: number ): void {
+       respGoogleMatrix.then(result => {
+         if (this.distances.length < 2) {
+           const respStatus = result.distance.rows["0"].elements["0"].status;
+           if (respStatus === CONST.DIST_MATRIX_OK) {
+             this.distance = {
+               price: 0,
+               distanceText: result.distance.rows["0"].elements["0"].distance.text,
+               distanceValue: result.distance.rows["0"].elements["0"].distance.value,
+               durationText: result.distance.rows["0"].elements["0"].duration.text,
+               durationValue: result.distance.rows["0"].elements["0"].duration.value,
+               status: result.distance.rows["0"].elements["0"].status,
+               whichForm: whichForm
+             };
+             const respW = this.distances.filter(w => (w.whichForm === whichForm));
+             if (respW.length===0) {
+               this.distances.push(this.distance);
+               this.cdr.markForCheck();
+             }
+           };
+         }
         }).catch(error => {
          // this.resetDistance();
           console.log('error setDistance: ', error);
         });
        // due many callback call issue
-
-    }else{
-      // console.log('not valid distance to reset setDistance: ');
-    }
   }
-  getRespgoogleMapDistanceMatrix(): any {
+  getRespgoogleMapDistanceMatrixDestinataire(): any {
     return this.getDistanceMatrixService.googleMapDistanceMatrixService (
       {
         address: this.allFormGroup[0].get('address').value,
         number: this.allFormGroup[0].get('number').value,
         cp: this.allFormGroup[0].get('cp').value,
         state: this.allFormGroup[0].get('state').value,
-        city: 'Belgique'
+        country: 'Belgique'
       },
       {
         address: this.allFormGroup[1].get('address').value,
         number: this.allFormGroup[1].get('number').value,
         cp: this.allFormGroup[1].get('cp').value,
         state: this.allFormGroup[1].get('state').value,
-        city: 'Belgium'
+        country: 'Belgium'
+      });
+  }
+  getRespgoogleMapDistanceMatrixOrigin(): any {
+    return this.getDistanceMatrixService.googleMapDistanceMatrixService (
+      {
+        address: 'Rue des Alexiens',
+        number: 73,
+        cp: 1000,
+        state: 'Bruxelles',
+        country: 'Belgique'
+      },
+      {
+        address: this.allFormGroup[0].get('address').value,
+        number: this.allFormGroup[0].get('number').value,
+        cp: this.allFormGroup[0].get('cp').value,
+        state: this.allFormGroup[0].get('state').value,
+        country: 'Belgium'
       });
   }
 

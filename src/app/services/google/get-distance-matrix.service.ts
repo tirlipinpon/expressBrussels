@@ -10,13 +10,13 @@ export class GetDistanceMatrixService {
   constructor(    private mapsAPILoader: MapsAPILoader,
                   private ngZone: NgZone) { }
 
-  googleMapDistanceMatrixService(origin: Address, dest: Address): Promise<any> {
+  googleMapDistanceMatrixService(orig: Address, destB: Address): Promise<any> {
       return  this.mapsAPILoader.load()
         .then(
         () => {
            // return this.ngZone.run(() => {
-            const origin1 = origin.address + ' ' + origin.number + ' ' + origin.cp + ', ' + origin.state;
-            const destinationA = dest.address + ' ' + dest.number + ' ' + dest.cp + ', ' + dest.state;
+            const origin1 = orig.address + ' ' + orig.number + ' ' + orig.cp + ', ' + orig.state + ', ' + orig.country;
+            const destinationA = destB.address + ' ' + destB.number + ' ' + destB.cp + ', ' + destB.state + ', ' + destB.country;
             let service = new google.maps.DistanceMatrixService();
 
              return new Promise((resolve, reject) => {
