@@ -10,19 +10,21 @@
 
   <app-form
     [nameForm]="nameForm[0]"
-    [datas]="removals$ | async"
+    [datas]="removals$  | async"
     [contact]="contact$"
     [isCustomer]="'notCascades'"
     [formGroup]="formRemoval"
+    (updateDataForm)="isAllComplete($event)"
   >
   </app-form>
 
   <app-form
     [nameForm]="nameForm[1]"
-    [datas]="recipients$ | async"
+    [datas]="recipients$  | async"
     [contact]="contact$"
     [isCustomer]="'notCascades'"
     [formGroup]="formRecipient"
+    (updateDataForm)="isAllComplete($event)"
   >
   </app-form>
 
@@ -48,7 +50,11 @@
 <pre>{{distances | json}}</pre><br>
 formDistance= {{formDistance.value | json}}<br>
 
-<!--formRemoval = {{ formRemoval.value | json}}-->
+<div style="display:flex;">
+  formRemoval = <pre>{{ formRemoval.value | json}}</pre>
+  formRecipient = <pre>{{ formRecipient.value | json}}</pre>
+</div>
+
 
 
 

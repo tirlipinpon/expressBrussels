@@ -1,8 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import {FormGroup, FormBuilder} from '@angular/forms';
-import {DataForm, DataDataFormState} from '../../../models/DataForm';
+import {Component, Input, Output, EventEmitter, ViewChild, OnInit, AfterViewInit} from '@angular/core';
+import {FormGroup} from '@angular/forms';
+import {DataForm} from '../../../models/DataForm';
 import {Contact} from "../../../models/contact";
 import { Observable } from 'rxjs/Observable';
+import {} from "@angular/material";
+import {MatOptionSelectionChange} from "@angular/material";
+import {MatAutocompleteSelectedEvent} from "@angular/material";
 
 @Component({
   selector: 'app-form',
@@ -10,41 +13,35 @@ import { Observable } from 'rxjs/Observable';
   styleUrls: ['form.component.css'],
 
 })
-export class FormComponent implements OnInit, OnDestroy {
-
-  private test = false;
+export class FormComponent implements AfterViewInit {
 
   @Input('isCustomer') isCustomer: string;
   @Input('formGroup') formGroup: FormGroup;
   @Input('nameForm') nameForm: string;
   @Input('contact') contact: Observable<Contact[]>;
-  @Input('datas') set data(value: DataForm[]) {
-    if (!!value) {
-      if (this.isCustomer === 'customer') {
-        if (!this.test){
-          this._initData(value);
-          this.test = true;
-        }
-      }else{
-        if (this._user.length == 0) {
-          for (let i=0; i< Object.keys(value).length; i++){
-            this._user.push(value[i]);
-          }
-        }
+  @Input('datas') dataValues:  DataForm[];
+  @Output() updateDataForm: EventEmitter<string> = new EventEmitter<string>();
 
-      }
-    }
+  constructor() {}
+
+  ngAfterViewInit() {}
+
+  itemSelectedName (evt: MatAutocompleteSelectedEvent) {
+    this._initData(this.filterStatesName(evt.option.value));
+  }
+  itemSelectedRefClient (evt: MatAutocompleteSelectedEvent) {
+    this._initData(this.filterStatesRefClient(evt.option.value));
   }
 
-  @Output() updateDataForm = new EventEmitter();
-  private _user: DataForm[] = [];
-
-  constructor(private fb: FormBuilder) {}
-  ngOnInit() {}
-  ngOnDestroy() {}
-
-  resetForm(formGroup: FormGroup): void {
-    formGroup.reset();
+  filterStatesName(val: string): DataForm {
+    const resp =  this.dataValues.filter(state =>
+    state.name.toLowerCase().indexOf(val.toLowerCase()) === 0);
+    return resp[0];
+  }
+  filterStatesRefClient(val: string): DataForm {
+    const resp =  this.dataValues.filter(state =>
+    state.ref_client.toLowerCase().indexOf(val.toLowerCase()) === 0);
+    return resp[0];
   }
 
   // for customer
@@ -69,8 +66,11 @@ export class FormComponent implements OnInit, OnDestroy {
       created: data.created,
       fk_type: data.fk_type
     });
+    this.saveDataCustomer();
   }
   saveDataCustomer(): void {
-    this.updateDataForm.emit();
+    this.updateDataForm.emit(this.nameForm);
   }
+
+
 }

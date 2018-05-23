@@ -280,7 +280,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.store.dispatch(new OrderActions.SaveOrder());
     this.resetOrder();
   }
-  isAllComplete(): boolean {
+  isAllComplete(emitted: any): boolean {
+    console.log(emitted)
     if (this.isFormsValide()) {
       return this.calculDistance();
     }
@@ -293,13 +294,12 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
      return this.calculPriceBxl();
     }
   }
-
   isNational(): boolean  {
     return +this.formRemoval.get('clientZone').value === 0 || +this.formRecipient.get('clientZone').value === 0;
   }
-
   calculDistancesNational(): boolean {
     if (this.distances.length < 2) {
+    // if (true) {
       this.setDistance(this.getRespgoogleMapDistanceMatrixOrigin(),1);
       this.setDistance(this.getRespgoogleMapDistanceMatrixDestinataire(), 2);
     }
@@ -308,6 +308,17 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   calculPriceBxl(): boolean  {
     return true;
   }
+
+  calculTransportAndOption(prixZoneTransport: Observable<PrixZone>, price) {
+    prixZoneTransport.subscribe(data => {
+    price *= data.prixKm;
+    if(this.formOptions.get('options').value === 'double_express') {
+      price +=  (price * data.double_express / 100);
+    }else if(this.formOptions.get('options').value === 'go_and_back') {
+      price +=  (price * data.go_and_back / 100);
+    }
+  });
+}
   calculPriceNational() {
   // set distance total +10km *2
     let distM = 0;
@@ -317,26 +328,12 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     distM += 10000;
     distM *= 2;
     let distKm = distM / 1000;
-    //  get transport price
     let price = distKm;
+
     if(this.formOptions.get('transport').value === 'moto') {
-      this.prixZoneMoto$.subscribe(data => {
-        price *= data.prixKm;
-        if(this.formOptions.get('options').value === 'double_express') {
-          price +=  (price * data.double_express / 100);
-        }else if(this.formOptions.get('options').value === 'go_and_back') {
-          price +=  (price * data.go_and_back / 100);
-        }
-      });
+      this.calculTransportAndOption(this.prixZoneMoto$, price);
     }else if(this.formOptions.get('transport').value === 'voiture') {
-      this.prixZoneCamionnette$.subscribe(data => {
-        price *= data.prixKm;
-        if(this.formOptions.get('options').value === 'double_express') {
-          price += (price * data.double_express / 100);
-        }else if(this.formOptions.get('options').value === 'go_and_back') {
-          price +=  (price * data.go_and_back / 100);
-        }
-      });
+      this.calculTransportAndOption(this.prixZoneCamionnette$, price);
     }
   console.log(distKm);
 
@@ -362,6 +359,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   setDistance(respGoogleMatrix: any, whichForm: number ): void {
        respGoogleMatrix.then(result => {
          if (this.distances.length < 2) {
+         // if (true) {
            const respStatus = result.distance.rows["0"].elements["0"].status;
            if (respStatus === CONST.DIST_MATRIX_OK) {
              this.distance = {
@@ -371,11 +369,12 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
                durationText: result.distance.rows["0"].elements["0"].duration.text,
                durationValue: result.distance.rows["0"].elements["0"].duration.value,
                status: result.distance.rows["0"].elements["0"].status,
-               whichForm: whichForm
+               whichForm: whichForm + ' orig: ' + result.distance.originAddresses[0] + ' dest: ' +  result.distance.destinationAddresses[0]
              };
              if (this.distances.filter(w => (w.whichForm === whichForm)).length === 0) {
                this.distances.push(this.distance);
                if(this.distances.length === 2) {
+               // if (true) {
                  this.calculPriceNational();
                }
                this.cdr.markForCheck();

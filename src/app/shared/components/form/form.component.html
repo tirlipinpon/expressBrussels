@@ -17,8 +17,26 @@
 </form>
 <!--  notCascades  -->
 <form *ngIf="isCustomer==='notCascades'"  novalidate [formGroup]="formGroup">
-  <app-input-autocompletion [propName]="'name'" [data]="_user" [propType]="'string'" [witchForm]="1"  [formGroup]="formGroup"></app-input-autocompletion>
-  <app-input-autocompletion [propName]="'ref_client'" [data]="_user" [propType]="'string'" [witchForm]="1"   [formGroup]="formGroup"></app-input-autocompletion>
+  <!--<app-input-autocompletion [propName]="'name'" [data]="_user" [propType]="'string'" [witchForm]="1"  [formGroup]="formGroup"></app-input-autocompletion>-->
+  <!--<app-input-autocompletion [propName]="'ref_client'" [data]="_user" [propType]="'string'" [witchForm]="1"   [formGroup]="formGroup"></app-input-autocompletion>-->
+
+  <input type="text" matInput [matAutocomplete]="autoName" formControlName="name" placeholder="name">
+  <mat-autocomplete  #autoName="matAutocomplete" (optionSelected)="itemSelectedName($event)"  >
+    <mat-option *ngFor="let option of dataValues"   [value]="option?.name">
+      {{ option.name }}
+    </mat-option>
+  </mat-autocomplete>
+
+  <div *ngIf="dataValues.length&&dataValues[0].ref_client">
+    <input [attr.disabled]="" type="text" matInput [matAutocomplete]="autoRefClient" formControlName="ref_client" placeholder="ref_client">
+    <mat-autocomplete   #autoRefClient="matAutocomplete" (optionSelected)="itemSelectedRefClient($event)"  >
+      <mat-option  *ngFor="let option of dataValues"  [value]="option?.ref_client">
+         {{ option.ref_client }}
+      </mat-option>
+    </mat-autocomplete>
+  </div>
+
+
   <input type="hidden" formControlName="id">
   <input type="text" formControlName="address" [readonly]="true" placeholder="address">
   <input type="text" formControlName="number" [readonly]="true" placeholder="number">
@@ -33,8 +51,8 @@
 </form>
 <!--  cascades  -->
 <form [ngClass]="{ 'notValid': !formGroup.valid }"  *ngIf="isCustomer==='cascades'"  novalidate [formGroup]="formGroup">
-  <app-input-autocompletion [propName]="'name'" [data]="_user" [propType]="'string'" [witchForm]="1"  [formGroup]="formGroup"></app-input-autocompletion>
-  <app-input-autocompletion [propName]="'ref_client'" [data]="_user" [propType]="'string'" [witchForm]="1"   [formGroup]="formGroup"></app-input-autocompletion>
+  <!--<app-input-autocompletion [propName]="'name'" [data]="_user" [propType]="'string'" [witchForm]="1"  [formGroup]="formGroup"></app-input-autocompletion>-->
+  <!--<app-input-autocompletion [propName]="'ref_client'" [data]="_user" [propType]="'string'" [witchForm]="1"   [formGroup]="formGroup"></app-input-autocompletion>-->
   <input type="hidden" formControlName="id">
   <app-info [formGroup]="formGroup.get('infos')"></app-info>
   <input type="number" formControlName="clientZone" [readonly]="true" placeholder="zone">
