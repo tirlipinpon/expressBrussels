@@ -6,4 +6,5 @@ export interface Distance {
   status: string;
   price: number;
   whichForm: number;
+  way: string;
 }

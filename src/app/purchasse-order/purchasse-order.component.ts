@@ -148,7 +148,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.formDistance.reset();
     this.distances = [];
     this.cdr.detectChanges();
-
   }
   chackIsFormAsValue(form, ...val) {
     const flattenObject = this.flattenObject(form.value);
@@ -282,7 +281,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   }
   isAllComplete(emitted: any): boolean {
     console.log(emitted)
-    if (this.isFormsValide()) {
+    if (this.isFormsValide() && emitted) {
       return this.calculDistance();
     }
     return false;
@@ -322,9 +321,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   calculPriceNational() {
   // set distance total +10km *2
     let distM = 0;
-    this.distances.map(w => {
-      distM += w.distanceValue;
-    });
+    this.distances.map(w => { distM += w.distanceValue; });
     distM += 10000;
     distM *= 2;
     let distKm = distM / 1000;
@@ -335,17 +332,11 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     }else if(this.formOptions.get('transport').value === 'voiture') {
       this.calculTransportAndOption(this.prixZoneCamionnette$, price);
     }
-  console.log(distKm);
-
+    console.log(distKm);
     let time = 0;
-    this.distances.map(w => {
-      time += w.durationValue;
-    });
-
+    this.distances.map(w => { time += w.durationValue;  });
     let status = '';
-    this.distances.map(w => {
-      status += w.whichForm + ':' + w.status + ' ';
-    });
+    this.distances.map(w => { status += w.whichForm + ':' + w.status + ' ';  });
 
     this.formDistance.patchValue({
       price: price.toFixed(2),
@@ -369,15 +360,16 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
                durationText: result.distance.rows["0"].elements["0"].duration.text,
                durationValue: result.distance.rows["0"].elements["0"].duration.value,
                status: result.distance.rows["0"].elements["0"].status,
-               whichForm: whichForm + ' orig: ' + result.distance.originAddresses[0] + ' dest: ' +  result.distance.destinationAddresses[0]
+               whichForm: whichForm,
+               way:  ' orig: ' + result.distance.originAddresses[0] + ' dest: ' +  result.distance.destinationAddresses[0]
              };
              if (this.distances.filter(w => (w.whichForm === whichForm)).length === 0) {
                this.distances.push(this.distance);
+               this.cdr.markForCheck();
                if(this.distances.length === 2) {
                // if (true) {
                  this.calculPriceNational();
                }
-               this.cdr.markForCheck();
              }
            };
          }
