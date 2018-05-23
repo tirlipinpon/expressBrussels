@@ -43,7 +43,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   private distance: Distance;
   distances: Distance[] = [];
   datas: any;
-  nameForm = ['removal','recipient'];
+  nameForm = ['removals','recipients'];
 
   formRemoval: FormGroup;
   formRecipient: FormGroup;
@@ -208,7 +208,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       fk_client: ['', Validators.required],
       active: ['', Validators.required],
       created: ['', Validators.required],
-      fk_type: ['', Validators.required]
+      fk_type: ['', Validators.required],
+      addressValidated: ['']
     });
   }
   initFormsRecipient(): void {
@@ -231,6 +232,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       active: ['', Validators.required],
       created: ['', Validators.required],
       fk_type: ['', Validators.required],
+      addressValidated: ['']
     });
   }
   initFormsOptions(): void {
@@ -256,6 +258,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
         canDeactive = false;
       }
     });
+    console.log(canDeactive)
     return canDeactive;
   }
   isFormsValide(): boolean {
@@ -279,9 +282,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.store.dispatch(new OrderActions.SaveOrder());
     this.resetOrder();
   }
-  isAllComplete(emitted: any): boolean {
-    console.log(emitted)
-    if (this.isFormsValide() && emitted) {
+  isAllComplete(emitted?: any): boolean {
+    if (emitted && this.isFormsValide()) {
       return this.calculDistance();
     }
     return false;
@@ -298,9 +300,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   }
   calculDistancesNational(): boolean {
     if (this.distances.length < 2) {
-    // if (true) {
-      this.setDistance(this.getRespgoogleMapDistanceMatrixOrigin(),1);
-      this.setDistance(this.getRespgoogleMapDistanceMatrixDestinataire(), 2);
+        this.setDistance(this.getRespgoogleMapDistanceMatrixOrigin(), this.nameForm[0]);
+        this.setDistance(this.getRespgoogleMapDistanceMatrixDestinataire(), this.nameForm[1]);
     }
     return true;
   }
@@ -332,7 +333,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     }else if(this.formOptions.get('transport').value === 'voiture') {
       this.calculTransportAndOption(this.prixZoneCamionnette$, price);
     }
-    console.log(distKm);
     let time = 0;
     this.distances.map(w => { time += w.durationValue;  });
     let status = '';
@@ -347,7 +347,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   }
 
   // distance
-  setDistance(respGoogleMatrix: any, whichForm: number ): void {
+  setDistance(respGoogleMatrix: any, whichForm: string ): void {
        respGoogleMatrix.then(result => {
          if (this.distances.length < 2) {
          // if (true) {
@@ -363,15 +363,29 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
                whichForm: whichForm,
                way:  ' orig: ' + result.distance.originAddresses[0] + ' dest: ' +  result.distance.destinationAddresses[0]
              };
-             if (this.distances.filter(w => (w.whichForm === whichForm)).length === 0) {
-               this.distances.push(this.distance);
-               this.cdr.markForCheck();
-               if(this.distances.length === 2) {
+
+           }
+           else if (respStatus === CONST.DIST_MATRIX_NOT_FOUND) {
+             console.log(respStatus);
+             this.distance = {
+               price: 0,
+               distanceText: 'error',
+               distanceValue: 0,
+               durationText: 'error',
+               durationValue: 0,
+               status: result.distance.rows["0"].elements["0"].status,
+               whichForm: whichForm,
+               way:  ' orig: ' + result.distance.originAddresses[0] + ' dest: ' +  result.distance.destinationAddresses[0]
+             };
+           }
+           if (this.distances.filter(w => (w.whichForm === whichForm)).length === 0) {
+             this.distances.push(this.distance);
+             this.cdr.markForCheck();
+             if (this.distances.length === 2) {
                // if (true) {
-                 this.calculPriceNational();
-               }
+               this.calculPriceNational();
              }
-           };
+           }
          }
         }).catch(error => {
          // this.resetDistance();
@@ -386,14 +400,14 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
         number: this.allFormGroup[0].get('number').value,
         cp: this.allFormGroup[0].get('cp').value,
         state: this.allFormGroup[0].get('state').value,
-        country: 'Belgique'
+        country: ''
       },
       {
         address: this.allFormGroup[1].get('address').value,
         number: this.allFormGroup[1].get('number').value,
         cp: this.allFormGroup[1].get('cp').value,
         state: this.allFormGroup[1].get('state').value,
-        country: 'Belgium'
+        country: ''
       });
   }
   getRespgoogleMapDistanceMatrixOrigin(): any {
@@ -410,7 +424,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
         number: this.allFormGroup[0].get('number').value,
         cp: this.allFormGroup[0].get('cp').value,
         state: this.allFormGroup[0].get('state').value,
-        country: 'Belgium'
+        country: ''
       });
   }
 

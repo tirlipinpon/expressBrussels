@@ -1,11 +1,11 @@
-import {Component, Input, Output, EventEmitter, ViewChild, OnInit, AfterViewInit} from '@angular/core';
+import {Component, Input, Output, EventEmitter, AfterViewInit} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {DataForm} from '../../../models/DataForm';
 import {Contact} from "../../../models/contact";
 import { Observable } from 'rxjs/Observable';
 import {} from "@angular/material";
-import {MatOptionSelectionChange} from "@angular/material";
 import {MatAutocompleteSelectedEvent} from "@angular/material";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-form',
@@ -22,7 +22,16 @@ export class FormComponent implements AfterViewInit {
   @Input('datas') dataValues:  DataForm[];
   @Output() updateDataForm: EventEmitter<string> = new EventEmitter<string>();
 
-  constructor() {}
+  constructor(private router: Router) {}
+
+  goPlaces(nameform: string): void {
+    console.log(nameform)
+    this.router.navigate(['/', 'menu', nameform]).then(nav => {
+      console.log(nav); // true if navigation is successful
+    }, err => {
+      console.log(err) // when there's an error
+    });
+  }
 
   ngAfterViewInit() {}
 
@@ -64,7 +73,8 @@ export class FormComponent implements AfterViewInit {
       fk_client: data.fk_client,
       active: data.active,
       created: data.created,
-      fk_type: data.fk_type
+      fk_type: data.fk_type,
+      addressValidated: data.addressValidated
     });
     this.saveDataCustomer();
   }

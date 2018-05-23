@@ -54,13 +54,15 @@ const appRoutes: Routes = [
       {
         path: '',
         component: PurchasseOrderComponent,
+        canActivate: [AlwaysAuthGuardService],
+        canDeactivate: [CanDeactivateFormGuardService],
         resolve: { id: RouteResolverService }
       },
       {
         path: 'order',
         component: PurchasseOrderComponent,
-        canActivate: [AlwaysAuthGuardService],
-        canDeactivate: [CanDeactivateFormGuardService],
+        // canActivate: [AlwaysAuthGuardService],
+        // canDeactivate: [CanDeactivateFormGuardService],
         resolve: { id: RouteResolverService }
       },
       {
@@ -90,7 +92,7 @@ const appRoutes: Routes = [
     ]
   },
   // otherwise redirect to home
-  { path: '**',                   redirectTo: ''}
+  // { path: '**',  redirectTo: ''}
 ];
 
 @NgModule({

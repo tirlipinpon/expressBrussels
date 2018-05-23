@@ -33,4 +33,10 @@ form {
 .notValid {
   border: 3px solid red!important;
 }
+.not-validated-by-google {
+  border: 1px solid red;
+}
+.text-red {
+  color: #ff0000;
+}
 

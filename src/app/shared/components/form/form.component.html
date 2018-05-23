@@ -16,7 +16,7 @@
   <button  type="button"  (click)="saveDataCustomer()">save</button>
 </form>
 <!--  notCascades  -->
-<form *ngIf="isCustomer==='notCascades'"  novalidate [formGroup]="formGroup">
+<form *ngIf="isCustomer==='notCascades'" [class.not-validated-by-google]="formGroup.get('addressValidated').value=='0'"  novalidate [formGroup]="formGroup">
   <!--<app-input-autocompletion [propName]="'name'" [data]="_user" [propType]="'string'" [witchForm]="1"  [formGroup]="formGroup"></app-input-autocompletion>-->
   <!--<app-input-autocompletion [propName]="'ref_client'" [data]="_user" [propType]="'string'" [witchForm]="1"   [formGroup]="formGroup"></app-input-autocompletion>-->
 
@@ -48,6 +48,10 @@
   <input type="hidden" formControlName="created" [readonly]="true">
   <!--<button (click)="resetForm(formGroup)">reset: {{ nameForm }}</button>-->
   <input type="hidden" formControlName="fk_type" [readonly]="true">
+  <div *ngIf="formGroup.get('addressValidated').value=='0'">
+    <span class="text-red">Attention cette adresse n'est pas valide, et risque de faussée les informations de la course. </span>
+    <a (click)="goPlaces(nameForm)">go to edit {{nameForm}}</a>
+  </div>
 </form>
 <!--  cascades  -->
 <form [ngClass]="{ 'notValid': !formGroup.valid }"  *ngIf="isCustomer==='cascades'"  novalidate [formGroup]="formGroup">
@@ -62,3 +66,5 @@
 </form>
 
 {{formGroup.valid}}
+
+<!--{{formGroup.value | json}}-->

@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import {Routes, RouterModule} from '@angular/router';
 import { CommonModule } from '@angular/common';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HttpClientModule} from '@angular/common/http';
@@ -37,8 +38,9 @@ import {MatAutocompleteModule} from "@angular/material";
 
 @NgModule({
   imports: [
-    CommonModule,
     BrowserModule,
+    RouterModule,
+    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,

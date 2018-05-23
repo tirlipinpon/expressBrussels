@@ -5,6 +5,6 @@ export interface Distance {
   durationValue?: number;
   status: string;
   price: number;
-  whichForm: number;
+  whichForm: string;
   way: string;
 }
