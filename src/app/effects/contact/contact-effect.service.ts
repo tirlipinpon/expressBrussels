@@ -31,4 +31,20 @@ export class ContactEffectService {
         })
     );
 
+
+  @Effect() addContact: Observable<Action> = this.action$
+    .ofType(ContactActions.ADD_CONTACT)
+    .withLatestFrom(  this.store.select('customer')  )
+    .switchMap(([action, dataForm]) =>
+      this.contactService.addContact(action.payload, dataForm.id)
+        .map(() => {
+          this.notif.notify('info', 'add contact OK ','');
+          return new ContactActions.AddContactSuccess();
+        })
+        .catch(err => {
+          this.notif.notify('error', 'add contact NOK ', err);
+          return Observable.of(new ContactActions.AddContactFail(err))
+        })
+    );
+
 }

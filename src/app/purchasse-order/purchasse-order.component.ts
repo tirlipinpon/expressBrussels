@@ -278,9 +278,22 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.resetDistance();
   }
 
+  addContact(form: FormGroup): void {
+    const resp = form.get('infos.info1').value;
+    if (resp)
+      this.store.dispatch(new ContactActions.AddContact({
+        name: resp,
+        fk_client_id: 0,
+        fk_resp_dest_id: form.get('id').value
+      }));
+  }
+
   recapOrder() {
     this.store.dispatch(new OrderActions.SaveOrder());
+    this.addContact(this.formRemoval);
+    this.addContact(this.formRecipient);
     this.resetOrder();
+
   }
   isAllComplete(emitted?: any): void {
     if (emitted && this.isFormsValide()) {

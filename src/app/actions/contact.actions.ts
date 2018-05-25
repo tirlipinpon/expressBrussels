@@ -1,5 +1,5 @@
 import {Action} from '@ngrx/store';
-import {ContactState} from '../models/contact';
+import {ContactState, Contact} from '../models/contact';
 
 export const GET_CONTACT = 'Get CONTACT';
 export class GetContact implements Action {
@@ -29,7 +29,7 @@ export class GetContactFail implements Action {
 export const ADD_CONTACT = 'Add CONTACT';
 export class AddContact implements Action {
   readonly type = ADD_CONTACT;
-  constructor(public payload?: any) {
+  constructor(public payload?: Contact) {
     console.log('in actions:' , this.type + ' payload:', this.payload);
   }
 }
