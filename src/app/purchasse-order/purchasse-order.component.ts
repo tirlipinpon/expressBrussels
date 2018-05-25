@@ -44,6 +44,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   distances: Distance[] = [];
   datas: any;
   nameForm = ['removals','recipients'];
+  showSendBtn = false;
 
   formRemoval: FormGroup;
   formRecipient: FormGroup;
@@ -147,6 +148,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   resetDistance() {
     this.formDistance.reset();
     this.distances = [];
+    this.cdr.detectChanges();
+    this.showSendBtn = false;
     this.cdr.detectChanges();
   }
   chackIsFormAsValue(form, ...val) {
@@ -258,7 +261,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
         canDeactive = false;
       }
     });
-    console.log(canDeactive)
     return canDeactive;
   }
   isFormsValide(): boolean {
@@ -275,48 +277,51 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       form.reset();
     });
     this.store.dispatch(new OrderActions.InitOrder(this.customerId));
-    this.formDistance.reset();
     this.resetDistance();
   }
+
   recapOrder() {
     this.store.dispatch(new OrderActions.SaveOrder());
     this.resetOrder();
   }
-  isAllComplete(emitted?: any): boolean {
+  isAllComplete(emitted?: any): void {
     if (emitted && this.isFormsValide()) {
-      return this.calculDistance();
+       this.calculDistance();
     }
-    return false;
   }
-  calculDistance(): boolean {
+  calculDistance(): void {
     if (this.isNational()) {
-     return this.calculDistancesNational();
+      this.calculDistancesNational();
     }else{
-     return this.calculPriceBxl();
+      this.calculPriceBxl();
     }
   }
   isNational(): boolean  {
     return +this.formRemoval.get('clientZone').value === 0 || +this.formRecipient.get('clientZone').value === 0;
   }
-  calculDistancesNational(): boolean {
+  calculDistancesNational(): void {
     if (this.distances.length < 2) {
         this.setDistance(this.getRespgoogleMapDistanceMatrixOrigin(), this.nameForm[0]);
         this.setDistance(this.getRespgoogleMapDistanceMatrixDestinataire(), this.nameForm[1]);
     }
-    return true;
   }
-  calculPriceBxl(): boolean  {
-    return true;
+  calculPriceBxl(): void  {
   }
 
-  calculTransportAndOption(prixZoneTransport: Observable<PrixZone>, price) {
-    prixZoneTransport.subscribe(data => {
+  calculTransportAndOption(prixZoneTransport: Observable<PrixZone>, price: number): void {
+  prixZoneTransport.subscribe(data => {
     price *= data.prixKm;
     if(this.formOptions.get('options').value === 'double_express') {
       price +=  (price * data.double_express / 100);
-    }else if(this.formOptions.get('options').value === 'go_and_back') {
-      price +=  (price * data.go_and_back / 100);
+      console.log(price);
     }
+    else if(this.formOptions.get('options').value === 'go_and_back') {
+      price +=  (price * data.go_and_back / 100);
+      console.log(price);
+    }
+    this.formDistance.patchValue({
+      price: price.toFixed(2)
+    });
   });
 }
   calculPriceNational() {
@@ -329,21 +334,25 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     let price = distKm;
 
     if(this.formOptions.get('transport').value === 'moto') {
-      this.calculTransportAndOption(this.prixZoneMoto$, price);
+     const resp =  this.calculTransportAndOption(this.prixZoneMoto$, price);
     }else if(this.formOptions.get('transport').value === 'voiture') {
       this.calculTransportAndOption(this.prixZoneCamionnette$, price);
     }
+
     let time = 0;
     this.distances.map(w => { time += w.durationValue;  });
     let status = '';
     this.distances.map(w => { status += w.whichForm + ':' + w.status + ' ';  });
 
     this.formDistance.patchValue({
-      price: price.toFixed(2),
       distance: distKm,
       elapse_time: time,
       status: status
-    })
+    });
+
+    this.showSendBtn = true;
+    this.cdr.markForCheck();
+
   }
 
   // distance
