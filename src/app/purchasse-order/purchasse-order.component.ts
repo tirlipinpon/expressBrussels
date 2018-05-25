@@ -140,9 +140,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       this.chackIsFormAsValue(this.formRecipient, val);
     });
     this.formDistance.valueChanges.subscribe(val => {
-      if (val.status && val.status.length) {
         this.store.dispatch(new OrderActions.EditOrderDistance(val));
-      }
     });
   }
   resetDistance() {
@@ -295,6 +293,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     }else{
       this.calculPriceBxl();
     }
+    this.showSendBtn = true;
+    this.cdr.markForCheck();
   }
   isNational(): boolean  {
     return +this.formRemoval.get('clientZone').value === 0 || +this.formRecipient.get('clientZone').value === 0;
@@ -306,9 +306,47 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     }
   }
   calculPriceBxl(): void  {
+    // prendre le prix de zone la plus grande
+    let zone: number;
+    if (this.formRemoval.get('clientZone').value > this.formRecipient .get('clientZone').value) {
+      zone = +this.formRemoval.get('clientZone').value;
+    }else{
+      zone = +this.formRecipient.get('clientZone').value;
+    }
+
+    // calcul options
+    if(this.formOptions.get('transport').value === 'moto') {
+      this.calculTransportAndOptionBxl(this.prixZoneMoto$, zone);
+    }else if(this.formOptions.get('transport').value === 'voiture') {
+      this.calculTransportAndOptionBxl(this.prixZoneCamionnette$, zone);
+    }
+    // after15h
+    //
   }
 
-  calculTransportAndOption(prixZoneTransport: Observable<PrixZone>, price: number): void {
+  calculTransportAndOptionBxl(prixZoneTransport: Observable<PrixZone>, zone: number): void {
+    prixZoneTransport.subscribe(data => {
+      let price = +data['zone'+zone];
+      if(this.formOptions.get('options').value === 'double_express') {
+        price +=  (price * (+data.double_express) / 100);
+      }
+      else if(this.formOptions.get('options').value === 'go_and_back') {
+        price +=  (price * (+data.go_and_back) / 100);
+      }
+      if (''+data.after15h !== '0') {
+        const after15H  = (+data['zone'+zone])*(+data.after15h);
+        price = price + after15H;
+      }
+      this.formDistance.patchValue({
+        price: price.toFixed(2),
+        distance: '',
+        elapse_time: '',
+        status: 'Zone origine: ' + this.formRemoval.get('clientZone').value + ' To zone dest: ' + this.formRecipient.get('clientZone').value
+      });
+    });
+  }
+
+  calculTransportAndOptionNational(prixZoneTransport: Observable<PrixZone>, price: number): void {
   prixZoneTransport.subscribe(data => {
     price *= data.prixKm;
     if(this.formOptions.get('options').value === 'double_express') {
@@ -332,9 +370,9 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     let price = distKm;
 
     if(this.formOptions.get('transport').value === 'moto') {
-      this.calculTransportAndOption(this.prixZoneMoto$, price);
+      this.calculTransportAndOptionNational(this.prixZoneMoto$, price);
     }else if(this.formOptions.get('transport').value === 'voiture') {
-      this.calculTransportAndOption(this.prixZoneCamionnette$, price);
+      this.calculTransportAndOptionNational(this.prixZoneCamionnette$, price);
     }
 
     let time = 0;
@@ -347,9 +385,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       elapse_time: time,
       status: status
     });
-
-    this.showSendBtn = true;
-    this.cdr.markForCheck();
   }
 
   // distance

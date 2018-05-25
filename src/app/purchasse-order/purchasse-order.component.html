@@ -31,13 +31,16 @@
   <div class="options-distance">
     <app-option [formGroup]="formOptions" (updateDataForm)="isAllComplete($event)"></app-option>
 
-    <div *ngIf="distances.length === 2">
-      <span>price: {{ formDistance.get('price').value }}</span>
+    <div *ngIf="formDistance.get('price').value">
+      <span>Price: {{ formDistance.get('price').value }}€</span>
       <br>
-      <div>distance: {{ distances[0]?.distanceText }} + {{ distances[1]?.distanceText }}</div>
+      <div *ngIf="distances[0]?.distanceText">Distance: {{ distances[0]?.distanceText }} + {{ distances[1]?.distanceText }}</div>
       <br>
-      <div>time: {{ distances[0]?.durationText }} + {{ distances[1]?.durationText }}</div>
+      <div *ngIf="distances[0]?.durationText">Time: {{ distances[0]?.durationText }} + {{ distances[1]?.durationText }}</div>
     </div>
+
+
+
     <form [formGroup]="formDistance">
       <input type="hidden" formControlName="status" value="{{distance?.status}}"><br>
       <input type="hidden" formControlName="price" value="{{distance?.price}}"><br>
