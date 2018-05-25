@@ -313,11 +313,9 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     price *= data.prixKm;
     if(this.formOptions.get('options').value === 'double_express') {
       price +=  (price * data.double_express / 100);
-      console.log(price);
     }
     else if(this.formOptions.get('options').value === 'go_and_back') {
       price +=  (price * data.go_and_back / 100);
-      console.log(price);
     }
     this.formDistance.patchValue({
       price: price.toFixed(2)
@@ -334,7 +332,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     let price = distKm;
 
     if(this.formOptions.get('transport').value === 'moto') {
-     const resp =  this.calculTransportAndOption(this.prixZoneMoto$, price);
+      this.calculTransportAndOption(this.prixZoneMoto$, price);
     }else if(this.formOptions.get('transport').value === 'voiture') {
       this.calculTransportAndOption(this.prixZoneCamionnette$, price);
     }
@@ -352,7 +350,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
 
     this.showSendBtn = true;
     this.cdr.markForCheck();
-
   }
 
   // distance

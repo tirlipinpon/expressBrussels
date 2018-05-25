@@ -4,3 +4,5 @@ export const DIST_MATRIX_NOT_FOUND: string = 'NOT_FOUND';
 export const DIST_MATRIX_OK: string = 'OK';
 //   ZERO_RESULTS — Aucun itinéraire n'a pu être identifié entre le point de départ et la destination.
 export const DIST_MATRIX_ZERO_RESULTS: string = 'ZERO_RESULTS';
+
+
