@@ -93,7 +93,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.order$ = this.store.select(fromRoot.selectors.getOrder);
     this.prixZoneMoto$ = this.store.select(fromRoot.selectors.getPrixZoneMotoData);
     this.prixZoneCamionnette$ = this.store.select(fromRoot.selectors.getPrixZoneCamionnetteData);
-    this.contact$ = this.store.select(fromRoot.selectors.getContactData).skipWhile(data => ! data || data.length === 0 );
+    this.contact$ = this.store.select(fromRoot.selectors.getContactData);
   }
   storeDispatch() {
     this.customerService.currentCustomerId.subscribe(id => {
@@ -278,20 +278,29 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.resetDistance();
   }
 
-  addContact(form: FormGroup): void {
-    const resp = form.get('infos.info1').value;
-    if (resp)
-      this.store.dispatch(new ContactActions.AddContact({
-        name: resp,
-        fk_client_id: 0,
-        fk_resp_dest_id: form.get('id').value
-      }));
+  addContacts(removalForm: FormGroup, recipientForm: FormGroup): void {
+    const c1 = removalForm.get('infos.info1').value;
+    let removC = null;
+    if (c1 && c1.length > 2) {
+      removC  = {
+        name: c1,
+        fk_client_id: removalForm.get('fk_client').value,
+        fk_resp_dest_id: removalForm.get('id').value}
+    }
+    const c2 = recipientForm.get('infos.info1').value;
+    let recipC = null;
+    if (c2 && c2.length > 2) {
+      recipC  = {
+        name: c2,
+        fk_client_id: recipientForm.get('fk_client').value,
+        fk_resp_dest_id: recipientForm.get('id').value}
+    }
+      this.store.dispatch(new ContactActions.AddContacts([removC, recipC]));
   }
 
   recapOrder() {
     this.store.dispatch(new OrderActions.SaveOrder());
-    this.addContact(this.formRemoval);
-    this.addContact(this.formRecipient);
+    this.addContacts(this.formRemoval, this.formRecipient);
     this.resetOrder();
 
   }

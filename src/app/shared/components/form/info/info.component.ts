@@ -12,10 +12,11 @@ export class InfoComponent implements OnInit, OnChanges {
   @Input('contact') contact: Contact[];
   contacts: Contact[];
   constructor() {}
-  ngOnInit() {  }
+  ngOnInit() {
+  }
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.contact.currentValue && changes.contact.currentValue.length) {
-      this.contacts = changes.contact.currentValue;
+    if (changes.contact && changes.contact.currentValue && changes.contact.currentValue.length) {
+      this.contacts =  changes.contact.currentValue;
     }
 
   }

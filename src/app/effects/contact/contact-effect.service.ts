@@ -6,6 +6,7 @@ import {NotificationService} from "../../services/notification.service";
 import {ContactService} from "../../services/contact.service";
 import {Observable} from "rxjs";
 import * as ContactActions  from '../../actions/contact.actions';
+import {AddContacts} from "../../actions/contact.actions";
 
 @Injectable()
 export class ContactEffectService {
@@ -32,13 +33,12 @@ export class ContactEffectService {
     );
 
 
-  @Effect() addContact: Observable<Action> = this.action$
-    .ofType(ContactActions.ADD_CONTACT)
-    .withLatestFrom(  this.store.select('customer')  )
-    .switchMap(([action, dataForm]) =>
-      this.contactService.addContact(action.payload, dataForm.id)
+  @Effect() addContacts: Observable<Action> = this.action$
+    .ofType(ContactActions.ADD_CONTACTS)
+    .switchMap((action: Action) =>
+      this.contactService.addContacts(action)
         .map(() => {
-          this.notif.notify('info', 'add contact OK ','');
+          this.notif.notify('info', 'add contacts OK ','');
           return new ContactActions.AddContactSuccess();
         })
         .catch(err => {

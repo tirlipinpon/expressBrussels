@@ -22,7 +22,7 @@
 
   <input type="text" matInput [matAutocomplete]="autoName" formControlName="name" placeholder="name">
   <mat-autocomplete  #autoName="matAutocomplete" (optionSelected)="itemSelectedName($event)"  >
-    <mat-option *ngFor="let option of dataValues"   [value]="option?.name">
+    <mat-option *ngFor="let option of dataValues" [value]="option?.name">
       {{ option.name }}
     </mat-option>
   </mat-autocomplete>

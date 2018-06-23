@@ -59,12 +59,13 @@ formDistance= {{formDistance.value | json}}<br>
 
 formOptions= {{formOptions.value | json}}<br>
 
+
 <div style="display:flex;">
   formRemoval = <pre>{{ allFormGroup[0].value | json}}</pre>
   formRecipient = <pre>{{ allFormGroup[1].value | json}}</pre>
 </div>
 
-<button (click)="addContact(formRecipient)"> add contact</button>
+<button (click)="addContacts(formRemoval, formRecipient)"> add contact</button>
 
 
 

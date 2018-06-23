@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, AfterViewInit} from '@angular/core';
+import {Component, Input, Output, EventEmitter, AfterViewInit, ChangeDetectorRef} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {DataForm} from '../../../models/DataForm';
 import {Contact} from "../../../models/contact";
@@ -25,7 +25,6 @@ export class FormComponent implements AfterViewInit {
   constructor(private router: Router) {}
 
   goPlaces(nameform: string): void {
-    console.log(nameform)
     this.router.navigate(['/', 'menu', nameform]).then(nav => {
       console.log(nav); // true if navigation is successful
     }, err => {

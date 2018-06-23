@@ -26,18 +26,19 @@ export class GetContactFail implements Action {
 }
 
 
-export const ADD_CONTACT = 'Add CONTACT';
-export class AddContact implements Action {
-  readonly type = ADD_CONTACT;
-  constructor(public payload?: Contact) {
-    console.log('in actions:' , this.type + ' payload:', this.payload);
+export const ADD_CONTACTS = 'Add CONTACTS';
+export class AddContacts implements Action {
+  readonly type = ADD_CONTACTS;
+  constructor(public payload: Contact[]) {
+    console.log('in actions:' , this.type + ' payload[0]:', this.payload[0]);
+    console.log('in actions:' , this.type + ' payload[1]:', this.payload[1]);
   }
 }
 
 export const ADD_CONTACT_SUCCESS = 'Add CONTACT Success';
 export class AddContactSuccess implements Action {
   readonly type = ADD_CONTACT_SUCCESS;
-  constructor(public payload: any) {
+  constructor(public payload?: any) {
     // console.log('in actions:' , this.type + ' payload:', this.payload);
   }
 }
@@ -46,7 +47,7 @@ export const ADD_CONTACT_FAIL = 'Add CONTACT Fail';
 export class AddContactFail implements Action {
   readonly type = ADD_CONTACT_FAIL;
   constructor(public payload: string) {
-    console.log('in actions:' , this.type + ' payload:', this.payload);
+    // console.log('in actions:' , this.type + ' payload:', this.payload);
   }
 }
 
@@ -54,6 +55,6 @@ export type All =
   GetContact
     | GetContactSuccess
     | GetContactFail
-    | AddContact
+    | AddContacts
     | AddContactSuccess
     | AddContactFail;
