@@ -91,7 +91,7 @@ export const SAVE_ORDER_FAIL = 'Save Order Fail';
 export class SaveOrderFail implements Action {
   readonly type = SAVE_ORDER_FAIL;
   constructor(public payload: string) {
-    // console.log('in actions get customer payload= ',payload);
+     console.log('in actions save order fail payload= ',payload);
   }
 }
 // =================== distance ================================

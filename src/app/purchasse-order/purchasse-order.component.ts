@@ -25,6 +25,8 @@ import {ActivatedRoute} from "@angular/router";
 import {PrixZone} from "../models/prixZone";
 import {Contact} from "../models/contact";
 
+import { map } from 'rxjs/operators';
+
 @Component({
   selector: 'app-purchasse-order',
   templateUrl: './purchasse-order.component.html',
@@ -50,6 +52,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   formRecipient: FormGroup;
   formOptions: FormGroup;
   formDistance: FormGroup;
+  contactRemoval$: Observable<Contact[]>;
+  contactRecipient$: Observable<Contact[]>;
   private allFormGroup: FormGroup[] = [];
   private valueRemovalChanges$;
   private valueRecipientChanges$;
@@ -58,6 +62,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   private valueRecipientInfosChanges$;
   private customerId: number;
   private idClient: any;
+
 
   constructor (
     private store: Store<fromRoot.AppState>,
@@ -118,10 +123,20 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.valueRemovalChanges$ = this.formRemoval.get('id').valueChanges.subscribe(val => {
       this.resetDistance();
       this.store.dispatch(new OrderActions.EditOrderRemoval(val));
+      this.contactRemoval$ = null;
+      this.contactRemoval$ = this.contact$
+        .pipe(
+          map(x => x.filter(data => +data['fk_resp_dest_id'] === +val) )
+        );
     });
     this.valueRecipientChanges$ = this.formRecipient.get('id').valueChanges.subscribe(val => {
       this.resetDistance();
       this.store.dispatch(new OrderActions.EditOrderRecipient(val));
+      this.contactRecipient$ = null;
+      this.contactRecipient$ = this.contact$
+        .pipe(
+          map(x => x.filter(data =>   +data['fk_resp_dest_id'] === +val) )
+        );
     });
     this.valueRemovalInfosChanges$ = this.formRemoval.get('infos').valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderRemovalInfos(val));
@@ -279,23 +294,23 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   }
 
   addContacts(removalForm: FormGroup, recipientForm: FormGroup): void {
-    const c1 = removalForm.get('infos.info1').value;
-    let removC = null;
-    if (c1 && c1.length > 2) {
-      removC  = {
-        name: c1,
-        fk_client_id: removalForm.get('fk_client').value,
-        fk_resp_dest_id: removalForm.get('id').value}
-    }
-    const c2 = recipientForm.get('infos.info1').value;
-    let recipC = null;
-    if (c2 && c2.length > 2) {
-      recipC  = {
-        name: c2,
-        fk_client_id: recipientForm.get('fk_client').value,
-        fk_resp_dest_id: recipientForm.get('id').value}
-    }
-      this.store.dispatch(new ContactActions.AddContacts([removC, recipC]));
+    // const c1 = removalForm.get('infos.info1').value;
+    // let removC = null;
+    // if (c1 && c1.length > 2) {
+    //   removC  = {
+    //     name: c1,
+    //     fk_client_id: removalForm.get('fk_client').value,
+    //     fk_resp_dest_id: removalForm.get('id').value}
+    // }
+    // const c2 = recipientForm.get('infos.info1').value;
+    // let recipC = null;
+    // if (c2 && c2.length > 2) {
+    //   recipC  = {
+    //     name: c2,
+    //     fk_client_id: recipientForm.get('fk_client').value,
+    //     fk_resp_dest_id: recipientForm.get('id').value}
+    // }
+    //   this.store.dispatch(new ContactActions.AddContacts([removC, recipC]));
   }
 
   recapOrder() {

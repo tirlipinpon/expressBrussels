@@ -6,7 +6,6 @@ import {NotificationService} from "../../services/notification.service";
 import {ContactService} from "../../services/contact.service";
 import {Observable} from "rxjs";
 import * as ContactActions  from '../../actions/contact.actions';
-import {AddContacts} from "../../actions/contact.actions";
 
 @Injectable()
 export class ContactEffectService {
@@ -45,6 +44,11 @@ export class ContactEffectService {
           this.notif.notify('error', 'add contact NOK ', err);
           return Observable.of(new ContactActions.AddContactFail(err))
         })
+    );
+
+  @Effect() addContactsSuccess: Observable<Action> = this.action$
+    .ofType(ContactActions.ADD_CONTACT_SUCCESS)
+    .map(() => new ContactActions.GetContact()
     );
 
 }

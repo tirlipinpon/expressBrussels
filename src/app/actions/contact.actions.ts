@@ -29,9 +29,8 @@ export class GetContactFail implements Action {
 export const ADD_CONTACTS = 'Add CONTACTS';
 export class AddContacts implements Action {
   readonly type = ADD_CONTACTS;
-  constructor(public payload: Contact[]) {
-    console.log('in actions:' , this.type + ' payload[0]:', this.payload[0]);
-    console.log('in actions:' , this.type + ' payload[1]:', this.payload[1]);
+  constructor(public payload: any) {
+    console.log('in actions:' , this.type + ' payload:', this.payload);
   }
 }
 
