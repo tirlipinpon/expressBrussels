@@ -1,11 +1,11 @@
 import {
-  Component, OnInit, OnDestroy, ChangeDetectorRef, HostListener, ElementRef, ViewChild, NgZone
+  Component, OnInit, OnDestroy, ChangeDetectorRef, HostListener
 } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs/Observable';
-import {NotificationService} from '../../services/notification.service';
-import * as actions  from '../../actions/removal.actions';
+import * as actionsRemoval  from '../../actions/removal.actions';
+import * as actionsRecipient  from '../../actions/recipient.actions';
 import * as fromRoot from '../../shared/appState';
 import {DataForm} from '../../models/DataForm';
 import * as moment from 'moment';
@@ -14,6 +14,7 @@ import {MyClientZones} from '../../models/my-client-zones';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import {CustomerService} from "../../services/customer.service";
+import {ActivatedRoute} from "@angular/router";
 
 
 @Component({
@@ -24,20 +25,30 @@ import {CustomerService} from "../../services/customer.service";
 export class RemovalsComponent implements OnInit, OnDestroy {
 
   private customerId: number;
-  private typeDataForm = 1;
+  private typeDataForm: number;
   storeData$: Observable<DataForm[]>;
   allFormGroup: FormGroup[] = [];
   clientZones$: Observable<MyClientZones[]>;
   clientZones: MyClientZones[];
+  private witchComponent: string;
 
 
   constructor(private store: Store<fromRoot.AppState>,
               private fb: FormBuilder,
               private customerService: CustomerService,
-              private cd: ChangeDetectorRef) {
+              private cd: ChangeDetectorRef,
+              private route: ActivatedRoute) {
+    this.witchComponent = this.route.routeConfig.path;
+    if (this.witchComponent === 'removals') {
+      this.typeDataForm = 1; // diff
+    }else{
+      this.typeDataForm = 2; // diff
+    }
+
     this.storeDispatch();
   }
   ngOnInit() {
+
     this.storeSelect();
     this.allFormGroup.push(this.createFormGroup(null));
     this.initFormsRemoval();
@@ -48,14 +59,21 @@ export class RemovalsComponent implements OnInit, OnDestroy {
     this.customerService.currentCustomerId.subscribe(id => {
       if (id !== 0) {
         this.customerId = id;
-        this.store.dispatch(new actions.GetRemovals(this.customerId*10+1)); // (id + type)  eg: id = 69; type=1 fk_type=691
+        if (this.witchComponent === 'removals') {
+          this.store.dispatch(new actionsRemoval.GetRemovals(this.customerId*10+this.typeDataForm)); // (id + type)  eg: id = 69; type=1 fk_type=691
+        }else if (this.witchComponent === 'recipients') {
+          this.store.dispatch(new actionsRecipient.GetRecipients(this.customerId*10+this.typeDataForm)); // (id + type)  eg: id = 69; type=1 fk_type=691
+        }
       }
     });
   }
   storeSelect() {
-    // this.customerId$ = this.store.select(fromRoot.selectors.getCustomerId);
-    // this.customerId$.subscribe(data => this.customerId = data );
-    this.storeData$ = this.store.select(fromRoot.selectors.getRemovalsData);
+    if (this.witchComponent === 'removals') {
+      this.storeData$ = this.store.select(fromRoot.selectors.getRemovalsData); // diff
+    }else if (this.witchComponent === 'recipients') {
+      this.storeData$ = this.store.select(fromRoot.selectors.getRecipientsData); // diff
+    }
+
     this.clientZones$ = this.store.select(fromRoot.selectors.getClientZonesData);
     this.clientZones$.subscribe(data => {
       this.clientZones = data;
@@ -94,7 +112,6 @@ export class RemovalsComponent implements OnInit, OnDestroy {
         ctrl.state.disable();
         ctrl.phone.disable();
         ctrl.phone.disable();
-        ctrl.created.disable();
       }else if (ctrl.active.value === '1'){
         ctrl.name.enable();
         ctrl.ref_client.enable();
@@ -104,7 +121,6 @@ export class RemovalsComponent implements OnInit, OnDestroy {
         ctrl.state.enable();
         ctrl.phone.enable();
         ctrl.phone.enable();
-        ctrl.created.disable();
       }
     });
     this.cd.markForCheck();
@@ -139,7 +155,12 @@ export class RemovalsComponent implements OnInit, OnDestroy {
     });
   }
   update(form: FormGroup): void {
-    this.store.dispatch(new actions.EditRemoval(form.value));
+    if (this.witchComponent === 'removals') {
+      this.store.dispatch(new actionsRemoval.EditRemoval(form.value)); // diff
+    }else if (this.witchComponent === 'recipients') {
+      this.store.dispatch(new actionsRecipient.EditRecipient(form.value)); // diff
+    }
+
     form.markAsUntouched();
     form.markAsPristine();
   }
@@ -154,10 +175,19 @@ export class RemovalsComponent implements OnInit, OnDestroy {
       form.enable();
       form.get('created').disable();
     }
-    this.store.dispatch(new actions.DeleteRemoval(<DataForm>form.value));
+    if (this.witchComponent === 'removals') {
+      this.store.dispatch(new actions.DeleteRemoval(<DataForm>form.value)); // diff
+    }else if (this.witchComponent === 'recipients') {
+      this.store.dispatch(new actions.DeleteRecipient(<DataForm>form.value)); // diff
+    }
+
   }
   add(form: FormGroup): void {
-    this.store.dispatch(new actions.AddRemoval(form.value));
+    if (this.witchComponent === 'removals') {
+      this.store.dispatch(new actionsRemoval.AddRemoval(form.value)); // diff
+    }else if (this.witchComponent === 'recipients') {
+      this.store.dispatch(new actionsRecipient.AddRecipient(form.value)); // diff
+    }
     this.allFormGroup[0].reset();
     this.allFormGroup[0].markAsUntouched();
     this.allFormGroup[0].markAsPristine();

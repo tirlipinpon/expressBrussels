@@ -56,7 +56,7 @@ export const ADD_RECIPIENT = 'Add Recipient';
 export class AddRecipient implements Action {
   readonly type = ADD_RECIPIENT;
   constructor(public payload: DataForm) {
-    // console.log('in actions add Recipient payload= ',payload);
+    console.log('in actions add Recipient payload= ',payload);
   }
 }
 
@@ -64,7 +64,7 @@ export const ADD_RECIPIENT_SUCCESS = 'Add Recipient Success';
 export class AddRecipientSuccess implements Action {
   readonly type = ADD_RECIPIENT_SUCCESS;
   constructor(public payload: number) {
-    // console.log('in actions add Recipient success payload= ',payload);
+    console.log('in actions add Recipient success payload= ',payload);
   }
 }
 
@@ -72,7 +72,7 @@ export const ADD_RECIPIENT_FAIL = 'Add Recipient Fail';
 export class AddRecipientFail implements Action {
   readonly type = ADD_RECIPIENT_FAIL;
   constructor(public payload: string) {
-    // console.log('in actions add Recipient payload= ',payload);
+    console.log('in actions add Recipient payload= ',payload);
   }
 }
 

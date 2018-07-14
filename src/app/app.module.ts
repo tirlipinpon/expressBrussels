@@ -19,7 +19,6 @@ import {NotificationService} from './services/notification.service';
 import { CommonModule } from '@angular/common';
 import {SharedModule} from './shared/shared.module';
 import {HttpClientModule} from '@angular/common/http';
-import {RecipientsEditModule} from './recipients-edit/recipients-edit.module';
 import {RemovalsEditModule} from './removals-edit/removals-edit.module';
 import {RemovalService} from './services/removal.service';
 import { OrdersComponent } from './orders/orders.component';
@@ -79,7 +78,7 @@ const appRoutes: Routes = [
       },
       {
         path: 'recipients',
-        component: RecipientsComponent,
+        component: RemovalsComponent,
         canActivate: [AlwaysAuthGuardService],
         canDeactivate: [CanDeactivateFormGuardService]
       },
@@ -119,7 +118,6 @@ const appRoutes: Routes = [
     MatSortModule,
 
     PurchasseModule,
-    RecipientsEditModule,
     RemovalsEditModule,
     SharedModule,
     CascadeModule,

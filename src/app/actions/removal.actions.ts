@@ -56,7 +56,7 @@ export const ADD_REMOVAL = 'Add Removal';
 export class AddRemoval implements Action {
   readonly type = ADD_REMOVAL;
   constructor(public payload: DataForm) {
-    // console.log('in actions add removal payload= ',payload);
+    console.log('in actions add removal payload= ',payload);
   }
 }
 
@@ -64,7 +64,7 @@ export const ADD_REMOVAL_SUCCESS = 'Add Removal Success';
 export class AddRemovalSuccess implements Action {
   readonly type = ADD_REMOVAL_SUCCESS;
   constructor(public payload: number) {
-    // console.log('in actions add removal success payload= ',payload);
+    console.log('in actions add removal success payload= ',payload);
   }
 }
 
@@ -72,7 +72,7 @@ export const ADD_REMOVAL_FAIL = 'Add Removal Fail';
 export class AddRemovalFail implements Action {
   readonly type = ADD_REMOVAL_FAIL;
   constructor(public payload: string) {
-    // console.log('in actions add removal payload= ',payload);
+    console.log('in actions add removal payload= ',payload);
   }
 }
 
