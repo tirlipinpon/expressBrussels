@@ -1,6 +1,20 @@
 <div class="pos-rel">
   <form  novalidate [formGroup]="formGroup">
-    <input id="{{propName}}" (focus)="toogleDropDown(true)" type="{{type}}" formControlName="{{propName}}" autocomplete="off" placeholder="{{propName}}" >
+
+    <mat-form-field appearance="fill">
+      <mat-label>Fill form {{propName}}</mat-label>
+      <input matInput
+             id="{{propName}}"
+             (focus)="toogleDropDown(true)"
+             type="{{type}}"
+             formControlName="{{propName}}"
+             autocomplete="off"
+             placeholder="{{propName}}">
+      <mat-icon *ngIf="propName==='cp'" matSuffix></mat-icon>
+      <mat-icon *ngIf="propName==='state'" matSuffix><fa-icon [icon]="['fas', 'university'] " size="xs"></fa-icon></mat-icon>
+    </mat-form-field>
+
+
   </form>
   <div clickOutside [myId]="propName" (clickOutside)="toogleDropDown(false)" *ngIf="showDropDown" class="state-container-dropdown">
     <div>

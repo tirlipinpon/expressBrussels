@@ -1,9 +1,19 @@
 <form  novalidate [formGroup]="formGroup" [class.not-validated-by-google]="formGroup.get('addressValidated').value=='0'">
   <app-autocomplete-google [refInputAutoComplete]="refInputAutoComplete" [formGroup]="formGroup"></app-autocomplete-google>
-  <input type="text" formControlName="number">
+
+
+  <mat-form-field appearance="fill">
+    <mat-label>Fill form number</mat-label>
+    <input matInput
+           formControlName="number"
+           autocomplete="off"
+           #input_phone
+           placeholder="number">
+  </mat-form-field>
+
   <!-- directive input autocompletion -->
   <app-input-autocompletion [propName]="'cp'" [data]="clientZones" [propType]="'number'" [witchForm]="2"  [formGroup]="formGroup"></app-input-autocompletion>
   <app-input-autocompletion #refInputAutoComplete [propName]="'state'" [data]="clientZones" [propType]="'string'" [witchForm]="2"  [formGroup]="formGroup"></app-input-autocompletion>
-  <input type="number" formControlName="clientZone" placeholder="client zone">
-  <input type="number" formControlName="addressValidated" placeholder="address validated">
+  <input type="hidden" formControlName="clientZone" placeholder="client zone">
+  <input type="hidden" formControlName="addressValidated" placeholder="address validated">
 </form>

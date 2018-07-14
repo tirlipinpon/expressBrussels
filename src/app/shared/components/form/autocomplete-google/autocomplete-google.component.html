@@ -1,10 +1,17 @@
 <form  novalidate [formGroup]="formGroup">
-<input #search
-       type="text"
-       formControlName="address"
-       placeholder="address"
-       autocorrect="off"
-       autocapitalize="off"
-       spellcheck="off"
-       class="form-control">
+  <mat-form-field appearance="fill">
+    <mat-label>Fill form address</mat-label>
+    <input matInput
+           #search
+           formControlName="address"
+           autocorrect="off"
+           autocapitalize="off"
+           spellcheck="off"
+           #input_address
+           placeholder="address"
+           class="form-control"
+           required>
+    <mat-error *ngIf="formGroup.get('address').invalid">address is required</mat-error>
+    <mat-icon matSuffix><fa-icon [icon]="['fas', 'home'] " size="xs"></fa-icon></mat-icon>
+  </mat-form-field>
 </form>

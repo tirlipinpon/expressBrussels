@@ -37,6 +37,12 @@ import {MatAutocompleteModule, MatSelectModule} from "@angular/material";
 import { ValidatorClassDirective } from './directives/validator-class.directive';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material';
+import {MatIconModule} from '@angular/material/icon';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import {faPhone, faHome, faClock, faUser, faUniversity, faIdCard} from '@fortawesome/free-solid-svg-icons';
+
+library.add(faPhone, faHome, faClock, faUser, faUniversity, faIdCard);
 
 @NgModule({
   imports: [
@@ -55,6 +61,8 @@ import {MatInputModule} from '@angular/material';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatIconModule,
+    FontAwesomeModule,
 
 
     EffectsModule.forRoot([
@@ -84,7 +92,9 @@ import {MatInputModule} from '@angular/material';
     AddressComponent,
     ValidatorClassDirective,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    FontAwesomeModule,
+    MatIconModule
   ],
   declarations: [
     // component

@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 export class ValidatorClassDirective {
 
   protected _elementClass: string[] = [];
-  @Input('appValidatorClass-min') minValue: number;
+  @Input('appValidatorClass') minValue: number;
   @Input() maxValue: number;
 
   // @HostBinding('class')

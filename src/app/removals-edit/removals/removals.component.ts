@@ -9,7 +9,6 @@ import * as actions  from '../../actions/removal.actions';
 import * as fromRoot from '../../shared/appState';
 import {DataForm} from '../../models/DataForm';
 import * as moment from 'moment';
-import {ConfirmationService} from 'primeng/components/common/confirmationservice';
 import * as ClientZonesActions  from '../../actions/clientZones.actions';
 import {MyClientZones} from '../../models/my-client-zones';
 import 'rxjs/add/operator/debounceTime';
@@ -30,6 +29,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
   allFormGroup: FormGroup[] = [];
   clientZones$: Observable<MyClientZones[]>;
   clientZones: MyClientZones[];
+
 
   constructor(private store: Store<fromRoot.AppState>,
               private fb: FormBuilder,
@@ -134,7 +134,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
       type: [data ? data.type : this.typeDataForm],
       fk_client: [data ? data.fk_client : this.customerId],
       active: [data ? active : 1],
-      created: [data ? moment(data.created).format('DD-MM-YYYY') : ''],
+      created: [{value: data ? moment(data.created).format('DD-MM-YYYY') : '', disabled: true}],
       fk_type: [data ? data.fk_type : this.customerId+''+this.typeDataForm],
     });
   }
