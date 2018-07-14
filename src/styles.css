@@ -7,3 +7,12 @@
 .ui-growl-message-info    {color: blue!important}
 .ui-growl-message-warn    {color: grey!important}
 
+.v-empty {
+  background-color: #c55f60;
+}
+.v-to-short {
+  background-color: rgba(100, 91, 113, 0.3)
+}
+.v-to-long {
+  background-color: rgba(197, 91, 113, 0.3);
+}

@@ -33,8 +33,10 @@ import { AddressComponent } from './components/form/address/address.component';
 import {PrixZoneMotoEffectService} from "../effects/prix-zone-moto/prix-zone-moto.effect.service";
 import {PrixZoneCamionnetteEffectService} from "../effects/prix-zone-camionnette/prix-zone-camionnette.effect.service";
 import {ContactEffectService} from "../effects/contact/contact-effect.service";
-import {MatAutocompleteModule} from "@angular/material";
-
+import {MatAutocompleteModule, MatSelectModule} from "@angular/material";
+import { ValidatorClassDirective } from './directives/validator-class.directive';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material';
 
 @NgModule({
   imports: [
@@ -50,6 +52,10 @@ import {MatAutocompleteModule} from "@angular/material";
     DialogModule,
     ConfirmDialogModule,
     MatAutocompleteModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+
 
     EffectsModule.forRoot([
       CustomerEffectService,
@@ -75,21 +81,29 @@ import {MatAutocompleteModule} from "@angular/material";
     ClientCpPipe,
     InputAutocompletionComponent,
     AutocompleteGoogleComponent,
-    AddressComponent
+    AddressComponent,
+    ValidatorClassDirective,
+    MatFormFieldModule,
+    MatInputModule
   ],
   declarations: [
+    // component
     NotificationComponent,
     FormComponent,
-    DropDownDirective,
-    OnBlurDirective,
     InfoComponent,
     OptionComponent,
-    SearchFilterPipe,
     ProfileComponent,
-    ClientCpPipe,
     InputAutocompletionComponent,
     AutocompleteGoogleComponent,
-    AddressComponent
+    AddressComponent,
+    // directive
+    DropDownDirective,
+    OnBlurDirective,
+    ValidatorClassDirective,
+    // pipe
+    ClientCpPipe,
+    SearchFilterPipe
+
   ],
   providers: [
     ConfirmationService

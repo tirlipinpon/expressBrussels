@@ -5,6 +5,19 @@
   <div class="formRemoval" >
     <form  novalidate [formGroup]="allFormGroup[0]">
       <input type="hidden" formControlName="id">
+
+      <mat-form-field appearance="outline" MatFormFieldControl>
+        <input matInput
+               formControlName="name"
+               [appValidatorClass-min]="3"
+               maxValue="10"
+               minlength="10"
+               autocomplete="off"
+               #input
+               placeholder="name">
+        <mat-hint align="end">min {{input.value?.length || 0}}/4</mat-hint>
+      </mat-form-field>
+
       <input type="text" formControlName="name" autocomplete="off" placeholder="name">
       <input type="text"  formControlName="ref_client" autocomplete="off" placeholder="ref_client">
       <app-address [formGroup]="allFormGroup[0]" [data]="clientZones"></app-address>
@@ -18,14 +31,14 @@
   <div class="formRemoval" *ngFor="let removal of allFormGroup | slice:1" let index="index" >
       <form  novalidate [formGroup]="removal" >
         <input type="hidden" formControlName="id" >
-        <input type="text" formControlName="name" autocomplete="off" >
+        <input type="text" [appValidatorClass]="3" maxValue="10" formControlName="name" autocomplete="off" >
         <input type="text" formControlName="ref_client" autocomplete="off">
         <app-address [formGroup]="removal" [data]="clientZones"></app-address>
         <input type="text" formControlName="phone">
         <input type="text" formControlName="created">
         <input type="hidden" formControlName="fk_type">
-        <button [disabled]="!removal.dirty" (click)="update(removal)"> update </button>
-        <button (click)="delete(removal)"> {{removal.get('active').value==1 ? 'desactive' : 'active'}} </button>
+        <button [disabled]="!removal.dirty || !removal.valid  " (click)="update(removal)"> update </button>
+        <button  (click)="delete(removal)"> {{removal.get('active').value==1 ? 'desactive' : 'active'}} </button>
       </form>
   </div>
 </div>

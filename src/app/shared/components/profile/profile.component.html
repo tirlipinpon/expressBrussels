@@ -1,13 +1,25 @@
 <p-dialog header="Edit profile" [(visible)]="display">
 
-  <app-form
-  [nameForm]="nameForm[0]"
-  [datas]="customer$ | async"
-  [isCustomer]="'customer'"
-  [formGroup]="formCustomer"
-  (updateDataForm)="saveCustomer()"
-  >
-  </app-form>
+
+  <!--  customer  -->
+  <form novalidate [formGroup]="formCustomer" style="display:flex;flex-direction:column;">
+    <input type="hidden" formControlName="id">
+    <input type="text" formControlName="name" placeholder="name">
+    <input type="text" formControlName="address" placeholder="address">
+    <input type="text" formControlName="number" placeholder="number">
+    <input type="number" formControlName="cp" placeholder="cp">
+    <input type="text" formControlName="state" placeholder="state">
+    <input type="text" formControlName="phone" placeholder="phone">
+    <div formGroupName="infos">
+      <input type="text" formControlName="info1" placeholder="mail">
+      <input type="text" formControlName="info2" placeholder="mdp">
+    </div>
+    <input type="hidden" formControlName="created">
+    <input type="hidden" formControlName="fk_type">
+    <button  type="button"  (click)="saveCustomer()">save</button>
+  </form>
+
 </p-dialog>
+
 
 <button type="text" (click)="showDialog()" pButton  label="edit profile"></button>

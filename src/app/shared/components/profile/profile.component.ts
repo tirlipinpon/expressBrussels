@@ -28,12 +28,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
               private customerService: CustomerService,
               private fb: FormBuilder) {
     this.storeSelect();
-    this.initFormsCustomer();
   }
 
   ngOnInit() {
     this.storeDispatch();
-    this.onValueCustomerChanged();
+
   }
   ngOnDestroy() {
     this.formValueChanges$.unsubscribe();
@@ -51,6 +50,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   storeSelect(){
     this.customer$ = this.store.select(fromRoot.selectors.getCustomer);
+    this.customer$.subscribe(data => {
+      this.initFormsCustomer(data);
+      this.onValueCustomerChanged();
+    })
   }
   storeDispatch() {
     // this.store.dispatch(new CustomerActions.GetCustomer(1));
@@ -66,25 +69,25 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.store.dispatch(new CustomerActions.SaveCustomer());
   }
 
-  initFormsCustomer(): void {
+  initFormsCustomer(data: DataForm): void {
     this.formCustomer = this.fb.group({
-      id: ['', [Validators.required]],
-      name: ['', Validators.required],
+      id: [data['id'], [Validators.required]],
+      name: [data['name'], Validators.required],
       ref_client: [''],
-      address: ['', Validators.required],
-      number: ['', Validators.required],
-      cp: ['', Validators.required],
-      state: ['', Validators.required],
-      phone: ['', Validators.required],
+      address: [data['address'], Validators.required],
+      number: [data['number'], Validators.required],
+      cp: [data['cp'], Validators.required],
+      state: [data['state'], Validators.required],
+      phone: [data['phone'], Validators.required],
       infos: this.fb.group({
-        info1: ['', { updateOn: 'blur', validators: [Validators.required]} ],
-        info2: ['', { updateOn: 'blur', validators: [Validators.required]} ],
+        info1: [data['infos.info1'], { updateOn: 'blur', validators: [Validators.required]} ],
+        info2: [data['infos.info2'], { updateOn: 'blur', validators: [Validators.required]} ],
       }),
-      type: ['', Validators.required],
-      fk_client: ['', Validators.required],
-      active: ['', Validators.required],
-      created: ['', Validators.required],
-      fk_type: [0, Validators.required]
+      type: [data['type'], Validators.required],
+      fk_client: [data['fk_client'], Validators.required],
+      active: [data['active'], Validators.required],
+      created: [data['created'], Validators.required],
+      fk_type: [10, Validators.required]
     });
   }
 
