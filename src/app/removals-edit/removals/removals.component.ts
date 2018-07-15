@@ -15,6 +15,7 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import {CustomerService} from "../../services/customer.service";
 import {ActivatedRoute} from "@angular/router";
+import {ValidatorforbiddenName} from "../../shared/validators/validators-conflict.directive";
 
 
 @Component({
@@ -48,7 +49,6 @@ export class RemovalsComponent implements OnInit, OnDestroy {
     this.storeDispatch();
   }
   ngOnInit() {
-
     this.storeSelect();
     this.allFormGroup.push(this.createFormGroup(null));
     this.initFormsRemoval();
@@ -81,7 +81,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
   }
   initFormsRemoval(): void {
     this.storeData$.subscribe(data => {
-      this.cd.markForCheck();
+      this.cd.markForCheck(); // TODO: remove ?
       if (data.length ) {
         // init data
         if (this.allFormGroup.length === 1) {
@@ -134,7 +134,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
     }
     return this.fb.group({
       id: [data ? data.id : ''],
-      name: [data? data.name : '', Validators.required],
+      name: [data? data.name : '', [Validators.required, ValidatorforbiddenName(this.storeData$)]],
       ref_client: [data ? data.ref_client : ''],
       address: [data ? data.address : '', Validators.required],
       number: [data ? data.number : '', Validators.required],
@@ -176,9 +176,9 @@ export class RemovalsComponent implements OnInit, OnDestroy {
       form.get('created').disable();
     }
     if (this.witchComponent === 'removals') {
-      this.store.dispatch(new actions.DeleteRemoval(<DataForm>form.value)); // diff
+      this.store.dispatch(new actionsRemoval.DeleteRemoval(<DataForm>form.value)); // diff
     }else if (this.witchComponent === 'recipients') {
-      this.store.dispatch(new actions.DeleteRecipient(<DataForm>form.value)); // diff
+      this.store.dispatch(new actionsRecipient.DeleteRecipient(<DataForm>form.value)); // diff
     }
 
   }

@@ -7,7 +7,6 @@ import {Routes, RouterModule} from '@angular/router';
 import {PurchasseOrderComponent} from './purchasse-order/purchasse-order.component';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import { SortByValuePipe } from './shared/pipe/sort-by-value.pipe';
-import { RecipientsComponent } from './recipients-edit/recipients/recipients.component';
 import { RemovalsComponent } from './removals-edit/removals/removals.component';
 import { AlwaysAuthGuardService } from './services/always-auth-guard.service';
 import { UnsearchedTermGuard } from './services/UnseavedTermGuard';

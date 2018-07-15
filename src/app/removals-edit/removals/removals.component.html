@@ -16,10 +16,11 @@
                placeholder="name"
                required>
         <mat-icon matSuffix><fa-icon [icon]="['fas', 'user'] " size="xs"></fa-icon></mat-icon>
-        <mat-error *ngIf="allFormGroup[0].get('name').invalid">Name is required and min 3 character</mat-error>
+        <mat-error *ngIf="allFormGroup[0].get('name')?.errors?.required">Name is required and min 3 character</mat-error>
+        <mat-error *ngIf="allFormGroup[0].get('name')?.errors?.duplicate">This name exist</mat-error>
         <mat-hint align="end">min {{input_name.value?.length || 0}}/3</mat-hint>
       </mat-form-field>
-
+dup:{{allFormGroup[0].get('name')?.errors?.duplicate|json}}
 
       <mat-form-field >
         <input matInput
@@ -64,7 +65,7 @@
                  placeholder="name"
                  required>
           <mat-icon matSuffix><fa-icon [icon]="['fas', 'user'] " size="xs"></fa-icon></mat-icon>
-          <mat-error *ngIf="allFormGroup[0].get('name').invalid">Name is required and min 3 character</mat-error>
+          <mat-error *ngIf="removal.get('name').invalid">Name is required and min 3 character</mat-error>
           <mat-hint align="end">min {{s_input_name.value?.length || 0}}/3</mat-hint>
         </mat-form-field>
         <mat-form-field >
