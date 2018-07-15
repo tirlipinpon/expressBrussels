@@ -12,8 +12,7 @@ export class GetDistanceMatrixService {
 
   googleMapDistanceMatrixService(orig: Address, destB: Address): Promise<any> {
       return  this.mapsAPILoader.load()
-        .then(
-        () => {
+        .then( () => {
            // return this.ngZone.run(() => {
             const origin1 = orig.address + ' ' + orig.number + ' ' + orig.cp + ', ' + orig.state + ', ' + orig.country;
             const destinationA = destB.address + ' ' + destB.number + ' ' + destB.cp + ', ' + destB.state + ', ' + destB.country;
@@ -37,7 +36,6 @@ export class GetDistanceMatrixService {
                  }
                );
              });
-          // });
 
         })
         .catch(this.handleError);

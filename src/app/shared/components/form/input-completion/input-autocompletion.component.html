@@ -9,7 +9,8 @@
              type="{{type}}"
              formControlName="{{propName}}"
              autocomplete="off"
-             placeholder="{{propName}}">
+             placeholder="{{propName}}"
+             required>
       <mat-icon *ngIf="propName==='cp'" matSuffix></mat-icon>
       <mat-icon *ngIf="propName==='state'" matSuffix><fa-icon [icon]="['fas', 'university'] " size="xs"></fa-icon></mat-icon>
     </mat-form-field>

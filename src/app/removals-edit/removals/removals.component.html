@@ -7,7 +7,7 @@
       <input type="hidden" formControlName="id">
 
 
-      <mat-form-field hintLabel="Required">
+      <mat-form-field >
         <input matInput
                formControlName="name"
                minlength="3"
@@ -16,11 +16,11 @@
                placeholder="name"
                required>
         <mat-icon matSuffix><fa-icon [icon]="['fas', 'user'] " size="xs"></fa-icon></mat-icon>
-        <mat-error *ngIf="allFormGroup[0].get('name')?.errors?.required">Name is required and min 3 character</mat-error>
+        <mat-error *ngIf="allFormGroup[0].get('name')?.errors?.required">Name is required.</mat-error>
+        <mat-error *ngIf="allFormGroup[0].get('name')?.errors?.minLength">Name min 3 character.</mat-error>
         <mat-error *ngIf="allFormGroup[0].get('name')?.errors?.duplicate">This name exist</mat-error>
-        <mat-hint align="end">min {{input_name.value?.length || 0}}/3</mat-hint>
+        <mat-hint *ngIf="input_name.value?.length<3" align="end">min {{input_name.value?.length || 0}}/3</mat-hint>
       </mat-form-field>
-dup:{{allFormGroup[0].get('name')?.errors?.duplicate|json}}
 
       <mat-form-field >
         <input matInput
@@ -30,27 +30,26 @@ dup:{{allFormGroup[0].get('name')?.errors?.duplicate|json}}
                #input_ref_client
                placeholder="ref_client">
         <mat-icon matSuffix><fa-icon [icon]="['fas', 'id-card'] " size="xs"></fa-icon></mat-icon>
-        <mat-hint align="end">min {{input_ref_client.value?.length || 0}}/4</mat-hint>
+        <mat-hint *ngIf="input_ref_client.value?.length<4"  align="end">min {{input_ref_client.value?.length || 0}}/4</mat-hint>
       </mat-form-field>
 
 
       <app-address [formGroup]="allFormGroup[0]" [data]="clientZones"></app-address>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Fill form field</mat-label>
+        <mat-form-field>
+          <mat-label>Fill form phone</mat-label>
           <input matInput
                  formControlName="phone"
                  autocomplete="off"
                  #input_phone
                  placeholder="phone">
           <mat-icon matSuffix><fa-icon [icon]="['fas', 'phone'] " size="xs"></fa-icon></mat-icon>
-          <mat-hint>Hint</mat-hint>
         </mat-form-field>
 
       <input type="hidden" formControlName="fk_type">
       <input type="hidden" formControlName="active" value="1">
       <input type="hidden" formControlName="clientZone">
-      <button  (click)="add(allFormGroup[0])"> add </button>
+      <button [disabled]="allFormGroup[0].invalid" (click)="add(allFormGroup[0])"> add </button>
     </form>
   </div>
   <div class="formRemoval" *ngFor="let removal of allFormGroup | slice:1" let index="index" >
@@ -65,7 +64,8 @@ dup:{{allFormGroup[0].get('name')?.errors?.duplicate|json}}
                  placeholder="name"
                  required>
           <mat-icon matSuffix><fa-icon [icon]="['fas', 'user'] " size="xs"></fa-icon></mat-icon>
-          <mat-error *ngIf="removal.get('name').invalid">Name is required and min 3 character</mat-error>
+          <mat-error *ngIf="removal.get('name')?.errors?.required">Name is required.</mat-error>
+          <mat-error *ngIf="removal.get('name')?.errors?.minLength">Name min 3 character.</mat-error>
           <mat-hint align="end">min {{s_input_name.value?.length || 0}}/3</mat-hint>
         </mat-form-field>
         <mat-form-field >
