@@ -24,7 +24,7 @@ import { OrdersComponent } from './orders/orders.component';
 import {MatTableModule} from '@angular/material/table';
 import {
   MatFormFieldModule, MatSortModule, MatPaginatorModule, MatInputModule, MatMenuModule,
-  MatButtonModule
+  MatButtonModule, MatRadioModule
 } from '@angular/material'; // TODO: import refrences
 import {CanDeactivateFormGuardService} from './services/can-deactivate-form-guard.service';
 import { LoginComponent } from './login/login.component';
@@ -125,6 +125,7 @@ const appRoutes: Routes = [
     SharedModule,
     CascadeModule,
     MatButtonModule,
+    MatRadioModule,
 
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyCdhzqNNDkWkbpqgajvi_66wx1dLoGoac0&language=fr&region=BE',
