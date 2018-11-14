@@ -28,7 +28,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
   recipients$: Observable<DataForm[]>;
   private customerId: number;
   isReferenceClient = false;
-  datasOrders:  PurchasseOrder[] = [];
+  datasOrders:  PurchasseOrder[];
   datasRemovals:  DataForm[];
   datasRecipients:  DataForm[];
   displayedColumns = ['id', 'fk_removal_id', 'fk_recipient_id', 'options'];
@@ -36,18 +36,18 @@ export class OrdersComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  @ViewChildren('mati') matInput: QueryList<any>
+  @ViewChildren('mati') matInput: QueryList<any>;
 
   constructor(
     private store: Store<fromRoot.AppState>,
     @Attribute('type') type,
     private customerService: CustomerService) {
     this.customerService.currentCustomerId.subscribe(id => { this.customerId = id; });
-    this.storeSelect();
   }
 
   ngOnInit() {
     this.storeDispatch();
+    this.storeSelect();
     this.getDatas();
   }
   ngOnDestroy(){
@@ -72,7 +72,8 @@ export class OrdersComponent implements OnInit, OnDestroy {
     });
     this.orders$.subscribe( (data: any) =>  {
       // console.log('data orders: ', data);
-      if (!!data) {
+      if (data) {
+        this.datasOrders = []; // TODO: why multiple record same value ?
         for(let i=0; i< Object.keys(data).length; i++) {
           // console.log('datasOrders:  ',data);
           this.datasOrders.push(data[i]);
@@ -82,16 +83,16 @@ export class OrdersComponent implements OnInit, OnDestroy {
       }
     });
   }
-  isExistReferenceClient(ref_removal: string, ref_recipient: string): boolean {
+  isExistReferenceClient(ref_removal?: string, ref_recipient?: string): boolean {
     if (ref_removal || ref_recipient) {
       return true;
     }
     return false;
   }
   isDataLoaded() {
-
     if (this.datasRemovals
       && this.datasRecipients
+      && this.datasOrders
       && this.datasOrders.length) {
 
       for(let i=0; i< Object.keys(this.datasOrders).length; i++) {
@@ -104,29 +105,31 @@ export class OrdersComponent implements OnInit, OnDestroy {
         const recipient = _.find(this.datasRecipients,['id', recipientId]);
 
         if (removal || recipient) {
-          this.isReferenceClient = this.isExistReferenceClient(removal.ref_client, recipient.ref_client);
+
+          this.isReferenceClient =
+            this.isExistReferenceClient(removal?removal.ref_client:null, recipient?recipient.ref_client:null);
           _.merge(this.datasOrders[i],
             {
-              'removal_address': removal.address,
-              'removal_cp': removal.cp,
-              'removal_name': removal.name,
-              'removal_ref_client': removal.ref_client,
-              'removal_number': removal.number,
-              'removal_phone': removal.phone,
-              'removal_state': removal.state,
-              'removal_info1': removal.infos.info1,
-              'removal_info2': removal.infos.info2,
+              'removal_address': removal?removal.address:'',
+              'removal_cp': removal?removal.cp:'',
+              'removal_name': removal?removal.name:'',
+              'removal_ref_client': removal?removal.ref_client:'',
+              'removal_number': removal?removal.number:'',
+              'removal_phone': removal?removal.phone:'',
+              'removal_state': removal?removal.state:'',
+              'removal_info1': removal?removal.infos.info1:'',
+              'removal_info2': removal?removal.infos.info2:'',
             },
             {
-              'recipient_address': recipient.address,
-              'recipient_cp': recipient.cp,
-              'recipient_name': recipient.name,
-              'recipient_ref_client': recipient.ref_client,
-              'recipient_number': recipient.number,
-              'recipient_phone': recipient.phone,
-              'recipient_state': recipient.state,
-              'recipient_info1': recipient.infos.info1,
-              'recipient_info2': recipient.infos.info2,
+              'recipient_address': recipient?recipient.address:'',
+              'recipient_cp': recipient?recipient.cp:'',
+              'recipient_name': recipient?recipient.name:'',
+              'recipient_ref_client': recipient?recipient.ref_client:'',
+              'recipient_number': recipient?recipient.number:'',
+              'recipient_phone': recipient?recipient.phone:'',
+              'recipient_state': recipient?recipient.state:'',
+              'recipient_info1': recipient?recipient.infos.info1:'',
+              'recipient_info2': recipient?recipient.infos.info2:'',
             });
         }
 
@@ -150,17 +153,36 @@ export class OrdersComponent implements OnInit, OnDestroy {
     this.store.dispatch(new RemovalActions.GetRemovals(this.customerId*10+1)); // (id + type)  eg: id = 69; type=1 fk_type=691
     this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10+2)); // (id + type)  eg: id = 69; type=2 fk_type=692
   }
+  applyFilterName(filterValue: string, target: any): void {
+    this.dataSource.filterPredicate = (data: any, filter: string) =>
+    data.recipient_name.indexOf(filter) != -1 || data.removal_name.indexOf(filter) != -1;
+    this.filterTable(filterValue, target);
+  }
+  applyFilterDate(filterValue: string, target: any): void {
+    this.dataSource.filterPredicate = (data: any, filter: string) => data.date.indexOf(filter) != -1;
+    this.filterTable(filterValue, target);
+  }
+  applyFilterRefClient(filterValue: string, target: any): void {
+    this.dataSource.filterPredicate =
+      (data: any, filter: string) =>
+      data.recipient_ref_client.indexOf(filter) != -1 || data.removal_ref_client.indexOf(filter) != -1;
+    this.filterTable(filterValue, target);
+  }
+  applyFilterNumber(filterValue: string, target: any): void {
+    this.dataSource.filterPredicate = (data: any, filter: string) => data.id.indexOf(filter) != -1;
+    this.filterTable(filterValue, target);
+  }
+  filterTable(filterValue: string, target: any) {
+    this.resetNotCurrentFilter(target);
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+  }
   resetNotCurrentFilter(current: any): void {
     this.matInput.forEach(elem => {
       if (elem.nativeElement.id !== current.id) {
         elem.nativeElement.value = '';
       }
     });
-  }
-  applyFilter(filterValue: string, target: any): void {
-    this.resetNotCurrentFilter(target);
-    filterValue = filterValue.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    this.dataSource.filter = filterValue;
   }
 }

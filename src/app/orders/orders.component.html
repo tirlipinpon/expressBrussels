@@ -1,15 +1,15 @@
 <div class="example-header">
   <mat-form-field *ngIf="isReferenceClient">
-    <input matInput #mati (keyup)="applyFilter($event.target.value, $event.target)" placeholder="reference client">
+    <input type="text" matInput #mati (keyup)="applyFilterRefClient($event.target.value, $event.target)" placeholder="reference client">
   </mat-form-field>
   <mat-form-field>
-    <input matInput #mati (keyup)="applyFilter($event.target.value, $event.target)" placeholder="données">
+    <input type="text" matInput #mati (keyup)="applyFilterName($event.target.value, $event.target)" placeholder="nom">
   </mat-form-field>
   <mat-form-field>
-    <input type="date" #mati   matInput (keyup)="applyFilter($event.target.value, $event.target)" placeholder="date">
+    <input type="date" #mati   matInput (keyup)="applyFilterDate($event.target.value, $event.target)" placeholder="date">
   </mat-form-field>
   <mat-form-field>
-    <input type="number" #mati matInput (keyup)="applyFilter($event.target.value, $event.target)" placeholder="numero">
+    <input type="number" #mati matInput (keyup)="applyFilterNumber($event.target.value, $event.target)" placeholder="numero">
   </mat-form-field>
 </div>
 

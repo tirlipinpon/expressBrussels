@@ -6,6 +6,7 @@
 
   <mat-form-field class="example-full-width">
     <input type="text" matInput [matAutocomplete]="autoName" formControlName="name" placeholder="name" aria-label="Number">
+    <mat-icon matSuffix><fa-icon [icon]="['fas', 'user'] " size="xs"></fa-icon></mat-icon>
     <mat-autocomplete  #autoName="matAutocomplete" (optionSelected)="itemSelectedName($event)"  >
       <mat-option *ngFor="let option of (filteredName | async)" [value]="option?.name">
         {{ option?.name }}
@@ -16,6 +17,7 @@
   <div *ngIf="dataValues.length && dataValues[0].ref_client">
     <mat-form-field class="example-full-width">
     <input type="text" matInput [matAutocomplete]="autoRefClient" formControlName="ref_client" placeholder="ref_client" aria-label="Number">
+      <mat-icon matSuffix><fa-icon [icon]="['fas', 'id-card'] " size="xs"></fa-icon></mat-icon>
     <mat-autocomplete   #autoRefClient="matAutocomplete" (optionSelected)="itemSelectedRefClient($event)"  >
       <mat-option  *ngFor="let option of (filteredRefClient | async)| notEmpty: 'ref_client'"  [value]="option?.ref_client">
          {{ option?.ref_client }}
@@ -26,19 +28,44 @@
 
 
   <input type="hidden" formControlName="id">
-  <input type="text" formControlName="address" [readonly]="true" placeholder="address">
-  <input type="text" formControlName="number" [readonly]="true" placeholder="number">
-  <input type="text" formControlName="cp" [readonly]="true" placeholder="cp">
-  <input type="text" formControlName="state" [readonly]="true" placeholder="state">
-  <input type="number" formControlName="clientZone" [readonly]="true" placeholder="zone">
-  <input type="text" formControlName="phone" [readonly]="true" placeholder="phone">
 
-  <app-info [contact]="contact | async" [formGroup]="formGroup.get('infos')"></app-info>
+  <div *ngIf="formGroup.get('id').value.length">
+    <div style="display:flex;">
+      <mat-form-field class="example-full-width">
+        <input matInput formControlName="address" [readonly]="true"  placeholder="address" value="test">
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <input matInput formControlName="number"  [readonly]="true"  placeholder="number">
+        <mat-icon matSuffix><fa-icon [icon]="['fas', 'home'] " size="xs"></fa-icon></mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div style="display:flex;">
+      <mat-form-field class="example-full-width">
+        <input matInput formControlName="cp" [readonly]="true" disabled  placeholder="cp">
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <input matInput formControlName="state" [readonly]="true" disabled  placeholder="state">
+        <mat-icon matSuffix><fa-icon [icon]="['fas', 'university'] " size="xs"></fa-icon></mat-icon>
+      </mat-form-field>
+    </div>
+
+    <input type="hidden" formControlName="clientZone" [readonly]="true" placeholder="zone">
+
+
+    <mat-form-field class="example-full-width">
+      <input type="tel" matInput placeholder="Telephone" formControlName="phone" [readonly]="true">
+      <mat-icon matSuffix><fa-icon [icon]="['fas', 'phone'] " size="xs"></fa-icon></mat-icon>
+    </mat-form-field>
+
+    <app-info [contact]="contact | async" [formGroup]="formGroup.get('infos')"></app-info>
+  </div>
+
 
   <input type="hidden" formControlName="created" [readonly]="true">
   <!--<button (click)="resetForm(formGroup)">reset: {{ nameForm }}</button>-->
   <input type="hidden" formControlName="fk_type" [readonly]="true">
-  
+
   <div *ngIf="formGroup.get('addressValidated').value=='0'">
     <span class="text-red">Attention cette adresse n'est pas valide, et risque de faussée les informations de la course. </span>
     <a (click)="goPlaces(nameForm)">go to edit {{nameForm}}</a>

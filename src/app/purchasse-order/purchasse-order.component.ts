@@ -316,7 +316,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   recapOrder() {
     this.store.dispatch(new OrderActions.SaveOrder());
     this.addContacts(this.formRemoval, this.formRecipient);
-    this.resetOrder();
+    // this.resetOrder();
 
   }
   isAllComplete(emitted?: any): void {
