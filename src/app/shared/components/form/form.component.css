@@ -40,3 +40,7 @@ form {
   color: #ff0000;
 }
 
+/* material */
+   .example-full-width {
+     width: 100%;
+   }

@@ -3,20 +3,25 @@
   <!--<app-input-autocompletion [propName]="'name'" [data]="_user" [propType]="'string'" [witchForm]="1"  [formGroup]="formGroup"></app-input-autocompletion>-->
   <!--<app-input-autocompletion [propName]="'ref_client'" [data]="_user" [propType]="'string'" [witchForm]="1"   [formGroup]="formGroup"></app-input-autocompletion>-->
 
-  <input type="text" matInput [matAutocomplete]="autoName" formControlName="name" placeholder="name">
-  <mat-autocomplete  #autoName="matAutocomplete" (optionSelected)="itemSelectedName($event)"  >
-    <mat-option *ngFor="let option of dataValues" [value]="option?.name">
-      {{ option.name }}
-    </mat-option>
-  </mat-autocomplete>
 
-  <div *ngIf="dataValues.length&&dataValues[0].ref_client">
-    <input [attr.disabled]="" type="text" matInput [matAutocomplete]="autoRefClient" formControlName="ref_client" placeholder="ref_client">
-    <mat-autocomplete   #autoRefClient="matAutocomplete" (optionSelected)="itemSelectedRefClient($event)"  >
-      <mat-option  *ngFor="let option of dataValues"  [value]="option?.ref_client">
-         {{ option.ref_client }}
+  <mat-form-field class="example-full-width">
+    <input type="text" matInput [matAutocomplete]="autoName" formControlName="name" placeholder="name" aria-label="Number">
+    <mat-autocomplete  #autoName="matAutocomplete" (optionSelected)="itemSelectedName($event)"  >
+      <mat-option *ngFor="let option of (filteredName | async)" [value]="option?.name">
+        {{ option?.name }}
       </mat-option>
     </mat-autocomplete>
+  </mat-form-field>
+
+  <div *ngIf="dataValues.length && dataValues[0].ref_client">
+    <mat-form-field class="example-full-width">
+    <input type="text" matInput [matAutocomplete]="autoRefClient" formControlName="ref_client" placeholder="ref_client" aria-label="Number">
+    <mat-autocomplete   #autoRefClient="matAutocomplete" (optionSelected)="itemSelectedRefClient($event)"  >
+      <mat-option  *ngFor="let option of (filteredRefClient | async)| notEmpty: 'ref_client'"  [value]="option?.ref_client">
+         {{ option?.ref_client }}
+      </mat-option>
+    </mat-autocomplete>
+    </mat-form-field>
   </div>
 
 
@@ -27,10 +32,13 @@
   <input type="text" formControlName="state" [readonly]="true" placeholder="state">
   <input type="number" formControlName="clientZone" [readonly]="true" placeholder="zone">
   <input type="text" formControlName="phone" [readonly]="true" placeholder="phone">
+
   <app-info [contact]="contact | async" [formGroup]="formGroup.get('infos')"></app-info>
+
   <input type="hidden" formControlName="created" [readonly]="true">
   <!--<button (click)="resetForm(formGroup)">reset: {{ nameForm }}</button>-->
   <input type="hidden" formControlName="fk_type" [readonly]="true">
+  
   <div *ngIf="formGroup.get('addressValidated').value=='0'">
     <span class="text-red">Attention cette adresse n'est pas valide, et risque de faussée les informations de la course. </span>
     <a (click)="goPlaces(nameForm)">go to edit {{nameForm}}</a>
