@@ -10,21 +10,22 @@ export function ValidatorforbiddenName(nameRe: Observable<DataForm[]>): AsyncVal
     if (isEmptyInputValue(control.value)) {
       return Observable.of(null);
     }else {
-
-
       // const id = ctrl.id.value;
       return new Promise((resolve, reject) => {
         return nameRe.subscribe(datas => {
-         const forbidden = datas.filter(data => {
-           if (control.parent) {
-             const ctrl = control.parent.controls;
-             const ctrlId = ctrl['id'].value;
-             return data.name === control.value && data.id != ctrlId;
-           }else {
-             resolve(null)
-           }
-          });
-          resolve(forbidden.length > 0 ? { 'duplicate': { value: control.value } } : null);
+          if (datas) {
+            const forbidden = datas.filter(data => {
+              if (control.parent) {
+                const ctrl = control.parent.controls;
+                const ctrlId = ctrl['id'].value;
+                return data.name === control.value && data.id != ctrlId;
+              }else {
+                resolve(null)
+              }
+            });
+            resolve(forbidden.length > 0 ? { 'duplicate': { value: control.value } } : null);
+          }
+          resolve(null)
         })
       });
     }

@@ -31,7 +31,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
   datasOrders:  PurchasseOrder[];
   datasRemovals:  DataForm[];
   datasRecipients:  DataForm[];
-  displayedColumns = ['id', 'fk_removal_id', 'fk_recipient_id', 'options'];
+  displayedColumns = ['id', 'created', 'fk_removal_id', 'fk_recipient_id', 'options'];
   dataSource: MatTableDataSource<PurchasseOrder>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -159,12 +159,11 @@ export class OrdersComponent implements OnInit, OnDestroy {
     this.filterTable(filterValue, target);
   }
   applyFilterDate(filterValue: string, target: any): void {
-    this.dataSource.filterPredicate = (data: any, filter: string) => data.date.indexOf(filter) != -1;
+    this.dataSource.filterPredicate = (data: any, filter: string) => data.created.indexOf(filter) != -1;
     this.filterTable(filterValue, target);
   }
   applyFilterRefClient(filterValue: string, target: any): void {
-    this.dataSource.filterPredicate =
-      (data: any, filter: string) =>
+    this.dataSource.filterPredicate = (data: any, filter: string) =>
       data.recipient_ref_client.indexOf(filter) != -1 || data.removal_ref_client.indexOf(filter) != -1;
     this.filterTable(filterValue, target);
   }

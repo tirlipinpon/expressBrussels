@@ -7,12 +7,14 @@ import * as ClientZonesActions from '../actions/clientZones.actions';
 import * as PrixZoneMotoActions from '../actions/prixZoneMoto.actions';
 import * as PrixZoneCamionnetteActions from '../actions/prixZoneCamionnette.actions';
 import * as ContactActions from '../actions/contact.actions';
-
+import * as _ from 'lodash';
 import {DataForm, DataDataFormState} from '../models/DataForm';
 import {PurchasseOrder} from '../models/PurchasseOrder';
 import {MyClientZones, MyClientZonesState} from '../models/my-client-zones';
 import {PrixZone, MyPrixZoneState} from "../models/prixZone";
 import {ContactState} from "../models/contact";
+import {DeleteRemovalSuccess} from "../actions/removal.actions";
+import {DeleteRecipientSuccess} from "../actions/recipient.actions";
 
 export type ActionCustomer = CustomerActions.All;
 export type ActionRemoval = RemovalActions.All;
@@ -91,6 +93,8 @@ export function removalReducer(state = initRemoval, action: ActionRemoval): Data
     //   return handleRemovalState(state, action);
     case RemovalActions.GET_LAST_REMOVAL_SUCCESS:
       return handleAddRemovalState(state, action);
+    case RemovalActions.DELETE_REMOVAL_SUCCESS:
+      return handleDeleteRemovalState(state, action);
     default:
       return state;
   }
@@ -116,10 +120,22 @@ function handleEditRemovalState(state: DataDataFormState, action: ActionRemoval)
   };
   return newState;
 }
+function handleDeleteRemovalState(state: DataDataFormState, action: DeleteRemovalSuccess): any {
+  const newState = _.clone(state);
+  const paylaod = action.payload;
+  const newState2 = newState.data.map(data => {
+    if (data.id === paylaod.id) {
+      return action.payload;
+    }
+    return data;
+  });
+  return {...state, ...newState2};
+}
 export const RemovalSelectors = {
   data: (state: DataDataFormState) => { return state.data },
   count: (state: DataDataFormState) => { return state.count }
 };
+
 
 // ======================================================
 // recipient reducer
@@ -137,6 +153,8 @@ export function recipientReducer(state = initRecipient, action: ActionRecipient)
       return handleEditRecipientState(state, action);
     case RecipientActions.GET_LAST_RECIPIENT_SUCCESS:
       return handleAddRecipientState(state, action);
+    case RecipientActions.DELETE_RECIPIENT_SUCCESS:
+      return handleDeleteRecipientState(state, action);
     default:
       return state;
   }
@@ -162,6 +180,16 @@ function handleEditRecipientState(state: DataDataFormState, action: ActionRecipi
   };
   return newState;
 }
+function handleDeleteRecipientState(state: DataDataFormState, action: DeleteRecipientSuccess): any {
+  const newState = _.clone(state);
+  const newState2 =  newState.data.map(data => {
+    if (data.id === action.payload.id) {
+      return action.payload;
+    }
+    return data;
+  });
+  return {...state, ...newState2};
+}
 export const RecipientSelectors = {
   data: (state: DataDataFormState) => { return state.data },
   count: (state: DataDataFormState) => { return state.count }
@@ -182,7 +210,7 @@ const orderInitOrder: PurchasseOrder =  {
     contact_recipient: '',
     message_recipient: '',
 
-    date: new Date(),
+    created: new Date(),
 
     price: 0,
     distance: 0,

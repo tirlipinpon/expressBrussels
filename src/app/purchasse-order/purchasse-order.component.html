@@ -31,15 +31,11 @@
   <div class="options-distance">
     <app-option [formGroup]="formOptions" (updateDataForm)="isAllComplete($event)"></app-option>
 
-    <div *ngIf="formDistance.get('price').value">
-      <span>Price: {{ formDistance.get('price').value }}€</span>
-      <br>
-      <div *ngIf="distances[0]?.distanceText">Distance: {{ distances[0]?.distanceText }} + {{ distances[1]?.distanceText }}</div>
-      <br>
-      <div *ngIf="distances[0]?.durationText">Time: {{ distances[0]?.durationText }} + {{ distances[1]?.durationText }}</div>
+    <div class="price-result" *ngIf="formDistance.get('price').value">
+      <div><fa-icon [icon]="['fas', 'euro-sign']" size="sm"></fa-icon> {{ formDistance.get('price').value }}</div>
+      <div *ngIf="distances[0]?.distanceText"><fa-icon [icon]="['fas', 'map-marked-alt']" size="sm"></fa-icon> {{ distances[0]?.distanceText }} + {{ distances[1]?.distanceText }}</div>
+      <div *ngIf="distances[0]?.durationText"><fa-icon [icon]="['fas', 'clock']" size="sm"></fa-icon> {{ distances[0]?.durationText }} + {{ distances[1]?.durationText }}</div>
     </div>
-
-
 
     <form [formGroup]="formDistance">
       <input type="hidden" formControlName="status" value="{{distance?.status}}"><br>
@@ -47,8 +43,10 @@
       <input type="hidden" formControlName="distance" value="{{distance?.distanceValue}}"><br>
       <input type="hidden" formControlName="elapse_time" value="{{distance?.durationValue}}">
     </form>
+
+    <button (click)="recapOrder()" mat-raised-button color="primary" [disabled]="!showSendBtn">Send order </button>
   </div>
-  <button *ngIf="showSendBtn" (click)="recapOrder()">Send order </button>
+
 </div>
 
 <!--contactRemoval$: {{contactRemoval$ | async}}<br>-->

@@ -12,6 +12,7 @@ export class OptionComponent implements OnInit {
   @Output() updateDataForm: EventEmitter<string> = new EventEmitter<string>();
   optionsSpeed: string[] = ['express', 'double_express', 'go_and_back'];
   optionsType: string[] = ['moto', 'voiture'];
+  optionsIcones: string[] = ['motorcycle', 'car'];
 
   constructor() {}
 

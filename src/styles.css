@@ -16,3 +16,6 @@
 .v-to-long {
   background-color: rgba(197, 91, 113, 0.3);
 }
+mat-icon{
+  color: rgba(103, 58, 183, 0.87)!important;
+}

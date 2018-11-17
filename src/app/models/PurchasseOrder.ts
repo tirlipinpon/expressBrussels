@@ -10,7 +10,7 @@ export interface PurchasseOrder {
   contact_recipient: string;
   message_recipient: string;
 
-  date: Date;
+  created: any;
 
   price: number;
   distance: number;

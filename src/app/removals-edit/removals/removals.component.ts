@@ -27,7 +27,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
 
   private customerId: number;
   private typeDataForm: number;
-  storeData$: Observable<DataForm[]>;
+  storeDataForm$: Observable<DataForm[]>;
   allFormGroup: FormGroup[] = [];
   clientZones$: Observable<MyClientZones[]>;
   clientZones: MyClientZones[];
@@ -69,9 +69,9 @@ export class RemovalsComponent implements OnInit, OnDestroy {
   }
   storeSelect() {
     if (this.witchComponent === 'removals') {
-      this.storeData$ = this.store.select(fromRoot.selectors.getRemovalsData); // diff
+      this.storeDataForm$ = this.store.select(fromRoot.selectors.getRemovalsData); // diff
     }else if (this.witchComponent === 'recipients') {
-      this.storeData$ = this.store.select(fromRoot.selectors.getRecipientsData); // diff
+      this.storeDataForm$ = this.store.select(fromRoot.selectors.getRecipientsData); // diff
     }
 
     this.clientZones$ = this.store.select(fromRoot.selectors.getClientZonesData);
@@ -80,9 +80,9 @@ export class RemovalsComponent implements OnInit, OnDestroy {
     });
   }
   initFormsRemoval(): void {
-    this.storeData$.subscribe(data => {
+    this.storeDataForm$.subscribe(data => {
       this.cd.markForCheck(); // TODO: remove ?
-      if (data.length ) {
+      if (data && data.length ) {
         // init data
         if (this.allFormGroup.length === 1) {
           data.forEach(elem => {
@@ -134,7 +134,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
     }
     return this.fb.group({
       id: [data ? data.id : ''],
-      name: [data? data.name : '', [Validators.required, Validators.minLength(3) ], [ValidatorforbiddenName(this.storeData$)] ],
+      name: [data? data.name : '', [Validators.required, Validators.minLength(3) ], [ValidatorforbiddenName(this.storeDataForm$)] ],
       ref_client: [data ? data.ref_client : '', [Validators.minLength(4)]],
       address: [data ? data.address : '', Validators.required],
       number: [data ? data.number : ''],

@@ -31,12 +31,24 @@ export class FormComponent implements OnInit, AfterViewInit {
     this.filteredName = this.formGroup.get('name').valueChanges
       .pipe(
         startWith(''),
-        map(value => this._filter(value, 'name'))
+        map(value => {
+          if (this.dataValues) {
+            return this._filter(value, 'name');
+          }else{
+            return;
+          }
+        })
       );
     this.filteredRefClient = this.formGroup.get('ref_client').valueChanges
       .pipe(
         startWith(''),
-        map(value => this._filter(value, 'ref_client'))
+        map(value => {
+          if (this.dataValues) {
+            return this._filter(value, 'ref_client');
+          } else {
+            return;
+          }
+        })
       );
   }
 

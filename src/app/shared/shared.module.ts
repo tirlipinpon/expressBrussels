@@ -40,11 +40,14 @@ import {MatInputModule} from '@angular/material';
 import {MatIconModule} from '@angular/material/icon';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import {faPhone, faHome, faClock, faUser, faUniversity, faIdCard, faComment, faUserTie, faUserTag} from '@fortawesome/free-solid-svg-icons';
+import {faPhone, faHome, faClock, faUser, faUniversity, faIdCard, faComment, faUserTie, faUserTag,
+  faEuroSign, faMapMarkedAlt, faMotorcycle, faCar} from '@fortawesome/free-solid-svg-icons';
 import {MatButtonModule} from '@angular/material/button';
 import { NotEmptyPipe } from './pipe/not-empty.pipe';
+import { NotDesactivePipe } from './pipe/not-desactive.pipe';
 
-library.add(faPhone, faHome, faClock, faUser, faUniversity, faIdCard, faComment, faUserTie, faUserTag);
+library.add(faPhone, faHome, faClock, faUser, faUniversity,
+  faIdCard, faComment, faUserTie, faUserTag, faEuroSign, faMapMarkedAlt, faClock, faMotorcycle, faCar);
 
 @NgModule({
   imports: [
@@ -119,7 +122,8 @@ library.add(faPhone, faHome, faClock, faUser, faUniversity, faIdCard, faComment,
     // pipe
     ClientCpPipe,
     SearchFilterPipe,
-    NotEmptyPipe
+    NotEmptyPipe,
+    NotDesactivePipe
 
   ],
   providers: [

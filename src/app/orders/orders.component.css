@@ -8,3 +8,10 @@ input[type="number"]::-webkit-inner-spin-button{
   display: none;
   -webkit-appearance: none;
 }
+
+.mat-column-id {
+  flex: 0 0 68px;
+}
+.mat-column-created {
+  flex: 0 0 150px;
+}
