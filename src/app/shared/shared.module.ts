@@ -45,6 +45,7 @@ import {faPhone, faHome, faClock, faUser, faUniversity, faIdCard, faComment, faU
 import {MatButtonModule} from '@angular/material/button';
 import { NotEmptyPipe } from './pipe/not-empty.pipe';
 import { NotDesactivePipe } from './pipe/not-desactive.pipe';
+import { NumberTransformToMonthPipe } from './pipe/number-transform-to-month.pipe';
 
 library.add(faPhone, faHome, faClock, faUser, faUniversity,
   faIdCard, faComment, faUserTie, faUserTag, faEuroSign, faMapMarkedAlt, faClock, faMotorcycle, faCar);
@@ -102,7 +103,8 @@ library.add(faPhone, faHome, faClock, faUser, faUniversity,
     FontAwesomeModule,
     MatIconModule,
     MatButtonModule,
-    MatRadioModule
+    MatRadioModule,
+    NumberTransformToMonthPipe
 
   ],
   declarations: [
@@ -123,7 +125,8 @@ library.add(faPhone, faHome, faClock, faUser, faUniversity,
     ClientCpPipe,
     SearchFilterPipe,
     NotEmptyPipe,
-    NotDesactivePipe
+    NotDesactivePipe,
+    NumberTransformToMonthPipe
 
   ],
   providers: [

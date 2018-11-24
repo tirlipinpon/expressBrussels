@@ -11,6 +11,20 @@
   <mat-form-field *ngIf="isReferenceClient">
     <input type="text" matInput #mati (keyup)="applyFilterRefClient($event.target.value, $event.target)" placeholder="reference client">
   </mat-form-field>
+  <!--<mat-form-field>-->
+    <!--<input type="text" matInput #mati (keyup)="applyFilterMonth($event.target.value, $event.target)" placeholder="Mois">-->
+  <!--</mat-form-field>-->
+
+  <mat-form-field>
+    <mat-select matInput placeholder="Mois ({{getCurrentDate() | date:'yyyy'}})" (selectionChange)="applyFilterMonth($event.value, $event)">
+      <mat-option [value]="'none'"></mat-option>
+      <mat-option   *ngFor="let month of months" [value]="month" >
+        {{month|numberTransformToMonth}} {{month}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
 </div>
 
 <div class="example-container mat-elevation-z8">

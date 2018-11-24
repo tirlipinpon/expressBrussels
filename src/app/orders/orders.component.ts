@@ -38,6 +38,9 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
   @ViewChildren('mati') matInput: QueryList<any>;
 
+  months: string[] = [];
+
+
   constructor(
     private store: Store<fromRoot.AppState>,
     @Attribute('type') type,
@@ -135,11 +138,27 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
 
       }
+      this.extractCurrentMonths(this.datasOrders);
       // console.log('this.datasOrders: ', this.datasOrders);
       this.dataSource = new MatTableDataSource(this.datasOrders);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     }
+  }
+
+  extractCurrentMonths(orders: PurchasseOrder[]): void {
+    orders.forEach(data => {
+      const year = data.created.slice(0, 4);
+      const current_year = (new Date()).getFullYear();
+      if (current_year === +year) {
+        this.months.push(data.created.slice(5, 7));
+      }
+    });
+    this.months = _.uniq(this.months);
+  }
+
+  getCurrentDate(): Date {
+    return new Date();
   }
 
   storeSelect() {
@@ -167,15 +186,31 @@ export class OrdersComponent implements OnInit, OnDestroy {
       data.recipient_ref_client.indexOf(filter) != -1 || data.removal_ref_client.indexOf(filter) != -1;
     this.filterTable(filterValue, target);
   }
+  applyFilterMonth(filterValue: string, target: any): void {
+    if (filterValue !== 'none') {
+      this.dataSource.filterPredicate = (data: any, filter: string) => {
+        const year = data.created.slice(0, 4);
+        const current_year = (new Date()).getFullYear();
+        if (current_year === +year) {
+          return data.created.slice(5, 7).indexOf(filter) != -1
+        }
+      };
+      this.filterTable(filterValue, target);
+    }else{
+      this.filterTable('', target);
+    }
+  }
   applyFilterNumber(filterValue: string, target: any): void {
     this.dataSource.filterPredicate = (data: any, filter: string) => data.id.indexOf(filter) != -1;
     this.filterTable(filterValue, target);
   }
   filterTable(filterValue: string, target: any) {
     this.resetNotCurrentFilter(target);
-    filterValue = filterValue.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    this.dataSource.filter = filterValue;
+    if (filterValue) {
+      filterValue = filterValue.trim(); // Remove whitespace
+      filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+      this.dataSource.filter = filterValue;
+    }
   }
   resetNotCurrentFilter(current: any): void {
     this.matInput.forEach(elem => {

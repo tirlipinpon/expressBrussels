@@ -24,7 +24,7 @@ import { OrdersComponent } from './orders/orders.component';
 import {MatTableModule} from '@angular/material/table';
 import {
   MatFormFieldModule, MatSortModule, MatPaginatorModule, MatInputModule, MatMenuModule,
-  MatButtonModule, MatRadioModule
+  MatButtonModule, MatRadioModule, MatSelectModule
 } from '@angular/material'; // TODO: import refrences
 import {CanDeactivateFormGuardService} from './services/can-deactivate-form-guard.service';
 import { LoginComponent } from './login/login.component';
@@ -38,6 +38,7 @@ import {GetDistanceMatrixService} from "./services/google/get-distance-matrix.se
 import {RouteResolverService} from "./services/route-resolver.service";
 import {GetPrixZoneService} from "./services/get-prix-zone.service";
 import { ContactService } from './services/contact.service';
+import {NumberTransformToMonthPipe} from "./shared/pipe/number-transform-to-month.pipe";
 
 
 
@@ -126,6 +127,7 @@ const appRoutes: Routes = [
     CascadeModule,
     MatButtonModule,
     MatRadioModule,
+    MatSelectModule,
 
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyCdhzqNNDkWkbpqgajvi_66wx1dLoGoac0&language=fr&region=BE',
