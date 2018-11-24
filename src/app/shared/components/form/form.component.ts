@@ -53,8 +53,11 @@ export class FormComponent implements OnInit, AfterViewInit {
   }
 
   private _filter(value: string, target: string): any[] {
-    const filterValue = value.toLowerCase();
-    return this.dataValues.filter(option => option[target].toLowerCase().includes(filterValue));
+    if (value && value.length) {
+      const filterValue = value.toLowerCase();
+      return this.dataValues.filter(option => option[target].toLowerCase().includes(filterValue));
+    }
+    return;
   }
 
 

@@ -38,7 +38,7 @@
       <mat-header-cell *matHeaderCellDef mat-sort-header> Enlèvement </mat-header-cell>
       <mat-cell *matCellDef="let row">
         <p><fa-icon style="color: rgba(0,0,0,0.27)!important;" [icon]="['fas', 'user']" size="sm"></fa-icon> {{ row.removal_name  }}</p>
-        <p *ngIf="row.removal_ref_client.length"><fa-icon style="color: rgba(0,0,0,0.27)!important;"  [icon]="['fas', 'id-card']" size="sm"></fa-icon> {{ row.removal_ref_client }}</p>
+        <p *ngIf="row.removal_ref_client && row.removal_ref_client.length"><fa-icon style="color: rgba(0,0,0,0.27)!important;"  [icon]="['fas', 'id-card']" size="sm"></fa-icon> {{ row.removal_ref_client }}</p>
         <!--<p>{{ row.removal_address  }} {{ row.removal_number  }}  </p>-->
         <p>
           <fa-icon style="color: rgba(0,0,0,0.27)!important;"  [icon]="['fas', 'home']" size="sm"></fa-icon>
@@ -55,7 +55,7 @@
       <mat-header-cell *matHeaderCellDef mat-sort-header> Destination </mat-header-cell>
       <mat-cell *matCellDef="let row">
         <p><fa-icon style="color: rgba(0,0,0,0.27)!important;"  [icon]="['fas', 'user']" size="sm"></fa-icon> {{ row.recipient_name  }}</p>
-        <p *ngIf="row.recipient_ref_client.length"><fa-icon style="color: rgba(0,0,0,0.27)!important;"  [icon]="['fas', 'id-card']" size="sm"></fa-icon> {{ row.recipient_ref_client }}</p>
+        <p *ngIf="row.recipient_ref_client && row.recipient_ref_client.length"><fa-icon style="color: rgba(0,0,0,0.27)!important;"  [icon]="['fas', 'id-card']" size="sm"></fa-icon> {{ row.recipient_ref_client }}</p>
         <!--<p>{{ row.recipient_address  }} {{ row.recipient_number  }}  </p>-->
         <p>
           <fa-icon style="color: rgba(0,0,0,0.27)!important;"  [icon]="['fas', 'home']" size="sm"></fa-icon>
@@ -80,6 +80,14 @@
         <p *ngIf="row.tomorrow!=0">tomorrow</p>
         <p>{{row.price}}€</p>
 
+      </mat-cell>
+    </ng-container>
+
+    <!-- print Column -->
+    <ng-container matColumnDef="print">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Print </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <button>print</button>
       </mat-cell>
     </ng-container>
 

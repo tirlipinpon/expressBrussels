@@ -27,7 +27,7 @@
 
   <input type="hidden" formControlName="id">
 
-  <div *ngIf="formGroup.get('id').value.length">
+  <div *ngIf="formGroup.get('id').value && formGroup.get('id').value.length">
     <div style="display:flex;">
       <mat-form-field class="example-full-width">
         <input matInput formControlName="address" [readonly]="true"   placeholder="address" value="test">

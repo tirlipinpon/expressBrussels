@@ -28,11 +28,11 @@ export class PurchasseOrderEffectService {
     .switchMap(action =>
       this.orderService.saveOrder(action[1], 1)
         .switchMap((payload) => {
-          this.notif.notify('info', 'some alert', payload.message);
+          this.notif.notify('info', 'Order created', payload.message);
            return Observable.of(new OrderActions.SaveOrderSuccess(action))
         })
         .catch(err => {
-          this.notif.notify('error', 'some alert', err);
+          this.notif.notify('error', 'Error', err);
           return Observable.of(new OrderActions.SaveOrderFail(err))
         })
     );
