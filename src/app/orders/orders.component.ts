@@ -16,6 +16,9 @@ import {DataForm} from '../models/DataForm';
 import * as _ from 'lodash';
 import {CustomerService} from "../services/customer.service";
 
+import * as jspdf from 'jspdf';
+import * as html2canvas from "html2canvas"
+
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.component.html',
@@ -31,7 +34,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
   datasOrders:  PurchasseOrder[];
   datasRemovals:  DataForm[];
   datasRecipients:  DataForm[];
-  displayedColumns = ['id', 'created', 'fk_removal_id', 'fk_recipient_id', 'options', 'print'];
+  displayedColumns = ['id', 'created', 'fk_removal_id', 'fk_recipient_id', 'options'];
   dataSource: MatTableDataSource<PurchasseOrder>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -218,5 +221,26 @@ export class OrdersComponent implements OnInit, OnDestroy {
         elem.nativeElement.value = '';
       }
     });
+  }
+
+  captureScreen() {
+    let data = document.getElementById('contentToConvert');
+    html2canvas(data).then(canvas => {
+// Few necessary setting options
+      let imgWidth = 208;
+      let pageHeight = 295;
+      let imgHeight = canvas.height * imgWidth / canvas.width;
+      let heightLeft = imgHeight;
+
+      const contentDataURL = canvas.toDataURL('image/png');
+      let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF
+      let position = 0;
+      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+      pdf.save('expressBrussels.pdf'); // Generated PDF
+    });
+  }
+
+  getTotalCost() {
+    return 25 //this.datasOrders.map(t => t.price).reduce((acc, value) => acc + value, 0);
   }
 }
