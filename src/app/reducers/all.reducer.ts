@@ -51,7 +51,6 @@ const initCustomer: DataForm = {
   fk_type: 0
 };
 export function customerReducer(state = initCustomer , action: ActionCustomer): DataForm {
-  // console.log('2 - Reducer customer :', action.type, state);
   switch (action.type) {
     case CustomerActions.SET_CUSTOMER:
 
@@ -59,11 +58,9 @@ export function customerReducer(state = initCustomer , action: ActionCustomer): 
         return {...state, ...action.payload};
       }
     case CustomerActions.GET_CUSTOMER_SUCCESS:
-      //console.log('in customer reducer getCustomer payload = ',action.payload);
       return {...state, ...action.payload};
     case CustomerActions.EDIT_CUSTOMER:
-      // console.log('in customer reducer editCustomer payload = ',action.payload);
-      return {...state, ...action.payload}; //Object.assign({}, state, action.payload );
+      return {...state, ...action.payload};
     // case CustomerActions.VALID_CUSTOMER:
     //   return state;
     default:

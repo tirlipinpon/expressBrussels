@@ -16,7 +16,7 @@
     </div>
     <input type="hidden" formControlName="created">
     <input type="hidden" formControlName="fk_type">
-    <button  type="button"  (click)="saveCustomer()">save</button>
+    <button  type="button" [disabled]="formCustomer.invalid"  (click)="saveCustomer()">save</button>
   </form>
 
 </p-dialog>
