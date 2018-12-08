@@ -2,11 +2,10 @@ import {Component, Input, Output, EventEmitter, AfterViewInit, ChangeDetectorRef
 import {FormGroup} from '@angular/forms';
 import {DataForm} from '../../../models/DataForm';
 import {Contact} from "../../../models/contact";
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import {MatAutocompleteSelectedEvent} from "@angular/material";
 import {Router} from "@angular/router";
-import {map} from "rxjs/operators/map";
-import {startWith} from "rxjs/operators/startWith";
+import {map, startWith} from "rxjs/operators";
 
 @Component({
   selector: 'app-form',

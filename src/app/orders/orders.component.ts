@@ -2,7 +2,7 @@ import {
   Component, OnInit, ViewEncapsulation, OnDestroy, ViewChild, ViewChildren, QueryList, Attribute
 } from '@angular/core';
 import {PurchasseOrder} from '../models/PurchasseOrder';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import * as fromRoot from '../shared/appState';
 import {Store} from '@ngrx/store';
 

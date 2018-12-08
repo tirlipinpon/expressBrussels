@@ -1,14 +1,14 @@
 import {AbstractControl, ValidatorFn, AsyncValidatorFn} from "@angular/forms";
-import {Observable} from "rxjs";
+import {Observable, of} from "rxjs";
 import {DataForm} from "../../models/DataForm";
-import 'rxjs/add/operator/toPromise';
+
 
 /** A hero's name can't match the given regular expression */
 export function ValidatorforbiddenName(nameRe: Observable<DataForm[]>): AsyncValidatorFn  {
   return (control: AbstractControl): Promise<{[key: string]: any}> | null  | Observable<{ [key: string]: any } | null> => {
 
     if (isEmptyInputValue(control.value)) {
-      return Observable.of(null);
+      return of(null);
     }else {
       // const id = ctrl.id.value;
       return new Promise((resolve, reject) => {

@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Store} from '@ngrx/store';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import * as actionsRemoval  from '../../actions/removal.actions';
 import * as actionsRecipient  from '../../actions/recipient.actions';
 import * as fromRoot from '../../shared/appState';
@@ -11,8 +11,8 @@ import {DataForm} from '../../models/DataForm';
 import * as moment from 'moment';
 import * as ClientZonesActions  from '../../actions/clientZones.actions';
 import {MyClientZones} from '../../models/my-client-zones';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
+
+
 import {CustomerService} from "../../services/customer.service";
 import {ActivatedRoute} from "@angular/router";
 import {ValidatorforbiddenName} from "../../shared/validators/validators-conflict.directive";

@@ -1,8 +1,7 @@
 import {CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
 import {PurchasseOrderComponent} from '../purchasse-order/purchasse-order.component';
 import {ConfirmationService} from 'primeng/components/common/confirmationservice';
-import { Observer} from 'rxjs/Observer';
-import { Observable} from 'rxjs/Observable';
+import { Observer,  Observable} from 'rxjs';
 import {Injectable} from '@angular/core';
 
 @Injectable()

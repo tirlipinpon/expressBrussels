@@ -1,10 +1,8 @@
+/// <reference types="@types/googlemaps" />
 import {Component, OnInit, OnDestroy, HostListener, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, Validators, FormGroup} from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/skipWhile'
-import 'rxjs/add/operator/map';
-
+import { Observable } from 'rxjs';
 import * as RemovalActions from '../actions/removal.actions';
 import * as RecipientActions from '../actions/recipient.actions';
 import * as OrderActions from '../actions/purchasseOrder.actions';
@@ -16,7 +14,7 @@ import {DataForm} from '../models/DataForm';
 import {PurchasseOrder} from '../models/PurchasseOrder';
 import {ComponentDeactivable} from '../services/can-deactivate-form-guard.service';
 import * as fromRoot from '../shared/appState';
-import {} from '@types/googlemaps';
+
 import {GetDistanceMatrixService} from "../services/google/get-distance-matrix.service";
 import {Distance} from "../models/distance";
 import * as CONST from '../models/googleMatrixStatus';

@@ -1,13 +1,15 @@
+
+import {throwError as observableThrowError, Observable} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders } from '@angular/common/http';
-import 'rxjs/add/operator/map'
+
 import {environment} from '../../environments/environment';
 import * as moment from 'moment';
-import {Observable} from 'rxjs/Observable';
 import {Store} from "@ngrx/store";
 import * as jwt_decode from 'jwt-decode';
 import * as CustomerActions from '../actions/customer.actions';
 import * as fromRoot from '../shared/appState';
+import {tap, catchError} from "rxjs/internal/operators";
 
 export const TOKEN_NAME: string = 'jwt_token';
 // const httpOptions = {
@@ -85,10 +87,11 @@ export class AuthenticationService {
     // this is just the HTTP call,
     // we still need to handle the reception of the token
     // shareReplay: prevent the receiver of this Observable from accidentally triggering multiple POST requests due to multiple subscriptions.
-    return this.http.post(url, data)
-      .do(res => this.setSession(res))
-      // .shareReplay()
-      .catch(error => Observable.throw('error in service login  with message from server -> ', error));
+    return this.http.post(url, data).pipe(
+    tap(res => this.setSession(res)),
+    // .shareReplay()
+      catchError(error => observableThrowError('error in service login  with message from server -> ', error))
+    )
   }
   private setSession(authResult) {
     if (authResult !== 'error') {

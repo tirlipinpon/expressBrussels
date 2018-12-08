@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Action, Store} from '@ngrx/store';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { CustomerService } from '../../services/customer.service';
-import { Observable } from 'rxjs/Observable';
+import {Observable, of} from 'rxjs';
 import * as CustomerActions  from '../../actions/customer.actions';
 import {NotificationService} from '../../services/notification.service';
 import {AppState} from '../../shared/appState';
+import {switchMap, catchError, map, withLatestFrom} from "rxjs/internal/operators";
 
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/of';
+
+
 
 @Injectable()
 export class CustomerEffectService {
@@ -19,34 +20,39 @@ export class CustomerEffectService {
     private customerService: CustomerService,
     private notif: NotificationService) { }
 
-  @Effect() getCustomer$: Observable<Action> = this.action$
-    .ofType(CustomerActions.GET_CUSTOMER)
-    .switchMap(action =>
-      this.customerService.getCustomer(action)
-        .map((payload) => {
+  @Effect() getCustomer$ = this.action$.pipe(
+    ofType(CustomerActions.GET_CUSTOMER),
+    switchMap(action =>
+      this.customerService.getCustomer(action).pipe(
+        map((payload) => {
           this.notif.notify('info', 'get customer', 'data ok');
           return new CustomerActions.GetCustomerSuccess(payload);
-      })
-        .catch(err => {
+        }),
+        catchError(err => {
           this.notif.notify('error', 'Get customers', err);
-          return Observable.of(new CustomerActions.GetCustomerFail(err))
+          return of(new CustomerActions.GetCustomerFail(err))
         })
+      )
+  )
     );
 
-  @Effect() saveCustomer$: Observable<Action> = this.action$
-    .ofType(CustomerActions.SAVE_CUSTOMER)
-    .withLatestFrom(  this.store.select('customer')  )
-    .switchMap(action =>
-      this.customerService.saveCustomer(action[1])
-        .map((payload) => {
+  @Effect() saveCustomer$  = this.action$.pipe(
+    ofType(CustomerActions.SAVE_CUSTOMER),
+    withLatestFrom(  this.store.select('customer')  ),
+    switchMap(action =>
+      this.customerService.saveCustomer(action[1]).pipe(
+        map((payload) => {
           this.notif.notify('success', 'some alert', 'data custome saved');
           return new CustomerActions.SaveCustomerSuccess(payload);
-        })
-        .catch(err => {
+        }),
+        catchError(err => {
           this.notif.notify('error', 'some alert', err);
-          return Observable.of(new CustomerActions.SaveCustomerFail(err))
+          return of(new CustomerActions.SaveCustomerFail(err))
         })
-    );
+      )
+    )
+  )
+
 
 
 }

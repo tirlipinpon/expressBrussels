@@ -1,11 +1,12 @@
 import {Injectable} from '@angular/core';
 import {Action, Store} from "@ngrx/store";
 import {AppState} from "../../shared/appState";
-import {Actions, Effect} from "@ngrx/effects";
+import {Actions, Effect, ofType} from "@ngrx/effects";
 import {NotificationService} from "../../services/notification.service";
 import {ContactService} from "../../services/contact.service";
-import {Observable} from "rxjs";
+import {Observable, of} from "rxjs";
 import * as ContactActions  from '../../actions/contact.actions';
+import {withLatestFrom, switchMap, map, catchError} from "rxjs/internal/operators";
 
 @Injectable()
 export class ContactEffectService {
@@ -16,39 +17,46 @@ export class ContactEffectService {
               private contactService: ContactService) {
   }
 
-  @Effect() getContact: Observable<Action> = this.action$
-    .ofType(ContactActions.GET_CONTACT)
-    .withLatestFrom(  this.store.select('customer')  )
-    .switchMap(([action, dataForm]) =>
-      this.contactService.getContact(dataForm.id)
-        .map((payload) => {
+  @Effect() getContact = this.action$.pipe(
+    ofType(ContactActions.GET_CONTACT),
+    withLatestFrom(  this.store.select('customer')  ),
+    switchMap(([action, dataForm]) =>
+      this.contactService.getContact(dataForm.id).pipe(
+        map((payload) => {
           this.notif.notify('info', 'get contact OK ', payload.count+'/total');
           return new ContactActions.GetContactSuccess(payload);
-        })
-        .catch(err => {
+        }),
+        catchError(err => {
           this.notif.notify('error', 'get contact NOK ', err);
-          return Observable.of(new ContactActions.GetContactFail(err))
+          return of(new ContactActions.GetContactFail(err))
         })
+      )
+  )
     );
 
 
-  @Effect() addContacts: Observable<Action> = this.action$
-    .ofType(ContactActions.ADD_CONTACTS)
-    .switchMap((action: Action) =>
-      this.contactService.addContacts(action)
-        .map(() => {
+  @Effect() addContacts  = this.action$.pipe(
+    ofType(ContactActions.ADD_CONTACTS),
+    switchMap((action: Action) =>
+      this.contactService.addContacts(action).pipe(
+        map(() => {
           this.notif.notify('info', 'add contacts OK ','');
           return new ContactActions.AddContactSuccess();
-        })
-        .catch(err => {
+        }),
+        catchError(err => {
           this.notif.notify('error', 'add contact NOK ', err);
-          return Observable.of(new ContactActions.AddContactFail(err))
+          return of(new ContactActions.AddContactFail(err))
         })
+      )
+
+  )
+
     );
 
-  @Effect() addContactsSuccess: Observable<Action> = this.action$
-    .ofType(ContactActions.ADD_CONTACT_SUCCESS)
-    .map(() => new ContactActions.GetContact()
-    );
+  @Effect() addContactsSuccess  = this.action$.pipe(
+    ofType(ContactActions.ADD_CONTACT_SUCCESS),
+    map(() => new ContactActions.GetContact())
+  )
+
 
 }

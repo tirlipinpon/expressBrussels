@@ -1,6 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild, NgZone, Input} from '@angular/core';
 import { MapsAPILoader} from '@agm/core';
-import {} from '@types/googlemaps';
 import {FormGroup} from "@angular/forms";
 import {InputAutocompletionComponent} from "../input-completion/input-autocompletion.component";
 

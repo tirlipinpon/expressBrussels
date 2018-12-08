@@ -1,5 +1,6 @@
 import {Component, OnInit, Input, OnDestroy} from '@angular/core';
 import {FormGroup} from '@angular/forms';
+import {debounceTime} from "rxjs/internal/operators";
 
 @Component({
   selector: 'app-input-autocompletion',
@@ -88,7 +89,7 @@ export class InputAutocompletionComponent implements OnInit, OnDestroy {
   }
   // form purchasse order case
   subscribeNameChanges(): void {
-      this.valueNameChanges$ = this.formGroup.get('name').valueChanges.debounceTime(700).subscribe(val => {
+      this.valueNameChanges$ = this.formGroup.get('name').valueChanges.pipe(debounceTime(700)).subscribe(val => {
         if ((!val || !val.length) && this.formGroup.dirty) {
           this.formGroup.get('ref_client').enable();
           this.formGroup.reset();

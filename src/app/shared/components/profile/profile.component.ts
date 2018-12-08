@@ -1,12 +1,12 @@
 import {Component, OnInit, ViewEncapsulation, OnDestroy} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {DataForm} from '../../../models/DataForm';
-import {Observable} from 'rxjs/Observable';
+import {Observable, Subject} from 'rxjs';
 import * as fromRoot from '../../appState';
 import {Store} from '@ngrx/store';
 import * as CustomerActions from '../../../actions/customer.actions';
 import {CustomerService} from "../../../services/customer.service";
-import {Subject} from "rxjs";
+import {debounceTime, distinctUntilChanged} from "rxjs/internal/operators";
 
 @Component({
   selector: 'app-profile',
@@ -45,7 +45,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   storeSelect(){
     this.customer$ = this.store.select(fromRoot.selectors.getCustomer);
-    this.customer$.distinctUntilChanged().subscribe(data => {
+    this.customer$.pipe(distinctUntilChanged()).subscribe(data => {
       if (data) {
         if (!this.registered) {
           this.registered = true;
@@ -56,7 +56,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
     })
   }
   onValueCustomerChanged() {
-    this.formCustomer.valueChanges.debounceTime(1000).distinctUntilChanged().subscribe(val => {
+    this.formCustomer.valueChanges.pipe(
+      debounceTime(1000),
+      distinctUntilChanged()
+    )
+      .subscribe(val => {
       if (val) {
         this.store.dispatch(new CustomerActions.EditCustomer(val));
       }
