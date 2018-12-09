@@ -14,7 +14,7 @@ export class InputAutocompletionComponent implements OnInit, OnDestroy {
   @Input() data: any;
   @Input() witchForm: number;
   @Input() formGroup: FormGroup;
-  private showDropDown = false;
+   showDropDown = false;
   private valueNameChanges$: any;
   disabled = false;
 

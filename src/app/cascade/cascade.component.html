@@ -12,7 +12,7 @@
   </app-form>
   <form  [formGroup]="formRecipientCascade">
     <div formArrayName="items"
-         *ngFor="let item of formRecipientCascade.get('items').controls; let i = index;">
+         *ngFor="let item of formRecipientCascade.get('items'); let i = index;">
       <app-form
         [nameForm]="nameForm[1]"
         [datas]="recipients$ | async"

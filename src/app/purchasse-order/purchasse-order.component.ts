@@ -40,7 +40,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   prixZoneCamionnette$: Observable<PrixZone>;
   contact$: Observable<Contact[]>;
 
-  private distance: Distance;
+  distance: Distance;
   distances: Distance[] = [];
   datas: any;
   nameForm = ['removals','recipients'];

@@ -18,7 +18,10 @@ import {CustomerService} from "../services/customer.service";
 
 import * as jspdf from 'jspdf';
 import * as html2canvas from "html2canvas"
-
+export interface Transaction {
+  item: string;
+  cost: number;
+}
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.component.html',
@@ -38,9 +41,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<PurchasseOrder>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-
   @ViewChildren('mati') matInput: QueryList<any>;
-
   months: string[] = [];
 
 
@@ -240,7 +241,13 @@ export class OrdersComponent implements OnInit, OnDestroy {
     });
   }
 
+  /** Gets the total cost of all transactions. */
   getTotalCost() {
-    return 25 //this.datasOrders.map(t => t.price).reduce((acc, value) => acc + value, 0);
+    if (this.dataSource && this.dataSource.data) {
+      console.log(this.dataSource.data);
+      return this.dataSource.data.map(t => +t.price).reduce((acc, value) => acc + value, 0);
+    }
+    return 0;
   }
+
 }
