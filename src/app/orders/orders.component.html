@@ -41,14 +41,14 @@
       <!-- created Column -->
       <ng-container matColumnDef="created">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> created </th>
-        <td mat-cell *matCellDef="let transaction"> {{transaction.created | date:'d-MM-y'}} </td>
+        <td mat-cell *matCellDef="let transaction"> {{transaction.created }} </td>
         <td mat-footer-cell *matFooterCellDef>  </td>
       </ng-container>
       <!-- removal Column -->
       <ng-container matColumnDef="fk_removal_id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Enlèvement </th>
         <td mat-cell *matCellDef="let transaction">
-          <p><fa-icon style="color: rgba(0,0,0,0.27)!important;" [icon]="['fas', 'user']" size="sm"></fa-icon>{{ transaction.removal_name  }}</p>
+          <p><fa-icon style="color: rgba(0,0,0,0.27)!important;" [icon]="['fas', 'user']" size="sm"></fa-icon> {{ transaction.removal_name  }}</p>
           <p *ngIf="transaction.removal_ref_client && transaction.removal_ref_client.length">
             <fa-icon style="color: rgba(0,0,0,0.27)!important;" [icon]="['fas', 'id-card']" size="sm"></fa-icon>
             {{ transaction.removal_ref_client }}</p>

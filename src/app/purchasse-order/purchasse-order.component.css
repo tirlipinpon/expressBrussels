@@ -1,9 +1,9 @@
 .conatinerFormData {
   /*border: 1px solid blue;*/
   /*background-color: rgba(0, 0, 0, 0.15);*/
-  margin:1px;
   padding:1px;
   display: flex;
+  margin: auto;
 }
 
 .options-distance {

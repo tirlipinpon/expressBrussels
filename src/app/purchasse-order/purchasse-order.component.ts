@@ -24,6 +24,7 @@ import {PrixZone} from "../models/prixZone";
 import {Contact} from "../models/contact";
 
 import { map } from 'rxjs/operators';
+import {NotificationService} from "../services/notification.service";
 
 @Component({
   selector: 'app-purchasse-order',
@@ -68,7 +69,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     private getDistanceMatrixService: GetDistanceMatrixService,
     private cdr: ChangeDetectorRef,
     private customerService: CustomerService,
-    private route: ActivatedRoute)
+    private route: ActivatedRoute,
+    private notificationsService: NotificationService)
   {
     this.storeDispatch();
     this.initFormsRemoval();
@@ -284,11 +286,15 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     return valid;
   }
   resetOrder() {
+    this.success();
     this.allFormGroup.forEach( form => {
       form.reset();
+      // this.markAsPristine(form)
     });
+    this.formOptions.reset();
     this.store.dispatch(new OrderActions.InitOrder(this.customerId));
     this.resetDistance();
+
   }
 
   addContacts(removalForm: FormGroup, recipientForm: FormGroup): void {
@@ -314,7 +320,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   recapOrder() {
     this.store.dispatch(new OrderActions.SaveOrder());
     this.addContacts(this.formRemoval, this.formRecipient);
-    // this.resetOrder();
+    this.resetOrder();
 
   }
   isAllComplete(emitted?: any): void {
@@ -504,9 +510,9 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       });
   }
 
-  // success() {
-  //   this.notificationsService.notify('success', 'some alert', 'push was called!');
-  // }
+  success() {
+    this.notificationsService.notify('success', 'Bon de commande', 'Le bon a été créée');
+  }
   // info() {
   //   this.notificationsService.notify('info', 'some alert', 'push was called!');
   // }

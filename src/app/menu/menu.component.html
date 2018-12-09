@@ -1,10 +1,16 @@
-<button mat-button routerLink="/menu/order" routerLinkActive="active-link">Commande</button>
-<button mat-button routerLink="/menu/orders" routerLinkActive="active-link">Bon de commandes</button>
-<button mat-button routerLink="/menu/removals" routerLinkActive="active-link">enlevements</button>
-<button mat-button routerLink="/menu/recipients" routerLinkActive="active-link">destinations</button>
-<button disabled mat-button routerLinkActive="active-link">factures</button>
-<button disabled mat-button routerLink="/menu/cascade" routerLinkActive="active-link">cascade</button>
-
-<app-profile></app-profile>
+<div class="flex-menu">
+  <div>
+    <img src="assets/img/logo_sfe_long.jpg">
+  </div>
+  <div>
+    <button mat-button routerLink="/menu/order" routerLinkActive="active-link">Bon de commande</button>
+    <button mat-button routerLink="/menu/orders" routerLinkActive="active-link">commandes</button>
+    <button mat-button routerLink="/menu/removals" routerLinkActive="active-link">enlevements</button>
+    <button mat-button routerLink="/menu/recipients" routerLinkActive="active-link">destinations</button>
+    <button disabled mat-button routerLinkActive="active-link">factures</button>
+    <button disabled mat-button routerLink="/menu/cascade" routerLinkActive="active-link">cascade</button>
+    <app-profile></app-profile>
+  </div>
+</div>
 <app-notification></app-notification>
 <router-outlet></router-outlet>
