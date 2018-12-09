@@ -1,48 +1,49 @@
 <div id="contentToConvert">
   <div class="example-header">
     <mat-form-field>
-      <input type="number" #mati matInput (keyup)="applyFilterNumber($event.target.value, $event.target)" placeholder="numero">
+      <input type="number" #mati matInput (keyup)="applyFilterNumber($event.target.value, $event.target)"
+             placeholder="numero">
     </mat-form-field>
     <mat-form-field>
-      <input type="date" #mati   matInput (keyup)="applyFilterDate($event.target.value, $event.target)" placeholder="date">
+      <input type="date" #mati matInput (keyup)="applyFilterDate($event.target.value, $event.target)"
+             placeholder="date">
     </mat-form-field>
     <mat-form-field>
       <input type="text" matInput #mati (keyup)="applyFilterName($event.target.value, $event.target)" placeholder="nom">
     </mat-form-field>
     <mat-form-field *ngIf="isReferenceClient">
-      <input type="text" matInput #mati (keyup)="applyFilterRefClient($event.target.value, $event.target)" placeholder="reference client">
+      <input type="text" matInput #mati (keyup)="applyFilterRefClient($event.target.value, $event.target)"
+             placeholder="reference client">
     </mat-form-field>
-    <!--<mat-form-field>-->
-    <!--<input type="text" matInput #mati (keyup)="applyFilterMonth($event.target.value, $event.target)" placeholder="Mois">-->
-    <!--</mat-form-field>-->
-
     <mat-form-field>
-      <mat-select matInput placeholder="Mois ({{getCurrentDate() | date:'yyyy'}})" (selectionChange)="applyFilterMonth($event.value, $event)">
+      <mat-select matInput placeholder="Mois ({{getCurrentDate() | date:'yyyy'}})"
+                  (selectionChange)="applyFilterMonth($event.value, $event)">
         <mat-option [value]="'none'"></mat-option>
-        <mat-option   *ngFor="let month of months" [value]="month" >
-          {{month|numberTransformToMonth}} {{month}}
+        <mat-option *ngFor="let month of months" [value]="month">
+          {{month|numberTransformToMonth}} ({{month|countOrdersByMonth:dataSource.data}}) {{month|countOrdersPriceByMonth:dataSource.data}} €
         </mat-option>
       </mat-select>
     </mat-form-field>
+    <button mat-stroked-button (click)="captureScreen('contentToConvert')">
+      <fa-icon [icon]="['fas', 'file-pdf']" size="sm"></fa-icon>
+      Print selected order(s)
+    </button>
   </div>
-  <button (click)="captureScreen()">Print</button>
 
   <div class="mat-elevation-z8" >
-    <table mat-table [dataSource]="dataSource" matSort >
+    <table mat-table [dataSource]="dataSource" matSort matSortActive="created">
       <!-- id Column -->
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> id </th>
         <td mat-cell *matCellDef="let transaction"> {{transaction.id}} </td>
-        <td mat-footer-cell *matFooterCellDef> Total </td>
+        <td mat-footer-cell *matFooterCellDef> Total ({{getCurrentDate() | date:'yyyy'}})</td>
       </ng-container>
-
       <!-- created Column -->
       <ng-container matColumnDef="created">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> created </th>
         <td mat-cell *matCellDef="let transaction"> {{transaction.created | date:'d-MM-y'}} </td>
         <td mat-footer-cell *matFooterCellDef>  </td>
       </ng-container>
-
       <!-- removal Column -->
       <ng-container matColumnDef="fk_removal_id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Enlèvement </th>
@@ -64,7 +65,6 @@
             {{ transaction.message_removal  }}</p></td>
         <td mat-footer-cell *matFooterCellDef>  </td>
       </ng-container>
-
       <!-- recipient Column -->
       <ng-container matColumnDef="fk_recipient_id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Destination </th>
@@ -85,7 +85,6 @@
         </td>
         <td mat-footer-cell *matFooterCellDef>  </td>
       </ng-container>
-
       <!-- options Column -->
       <ng-container matColumnDef="options">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Options/prix </th>
@@ -96,34 +95,38 @@
             <p *ngIf="transaction.transport==='voiture'"> <fa-icon [icon]="['fas', 'car']" size="sm"></fa-icon></p>
           </div>
           <p *ngIf="transaction.tomorrow!=0">tomorrow</p>
-          <p>{{transaction.price}}€</p>
+          <p>{{transaction.price}} €</p>
         </td>
 
         <td mat-footer-cell *matFooterCellDef> {{getTotalCost() | currency:'EUR':true}} </td>
       </ng-container>
-
       <!-- Disclaimer column -->
       <ng-container matColumnDef="disclaimer">
         <td mat-footer-cell *matFooterCellDef colspan="2">
           Please note that the cost of items displayed are completely and totally made up.
         </td>
       </ng-container>
-
+      <!-- print Column -->
+      <ng-container matColumnDef="print">
+        <th mat-header-cell *matHeaderCellDef> print order </th>
+        <td mat-cell *matCellDef="let transaction">
+          <button mat-stroked-button (click)="captureScreen('print-'+transaction.id)">
+          <fa-icon [icon]="['fas', 'file-pdf']" size="sm"></fa-icon>
+          Print this order
+        </button>
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
       <!-- The table will render two header rows, one data row per data object, and two footer rows. -->
       <tr mat-header-row *matHeaderRowDef="displayedColumns"
           class="example-first-header-row">
       </tr>
-
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-      <tr mat-footer-row *matFooterRowDef="displayedColumns ; sticky: true" class="example-first-footer-row"></tr>
-      <!--<tr mat-footer-row *matFooterRowDef="['disclaimer']" class="example-second-footer-row"></tr>-->
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" id="print-{{row.id}}"></tr>
+      <tr mat-footer-row *matFooterRowDef="displayedColumns;" class="example-first-footer-row"></tr>
     </table>
-    <mat-paginator [pageSizeOptions]="[5, 10, 20, 50]" showFirstLastButtons></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
   </div>
 </div>
-
-
 
 <p-confirmDialog header="Confirmation"
                  icon="fa fa-question-circle" width="400">

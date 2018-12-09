@@ -1,12 +1,12 @@
 import {
-  Component, OnInit, ViewEncapsulation, OnDestroy, ViewChild, ViewChildren, QueryList, Attribute
+  Component, OnInit, ViewEncapsulation, OnDestroy, ViewChild, ViewChildren, QueryList, Attribute, AfterContentChecked
 } from '@angular/core';
 import {PurchasseOrder} from '../models/PurchasseOrder';
 import {Observable} from 'rxjs';
 import * as fromRoot from '../shared/appState';
 import {Store} from '@ngrx/store';
 
-import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {MatPaginator, MatSort, MatTableDataSource, MatSortable} from '@angular/material';
 
 import * as OrdersActions from '../actions/orders.actions';
 import * as RemovalActions from '../actions/removal.actions';
@@ -37,13 +37,12 @@ export class OrdersComponent implements OnInit, OnDestroy {
   datasOrders:  PurchasseOrder[];
   datasRemovals:  DataForm[];
   datasRecipients:  DataForm[];
-  displayedColumns = ['id', 'created', 'fk_removal_id', 'fk_recipient_id', 'options'];
+  displayedColumns = ['id', 'created', 'fk_removal_id', 'fk_recipient_id', 'options', 'print'];
   dataSource: MatTableDataSource<PurchasseOrder>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChildren('mati') matInput: QueryList<any>;
   months: string[] = [];
-
 
   constructor(
     private store: Store<fromRoot.AppState>,
@@ -59,7 +58,6 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy(){
   }
-
   getDatas() {
     this.removals$.subscribe(data => {
       // console.log('data removals: ', data);
@@ -68,7 +66,6 @@ export class OrdersComponent implements OnInit, OnDestroy {
         this.isDataLoaded();
       }
     });
-
     this.recipients$.subscribe(data => {
       // console.log('data recipients: ', data);
       if (data.length) {
@@ -78,14 +75,11 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
     });
     this.orders$.subscribe( (data: any) =>  {
-      // console.log('data orders: ', data);
       if (data) {
         this.datasOrders = []; // TODO: why multiple record same value ?
         for(let i=0; i< Object.keys(data).length; i++) {
-          // console.log('datasOrders:  ',data);
           this.datasOrders.push(data[i]);
         }
-        // console.log('data Orders', data);
         this.isDataLoaded();
       }
     });
@@ -103,16 +97,12 @@ export class OrdersComponent implements OnInit, OnDestroy {
       && this.datasOrders.length) {
 
       for(let i=0; i< Object.keys(this.datasOrders).length; i++) {
-        // console.log('datasRecipients: ', this.datasRecipients);
-
         const removalId = this.datasOrders[i].fk_removal_id;
         const removal = _.find(this.datasRemovals,['id', removalId]);
-
         const recipientId = this.datasOrders[i].fk_recipient_id;
         const recipient = _.find(this.datasRecipients,['id', recipientId]);
 
         if (removal || recipient) {
-
           this.isReferenceClient =
             this.isExistReferenceClient(removal?removal.ref_client:null, recipient?recipient.ref_client:null);
           _.merge(this.datasOrders[i],
@@ -139,17 +129,13 @@ export class OrdersComponent implements OnInit, OnDestroy {
               'recipient_info2': recipient?recipient.infos.info2:'',
             });
         }
-
-
       }
       this.extractCurrentMonths(this.datasOrders);
-      // console.log('this.datasOrders: ', this.datasOrders);
       this.dataSource = new MatTableDataSource(this.datasOrders);
       this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+      this.initialSort()
     }
   }
-
   extractCurrentMonths(orders: PurchasseOrder[]): void {
     orders.forEach(data => {
       const year = data.created.slice(0, 4);
@@ -160,11 +146,13 @@ export class OrdersComponent implements OnInit, OnDestroy {
     });
     this.months = _.uniq(this.months);
   }
-
   getCurrentDate(): Date {
     return new Date();
   }
-
+  initialSort() {
+    this.sort.sort(<MatSortable>({id: 'created', start: 'desc'}));
+    this.dataSource.sort = this.sort;
+  }
   storeSelect() {
     this.removals$ = this.store.select(fromRoot.selectors.getRemovalsData);
     this.recipients$ = this.store.select(fromRoot.selectors.getRecipientsData);
@@ -223,11 +211,10 @@ export class OrdersComponent implements OnInit, OnDestroy {
       }
     });
   }
-
-  captureScreen() {
-    let data = document.getElementById('contentToConvert');
+  captureScreen(elem: string) {
+    let data = document.getElementById(elem);
     html2canvas(data).then(canvas => {
-// Few necessary setting options
+      // Few necessary setting options
       let imgWidth = 208;
       let pageHeight = 295;
       let imgHeight = canvas.height * imgWidth / canvas.width;
@@ -240,14 +227,15 @@ export class OrdersComponent implements OnInit, OnDestroy {
       pdf.save('expressBrussels.pdf'); // Generated PDF
     });
   }
-
-  /** Gets the total cost of all transactions. */
-  getTotalCost() {
+  getTotalCost(month?: number): number {
     if (this.dataSource && this.dataSource.data) {
-      console.log(this.dataSource.data);
-      return this.dataSource.data.map(t => +t.price).reduce((acc, value) => acc + value, 0);
+      return this.dataSource.data.map(t => {
+        if (+t.created.slice(0, 4) === +(new Date()).getFullYear()) {
+          return +t.price
+        }
+        return 0;
+      }).reduce((acc, value) => acc + value, 0);
     }
-    return 0;
+    return null;
   }
-
 }

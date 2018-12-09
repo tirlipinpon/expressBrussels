@@ -41,13 +41,15 @@ import {MatIconModule} from '@angular/material/icon';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {faPhone, faHome, faClock, faUser, faUniversity, faIdCard, faComment, faUserTie, faUserTag,
-  faEuroSign, faMapMarkedAlt, faMotorcycle, faCar} from '@fortawesome/free-solid-svg-icons';
+  faEuroSign, faMapMarkedAlt, faMotorcycle, faCar, faFilePdf} from '@fortawesome/free-solid-svg-icons';
 import {MatButtonModule} from '@angular/material/button';
 import { NotEmptyPipe } from './pipe/not-empty.pipe';
 import { NotDesactivePipe } from './pipe/not-desactive.pipe';
 import { NumberTransformToMonthPipe } from './pipe/number-transform-to-month.pipe';
+import { CountOrdersByMonthPipe } from './pipe/count-orders-by-month.pipe';
+import { CountOrdersPriceByMonthPipe } from './pipe/count-orders-price-by-month.pipe';
 
-library.add(faPhone, faHome, faClock, faUser, faUniversity,
+library.add(faPhone, faHome, faClock, faUser, faUniversity, faFilePdf,
   faIdCard, faComment, faUserTie, faUserTag, faEuroSign, faMapMarkedAlt, faClock, faMotorcycle, faCar);
 
 @NgModule({
@@ -104,7 +106,9 @@ library.add(faPhone, faHome, faClock, faUser, faUniversity,
     MatIconModule,
     MatButtonModule,
     MatRadioModule,
-    NumberTransformToMonthPipe
+    NumberTransformToMonthPipe,
+    CountOrdersByMonthPipe,
+    CountOrdersPriceByMonthPipe
 
   ],
   declarations: [
@@ -126,7 +130,9 @@ library.add(faPhone, faHome, faClock, faUser, faUniversity,
     SearchFilterPipe,
     NotEmptyPipe,
     NotDesactivePipe,
-    NumberTransformToMonthPipe
+    NumberTransformToMonthPipe,
+    CountOrdersByMonthPipe,
+    CountOrdersPriceByMonthPipe
 
   ],
   providers: [
