@@ -29,7 +29,7 @@ export class GetContactFail implements Action {
 export const ADD_CONTACTS = 'Add CONTACTS';
 export class AddContacts implements Action {
   readonly type = ADD_CONTACTS;
-  constructor(public payload: any) {
+  constructor(public payload?: any) {
     console.log('in actions:' , this.type + ' payload:', this.payload);
   }
 }
@@ -45,7 +45,7 @@ export class AddContactSuccess implements Action {
 export const ADD_CONTACT_FAIL = 'Add CONTACT Fail';
 export class AddContactFail implements Action {
   readonly type = ADD_CONTACT_FAIL;
-  constructor(public payload: string) {
+  constructor(public payload?: any) {
     // console.log('in actions:' , this.type + ' payload:', this.payload);
   }
 }

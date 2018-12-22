@@ -1,10 +1,9 @@
-
 import {throwError as observableThrowError, Observable, concat, of} from 'rxjs';
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ContactState} from "../models/contact";
 import {environment} from "../../environments/environment";
-import {catchError} from "rxjs/internal/operators";
+import {catchError, mergeMap} from "rxjs/internal/operators";
 
 @Injectable()
 export class ContactService {
@@ -19,34 +18,24 @@ export class ContactService {
     return this.http.get<ContactState>(url).pipe(
       catchError(error => observableThrowError('error in service get contact with message from server -> ', error))
     )
-
   }
 
-  addContacts(contact: any): Observable<any> {
-    const data = contact.payload.payload[1];
-    let url = this.apiUrl + 'php//add_contact.php';
+  addContacts(order: any): Observable<any> {
+    const data = order;
+    let url = this.apiUrl+'php//add_contact.php';
     const resp0 = {
-      name: data.contact_removal,
+      name: data.contact_removal ? data.contact_removal : '',
       fk_client_id: data.fk_customer_id,
       fk_resp_dest_id: data.fk_removal_id
-    }
+    };
     const resp1 = {
-      name: data.contact_recipient,
+      name: data.contact_recipient ? data.contact_recipient : '',
       fk_client_id: data.fk_customer_id,
       fk_resp_dest_id: data.fk_recipient_id
-    }
-
-    return of(
-      concat(
-        this.http.post(url, resp0).pipe(
-          catchError(error => observableThrowError('error in service add contact 1 with message from server -> ', error))
-        ),
-        this.http.post(url, resp1).pipe(
-          catchError(error => observableThrowError('error in service add contact 2 with message from server -> ', error))
+    };
+    return  this.http.post(url,resp0).pipe(
+          mergeMap(() => this.http.post(url, resp1))
         )
-      )
-  )
-
   }
 
 }

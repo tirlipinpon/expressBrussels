@@ -7,6 +7,8 @@ import {ContactService} from "../../services/contact.service";
 import {Observable, of} from "rxjs";
 import * as ContactActions  from '../../actions/contact.actions';
 import {withLatestFrom, switchMap, map, catchError} from "rxjs/internal/operators";
+import {AddContactSuccess} from "../../actions/contact.actions";
+import {AddContactFail} from "../../actions/contact.actions";
 
 @Injectable()
 export class ContactEffectService {
@@ -19,11 +21,11 @@ export class ContactEffectService {
 
   @Effect() getContact = this.action$.pipe(
     ofType(ContactActions.GET_CONTACT),
-    withLatestFrom(  this.store.select('customer')  ),
+    withLatestFrom(this.store.select('customer')),
     switchMap(([action, dataForm]) =>
       this.contactService.getContact(dataForm.id).pipe(
         map((payload) => {
-          this.notif.notify('info', 'get contact OK ', payload.count+'/total');
+          this.notif.notify('info', 'get contact OK ', payload.count + '/total');
           return new ContactActions.GetContactSuccess(payload);
         }),
         catchError(err => {
@@ -31,32 +33,24 @@ export class ContactEffectService {
           return of(new ContactActions.GetContactFail(err))
         })
       )
-  )
-    );
+    )
+  );
 
-
-  @Effect() addContacts  = this.action$.pipe(
+  @Effect() addContacts = this.action$.pipe(
     ofType(ContactActions.ADD_CONTACTS),
-    switchMap((action: Action) =>
-      this.contactService.addContacts(action).pipe(
-        map(() => {
-          this.notif.notify('info', 'add contacts OK ','');
-          return new ContactActions.AddContactSuccess();
-        }),
-        catchError(err => {
-          this.notif.notify('error', 'add contact NOK ', err);
-          return of(new ContactActions.AddContactFail(err))
-        })
-      )
+    switchMap((data) =>
 
-  )
+          this.contactService.addContacts(data.payload).pipe(
+            map((resp) => new AddContactSuccess()),
+            catchError(err =>  new AddContactFail(err))
+          )
 
-    );
 
-  @Effect() addContactsSuccess  = this.action$.pipe(
+    )
+  );
+
+  @Effect() addContactsSuccess = this.action$.pipe(
     ofType(ContactActions.ADD_CONTACT_SUCCESS),
     map(() => new ContactActions.GetContact())
   )
-
-
 }

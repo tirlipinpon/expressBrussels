@@ -18,11 +18,12 @@ export class OrderService {
 
   saveOrder(data, id): Observable<any>{
     data.fk_customer_id = id;
-    console.log('in order service save new order to db with this data-> ', data);
+    console.log('1) in order service save new order to db with this data-> ', data);
     let url = this.apiUrl+'php//addOrder.php';
-    return this.http.post(url,data).pipe(
-      catchError(error => observableThrowError('error in service save order with message from server -> '+ error))
-    )
+    return this.http.post(url,data);
+    //   .pipe(
+    //   catchError(error => observableThrowError('error in service save order with message from server -> '+ error))
+    // )
   }
 
   getOrders(data): Observable<PurchasseOrder[]> {
