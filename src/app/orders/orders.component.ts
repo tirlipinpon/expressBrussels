@@ -18,10 +18,7 @@ import {CustomerService} from "../services/customer.service";
 
 import * as jspdf from 'jspdf';
 import * as html2canvas from "html2canvas"
-export interface Transaction {
-  item: string;
-  cost: number;
-}
+
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.component.html',
@@ -175,7 +172,9 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
   applyFilterRefClient(filterValue: string, target: any): void {
     this.dataSource.filterPredicate = (data: any, filter: string) =>
-      data.recipient_ref_client.indexOf(filter) != -1 || data.removal_ref_client.indexOf(filter) != -1;
+      data.recipient_ref_client?data.recipient_ref_client.indexOf(filter) != -1:false
+       ||
+      data.removal_ref_client?data.removal_ref_client.indexOf(filter) != -1:false;
     this.filterTable(filterValue, target);
   }
   applyFilterMonth(filterValue: string, target: any): void {

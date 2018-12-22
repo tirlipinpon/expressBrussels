@@ -20,3 +20,11 @@
 mat-icon{
   color: rgba(103, 58, 183, 0.87)!important;
 }
+
+.ui-dialog .ui-dialog-titlebar-icon::before{
+  content: "\f00d";
+  font-family: "FontAwesome";
+}
+.ui-dialog-resizable .ui-dialog-content {
+  background-color: white!important;
+}
