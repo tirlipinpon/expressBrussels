@@ -3,6 +3,18 @@
   <!--<app-input-autocompletion [propName]="'name'" [data]="_user" [propType]="'string'" [witchForm]="1"  [formGroup]="formGroup"></app-input-autocompletion>-->
   <!--<app-input-autocompletion [propName]="'ref_client'" [data]="_user" [propType]="'string'" [witchForm]="1"   [formGroup]="formGroup"></app-input-autocompletion>-->
 
+  <div *ngIf="dataValues && dataValues.length && dataValues[0].ref_client">
+    <mat-form-field class="example-full-width">
+      <input type="text" matInput [matAutocomplete]="autoRefClient" formControlName="ref_client" placeholder="ref_client" aria-label="Number">
+      <mat-icon matSuffix><fa-icon [icon]="['fas', 'id-card'] " size="xs"></fa-icon></mat-icon>
+      <mat-autocomplete   #autoRefClient="matAutocomplete" (optionSelected)="itemSelectedRefClient($event)"  >
+        <mat-option  *ngFor="let option of (filteredRefClient | async)| notEmpty: 'ref_client'"  [value]="option?.ref_client">
+          {{ option?.ref_client }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+
   <mat-form-field class="example-full-width">
     <input type="text" matInput [matAutocomplete]="autoName" formControlName="name" placeholder="name" aria-label="Number">
     <mat-icon matSuffix><fa-icon [icon]="['fas', 'user'] " size="xs"></fa-icon></mat-icon>
@@ -13,17 +25,7 @@
     </mat-autocomplete>
   </mat-form-field>
 
-  <div *ngIf="dataValues && dataValues.length && dataValues[0].ref_client">
-    <mat-form-field class="example-full-width">
-    <input type="text" matInput [matAutocomplete]="autoRefClient" formControlName="ref_client" placeholder="ref_client" aria-label="Number">
-      <mat-icon matSuffix><fa-icon [icon]="['fas', 'id-card'] " size="xs"></fa-icon></mat-icon>
-    <mat-autocomplete   #autoRefClient="matAutocomplete" (optionSelected)="itemSelectedRefClient($event)"  >
-      <mat-option  *ngFor="let option of (filteredRefClient | async)| notEmpty: 'ref_client'"  [value]="option?.ref_client">
-         {{ option?.ref_client }}
-      </mat-option>
-    </mat-autocomplete>
-    </mat-form-field>
-  </div>
+
 
   <input type="hidden" formControlName="id">
 
