@@ -4,7 +4,7 @@ import {
 import {PurchasseOrder} from '../models/PurchasseOrder';
 import {Observable} from 'rxjs';
 import * as fromRoot from '../shared/appState';
-import {Store} from '@ngrx/store';
+import {Store, select} from '@ngrx/store';
 
 import {MatPaginator, MatSort, MatTableDataSource, MatSortable} from '@angular/material';
 
@@ -151,10 +151,9 @@ export class OrdersComponent implements OnInit, OnDestroy {
     this.dataSource.sort = this.sort;
   }
   storeSelect() {
-    this.removals$ = this.store.select(fromRoot.selectors.getRemovalsData);
-    this.recipients$ = this.store.select(fromRoot.selectors.getRecipientsData);
-    this.orders$ = this.store.select(fromRoot.selectors.getOrders);
-
+    this.removals$ = this.store.pipe(select(fromRoot.selectors.getRemovalsData));
+    this.recipients$ = this.store.pipe(select(fromRoot.selectors.getRecipientsData));
+    this.orders$ = this.store.pipe(select(fromRoot.selectors.getOrders));
   }
   storeDispatch() {
     this.store.dispatch(new OrdersActions.GetOrders(this.customerId));

@@ -7,6 +7,7 @@ import * as ClientZonesActions from '../actions/clientZones.actions';
 import * as PrixZoneMotoActions from '../actions/prixZoneMoto.actions';
 import * as PrixZoneCamionnetteActions from '../actions/prixZoneCamionnette.actions';
 import * as ContactActions from '../actions/contact.actions';
+import * as ToasterActions from '../actions/toaster.actions';
 import * as _ from 'lodash';
 import {DataForm, DataDataFormState} from '../models/DataForm';
 import {PurchasseOrder} from '../models/PurchasseOrder';
@@ -15,6 +16,7 @@ import {PrixZone, MyPrixZoneState} from "../models/prixZone";
 import {ContactState} from "../models/contact";
 import {DeleteRemovalSuccess} from "../actions/removal.actions";
 import {DeleteRecipientSuccess} from "../actions/recipient.actions";
+import {ToasterState} from "../models/toaster";
 
 export type ActionCustomer = CustomerActions.All;
 export type ActionRemoval = RemovalActions.All;
@@ -25,6 +27,7 @@ export type ActionClientZones = ClientZonesActions.All;
 export type ActionPrixZoneMoto = PrixZoneMotoActions.All;
 export type ActionPrixZoneCamionnette = PrixZoneCamionnetteActions.All;
 export type ActionContact = ContactActions.All;
+export type ActionToaster = ToasterActions.All;
 
 // ======================================================
 // customer reducer
@@ -417,4 +420,34 @@ export function contactReducer(state = contactInit, action: ActionContact): Cont
 export const ContactSelector = {
   data: (state: ContactState) => { return state.data },
   count: (state: ContactState) => { return state.count }
+};
+
+
+// ======================================================
+// toaster
+// ======================================================
+const toasterInit: ToasterState = {
+  data: [],
+  count: 0
+};
+export function toasterReducer(state = toasterInit, action: ActionToaster): ToasterState {
+  switch(action.type){
+    case ToasterActions.SET_TOASTER:
+     return handleAddToaster(state, action);
+    default:
+      return state;
+  }
+
+};
+
+export function handleAddToaster(state: ToasterState, action: ActionToaster): ToasterState {
+  const newState = Object.assign({}, state, {
+    data: [action.payload]
+  });
+  return newState;
+}
+
+export const ToasterSelector = {
+  data: (state: ToasterState) => { return state.data },
+  count: (state: ToasterState) => { return state.count }
 };

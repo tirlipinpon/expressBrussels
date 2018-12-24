@@ -48,6 +48,7 @@ import { NotDesactivePipe } from './pipe/not-desactive.pipe';
 import { NumberTransformToMonthPipe } from './pipe/number-transform-to-month.pipe';
 import { CountOrdersByMonthPipe } from './pipe/count-orders-by-month.pipe';
 import { CountOrdersPriceByMonthPipe } from './pipe/count-orders-price-by-month.pipe';
+import {ToasterEffectService} from "../effects/toaster/toaster-effect.service";
 
 library.add(faPhone, faHome, faClock, faUser, faUniversity, faFilePdf,
   faIdCard, faComment, faUserTie, faUserTag, faEuroSign, faMapMarkedAlt, faClock, faMotorcycle, faCar);
@@ -83,7 +84,8 @@ library.add(faPhone, faHome, faClock, faUser, faUniversity, faFilePdf,
       PrixZoneCamionnetteEffectService,
       RecipientEffectService,
       RemovalEffectService,
-      ContactEffectService
+      ContactEffectService,
+      ToasterEffectService
     ]),
     // StoreModule.forFeature('todo', customerReducer)
     StoreModule.forRoot(reducers),

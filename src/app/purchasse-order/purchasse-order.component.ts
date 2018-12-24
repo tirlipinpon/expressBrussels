@@ -53,6 +53,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   formDistance: FormGroup;
   contactRemoval$: Observable<Contact[]>;
   contactRecipient$: Observable<Contact[]>;
+  private toast$: Observable<any>;
   private allFormGroup: FormGroup[] = [];
   private valueRemovalChanges$;
   private valueRecipientChanges$;
@@ -99,6 +100,13 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.prixZoneMoto$ = this.store.select(fromRoot.selectors.getPrixZoneMotoData);
     this.prixZoneCamionnette$ = this.store.select(fromRoot.selectors.getPrixZoneCamionnetteData);
     this.contact$ = this.store.select(fromRoot.selectors.getContactData);
+    this.toast$ = this.store.select(fromRoot.selectors.getToasterData);
+    this.toast$.subscribe(data => {
+      if (data && data[0]) {
+        this.notificationsService.notify(data[0].severity, data[0].summary, data[0].detail);
+        this.cdr.markForCheck();
+      }
+    })
   }
   storeDispatch() {
     this.customerService.currentCustomerId.subscribe(id => {
@@ -286,7 +294,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     return valid;
   }
   resetOrder() {
-    this.success();
     this.allFormGroup.forEach( form => {
       form.reset();
       // this.markAsPristine(form)
@@ -294,9 +301,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.formOptions.reset();
     this.store.dispatch(new OrderActions.InitOrder(this.customerId));
     this.resetDistance();
-
   }
-
   addContacts(removalForm: FormGroup, recipientForm: FormGroup): void {
     let  contact  = {
       name: null,
@@ -318,7 +323,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       this.store.dispatch(new ContactActions.AddContacts(contact));
     }
   }
-
   recapOrder() {
     this.store.dispatch(new OrderActions.SaveOrder());
     this.addContacts(this.formRemoval, this.formRecipient);
@@ -366,7 +370,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     // after15h
     //
   }
-
   calculTransportAndOptionBxl(prixZoneTransport: Observable<PrixZone>, zone: number): void {
     prixZoneTransport.subscribe(data => {
       let price = +data['zone'+zone];
@@ -388,7 +391,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       });
     });
   }
-
   calculTransportAndOptionNational(prixZoneTransport: Observable<PrixZone>, price: number): void {
   prixZoneTransport.subscribe(data => {
     price *= data.prixKm;
@@ -429,7 +431,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       status: status
     });
   }
-
   // distance
   setDistance(respGoogleMatrix: any, whichForm: string ): void {
        respGoogleMatrix.then(result => {
@@ -511,18 +512,4 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
         country: ''
       });
   }
-
-  success() {
-    this.notificationsService.notify('success', 'Bon de commande', 'Le bon a été créée');
-  }
-  // info() {
-  //   this.notificationsService.notify('info', 'some alert', 'push was called!');
-  // }
-  // warn() {
-  //   this.notificationsService.notify('warn', 'some alert', 'push was called!');
-  // }
-  // error() {
-  //   this.notificationsService.notify('error', 'some alert', 'push was called!');
-  // }
-
 }

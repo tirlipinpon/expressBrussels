@@ -14,7 +14,6 @@ import {CustomerService} from './services/customer.service';
 import {OrderService} from './services/order.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MessageService} from 'primeng/components/common/messageservice';
-import {NotificationService} from './services/notification.service';
 import { CommonModule } from '@angular/common';
 import {SharedModule} from './shared/shared.module';
 import {HttpClientModule} from '@angular/common/http';
@@ -152,7 +151,6 @@ const appRoutes: Routes = [
     AlwaysAuthGuardService,
     UnsearchedTermGuard,
     MessageService,
-    NotificationService,
     CanDeactivateFormGuardService,
     AuthenticationService,
     ClientZonesService,

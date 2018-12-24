@@ -10,17 +10,21 @@ import {
   prixZoneCamionnetteReducer,
   recipientReducer,
   removalReducer,
+  contactReducer,
   CustomerSelector,
   RemovalSelectors,
   RecipientSelectors,
   PurchasseOrderSelector,
   OrderSelector,
   ClientZonesSelector,
-  PrixZoneMotoSelector, PrixZoneCamionnetteSelector, contactReducer, ContactSelector
+  PrixZoneMotoSelector,
+  PrixZoneCamionnetteSelector,
+  ContactSelector, toasterReducer, ToasterSelector
 } from '../reducers/all.reducer';
 import {MyClientZones, MyClientZonesState} from '../models/my-client-zones';
 import {PrixZone, MyPrixZoneState} from "../models/prixZone";
 import {ContactState, Contact} from "../models/contact";
+import {ToasterState, Toaster} from "../models/toaster";
 
 export interface AppState {
   customer: DataForm;
@@ -32,6 +36,7 @@ export interface AppState {
   prixZoneMoto: MyPrixZoneState;
   prixZoneCamionnette: MyPrixZoneState;
   contact: ContactState;
+  toaster: ToasterState;
 }
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -43,7 +48,8 @@ export const reducers: ActionReducerMap<AppState> = {
   clientZones: clientZonesReducer,
   prixZoneMoto: prixZoneMotoReducer,
   prixZoneCamionnette: prixZoneCamionnetteReducer,
-  contact: contactReducer
+  contact: contactReducer,
+  toaster: toasterReducer
 };
 
 const getCustomerState = createFeatureSelector('customer');
@@ -55,6 +61,7 @@ const getClientZonesState = createFeatureSelector('clientZones');
 const getPrixZoneMotoState = createFeatureSelector('prixZoneMoto');
 const getPrixZoneCamionnetteState = createFeatureSelector('prixZoneCamionnette');
 const contactState = createFeatureSelector('contact');
+const toasterState = createFeatureSelector('toaster');
 
 // export const rootSelectors = {
 // customer: createSelector(getCustomerState, (state: AppState) => { return state.customer}),
@@ -85,6 +92,9 @@ export interface Selectors {
 
   getContactData: MemoizedSelector<AppState, Contact[]>;
   getContactCount: MemoizedSelector<AppState, number>;
+
+  getToasterData: MemoizedSelector<AppState, Toaster[]>;
+  getToasterCount: MemoizedSelector<AppState, number>;
 }
 
 export const selectors: Selectors = {
@@ -108,5 +118,8 @@ export const selectors: Selectors = {
 
   getContactData: createSelector(contactState, ContactSelector.data ),
   getContactCount: createSelector(contactState, ContactSelector.count ),
+
+  getToasterData: createSelector(toasterState, ToasterSelector.data ),
+  getToasterCount: createSelector(toasterState, ToasterSelector.count ),
 
 }

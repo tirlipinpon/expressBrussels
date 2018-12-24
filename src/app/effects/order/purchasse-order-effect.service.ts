@@ -1,18 +1,14 @@
 import { Injectable } from '@angular/core';
 import {Actions, Effect, ofType} from '@ngrx/effects';
-import {Observable, of} from 'rxjs';
-import {Action, Store} from '@ngrx/store';
+import {of} from 'rxjs';
+import { Store} from '@ngrx/store';
 import {AppState} from '../../shared/appState';
 import {OrderService} from '../../services/order.service';
 import {NotificationService} from '../../services/notification.service';
-
-
-
 import * as OrderActions  from '../../actions/purchasseOrder.actions';
-import * as ContactActions from '../../actions/contact.actions';
+import * as ToasterActions  from '../../actions/toaster.actions';
 import {withLatestFrom, switchMap, catchError, map, tap} from "rxjs/internal/operators";
 import {SaveOrderSuccess} from "../../actions/purchasseOrder.actions";
-import {AddContacts} from "../../actions/contact.actions";
 
 @Injectable()
 export class PurchasseOrderEffectService {
@@ -40,8 +36,13 @@ export class PurchasseOrderEffectService {
     )
   );
 
-  @Effect({dispatch: false}) saveOrderSuccess$ = this.action$.pipe(
+  @Effect() saveOrderSuccess$ = this.action$.pipe(
     ofType(OrderActions.SAVE_ORDER_SUCCESS),
-    switchMap((data) => of(this.notif.notify('success', 'contact recorded', 'data')) )
+    map((data: any) => new ToasterActions.SetToaster(
+      {
+        severity: 'success',
+        summary: 'order record',
+        detail: 'recorded successfully number ' + data.payload.id + '.'
+      }) )
   )
 }
