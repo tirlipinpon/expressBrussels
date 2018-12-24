@@ -41,8 +41,8 @@ export class PurchasseOrderEffectService {
     map((data: any) => new ToasterActions.SetToaster(
       {
         severity: 'success',
-        summary: 'order record',
-        detail: 'recorded successfully number ' + data.payload.id + '.'
+        summary: 'Enregistrement de la commande réussite.',
+        detail: 'La commande ' + data.payload.id +' a été enregistrée, un chauffeur arrive.'
       }) )
   )
 }
