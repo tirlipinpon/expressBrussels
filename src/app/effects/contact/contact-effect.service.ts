@@ -39,13 +39,13 @@ export class ContactEffectService {
   @Effect() addContacts = this.action$.pipe(
     ofType(ContactActions.ADD_CONTACTS),
     switchMap((data) =>
-
-          this.contactService.addContacts(data.payload).pipe(
+          this.contactService.addContacts(data).pipe(
             map((resp) => new AddContactSuccess()),
-            catchError(err =>  new AddContactFail(err))
+            catchError(err => {
+              this.notif.notify('error', 'add contact NOK ', err);
+              return of(new AddContactFail(err))
+            } )
           )
-
-
     )
   );
 

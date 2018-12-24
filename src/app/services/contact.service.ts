@@ -21,21 +21,9 @@ export class ContactService {
   }
 
   addContacts(order: any): Observable<any> {
-    const data = order;
     let url = this.apiUrl+'php//add_contact.php';
-    const resp0 = {
-      name: data.contact_removal ? data.contact_removal : '',
-      fk_client_id: data.fk_customer_id,
-      fk_resp_dest_id: data.fk_removal_id
-    };
-    const resp1 = {
-      name: data.contact_recipient ? data.contact_recipient : '',
-      fk_client_id: data.fk_customer_id,
-      fk_resp_dest_id: data.fk_recipient_id
-    };
-    return  this.http.post(url,resp0).pipe(
-          mergeMap(() => this.http.post(url, resp1))
-        )
+    const data = order.payload;
+    return  this.http.post(url,data);
   }
 
 }

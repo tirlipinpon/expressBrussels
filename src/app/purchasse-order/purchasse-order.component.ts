@@ -298,23 +298,25 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   }
 
   addContacts(removalForm: FormGroup, recipientForm: FormGroup): void {
-    // const c1 = removalForm.get('infos.info1').value;
-    // let removC = null;
-    // if (c1 && c1.length > 2) {
-    //   removC  = {
-    //     name: c1,
-    //     fk_client_id: removalForm.get('fk_client').value,
-    //     fk_resp_dest_id: removalForm.get('id').value}
-    // }
-    // const c2 = recipientForm.get('infos.info1').value;
-    // let recipC = null;
-    // if (c2 && c2.length > 2) {
-    //   recipC  = {
-    //     name: c2,
-    //     fk_client_id: recipientForm.get('fk_client').value,
-    //     fk_resp_dest_id: recipientForm.get('id').value}
-    // }
-    //   this.store.dispatch(new ContactActions.AddContacts([removC, recipC]));
+    let  contact  = {
+      name: null,
+      fk_client_id: this.formRecipient.get('fk_client').value,
+      fk_resp_dest_id: null
+    };
+
+    const c1 = removalForm.get('infos.info1').value;
+    if (c1 && c1.length > 2) {
+      contact.name = c1 ;
+      contact.fk_resp_dest_id = removalForm.get('id').value ;
+      this.store.dispatch(new ContactActions.AddContacts(contact));
+    }
+
+    const c2 = recipientForm.get('infos.info1').value;
+    if (c2 && c2.length > 2) {
+      contact.name = c2;
+      contact.fk_resp_dest_id = recipientForm.get('id').value ;
+      this.store.dispatch(new ContactActions.AddContacts(contact));
+    }
   }
 
   recapOrder() {

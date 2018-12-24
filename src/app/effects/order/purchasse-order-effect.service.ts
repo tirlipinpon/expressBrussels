@@ -40,10 +40,8 @@ export class PurchasseOrderEffectService {
     )
   );
 
-  @Effect() saveOrderSuccess$ = this.action$.pipe(
+  @Effect({dispatch: false}) saveOrderSuccess$ = this.action$.pipe(
     ofType(OrderActions.SAVE_ORDER_SUCCESS),
-    map((data) => new AddContacts(data.payload) )
+    switchMap((data) => of(this.notif.notify('success', 'contact recorded', 'data')) )
   )
-
-
 }
