@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewEncapsulation, OnDestroy} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation, OnDestroy, HostListener} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {DataForm} from '../../../models/DataForm';
 import {Observable, Subject} from 'rxjs';
@@ -102,4 +102,20 @@ export class ProfileComponent implements OnInit, OnDestroy {
     });
   }
 
+  @HostListener('window:beforeunload')
+  canDeactivate(): boolean {
+    let canDeactive = true;
+    if (this.formCustomer.dirty && this.formCustomer.touched) {
+        canDeactive = false;
+      }
+    return canDeactive;
+  }
+
+  // onBeforeDialogHide(event){
+  //   console.log("Just before the dialog is closing");
+  //   if (event.target.className === "ng-tns-c5-0 ui-dialog-titlebar-icon ui-dialog-titlebar-close ui-corner-all ng-star-inserted") {
+  //     event.preventDefault();
+  //     return false;
+  //   }
+  // }
 }
