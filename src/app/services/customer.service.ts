@@ -1,9 +1,8 @@
-
 import {throwError as observableThrowError, Observable, BehaviorSubject} from 'rxjs';
 import {Injectable} from '@angular/core';
-import { HttpClient  } from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {DataForm} from '../models/DataForm';
-import { environment } from '../../environments/environment';
+import {environment} from '../../environments/environment';
 import * as fromRoot from '../shared/appState';
 import {Store} from "@ngrx/store";
 import {catchError} from "rxjs/internal/operators";
@@ -30,19 +29,24 @@ export class CustomerService {
     this.messageSource.next(message);
   }
 
-  getCustomer(data: any): Observable<DataForm> {
-     // console.log('id from service: ', data.payload);
-    let url = this.apiUrl+'php//read_one.php?id='+data.payload;
-    return this.http.get<DataForm>(url).pipe(
-  catchError(error => observableThrowError('error in service get customer with message from server -> ', error))
-    )
+  sendEmail(data): Observable<any> {
+    // console.log('in customer service set new customer to db with this data-> ', data);
+    let url = this.apiUrl + 'php//read_one_by_email.php';
+    return this.http.post(url, {email: data.payload});
+  }
 
+  getCustomer(data: any): Observable<DataForm> {
+    // console.log('id from service: ', data.payload);
+    let url = this.apiUrl + 'php//read_one.php?id=' + data.payload;
+    return this.http.get<DataForm>(url).pipe(
+      catchError(error => observableThrowError('error in service get customer with message from server -> ', error))
+    )
   }
 
   saveCustomer(data): Observable<any> {
     // console.log('in customer service set new customer to db with this data-> ', data);
-    let url = this.apiUrl+'php//update.php';
-    return this.http.post(url,data).pipe(
+    let url = this.apiUrl + 'php//update.php';
+    return this.http.post(url, data).pipe(
       catchError(error => observableThrowError('error in service save customer with message from server -> ', error))
     )
   }
@@ -50,6 +54,4 @@ export class CustomerService {
   isLoggedIn(): boolean {
     return true;
   }
-
-
 }

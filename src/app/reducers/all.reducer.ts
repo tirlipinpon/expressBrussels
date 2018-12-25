@@ -56,7 +56,6 @@ const initCustomer: DataForm = {
 export function customerReducer(state = initCustomer , action: ActionCustomer): DataForm {
   switch (action.type) {
     case CustomerActions.SET_CUSTOMER:
-
       if (state.id===0 || !state.id) {
         return {...state, ...action.payload};
       }

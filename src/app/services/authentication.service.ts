@@ -90,7 +90,7 @@ export class AuthenticationService {
     return this.http.post(url, data).pipe(
     tap(res => this.setSession(res)),
     // .shareReplay()
-      catchError(error => observableThrowError('error in service login  with message from server -> ', error))
+      catchError(error =>  'error in service login  with message from server' )
     )
   }
   private setSession(authResult) {

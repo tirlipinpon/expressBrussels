@@ -5,6 +5,6 @@
 
 export const environment = {
   production: false,
-  apiUrl: "http://www.expressbrussel.com/login/"
-  // apiUrl: "http://localhost/expressDB/"
+  // apiUrl: "http://www.expressbrussel.com/login/"
+  apiUrl: "http://localhost/expressDB/"
 };
