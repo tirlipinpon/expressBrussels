@@ -19,7 +19,7 @@ export class CustomerService {
               private store: Store<fromRoot.AppState>) {
     this.customerId$ = this.store.select(fromRoot.selectors.getCustomerId);
     this.customerId$.subscribe(data => {
-      if (data !== 0) {
+      if (+data !== 0) {
         this.setCustomerId(data)
       }
     });

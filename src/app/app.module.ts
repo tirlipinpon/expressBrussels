@@ -62,7 +62,7 @@ const appRoutes: Routes = [
       {
         path: 'order',
         component: PurchasseOrderComponent,
-        // canActivate: [AlwaysAuthGuardService],
+        canActivate: [AlwaysAuthGuardService],
         // canDeactivate: [CanDeactivateFormGuardService],
         resolve: { id: RouteResolverService }
       },

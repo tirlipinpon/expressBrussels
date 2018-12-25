@@ -2,7 +2,7 @@
 
 
   <!--  customer  -->
-  <form novalidate [formGroup]="formCustomer" style="display:flex;flex-direction:column;color:black">
+  <form *ngIf="formCustomer" novalidate [formGroup]="formCustomer" style="display:flex;flex-direction:column;color:black">
     <input type="hidden" formControlName="id">
     <mat-form-field class="example-full-width">
       <input matInput formControlName="name" placeholder="name">

@@ -10,6 +10,7 @@ import * as jwt_decode from 'jwt-decode';
 import * as CustomerActions from '../actions/customer.actions';
 import * as fromRoot from '../shared/appState';
 import {tap, catchError} from "rxjs/internal/operators";
+import {dispatch} from "rxjs/internal/observable/range";
 
 export const TOKEN_NAME: string = 'jwt_token';
 // const httpOptions = {
@@ -102,6 +103,10 @@ export class AuthenticationService {
       const decoded = jwt_decode(this.getToken());
       // console.log(decoded);
     }
+  }
+  getDecodedTokenId(): number {
+    const decoded = jwt_decode(this.getToken());
+    return +decoded.id;
   }
   logout(): void {
     // clear token remove user from local storage to log user out

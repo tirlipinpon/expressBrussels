@@ -46,7 +46,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   storeSelect(){
     this.customer$ = this.store.select(fromRoot.selectors.getCustomer);
     this.customer$.pipe(distinctUntilChanged()).subscribe(data => {
-      if (data) {
+      if (data && +data.id !== 0) {
         if (!this.registered) {
           this.registered = true;
           this.initFormsCustomer(data);
@@ -59,8 +59,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.formCustomer.valueChanges.pipe(
       debounceTime(1000),
       distinctUntilChanged()
-    )
-      .subscribe(val => {
+    ).subscribe(val => {
       if (val) {
         this.store.dispatch(new CustomerActions.EditCustomer(val));
       }

@@ -3,6 +3,7 @@ import {CanActivate, Router} from '@angular/router';
 import {AuthenticationService} from './authentication.service';
 import {Store} from '@ngrx/store';
 import * as fromRoot from '../shared/appState';
+import {GetCustomer} from "../actions/customer.actions";
 
 @Injectable()
 export class AlwaysAuthGuardService implements CanActivate {
@@ -14,8 +15,12 @@ export class AlwaysAuthGuardService implements CanActivate {
 
   canActivate() {
     // console.log('AlwaysAuthGuard');
-    if (this.authenticationService.isToken() && this.authenticationService.isTokenExpired()) {
-      this.authenticationService.setCustomerDecoded();
+    const resp1 = this.authenticationService.isToken();
+    const resp2 = this.authenticationService.isTokenExpired();
+    if (resp1 && resp2) {
+      // this.authenticationService.setCustomerDecoded();
+      const id = this.authenticationService.getDecodedTokenId();
+      this.store.dispatch(new GetCustomer(id));
       return true;
     }
     // console.log('canActivate: ', false);

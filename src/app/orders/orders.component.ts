@@ -45,11 +45,15 @@ export class OrdersComponent implements OnInit, OnDestroy {
     private store: Store<fromRoot.AppState>,
     @Attribute('type') type,
     private customerService: CustomerService) {
-    this.customerService.currentCustomerId.subscribe(id => { this.customerId = id; });
+    this.customerService.currentCustomerId.subscribe(id => {
+      if (id && +id !== 0) {
+        this.customerId = id;
+        this.storeDispatch();
+      }
+    });
   }
 
   ngOnInit() {
-    this.storeDispatch();
     this.storeSelect();
     this.getDatas();
   }
