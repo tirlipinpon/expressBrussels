@@ -22,7 +22,7 @@ export class AutocompleteGoogleComponent implements OnInit {
       () => {
         let options = {
           types: ['address'],
-          componentRestrictions: {country: 'be'}
+          componentRestrictions: {country: ['be','fr']}
         };
         let autocomplete = new google.maps.places.Autocomplete(this.searchElement.nativeElement, options);
 

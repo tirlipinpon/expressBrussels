@@ -2,10 +2,15 @@
 <form *ngIf="isCustomer==='notCascades'" [class.not-validated-by-google]="formGroup.get('addressValidated').value=='0'"  novalidate [formGroup]="formGroup">
   <!--<app-input-autocompletion [propName]="'name'" [data]="_user" [propType]="'string'" [witchForm]="1"  [formGroup]="formGroup"></app-input-autocompletion>-->
   <!--<app-input-autocompletion [propName]="'ref_client'" [data]="_user" [propType]="'string'" [witchForm]="1"   [formGroup]="formGroup"></app-input-autocompletion>-->
+  <mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>{{nameForm === 'removals' ? 'Enlevement' : 'Destinataire'}}</span>
+  </mat-toolbar-row>
+  </mat-toolbar>
 
   <div *ngIf="dataValues && dataValues.length && dataValues[0].ref_client">
     <mat-form-field class="example-full-width">
-      <input type="text" matInput [matAutocomplete]="autoRefClient" formControlName="ref_client" placeholder="ref_client" aria-label="Number">
+      <input type="text" matInput [matAutocomplete]="autoRefClient" formControlName="ref_client" placeholder="reference client" aria-label="Number">
       <mat-icon matSuffix><fa-icon [icon]="['fas', 'id-card'] " size="xs"></fa-icon></mat-icon>
       <mat-autocomplete   #autoRefClient="matAutocomplete" (optionSelected)="itemSelectedRefClient($event)"  >
         <mat-option  *ngFor="let option of (filteredRefClient | async)| notEmpty: 'ref_client'"  [value]="option?.ref_client">
@@ -16,7 +21,7 @@
   </div>
 
   <mat-form-field class="example-full-width">
-    <input type="text" matInput [matAutocomplete]="autoName" formControlName="name" placeholder="name" aria-label="Number">
+    <input type="text" matInput [matAutocomplete]="autoName" formControlName="name" placeholder="nom" aria-label="Number">
     <mat-icon matSuffix><fa-icon [icon]="['fas', 'user'] " size="xs"></fa-icon></mat-icon>
     <mat-autocomplete  #autoName="matAutocomplete" (optionSelected)="itemSelectedName($event)"  >
       <mat-option *ngFor="let option of (filteredName | async)|notDesactive" [value]="option?.name">
@@ -32,20 +37,20 @@
   <div *ngIf="formGroup.get('id').value && formGroup.get('id').value.length">
     <div style="display:flex;">
       <mat-form-field class="example-full-width">
-        <input matInput formControlName="address" [readonly]="true"   placeholder="address" value="test">
+        <input matInput formControlName="address" [readonly]="true"   placeholder="adresse" value="test">
       </mat-form-field>
       <mat-form-field class="example-full-width">
-        <input matInput formControlName="number"  [readonly]="true"   placeholder="number">
+        <input matInput formControlName="number"  [readonly]="true"   placeholder="numero">
         <!--<mat-icon matSuffix><fa-icon [icon]="['fas', 'home'] " size="xs"></fa-icon></mat-icon>-->
       </mat-form-field>
     </div>
 
     <div style="display:flex;">
       <mat-form-field class="example-full-width">
-        <input matInput formControlName="cp" [readonly]="true"  placeholder="cp">
+        <input matInput formControlName="cp" [readonly]="true"  placeholder="code postale">
       </mat-form-field>
       <mat-form-field class="example-full-width">
-        <input matInput formControlName="state" [readonly]="true" placeholder="state">
+        <input matInput formControlName="state" [readonly]="true" placeholder="ville">
         <!--<mat-icon matSuffix><fa-icon [icon]="['fas', 'university'] " size="xs"></fa-icon></mat-icon>-->
       </mat-form-field>
     </div>
@@ -54,7 +59,7 @@
 
 
     <mat-form-field class="example-full-width">
-      <input type="tel" matInput placeholder="Telephone" formControlName="phone" [readonly]="true">
+      <input type="tel" matInput placeholder="telephone" formControlName="phone" [readonly]="true">
       <!--<mat-icon matSuffix><fa-icon [icon]="['fas', 'phone'] " size="xs"></fa-icon></mat-icon>-->
     </mat-form-field>
 

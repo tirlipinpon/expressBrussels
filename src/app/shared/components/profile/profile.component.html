@@ -1,45 +1,45 @@
-<p-dialog header="Edit profile" [(visible)]="display">
+<p-dialog header="Edition des informations client" [(visible)]="display">
 
 
   <!--  customer  -->
   <form *ngIf="formCustomer" novalidate [formGroup]="formCustomer" style="display:flex;flex-direction:column;color:black">
     <input type="hidden" formControlName="id">
     <mat-form-field class="example-full-width">
-      <input matInput formControlName="name" placeholder="name">
+      <input matInput formControlName="name" placeholder="nom">
     </mat-form-field>
     <mat-form-field class="example-full-width">
-      <input matInput formControlName="address" placeholder="address">
+      <input matInput formControlName="address" placeholder="adresse">
     </mat-form-field>
     <mat-form-field class="example-full-width">
-      <input matInput formControlName="number" placeholder="number">
+      <input matInput formControlName="number" placeholder="numero">
     </mat-form-field>
     <mat-form-field class="example-full-width">
-      <input matInput formControlName="cp" placeholder="cp">
+      <input matInput formControlName="cp" placeholder="code postale">
     </mat-form-field>
     <mat-form-field class="example-full-width">
-      <input matInput formControlName="state" placeholder="state">
+      <input matInput formControlName="state" placeholder="ville">
     </mat-form-field>
     <mat-form-field class="example-full-width">
-      <input matInput formControlName="phone" placeholder="phone">
+      <input matInput formControlName="phone" placeholder="telephone">
     </mat-form-field>
 
     <div formGroupName="infos">
       <mat-form-field class="example-full-width">
-        <input matInput formControlName="info1" placeholder="mail">
+        <input matInput formControlName="info1" placeholder="email">
       </mat-form-field>
       <mat-form-field class="example-full-width">
-        <input matInput formControlName="info2" placeholder="mdp">
+        <input matInput formControlName="info2" placeholder="mot de passe">
       </mat-form-field>
     </div>
     <input type="hidden" formControlName="created">
     <input type="hidden" formControlName="fk_type">
     <button mat-raised-button type="button" [disabled]="formCustomer.invalid || formCustomer.pristine"
-            (click)="saveCustomer()">save
+            (click)="saveCustomer()">Sauvegarder
     </button>
   </form>
 
 </p-dialog>
 
 
-<button mat-raised-button color="primary" (click)="showDialog()" pButton label="edit profile"></button>
+<button mat-raised-button color="primary" (click)="showDialog()" pButton label="Client: {{formCustomer?.get('name').value}}"></button>
 

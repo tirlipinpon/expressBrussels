@@ -26,7 +26,7 @@
     </mat-form-field>
     <button mat-stroked-button (click)="captureScreen('contentToConvert')">
       <fa-icon [icon]="['fas', 'file-pdf']" size="sm"></fa-icon>
-      Print selected order(s)
+      Enregistrer le(s) bon(s) selectionnés
     </button>
   </div>
 
@@ -34,13 +34,13 @@
     <table mat-table [dataSource]="dataSource" matSort matSortActive="created">
       <!-- id Column -->
       <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> id </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> numero de bon </th>
         <td mat-cell *matCellDef="let transaction"> {{transaction.id}} </td>
         <td mat-footer-cell *matFooterCellDef> Total ({{getCurrentDate() | date:'yyyy'}})</td>
       </ng-container>
       <!-- created Column -->
       <ng-container matColumnDef="created">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> created </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> date de création </th>
         <td mat-cell *matCellDef="let transaction"> {{transaction.created }} </td>
         <td mat-footer-cell *matFooterCellDef>  </td>
       </ng-container>
@@ -108,11 +108,11 @@
       </ng-container>
       <!-- print Column -->
       <ng-container matColumnDef="print">
-        <th mat-header-cell *matHeaderCellDef> print order </th>
+        <th mat-header-cell *matHeaderCellDef> PDF </th>
         <td mat-cell *matCellDef="let transaction">
           <button mat-stroked-button (click)="captureScreen('print-'+transaction.id)">
           <fa-icon [icon]="['fas', 'file-pdf']" size="sm"></fa-icon>
-          Print this order
+          Telecharger ce bon en PDF
         </button>
         </td>
         <td mat-footer-cell *matFooterCellDef></td>

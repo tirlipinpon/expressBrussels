@@ -1,8 +1,8 @@
 <div class="pos-rel">
-  <form  novalidate [formGroup]="formGroup">
 
-    <mat-form-field appearance="fill">
-      <mat-label>Fill form {{propName}}</mat-label>
+  <form  novalidate [formGroup]="formGroup">
+    <mat-form-field appearance="fill" style="width:100%;">
+      <mat-label>{{propName}}</mat-label>
       <input matInput
              id="{{propName}}"
              (focus)="toogleDropDown(true)"
@@ -14,9 +14,8 @@
       <mat-icon *ngIf="propName==='cp'" matSuffix></mat-icon>
       <mat-icon *ngIf="propName==='state'" matSuffix><fa-icon [icon]="['fas', 'university'] " size="xs"></fa-icon></mat-icon>
     </mat-form-field>
-
-
   </form>
+
   <div clickOutside [myId]="propName" (clickOutside)="toogleDropDown(false)" *ngIf="showDropDown" class="state-container-dropdown">
     <div>
       <div (click)="setSelectdedValue(propName, d[propName])" class="state" *ngFor="let d of data | clientCp:getSearchValue(propName):propName:propType;  let index=index">
@@ -24,4 +23,5 @@
       </div>
     </div>
   </div>
+
 </div>

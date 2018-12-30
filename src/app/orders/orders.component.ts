@@ -34,7 +34,13 @@ export class OrdersComponent implements OnInit, OnDestroy {
   datasOrders:  PurchasseOrder[];
   datasRemovals:  DataForm[];
   datasRecipients:  DataForm[];
-  displayedColumns = ['id', 'created', 'fk_removal_id', 'fk_recipient_id', 'options', 'print'];
+  displayedColumns = [
+    'id',
+    'created',
+    'fk_removal_id',
+    'fk_recipient_id',
+    'options',
+    'print'];
   dataSource: MatTableDataSource<PurchasseOrder>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

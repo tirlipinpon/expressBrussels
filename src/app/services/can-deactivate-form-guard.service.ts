@@ -25,7 +25,7 @@ export class CanDeactivateFormGuardService implements CanDeactivate<ComponentDea
       return Observable.create((observer: Observer<boolean>) => {
         // console.log('component.canDeactivate() 3 ', component.canDeactivate());
         this.confirmationService.confirm({
-          message: 'You have unsaved changes. Are you sure you want to leave this page?',
+          message: 'La page contient des informations non sauvegardées, voulez vous quand même quiter la page ?',
           accept: () => {
             // console.log('component.canDeactivate() 4 ', component.canDeactivate());
             observer.next(true);

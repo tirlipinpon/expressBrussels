@@ -12,15 +12,15 @@
 					</span>
 
         <div class="wrap-input100 validate-input" data-validate = "Enter username">
-          <input class="input100" type="text" formControlName="email" name="email" placeholder="Email"  value="test" required />
+          <input class="input100" type="text" formControlName="email" name="email" placeholder="email"  value="test" required />
           <span class="focus-input100" data-placeholder="&#xf207;"></span>
         </div>
-        <div *ngIf="form.get('email').dirty && !form.get('email').valid" class="input100" style="color:red;font-size:12px;height:25px;">email is required</div>
+        <div *ngIf="form.get('email').dirty && !form.get('email').valid" class="input100" style="color:red;font-size:12px;height:25px;">email obligatoire</div>
 
         <div *ngIf="!isforgotProcess">
           <div class="wrap-input100 validate-input flex-between-baseline" data-validate="Enter password" >
             <div>
-              <input type="{{typeInput}}" class="input100" formControlName="password"  name="password"  value="test" placeholder="Password" required />
+              <input type="{{typeInput}}" class="input100" formControlName="password"  name="password"  value="test" placeholder="Mot de passe" required />
               <span class="focus-input100" data-placeholder="O"></span>
             </div>
             <div *ngIf="typeInput=='text'" style="color:white;" (mouseover)="changeTypeInputText()" (mouseleave)="changeTypeInputPassword()">

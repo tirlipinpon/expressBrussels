@@ -33,7 +33,10 @@ import { AddressComponent } from './components/form/address/address.component';
 import {PrixZoneMotoEffectService} from "../effects/prix-zone-moto/prix-zone-moto.effect.service";
 import {PrixZoneCamionnetteEffectService} from "../effects/prix-zone-camionnette/prix-zone-camionnette.effect.service";
 import {ContactEffectService} from "../effects/contact/contact-effect.service";
-import {MatAutocompleteModule, MatSelectModule, MatRadioModule, MatCheckboxModule} from "@angular/material";
+import {
+  MatAutocompleteModule, MatSelectModule, MatRadioModule, MatCheckboxModule,
+  MatToolbarModule
+} from "@angular/material";
 import { ValidatorClassDirective } from './directives/validator-class.directive';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material';
@@ -75,6 +78,7 @@ library.add(faPhone, faHome, faClock, faUser, faUniversity, faFilePdf,
     MatButtonModule,
     MatRadioModule,
     MatCheckboxModule,
+    MatToolbarModule,
     EffectsModule.forRoot([
       CustomerEffectService,
       ClientZonesEffectService,
