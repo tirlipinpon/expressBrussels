@@ -25,11 +25,11 @@ export class ContactEffectService {
     switchMap(([action, dataForm]) =>
       this.contactService.getContact(dataForm.id).pipe(
         map((payload) => {
-          this.notif.notify('info', 'get contact OK ', payload.count + '/total');
+          // this.notif.notify('info', 'get contact OK ', payload.count + '/total');
           return new ContactActions.GetContactSuccess(payload);
         }),
         catchError(err => {
-          this.notif.notify('error', 'get contact NOK ', err);
+          // this.notif.notify('error', 'get contact NOK ', err);
           return of(new ContactActions.GetContactFail(err))
         })
       )
@@ -42,7 +42,7 @@ export class ContactEffectService {
           this.contactService.addContacts(data).pipe(
             map((resp) => new AddContactSuccess()),
             catchError(err => {
-              this.notif.notify('error', 'add contact NOK ', err);
+              // this.notif.notify('error', 'add contact NOK ', err);
               return of(new AddContactFail(err))
             } )
           )

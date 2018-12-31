@@ -4,7 +4,7 @@ import {DataForm} from "../../models/DataForm";
 
 
 /** A hero's name can't match the given regular expression */
-export function ValidatorforbiddenName(nameRe: Observable<DataForm[]>): AsyncValidatorFn  {
+export function ValidatorDuplicateString(nameRe: Observable<DataForm[]>, type: string): AsyncValidatorFn  {
   return (control: AbstractControl): Promise<{[key: string]: any}> | null  | Observable<{ [key: string]: any } | null> => {
 
     if (isEmptyInputValue(control.value)) {
@@ -18,7 +18,7 @@ export function ValidatorforbiddenName(nameRe: Observable<DataForm[]>): AsyncVal
               if (control.parent) {
                 const ctrl = control.parent.controls;
                 const ctrlId = ctrl['id'].value;
-                return data.name === control.value && data.id != ctrlId;
+                return data[type] === control.value && data.id != ctrlId;
               }else {
                 resolve(null)
               }

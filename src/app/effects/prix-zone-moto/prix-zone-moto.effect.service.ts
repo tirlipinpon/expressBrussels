@@ -21,11 +21,11 @@ export class PrixZoneMotoEffectService {
       this.getPrixZoneService.getPrixZoneByType(action['payload']).pipe(
         map(payload => {
           const data = ' zone1: ' + payload['data']['zone1'] + ' zone2: ' + (payload['data']['zone2']) + ' zone3: ' + (payload['data']['zone3'])
-          this.notif.notify('info', 'get prix zones moto', data);
+          // this.notif.notify('info', 'get prix zones moto', data);
           return new PrixZoneMotoActions.GetPrixZoneMotoSuccess(payload);
         }),
         catchError(err => {
-          this.notif.notify('error', 'Get prix zone moto', err);
+          // this.notif.notify('error', 'Get prix zone moto', err);
           return of(new PrixZoneMotoActions.GetPrixZoneMotoFail(err))
         })
       )

@@ -23,7 +23,7 @@ export class CustomerEffectService {
     switchMap(action =>
       this.customerService.sendEmail(action).pipe(
         map((payload) => {
-          this.notif.notify('info', 'send customer email', 'data ok');
+          // this.notif.notify('info', 'send customer email', 'data ok');
         })
       )
     )
@@ -34,11 +34,11 @@ export class CustomerEffectService {
     switchMap(action =>
       this.customerService.getCustomer(action).pipe(
         map((payload) => {
-          this.notif.notify('info', 'get customer', 'data ok');
+          // this.notif.notify('info', 'get customer', 'data ok');
           return new CustomerActions.GetCustomerSuccess(payload);
         }),
         catchError(err => {
-          this.notif.notify('error', 'Get customers', err);
+          // this.notif.notify('error', 'Get customers', err);
           return of(new CustomerActions.GetCustomerFail(err))
         })
       )
@@ -55,7 +55,7 @@ export class CustomerEffectService {
           return new CustomerActions.SaveCustomerSuccess(payload);
         }),
         catchError(err => {
-          this.notif.notify('error', 'some alert', err);
+          // this.notif.notify('error', 'some alert', err);
           return of(new CustomerActions.SaveCustomerFail(err))
         })
       )

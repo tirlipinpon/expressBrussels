@@ -36,6 +36,8 @@
           <mat-icon matSuffix>
             <fa-icon [icon]="['fas', 'id-card'] " size="xs"></fa-icon>
           </mat-icon>
+          <mat-error *ngIf="allFormGroup[0].get('ref_client')?.errors?.minLength">reference client min 4 characteres.</mat-error>
+          <mat-error *ngIf="allFormGroup[0].get('ref_client')?.errors?.duplicate">Cette ref_client exist déja</mat-error>
           <mat-hint *ngIf="input_ref_client.value?.length<4" align="end">min {{input_ref_client.value?.length || 0}}/4
           </mat-hint>
         </mat-form-field>

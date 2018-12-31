@@ -171,52 +171,89 @@ export class OrdersComponent implements OnInit, OnDestroy {
     this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10+2)); // (id + type)  eg: id = 69; type=2 fk_type=692
   }
   applyFilterName(filterValue: string, target: any): void {
-    this.dataSource.filterPredicate = (data: any, filter: string) =>
-    data.recipient_name.indexOf(filter) != -1 || data.removal_name.indexOf(filter) != -1;
-    this.filterTable(filterValue, target);
+    if (this.dataSource) {
+      this.dataSource.filterPredicate = (data: any, filter: string) =>
+      data.recipient_name.indexOf(filter) != -1 || data.removal_name.indexOf(filter) != -1;
+      this.filterTable(filterValue, target);
+    }
+
   }
   applyFilterDate(filterValue: string, target: any): void {
-    this.dataSource.filterPredicate = (data: any, filter: string) => data.created.indexOf(filter) != -1;
-    this.filterTable(filterValue, target);
+    if (this.dataSource) {
+      this.dataSource.filterPredicate = (data: any, filter: string) => data.created.indexOf(filter) != -1;
+      this.filterTable(filterValue, target);
+    }
   }
   applyFilterRefClient(filterValue: string, target: any): void {
-    this.dataSource.filterPredicate = (data: any, filter: string) =>
-      data.recipient_ref_client?data.recipient_ref_client.indexOf(filter) != -1:false
-       ||
-      data.removal_ref_client?data.removal_ref_client.indexOf(filter) != -1:false;
-    this.filterTable(filterValue, target);
+    if (this.dataSource) {
+      this.dataSource.filterPredicate = (data: any, filter: string) =>
+        data.recipient_ref_client ? data.recipient_ref_client.indexOf(filter) != -1 : false
+          ||
+          data.removal_ref_client ? data.removal_ref_client.indexOf(filter) != -1 : false;
+      this.filterTable(filterValue, target);
+    }
   }
   applyFilterMonth(filterValue: string, target: any): void {
-    if (filterValue !== 'none') {
-      this.dataSource.filterPredicate = (data: any, filter: string) => {
-        const year = data.created.slice(0, 4);
-        const current_year = (new Date()).getFullYear();
-        if (current_year === +year) {
-          return data.created.slice(5, 7).indexOf(filter) != -1
-        }
-      };
-      this.filterTable(filterValue, target);
-    }else{
-      this.filterTable('', target);
+    if (this.dataSource) {
+      if (filterValue !== 'none') {
+        this.dataSource.filterPredicate = (data: any, filter: string) => {
+          const year = data.created.slice(0, 4);
+          const current_year = (new Date()).getFullYear();
+          if (current_year === +year) {
+            return data.created.slice(5, 7).indexOf(filter) != -1
+          }
+        };
+        this.filterTable(filterValue, target);
+      } else {
+        this.filterTable('', target);
+      }
     }
   }
   applyFilterNumber(filterValue: string, target: any): void {
-    this.dataSource.filterPredicate = (data: any, filter: string) => data.id.indexOf(filter) != -1;
-    this.filterTable(filterValue, target);
+    if (this.dataSource) {
+      this.dataSource.filterPredicate = (data: any, filter: string) => data.id.indexOf(filter) != -1;
+      this.filterTable(filterValue, target);
+    }
   }
   filterTable(filterValue: string, target: any) {
     this.resetNotCurrentFilter(target);
-    if (filterValue) {
-      filterValue = filterValue.trim(); // Remove whitespace
-      filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-      this.dataSource.filter = filterValue;
+    if (this.dataSource) {
+      this.resetFilter();
+      if (filterValue) {
+        filterValue = filterValue.trim(); // Remove whitespace
+        filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+        this.dataSource.filter = filterValue;
+      }
     }
+
+  }
+  resetFilter() {
+    if (this.dataSource) {
+      this.dataSource.filter = null;
+    }
+  }
+  resetFilterButtonClick(): void {
+    this.resetFilter();
+    this.resetCriteriaInputFilter();
+  }
+  resetCriteriaInputFilter(): void {
+    this.matInput.forEach(elem => {
+      if (elem.nativeElement) {
+        elem.nativeElement.value = '';
+      }
+      if (elem.controlType) { // select
+        elem.value = '';
+      }
+    });
   }
   resetNotCurrentFilter(current: any): void {
     this.matInput.forEach(elem => {
-      if (elem.nativeElement.id !== current.id) {
-        elem.nativeElement.value = '';
-      }
+        if (elem.nativeElement && elem.nativeElement.id !== current.id) {
+          elem.nativeElement.value = '';
+        }
+        if (!current.source && elem.controlType) { // select
+          elem.value = '';
+        }
     });
   }
   captureScreen(elem: string) {

@@ -21,11 +21,11 @@ export class PrixZoneCamionnetteEffectService {
       this.getPrixZoneService.getPrixZoneByType(action['payload']).pipe(
         map(payload => {
           const data = ' zone1: ' + payload['data']['zone1'] + ' zone2: ' + (payload['data']['zone2']) + ' zone3: ' + (payload['data']['zone3'])
-          this.notif.notify('info', 'get prix zones Camionnette', data);
+          // this.notif.notify('info', 'get prix zones Camionnette', data);
           return new PrixZoneCamionnetteActions.GetPrixZoneCamionnetteSuccess(payload);
         }),
         catchError(err => {
-          this.notif.notify('error', 'Get prix zone Camionnette', err);
+          // this.notif.notify('error', 'Get prix zone Camionnette', err);
           return of(new PrixZoneCamionnetteActions.GetPrixZoneCamionnetteFail(err))
         })
       )

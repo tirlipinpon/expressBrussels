@@ -111,7 +111,7 @@ export class AuthenticationService {
   logout(): void {
     // clear token remove user from local storage to log user out
     this.token = null;
-    localStorage.removeItem('id_token');
+    localStorage.removeItem(TOKEN_NAME);
     localStorage.removeItem('expires_at');
   }
 }

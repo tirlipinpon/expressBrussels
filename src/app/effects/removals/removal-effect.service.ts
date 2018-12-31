@@ -26,7 +26,7 @@ export class RemovalEffectService {
         this.service.getRemovals(action).pipe(
           map((payload) => {
             let data = payload;
-            this.notif.notify('info', 'get Removal OK ', payload.count+'/total');
+            // this.notif.notify('info', 'get Removal OK ', payload.count+'/total');
             return new RemovalActions.GetRemovalsSuccess(data);
           }),
           catchError(err => {

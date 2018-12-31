@@ -29,7 +29,7 @@ export class PurchasseOrderEffectService {
           return new SaveOrderSuccess(payload)
         }),
         catchError(err => {
-          this.notif.notify('error', 'Error', err);
+          // this.notif.notify('error', 'Error', err);
           return  of(new OrderActions.SaveOrderFail(err))
         })
       )

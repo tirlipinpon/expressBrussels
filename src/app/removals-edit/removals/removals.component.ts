@@ -15,7 +15,7 @@ import {MyClientZones} from '../../models/my-client-zones';
 
 import {CustomerService} from "../../services/customer.service";
 import {ActivatedRoute} from "@angular/router";
-import {ValidatorforbiddenName} from "../../shared/validators/validators-conflict.directive";
+import {ValidatorDuplicateString} from "../../shared/validators/validators-conflict.directive";
 
 
 @Component({
@@ -100,31 +100,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
     });
   }
 
-  disableForm() {
-    this.allFormGroup.forEach(elem => {
-      const ctrl = elem.controls;
-      if (ctrl.active.value === '0') {
-        ctrl.name.disable();
-        ctrl.ref_client.disable();
-        ctrl.address.disable();
-        ctrl.number.disable();
-        ctrl.cp.disable();
-        ctrl.state.disable();
-        ctrl.phone.disable();
-        ctrl.phone.disable();
-      }else if (ctrl.active.value === '1'){
-        ctrl.name.enable();
-        ctrl.ref_client.enable();
-        ctrl.address.enable();
-        ctrl.number.enable();
-        ctrl.cp.enable();
-        ctrl.state.enable();
-        ctrl.phone.enable();
-        ctrl.phone.enable();
-      }
-    });
-    this.cd.markForCheck();
-  }
+
   createFormGroup(data?: DataForm): FormGroup {
     let active;
     if (!data){
@@ -134,8 +110,8 @@ export class RemovalsComponent implements OnInit, OnDestroy {
     }
     return this.fb.group({
       id: [data ? data.id : ''],
-      name: [data? data.name : '', [Validators.required, Validators.minLength(3) ], [ValidatorforbiddenName(this.storeDataForm$)] ],
-      ref_client: [data ? data.ref_client : '', [Validators.minLength(4)]],
+      name: [data? data.name : '', [Validators.required, Validators.minLength(3) ], [ValidatorDuplicateString(this.storeDataForm$, 'name')] ],
+      ref_client: [data ? data.ref_client : '', [Validators.minLength(4)], [ValidatorDuplicateString(this.storeDataForm$, 'ref_client')]],
       address: [data ? data.address : '', Validators.required],
       number: [data ? data.number : ''],
       cp: [data? data.cp : '', Validators.required],

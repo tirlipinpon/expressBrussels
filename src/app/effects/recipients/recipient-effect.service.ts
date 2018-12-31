@@ -22,11 +22,11 @@ export class RecipientEffectService {
       this.service.getRemovals(fk_type).pipe(
         map((payload) => {
           let data = payload;
-          this.notif.notify('info', 'get Recipients OK ', payload.count+'/total');
+          // this.notif.notify('info', 'get Recipients OK ', payload.count+'/total');
           return new RecipientActions.GetRecipientsSuccess(data);
         }),
         catchError(err => {
-          this.notif.notify('error', 'get Recipients NOK ', err);
+          // this.notif.notify('error', 'get Recipients NOK ', err);
           return of(new RecipientActions.GetRecipientsFail(err))
         })
       )

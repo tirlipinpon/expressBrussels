@@ -68,11 +68,9 @@ export class LoginComponent implements OnInit {
   }
   changeTypeInputText() {
     this.typeInput = 'text';
-    console.log(this.typeInput);
   }
   changeTypeInputPassword() {
     this.typeInput = 'password';
-    console.log(this.typeInput);
   }
   sendEmail() {
     if (this.form.get('email').value && this.form.get('email').value.length > 0)

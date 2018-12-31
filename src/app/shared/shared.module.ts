@@ -43,7 +43,7 @@ import {MatInputModule} from '@angular/material';
 import {MatIconModule} from '@angular/material/icon';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import {faPhone, faHome, faClock, faUser, faUniversity, faIdCard, faComment, faUserTie, faUserTag,
+import {faPhone, faHome, faClock, faUser, faUniversity, faIdCard, faComment, faUserTie, faUserTag, faEraser,
   faEuroSign, faMapMarkedAlt, faMotorcycle, faCar, faFilePdf, faEye, faEyeSlash} from '@fortawesome/free-solid-svg-icons';
 import {MatButtonModule} from '@angular/material/button';
 import { NotEmptyPipe } from './pipe/not-empty.pipe';
@@ -53,7 +53,7 @@ import { CountOrdersByMonthPipe } from './pipe/count-orders-by-month.pipe';
 import { CountOrdersPriceByMonthPipe } from './pipe/count-orders-price-by-month.pipe';
 import {ToasterEffectService} from "../effects/toaster/toaster-effect.service";
 
-library.add(faPhone, faHome, faClock, faUser, faUniversity, faFilePdf,
+library.add(faPhone, faHome, faClock, faUser, faUniversity, faFilePdf, faEraser,
   faIdCard, faComment, faUserTie, faUserTag, faEuroSign, faMapMarkedAlt, faClock, faMotorcycle, faCar, faEye, faEyeSlash);
 
 @NgModule({

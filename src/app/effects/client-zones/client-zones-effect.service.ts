@@ -22,11 +22,11 @@ export class ClientZonesEffectService {
     switchMap(action =>
       this.clientZonesService.getClientZones().pipe(
         map((payload) => {
-          this.notif.notify('info', 'get client zones', 'data ok ' + payload.count);
+          // this.notif.notify('info', 'get client zones', 'data ok ' + payload.count);
           return new ClientZonesActions.GetClientZonesSuccess(payload);
         }),
         catchError(err => {
-          this.notif.notify('error', 'Get client zones', err);
+          // this.notif.notify('error', 'Get client zones', err);
           return  of(new ClientZonesActions.GetClientZonesFail(err))
         })
       )

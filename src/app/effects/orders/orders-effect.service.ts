@@ -23,11 +23,11 @@ export class OrdersEffectService {
       // console.log('in effect orders switch map this payload: ', action);
       this.orderService.getOrders(action).pipe(
         map((payload) => {
-          this.notif.notify('info', 'get orders', 'data ok');
+          // this.notif.notify('info', 'get orders', 'data ok');
           return new OrdersActions.GetOrdersSuccess(payload);
         }),
         catchError(err => {
-          this.notif.notify('error', 'Get orders', err);
+          // this.notif.notify('error', 'Get orders', err);
           return  of(new OrdersActions.GetOrdersFail(err))
         })
       )
