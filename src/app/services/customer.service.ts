@@ -35,6 +35,12 @@ export class CustomerService {
     return this.http.post(url, {email: data.payload});
   }
 
+  sendMessage(data, customer): Observable<any> {
+    // console.log('in customer service set new customer to db with this data-> ', data);
+    let url = this.apiUrl + 'php//send_message.php';
+    return this.http.post(url, {message: data.payload.message, email: customer.infos.info1, name: customer.name});
+  }
+
   getCustomer(data: any): Observable<DataForm> {
     // console.log('id from service: ', data.payload);
     let url = this.apiUrl + 'php//read_one.php?id=' + data.payload;
