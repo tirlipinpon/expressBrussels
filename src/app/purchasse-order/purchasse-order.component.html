@@ -32,7 +32,8 @@
       <app-option [formGroup]="formOptions" (updateDataForm)="isAllComplete($event)"></app-option>
 
       <div class="price-result" *ngIf="formDistance.get('price').value">
-        <div><fa-icon [icon]="['fas', 'euro-sign']" size="sm"></fa-icon> {{ formDistance.get('price').value }}</div>
+        <div  matTooltip="Ce montant est cité à titre indicatif, sous réserve d&#39;approbation de la direction."
+              [matTooltipPosition]="'below'"><fa-icon [icon]="['fas', 'euro-sign']" size="sm"></fa-icon> {{ formDistance.get('price').value }}</div>
         <div *ngIf="distances[0]?.distanceText"><fa-icon [icon]="['fas', 'map-marked-alt']" size="sm"></fa-icon> {{ distances[0]?.distanceText }} + {{ distances[1]?.distanceText }}</div>
         <div *ngIf="distances[0]?.durationText"><fa-icon [icon]="['fas', 'clock']" size="sm"></fa-icon> {{ distances[0]?.durationText }} + {{ distances[1]?.durationText }}</div>
       </div>
@@ -44,29 +45,20 @@
         <input type="hidden" formControlName="elapse_time" value="{{distance?.durationValue}}">
       </form>
 
-      <button (click)="recapOrder()" mat-raised-button color="primary" [disabled]="!showSendBtn">Send order </button>
+      <div  matTooltip="Les champs nom ou reference pour l'enlèvement et le destinataire sont obligatoire ainsi que le choix d'un mode de transport et d'une option de livraison."
+            [matTooltipPosition]="'above'">
+        <button
+          (click)="recapOrder()"
+          mat-raised-button
+          color="primary"
+          [disabled]="!showSendBtn">Envoyer le bon de commande</button>
+      </div>
+
     </div>
 
   </div>
 </div>
 
-<!--contactRemoval$: {{contactRemoval$ | async}}<br>-->
-
-<!--isAllComplete: {{ showSendBtn }}<br>-->
-
-<!--distanceS: <pre>{{distances | json}}</pre><br>-->
-
-<!--formDistance= {{formDistance.value | json}}<br>-->
-
-<!--formOptions= {{formOptions.value | json}}<br>-->
-
-
-<!--<div style="display:flex;">-->
-  <!--formRemoval = <pre>{{ allFormGroup[0].value | json}}</pre>-->
-  <!--formRecipient = <pre>{{ allFormGroup[1].value | json}}</pre>-->
-<!--</div>-->
-
-<!--<button (click)="addContacts(formRemoval, formRecipient)"> add contact</button>-->
 
 
 

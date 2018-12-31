@@ -1,35 +1,45 @@
-<p-confirmDialog header="Confirmation"
-                 icon="fa fa-question-circle" width="400">
-</p-confirmDialog>
 
-<div  class="conatinerFormData">
-  <app-form
-    [nameForm]="nameForm[0]"
-    [datas]="removals$ | async"
-    [isCustomer]="'notCascades'"
-    [formGroup]="formRemoval"
-  >
-  </app-form>
-  <form  [formGroup]="formRecipientCascade">
-    <div formArrayName="items"
-         *ngFor="let item of formRecipientCascade.get('items'); let i = index;">
-      <app-form
-        [nameForm]="nameForm[1]"
-        [datas]="recipients$ | async"
-        [isCustomer]="'cascades'"
-        [formGroup]="item"
-      >
-        valid?= {{item.valid}}
-      </app-form>
-      <button  *ngIf="i > 0" (click)="removeItemCascade(i)">-</button>
-    </div>
-    <button (click)="addItemCascade()">+</button>
-  </form>
-  <app-option [formGroup]="formOptions">
-  </app-option>
-  <button *ngIf="isFormsValide()" (click)="recapOrder()">Send order </button>
+
+<div class="container">
+  <object data="assets/img/légalisation1.pdf" width="100%" height="100%" type='application/pdf'>
+    <p>Sorry, the PDF couldn't be displayed :(</p>
+    <a href="assets/img/légalisation1.pdf" target="_blank">Click Here</a>
+  </object>
 </div>
-valid :{{ isFormsValide() }}
+
+<!--<p-confirmDialog header="Confirmation"-->
+                 <!--icon="fa fa-question-circle" width="400">-->
+<!--</p-confirmDialog>-->
+
+<!--<div  class="conatinerFormData">-->
+  <!--<app-form-->
+    <!--[nameForm]="nameForm[0]"-->
+    <!--[datas]="removals$ | async"-->
+    <!--[isCustomer]="'cascades'"-->
+    <!--[formGroup]="formRemoval"-->
+  <!--&gt;-->
+  <!--</app-form>-->
+  <!--<form  [formGroup]="formRecipientCascade">-->
+    <!--<div formArrayName="items"-->
+         <!--*ngFor="let item of formRecipientCascade?.get('items'); let i = index;">-->
+      <!--<app-form-->
+        <!--[nameForm]="nameForm[1]"-->
+        <!--[datas]="recipients$ | async"-->
+        <!--[isCustomer]="'cascades'"-->
+        <!--[formGroup]="item"-->
+      <!--&gt;-->
+        <!--valid?= {{item.valid}}-->
+      <!--</app-form>-->
+      <!--<button  *ngIf="i === 0" (click)="removeItemCascade(i)">-</button>-->
+    <!--</div>-->
+    <!--<button (click)="addItemCascade()">+</button>-->
+  <!--</form>-->
+  <!--<app-option [formGroup]="formOptions">-->
+  <!--</app-option>-->
+  <!--<button *ngIf="isFormsValide()" (click)="recapOrder()">Send order </button>-->
+  <!--<button (click)="recapOrder()">Send order debug</button>&lt;!&ndash;debug&ndash;&gt;-->
+<!--</div>-->
+<!--valid :{{ isFormsValide() }}-->
 
 
 

@@ -3,7 +3,9 @@
   <form [class.not-validated-by-google]="formGroup.get('addressValidated').value=='0'"  novalidate [formGroup]="formGroup">
     <!--<app-input-autocompletion [propName]="'name'" [data]="_user" [propType]="'string'" [witchForm]="1"  [formGroup]="formGroup"></app-input-autocompletion>-->
     <!--<app-input-autocompletion [propName]="'ref_client'" [data]="_user" [propType]="'string'" [witchForm]="1"   [formGroup]="formGroup"></app-input-autocompletion>-->
-    <mat-toolbar color="primary">
+    <mat-toolbar color="primary"
+                 matTooltip="Introduire le nom d'un client ou une reference de la liste pour {{nameForm === 'removals' ? 'l enlevement' : 'le destinataire'}}, pour ajouter un nouvel utilisateur veuillez vous rendre sur la page {{nameForm === 'removals' ? 'Enlèvement' : 'Destinataire'}}"
+                 [matTooltipPosition]="'above'">
       <mat-toolbar-row>
         <span>{{nameForm === 'removals' ? 'Enlevement' : 'Destinataire'}}</span>
       </mat-toolbar-row>
@@ -30,33 +32,34 @@
     </mat-form-field>
     <input type="hidden" formControlName="id">
     <div *ngIf="formGroup.get('id').value && formGroup.get('id').value.length">
-      <div style="display:flex;">
+      <div matTooltip="Pour modifier l'adresse veuillez vous rendre sur la page {{nameForm === 'removals' ? 'Enlèvement' : 'Destinataire'}}"
+           [matTooltipPosition]="'above'"
+      class="not-allowed">
+        <div style="display:flex;">
+          <mat-form-field class="example-full-width">
+            <input matInput formControlName="address" [readonly]="true"   placeholder="adresse" value="test">
+          </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <input matInput formControlName="number"  [readonly]="true"   placeholder="numero">
+            <!--<mat-icon matSuffix><fa-icon [icon]="['fas', 'home'] " size="xs"></fa-icon></mat-icon>-->
+          </mat-form-field>
+        </div>
+        <div style="display:flex;">
+          <mat-form-field class="example-full-width">
+            <input matInput formControlName="cp" [readonly]="true"  placeholder="code postale">
+          </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <input matInput formControlName="state" [readonly]="true" placeholder="ville">
+            <!--<mat-icon matSuffix><fa-icon [icon]="['fas', 'university'] " size="xs"></fa-icon></mat-icon>-->
+          </mat-form-field>
+        </div>
+        <input type="hidden" formControlName="clientZone" [readonly]="true" placeholder="zone">
         <mat-form-field class="example-full-width">
-          <input matInput formControlName="address" [readonly]="true"   placeholder="adresse" value="test">
-        </mat-form-field>
-        <mat-form-field class="example-full-width">
-          <input matInput formControlName="number"  [readonly]="true"   placeholder="numero">
-          <!--<mat-icon matSuffix><fa-icon [icon]="['fas', 'home'] " size="xs"></fa-icon></mat-icon>-->
+          <input type="tel" matInput placeholder="telephone" formControlName="phone" [readonly]="true">
+          <!--<mat-icon matSuffix><fa-icon [icon]="['fas', 'phone'] " size="xs"></fa-icon></mat-icon>-->
         </mat-form-field>
       </div>
 
-      <div style="display:flex;">
-        <mat-form-field class="example-full-width">
-          <input matInput formControlName="cp" [readonly]="true"  placeholder="code postale">
-        </mat-form-field>
-        <mat-form-field class="example-full-width">
-          <input matInput formControlName="state" [readonly]="true" placeholder="ville">
-          <!--<mat-icon matSuffix><fa-icon [icon]="['fas', 'university'] " size="xs"></fa-icon></mat-icon>-->
-        </mat-form-field>
-      </div>
-
-      <input type="hidden" formControlName="clientZone" [readonly]="true" placeholder="zone">
-
-
-      <mat-form-field class="example-full-width">
-        <input type="tel" matInput placeholder="telephone" formControlName="phone" [readonly]="true">
-        <!--<mat-icon matSuffix><fa-icon [icon]="['fas', 'phone'] " size="xs"></fa-icon></mat-icon>-->
-      </mat-form-field>
 
       <app-info [contact]="contact | async" [formGroup]="formGroup.get('infos')"></app-info>
     </div>
@@ -71,17 +74,17 @@
 </div>
 
 
-<!--  cascades  -->
-<form [ngClass]="{ 'notValid': !formGroup.valid }"  *ngIf="isCustomer==='cascades'"  novalidate [formGroup]="formGroup">
-  <!--<app-input-autocompletion [propName]="'name'" [data]="_user" [propType]="'string'" [witchForm]="1"  [formGroup]="formGroup"></app-input-autocompletion>-->
-  <!--<app-input-autocompletion [propName]="'ref_client'" [data]="_user" [propType]="'string'" [witchForm]="1"   [formGroup]="formGroup"></app-input-autocompletion>-->
-  <input type="hidden" formControlName="id">
-  <app-info [formGroup]="formGroup.get('infos')"></app-info>
-  <input type="number" formControlName="clientZone" [readonly]="true" placeholder="zone">
-  <input type="hidden" formControlName="created" [readonly]="true">
-  <!--<button (click)="resetForm(formGroup)">reset: {{ nameForm }}</button>-->
-  <input type="hidden" formControlName="fk_type" [readonly]="true">
-</form>
+<!--&lt;!&ndash;  cascades  &ndash;&gt;-->
+<!--<form [ngClass]="{ 'notValid': !formGroup.valid }"  *ngIf="isCustomer==='cascades'"  novalidate [formGroup]="formGroup">-->
+  <!--&lt;!&ndash;<app-input-autocompletion [propName]="'name'" [data]="_user" [propType]="'string'" [witchForm]="1"  [formGroup]="formGroup"></app-input-autocompletion>&ndash;&gt;-->
+  <!--&lt;!&ndash;<app-input-autocompletion [propName]="'ref_client'" [data]="_user" [propType]="'string'" [witchForm]="1"   [formGroup]="formGroup"></app-input-autocompletion>&ndash;&gt;-->
+  <!--<input type="hidden" formControlName="id">-->
+  <!--<app-info [formGroup]="formGroup.get('infos')"></app-info>-->
+  <!--<input type="number" formControlName="clientZone" [readonly]="true" placeholder="zone">-->
+  <!--<input type="hidden" formControlName="created" [readonly]="true">-->
+  <!--&lt;!&ndash;<button (click)="resetForm(formGroup)">reset: {{ nameForm }}</button>&ndash;&gt;-->
+  <!--<input type="hidden" formControlName="fk_type" [readonly]="true">-->
+<!--</form>-->
 
 <!--{{formGroup.valid}}-->
 

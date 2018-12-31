@@ -34,8 +34,12 @@ import {PrixZoneMotoEffectService} from "../effects/prix-zone-moto/prix-zone-mot
 import {PrixZoneCamionnetteEffectService} from "../effects/prix-zone-camionnette/prix-zone-camionnette.effect.service";
 import {ContactEffectService} from "../effects/contact/contact-effect.service";
 import {
-  MatAutocompleteModule, MatSelectModule, MatRadioModule, MatCheckboxModule,
-  MatToolbarModule
+  MatAutocompleteModule,
+  MatSelectModule,
+  MatRadioModule,
+  MatCheckboxModule,
+  MatToolbarModule,
+  MatTooltipModule
 } from "@angular/material";
 import { ValidatorClassDirective } from './directives/validator-class.directive';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -79,6 +83,7 @@ library.add(faPhone, faHome, faClock, faUser, faUniversity, faFilePdf, faEraser,
     MatRadioModule,
     MatCheckboxModule,
     MatToolbarModule,
+    MatTooltipModule,
     EffectsModule.forRoot([
       CustomerEffectService,
       ClientZonesEffectService,

@@ -28,3 +28,7 @@ mat-icon{
 .ui-dialog-resizable .ui-dialog-content {
   background-color: white!important;
 }
+
+.not-allowed {
+  cursor: Not-Allowed;
+}
