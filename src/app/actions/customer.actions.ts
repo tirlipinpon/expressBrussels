@@ -9,6 +9,14 @@ export class SendCustomerEmail implements Action {
   }
 }
 
+export const SEND_CUSTOMER_MESSAGE = 'Send Customer Message';
+export class SendCustomerMessage implements Action {
+  readonly type = SEND_CUSTOMER_MESSAGE;
+  constructor(public payload: string) {
+    // console.log('in actions set customer payload= ',payload);
+  }
+}
+
 export const SET_CUSTOMER = 'Set Customer';
 export class SetCustomer implements Action {
   readonly type = SET_CUSTOMER;

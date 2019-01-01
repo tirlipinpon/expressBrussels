@@ -6,7 +6,7 @@ import {of} from 'rxjs';
 import * as CustomerActions  from '../../actions/customer.actions';
 import {NotificationService} from '../../services/notification.service';
 import {AppState} from '../../shared/appState';
-import {switchMap, catchError, map, withLatestFrom} from "rxjs/internal/operators";
+import {switchMap, catchError, map, withLatestFrom, tap} from "rxjs/internal/operators";
 
 
 @Injectable()
@@ -28,6 +28,21 @@ export class CustomerEffectService {
       )
     )
   );
+
+  @Effect({dispatch: false}) sendCustomerMessage$ = this.action$.pipe(
+    ofType(CustomerActions.SEND_CUSTOMER_MESSAGE),
+    withLatestFrom(  this.store.select('customer')),
+    tap(data => console.log(data)),
+    switchMap(([action, customer]) =>
+      this.customerService.sendMessage(action, customer).pipe(
+        map((payload) => {
+          // this.notif.notify('info', 'send customer email', 'data ok');
+        })
+      )
+    )
+  );
+
+
 
   @Effect() getCustomer$ = this.action$.pipe(
     ofType(CustomerActions.GET_CUSTOMER),
