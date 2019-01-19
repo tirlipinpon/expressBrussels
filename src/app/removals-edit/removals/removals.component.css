@@ -6,8 +6,8 @@
   display: flex;
   border: 1px solid #ccc;
   margin: 5px;
-  flex: 0 0 10%;
   padding: 5px;
+  width: 423px;
 }
 .formRemoval form {
   display: flex;
