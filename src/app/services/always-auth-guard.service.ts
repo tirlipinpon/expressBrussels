@@ -1,20 +1,31 @@
 import { Injectable } from '@angular/core';
-import {CanActivate} from "@angular/router";
-import {CustomerService} from "./customer.service";
+import {CanActivate, Router} from '@angular/router';
+import {AuthenticationService} from './authentication.service';
+import {Store} from '@ngrx/store';
+import * as fromRoot from '../shared/appState';
+import {GetCustomer} from "../actions/customer.actions";
 
 @Injectable()
 export class AlwaysAuthGuardService implements CanActivate {
 
-  constructor(private customerService: CustomerService) { }
+  // constructor(private customerService: CustomerService) { }
+  constructor(private router: Router,
+              private authenticationService: AuthenticationService,
+              private store: Store<fromRoot.AppState>) { }
 
   canActivate() {
-    console.log("AlwaysAuthGuard");
-    if (this.customerService.isLoggedIn()) {
+    // console.log('AlwaysAuthGuard');
+    const resp1 = this.authenticationService.isToken();
+    const resp2 = this.authenticationService.isTokenExpired();
+    if (resp1 && resp2) {
+      // this.authenticationService.setCustomerDecoded();
+      const id = this.authenticationService.getDecodedTokenId();
+      this.store.dispatch(new GetCustomer(id));
       return true;
-    } else {
-      console.log("You don't have permission to view this page");
-      return false;
     }
+    // console.log('canActivate: ', false);
+    // not logged in so redirect to login page
+    this.router.navigate(['/login']);
+    return false;
   }
-
 }

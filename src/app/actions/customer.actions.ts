@@ -1,6 +1,29 @@
 import { Action } from '@ngrx/store';
-import {DataForm} from "../models/DataForm";
+import {DataForm} from '../models/DataForm';
 
+export const SEND_CUSTOMER_EMAIL = 'Send Customer Email';
+export class SendCustomerEmail implements Action {
+  readonly type = SEND_CUSTOMER_EMAIL;
+  constructor(public payload: string) {
+    // console.log('in actions set customer payload= ',payload);
+  }
+}
+
+export const SEND_CUSTOMER_MESSAGE = 'Send Customer Message';
+export class SendCustomerMessage implements Action {
+  readonly type = SEND_CUSTOMER_MESSAGE;
+  constructor(public payload: string) {
+    // console.log('in actions set customer payload= ',payload);
+  }
+}
+
+export const SET_CUSTOMER = 'Set Customer';
+export class SetCustomer implements Action {
+  readonly type = SET_CUSTOMER;
+  constructor(public payload: DataForm) {
+    // console.log('in actions set customer payload= ',payload);
+  }
+}
 
 export const GET_CUSTOMER = 'Get Customer';
 export class GetCustomer implements Action {
@@ -14,7 +37,7 @@ export const GET_CUSTOMER_SUCCESS = 'Get Customer Success';
 export class GetCustomerSuccess implements Action {
   readonly type = GET_CUSTOMER_SUCCESS;
   constructor(public payload: DataForm) {
-    // console.log('in actions get customer payload= ',payload);
+    // console.log('in actions get customer success payload= ',payload);
   }
 }
 
@@ -25,38 +48,48 @@ export class GetCustomerFail implements Action {
     // console.log('in actions get customer payload= ',payload);
   }
 }
-
-//===================================================
-
+// ===================================================
 export const EDIT_CUSTOMER = 'Edit Customer';
 export class EditCustomer implements Action {
   readonly type = EDIT_CUSTOMER;
   constructor(public payload: DataForm) {
-    // console.log('in actions edit customer payload= ',payload);
+     // console.log('in actions edit customer payload= ',payload);
   }
 }
+// ===================================================
+export const SAVE_CUSTOMER = 'Save Customer';
+export class SaveCustomer implements Action {
+  readonly type = SAVE_CUSTOMER;
+}
 
-export const EDIT_CUSTOMER_SUCCESS = 'Edit Customer Success';
-export class EditCustomerSuccess implements Action {
-  readonly type = EDIT_CUSTOMER_SUCCESS;
-  constructor(public payload: DataForm) {
+export const SAVE_CUSTOMER_SUCCESS = 'SAVE Customer Success';
+export class SaveCustomerSuccess implements Action {
+  readonly type = SAVE_CUSTOMER_SUCCESS;
+  constructor(public payload: string) {
     // console.log('in actions get customer payload= ',payload);
   }
 }
 
-export const EDIT_CUSTOMER_FAIL = 'Edit Customer Fail';
-export class EditCustomerFail implements Action {
-  readonly type = EDIT_CUSTOMER_FAIL;
+export const SAVE_CUSTOMER_FAIL = 'SAVE Customer FAIL';
+export class SaveCustomerFail implements Action {
+  readonly type = SAVE_CUSTOMER_FAIL;
   constructor(public payload: string) {
     // console.log('in actions get customer payload= ',payload);
   }
 }
 
 export type All =
-      GetCustomer
+      SetCustomer
+    | GetCustomer
     | GetCustomerSuccess
     | GetCustomerFail
 
     | EditCustomer
-    | EditCustomerSuccess
-    | EditCustomerFail;
+
+    | SaveCustomer
+    | SaveCustomerSuccess
+    | SaveCustomerFail
+
+    | SendCustomerEmail
+
+

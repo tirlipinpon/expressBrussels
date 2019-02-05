@@ -1,52 +1,104 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { FormGroup } from "@angular/forms";
-import {DataForm} from "../../../models/DataForm";
-
+import {Component, Input, Output, EventEmitter, AfterViewInit, ChangeDetectorRef, OnInit} from '@angular/core';
+import {FormGroup} from '@angular/forms';
+import {DataForm} from '../../../models/DataForm';
+import {Contact} from "../../../models/contact";
+import { Observable } from 'rxjs';
+import {MatAutocompleteSelectedEvent} from "@angular/material";
+import {Router} from "@angular/router";
+import {map, startWith} from "rxjs/operators";
 
 @Component({
   selector: 'app-form',
   templateUrl: 'form.component.html',
-  styleUrls: ['form.component.css']
-})
-export class FormComponent implements OnInit, OnDestroy {
+  styleUrls: ['form.component.css'],
 
-  @Input('isCustomer') isCustomer: boolean;
+})
+export class FormComponent implements OnInit, AfterViewInit {
+
+  @Input('isCustomer') isCustomer: string;
   @Input('formGroup') formGroup: FormGroup;
   @Input('nameForm') nameForm: string;
-  @Input('datas') set data(value: DataForm[]) {
-    if (!!value) {
-      if (this.isCustomer) {
-        this._initData(value);
-      }else{
-        if(this._user.length == 0) {
-          for(let i=0; i< Object.keys(value).length; i++){
-            this._user.push(value[i]);
-            // console.log("this._user "+ this.nameForm + " = ", this._user);
-          }
-        }
+  @Input('contact') contact: Observable<Contact[]>;
+  @Input('datas') dataValues:  DataForm[];
+  @Output() updateDataForm: EventEmitter<string> = new EventEmitter<string>();
+  filteredName: Observable<string[]>;
+  filteredRefClient: Observable<string[]>;
 
-      }
-    }
+  constructor(private router: Router) {}
+
+  ngOnInit() {
+    this.filteredName = this.formGroup.get('name').valueChanges
+      .pipe(
+        startWith(''),
+        map(value => {
+          if (this.dataValues) {
+            return this._filter(value, 'name');
+          }else{
+            return;
+          }
+        })
+      );
+    this.filteredRefClient = this.formGroup.get('ref_client').valueChanges
+      .pipe(
+        startWith(''),
+        map(value => {
+          if (this.dataValues) {
+            return this._filter(value, 'ref_client');
+          } else {
+            return;
+          }
+        })
+      );
   }
 
-  @Output() updateDataForm = new EventEmitter<FormGroup>();
+  private _filter(value: string, target: string): any[] {
+    if (value && value.length) {
+      const filterValue = value.toLowerCase();
+      return this.dataValues.filter(option => option[target].toLowerCase().includes(filterValue));
+    }
+    return;
+  }
 
-  private showDropDown = false;
-  private _user: DataForm[] = [];
 
-  constructor() {}
-  ngOnInit() {}
-  ngOnDestroy() {}
+  goPlaces(nameform: string): void {
+    this.router.navigate(['/', 'menu', nameform]).then(nav => {
+      console.log(nav); // true if navigation is successful
+    }, err => {
+      console.log(err) // when there's an error
+    });
+  }
 
+  ngAfterViewInit() {}
+
+  itemSelectedName (evt: MatAutocompleteSelectedEvent) {
+    this._initData(this.filterStatesName(evt.option.value));
+  }
+  itemSelectedRefClient (evt: MatAutocompleteSelectedEvent) {
+    this._initData(this.filterStatesRefClient(evt.option.value));
+  }
+
+  filterStatesName(val: string): DataForm {
+    const resp =  this.dataValues.filter(state =>
+    state.name.toLowerCase().indexOf(val.toLowerCase()) === 0);
+    return resp[0];
+  }
+  filterStatesRefClient(val: string): DataForm {
+    const resp =  this.dataValues.filter(state =>
+    state.ref_client.toLowerCase().indexOf(val.toLowerCase()) === 0);
+    return resp[0];
+  }
+
+  // for customer
   private _initData(data): void {
-    // console.log("init data : ", data);
     this.formGroup.patchValue({
       id: data.id,
       name: data.name,
+      ref_client: data.ref_client!=='NULL' ? data.ref_client : '',
       address: data.address,
       number: data.number,
       cp: data.cp,
       state: data.state,
+      clientZone: data.clientZone,
       phone: data.phone,
       infos: {
         info1: data.infos.info1,
@@ -56,30 +108,14 @@ export class FormComponent implements OnInit, OnDestroy {
       fk_client: data.fk_client,
       active: data.active,
       created: data.created,
-      fk_type: data.fk_type
+      fk_type: data.fk_type,
+      addressValidated: data.addressValidated
     });
+    this.saveDataCustomer();
   }
-  // for customer
   saveDataCustomer(): void {
-    // console.log("-?- " + this.nameForm + ' button pushed for save data = ', this.formGroup.value);
-    this.updateDataForm.emit(this.formGroup.value);
+    this.updateDataForm.emit(this.nameForm);
   }
-  // auto completion
-  toogleDropDown() {
-    // console.log('toogleDropDown showDropDown = '+  this.showDropDown);
-    this.showDropDown = !this.showDropDown;
-  }
-  getSearchValue() {
-    return this.formGroup.value.name;
-  }
-  initSelectdedValue(value) {
-    // this.formGroup.patchValue({"name":this.datas[value].name});
-    // console.log('initSelectdedValue');
-    this._initData(this.getByValue(value));
-    this.toogleDropDown();
-  }
-  getByValue(value): DataForm {
-    let arrayWithElem = this._user.filter(elem => elem.name === value);
-    return arrayWithElem[0];
-  }
+
+
 }

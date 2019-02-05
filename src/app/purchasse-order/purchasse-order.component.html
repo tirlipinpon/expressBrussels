@@ -2,37 +2,65 @@
 <!--<button type="button" (click)="info()">info</button>-->
 <!--<button type="button" (click)="warn()">warn</button>-->
 <!--<button type="button" (click)="error()">error</button>-->
-
-<div class="conatinerFormData">
-
-  <app-form
-    [nameForm]="nameForm[0]"
-    [datas]="removals$ | async"
-    [isCustomer]="false"
-    [formGroup]="formRemoval"
-  >
-  </app-form>
-
-  <app-form
-    [nameForm]="nameForm[1]"
-    [datas]="recipients$ | async"
-    [isCustomer]="false"
-    [formGroup]="formRecipient"
-  >
-  </app-form>
-
-  <app-option
-    [formGroup]="formOptions"
-  >
-  </app-option>
-
-  <button *ngIf="isFormsValide()" (click)="recapOrder()">Send order </button>
-
-</div>
-
 <p-confirmDialog header="Confirmation"
                  icon="fa fa-question-circle" width="400">
 </p-confirmDialog>
+<div style="display: flex;">
+  <div class="conatinerFormData">
+
+    <app-form
+      [nameForm]="nameForm[0]"
+      [datas]="removals$  | async"
+      [contact]="contactRemoval$"
+      [isCustomer]="'notCascades'"
+      [formGroup]="formRemoval"
+      (updateDataForm)="isAllComplete($event)"
+    >
+    </app-form>
+
+    <app-form
+      [nameForm]="nameForm[1]"
+      [datas]="recipients$  | async"
+      [contact]="contactRecipient$"
+      [isCustomer]="'notCascades'"
+      [formGroup]="formRecipient"
+      (updateDataForm)="isAllComplete($event)"
+    >
+    </app-form>
+
+    <div class="options-distance">
+      <app-option [formGroup]="formOptions" (updateDataForm)="isAllComplete($event)"></app-option>
+
+      <div class="price-result" *ngIf="formDistance.get('price').value">
+        <div  matTooltip="Ce montant est cité à titre indicatif, sous réserve d&#39;approbation de la direction."
+              [matTooltipPosition]="'below'"><fa-icon [icon]="['fas', 'euro-sign']" size="sm"></fa-icon> {{ formDistance.get('price').value }}</div>
+        <div *ngIf="distances[0]?.distanceText"><fa-icon [icon]="['fas', 'map-marked-alt']" size="sm"></fa-icon> {{ distances[0]?.distanceText }} + {{ distances[1]?.distanceText }}</div>
+        <div *ngIf="distances[0]?.durationText"><fa-icon [icon]="['fas', 'clock']" size="sm"></fa-icon> {{ distances[0]?.durationText }} + {{ distances[1]?.durationText }}</div>
+      </div>
+
+      <form [formGroup]="formDistance">
+        <input type="hidden" formControlName="status" value="{{distance?.status}}"><br>
+        <input type="hidden" formControlName="price" value="{{distance?.price}}"><br>
+        <input type="hidden" formControlName="distance" value="{{distance?.distanceValue}}"><br>
+        <input type="hidden" formControlName="elapse_time" value="{{distance?.durationValue}}">
+      </form>
+
+      <div  matTooltip="Les champs nom ou reference pour l'enlèvement et le destinataire sont obligatoire ainsi que le choix d'un mode de transport et d'une option de livraison."
+            [matTooltipPosition]="'above'">
+        <button
+          (click)="recapOrder()"
+          mat-raised-button
+          color="primary"
+          [disabled]="!showSendBtn">Envoyer le bon de commande</button>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+
 
 
 

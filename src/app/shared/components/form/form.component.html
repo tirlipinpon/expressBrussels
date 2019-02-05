@@ -1,43 +1,90 @@
-<form  *ngIf="isCustomer"  novalidate [formGroup]="formGroup">
-  <input type="hidden" formControlName="id">
-  <input type="text" formControlName="name">
-  <input type="text" formControlName="address">
-  <input type="text" formControlName="number">
-  <input type="number" formControlName="cp">
-  <input type="text" formControlName="state">
-  <input type="text" formControlName="phone">
-  <div formGroupName="infos">
-    <input type="text" formControlName="info1" >
-    <input type="text" formControlName="info2">
-  </div>
-  <input type="text" formControlName="created">
-  <input type="hidden" formControlName="fk_type">
-  <button  type="button" [disabled]="!formGroup.valid || formGroup.pristine" (click)="saveDataCustomer()">save</button>
-</form>
-
-<form  *ngIf="!isCustomer"  novalidate [formGroup]="formGroup">
-
-  <div class="pos-rel">
-    <input id="search" (click)="toogleDropDown()" type="text" formControlName="name" >
-    <div clickOutside  (clickOutside)="toogleDropDown()" *ngIf="showDropDown" class="state-container-dropdown">
-      <div>
-        <div (click)="initSelectdedValue(d.name)" class="state" *ngFor="let d of _user | searchFilter:getSearchValue();  let index=index">
-          {{index}} {{d.name}}
-        </div>
-      </div>
+<!--  notCascades  -->
+<div *ngIf="isCustomer==='notCascades'" >
+  <form [class.not-validated-by-google]="formGroup.get('addressValidated').value=='0'"  novalidate [formGroup]="formGroup">
+    <!--<app-input-autocompletion [propName]="'name'" [data]="_user" [propType]="'string'" [witchForm]="1"  [formGroup]="formGroup"></app-input-autocompletion>-->
+    <!--<app-input-autocompletion [propName]="'ref_client'" [data]="_user" [propType]="'string'" [witchForm]="1"   [formGroup]="formGroup"></app-input-autocompletion>-->
+    <mat-toolbar color="primary"
+                 matTooltip="Introduire le nom d'un client ou une reference de la liste pour {{nameForm === 'removals' ? 'l enlevement' : 'le destinataire'}}, pour ajouter un nouvel utilisateur veuillez vous rendre sur la page {{nameForm === 'removals' ? 'Enlèvement' : 'Destinataire'}}"
+                 [matTooltipPosition]="'above'">
+      <mat-toolbar-row>
+        <span>{{nameForm === 'removals' ? 'Enlevement' : 'Destinataire'}}</span>
+      </mat-toolbar-row>
+    </mat-toolbar>
+    <div *ngIf="dataValues && dataValues.length && dataValues[0].ref_client">
+      <mat-form-field class="example-full-width">
+        <input type="text" matInput [matAutocomplete]="autoRefClient" formControlName="ref_client" placeholder="reference client" aria-label="Number">
+        <mat-icon matSuffix><fa-icon [icon]="['fas', 'id-card'] " size="xs"></fa-icon></mat-icon>
+        <mat-autocomplete   #autoRefClient="matAutocomplete" (optionSelected)="itemSelectedRefClient($event)"  >
+          <mat-option  *ngFor="let option of (filteredRefClient | async)| notEmpty: 'ref_client'"  [value]="option?.ref_client">
+            {{ option?.ref_client }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
     </div>
-  </div>
+    <mat-form-field class="example-full-width">
+      <input type="text" matInput [matAutocomplete]="autoName" formControlName="name" placeholder="nom" aria-label="Number">
+      <mat-icon matSuffix><fa-icon [icon]="['fas', 'user'] " size="xs"></fa-icon></mat-icon>
+      <mat-autocomplete  #autoName="matAutocomplete" (optionSelected)="itemSelectedName($event)"  >
+        <mat-option *ngFor="let option of (filteredName | async)|notDesactive" [value]="option?.name">
+          {{ option?.name }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <input type="hidden" formControlName="id">
+    <div *ngIf="formGroup.get('id').value && formGroup.get('id').value.length">
+      <div matTooltip="Pour modifier l'adresse veuillez vous rendre sur la page {{nameForm === 'removals' ? 'Enlèvement' : 'Destinataire'}}"
+           [matTooltipPosition]="'above'"
+      class="not-allowed">
+        <div style="display:flex;">
+          <mat-form-field class="example-full-width">
+            <input matInput formControlName="address" [readonly]="true"   placeholder="adresse" value="test">
+          </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <input matInput formControlName="number"  [readonly]="true"   placeholder="numero">
+            <!--<mat-icon matSuffix><fa-icon [icon]="['fas', 'home'] " size="xs"></fa-icon></mat-icon>-->
+          </mat-form-field>
+        </div>
+        <div style="display:flex;">
+          <mat-form-field class="example-full-width">
+            <input matInput formControlName="cp" [readonly]="true"  placeholder="code postale">
+          </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <input matInput formControlName="state" [readonly]="true" placeholder="ville">
+            <!--<mat-icon matSuffix><fa-icon [icon]="['fas', 'university'] " size="xs"></fa-icon></mat-icon>-->
+          </mat-form-field>
+        </div>
+        <input type="hidden" formControlName="clientZone" [readonly]="true" placeholder="zone">
+        <mat-form-field class="example-full-width">
+          <input type="tel" matInput placeholder="telephone" formControlName="phone" [readonly]="true">
+          <!--<mat-icon matSuffix><fa-icon [icon]="['fas', 'phone'] " size="xs"></fa-icon></mat-icon>-->
+        </mat-form-field>
+      </div>
 
-  <input type="hidden" formControlName="id">
-  <input type="text" formControlName="address" [readonly]="true">
-  <input type="text" formControlName="number" [readonly]="true">
-  <input type="text" formControlName="cp" [readonly]="true">
-  <input type="text" formControlName="state" [readonly]="true">
-  <input type="text" formControlName="phone" [readonly]="true">
 
-  <app-info [formGroup]="formGroup.get('infos')"></app-info>
+      <app-info [contact]="contact | async" [formGroup]="formGroup.get('infos')"></app-info>
+    </div>
+    <input type="hidden" formControlName="created" [readonly]="true">
+    <!--<button (click)="resetForm(formGroup)">reset: {{ nameForm }}</button>-->
+    <input type="hidden" formControlName="fk_type" [readonly]="true">
+    <div *ngIf="formGroup.get('addressValidated').value=='0'">
+      <span class="text-red">Adresse non valide. </span>
+      <button (click)="goPlaces(nameForm)" mat-raised-button color="warn">go to edit {{nameForm}}</button>
+    </div>
+  </form>
+</div>
 
-  <input type="text" formControlName="created" [readonly]="true">
-  <input type="hidden" formControlName="fk_type" [readonly]="true">
 
-</form>
+<!--&lt;!&ndash;  cascades  &ndash;&gt;-->
+<!--<form [ngClass]="{ 'notValid': !formGroup.valid }"  *ngIf="isCustomer==='cascades'"  novalidate [formGroup]="formGroup">-->
+  <!--&lt;!&ndash;<app-input-autocompletion [propName]="'name'" [data]="_user" [propType]="'string'" [witchForm]="1"  [formGroup]="formGroup"></app-input-autocompletion>&ndash;&gt;-->
+  <!--&lt;!&ndash;<app-input-autocompletion [propName]="'ref_client'" [data]="_user" [propType]="'string'" [witchForm]="1"   [formGroup]="formGroup"></app-input-autocompletion>&ndash;&gt;-->
+  <!--<input type="hidden" formControlName="id">-->
+  <!--<app-info [formGroup]="formGroup.get('infos')"></app-info>-->
+  <!--<input type="number" formControlName="clientZone" [readonly]="true" placeholder="zone">-->
+  <!--<input type="hidden" formControlName="created" [readonly]="true">-->
+  <!--&lt;!&ndash;<button (click)="resetForm(formGroup)">reset: {{ nameForm }}</button>&ndash;&gt;-->
+  <!--<input type="hidden" formControlName="fk_type" [readonly]="true">-->
+<!--</form>-->
+
+<!--{{formGroup.valid}}-->
+
