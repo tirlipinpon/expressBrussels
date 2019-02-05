@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RecipientsComponent } from './recipients.component';
+import { AutocompleteGoogleComponent } from './autocomplete-google.component';
 
-describe('RecipientsComponent', () => {
-  let component: RecipientsComponent;
-  let fixture: ComponentFixture<RecipientsComponent>;
+describe('AutocompleteGoogleComponent', () => {
+  let component: AutocompleteGoogleComponent;
+  let fixture: ComponentFixture<AutocompleteGoogleComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RecipientsComponent ]
+      declarations: [ AutocompleteGoogleComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RecipientsComponent);
+    fixture = TestBed.createComponent(AutocompleteGoogleComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

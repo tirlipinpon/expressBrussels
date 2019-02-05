@@ -1,5 +1,5 @@
 form{
-  border: 1px solid red;
+  /*border: 1px solid red;*/
   margin:1px;
   padding:1px;
   display: flex;
@@ -25,4 +25,29 @@ form{
 
 .state:hover{
   background-color: #000;
+}
+
+form {
+  border: 1px solid #2c8ac5;
+}
+.notValid {
+  border: 3px solid red!important;
+}
+.not-validated-by-google {
+  border: 1px solid red;
+}
+.text-red {
+  color: #ff0000;
+}
+
+/* material */
+   .example-full-width {
+     width: 100%;
+   }
+.example-icon {
+  padding: 0 14px;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
 }

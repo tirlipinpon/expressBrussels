@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
-import {PurchasseOrder} from "../models/PurchasseOrder";
+import {PurchasseOrder} from '../models/PurchasseOrder';
+import {Distance} from "../models/distance";
 
 export const INIT_ORDER = 'Init Order';
 export class InitOrder implements Action {
@@ -16,9 +17,7 @@ export class InitOrderSuccess implements Action {
     // console.log('in actions get customer payload= ',payload);
   }
 }
-
-//===================== removal ==============================
-
+// ===================== removal ==============================
 export const EDIT_ORDER_REMOVAL = 'Edit Order Removal';
 export class EditOrderRemoval implements Action {
   readonly type = EDIT_ORDER_REMOVAL;
@@ -26,51 +25,23 @@ export class EditOrderRemoval implements Action {
     // console.log('in actions get customer payload= ',payload);
   }
 }
-
-export const EDIT_ORDER_REMOVAL_SUCCESS = 'Edit Order Removal Success';
-export class EditOrderRemovalSuccess implements Action {
-  readonly type = EDIT_ORDER_REMOVAL_SUCCESS;
-  constructor(public payload: number) {
-    // console.log('in actions get customer payload= ',payload);
-  }
-}
-
-export const EDIT_ORDER_REMOVAL_FAIL = 'Edit Order Removal Fail';
-export class EditOrderRemovalFail implements Action {
-  readonly type = EDIT_ORDER_REMOVAL_FAIL;
-  constructor(public payload: string) {
-    // console.log('in actions get customer payload= ',payload);
-  }
-}
-
-//==================== recipient ===============================
-
+// ==================== recipient ===============================
 export const EDIT_ORDER_RECIPIENT = 'Edit Order Recipient';
 export class EditOrderRecipient implements Action {
   readonly type = EDIT_ORDER_RECIPIENT;
-  constructor(public payload: number) {
+  constructor(public payload: string[]) {
     // console.log('in actions get customer payload= ',payload);
   }
 }
-
-export const EDIT_ORDER_RECIPIENT_SUCCESS = 'Edit Order Recipient Success';
-export class EditOrderRecipientSuccess implements Action {
-  readonly type = EDIT_ORDER_RECIPIENT_SUCCESS;
-  constructor(public payload: number) {
+// ==================== recipient cascades ===============================
+export const EDIT_ORDER_RECIPIENT_CASCADES = 'Edit Order Recipient cascades';
+export class EditOrderRecipientCascades implements Action {
+  readonly type = EDIT_ORDER_RECIPIENT_CASCADES;
+  constructor(public payload: string[]) {
     // console.log('in actions get customer payload= ',payload);
   }
 }
-
-export const EDIT_ORDER_RECIPIENT_FAIL = 'Edit Order Recipient Fail';
-export class EditOrderRecipientFail implements Action {
-  readonly type = EDIT_ORDER_RECIPIENT_FAIL;
-  constructor(public payload: string) {
-    // console.log('in actions get customer payload= ',payload);
-  }
-}
-
-//==================== removal infos ===============================
-
+// ==================== removal infos ===============================
 export const EDIT_ORDER_REMOVAL_INFOS = 'Edit Order Removal Infos';
 export class EditOrderRemovalInfos implements Action {
   readonly type = EDIT_ORDER_REMOVAL_INFOS;
@@ -78,51 +49,23 @@ export class EditOrderRemovalInfos implements Action {
     // console.log('in actions get customer payload= ',payload);
   }
 }
-
-export const EDIT_ORDER_REMOVAL_INFOS_SUCCESS = 'Edit Order Removal Infos Success';
-export class EditOrderRemovalInfosSuccess implements Action {
-  readonly type = EDIT_ORDER_REMOVAL_INFOS_SUCCESS;
-  constructor(public payload: any) {
-    // console.log('in actions get customer payload= ',payload);
-  }
-}
-
-export const EDIT_ORDER_REMOVAL_INFOS_FAIL = 'Edit Order Removal Infos Fail';
-export class EditOrderRemovalInfosFail implements Action {
-  readonly type = EDIT_ORDER_REMOVAL_INFOS_FAIL;
-  constructor(public payload: string) {
-    // console.log('in actions get customer payload= ',payload);
-  }
-}
-
-//==================== recipient infos ===============================
-
+// ==================== recipient infos ===============================
 export const EDIT_ORDER_RECIPIENT_INFOS = 'Edit Order Recipient Infos';
 export class EditOrderRecipientInfos implements Action {
   readonly type = EDIT_ORDER_RECIPIENT_INFOS;
   constructor(public payload: any) {
-    // console.log('in actions get customer payload= ',payload);
+    // console.log('in actions get recipients infos  payload= ',payload);
   }
 }
-
-export const EDIT_ORDER_RECIPIENT_INFOS_SUCCESS = 'Edit Order Recipient Infos Success';
-export class EditOrderRecipientInfosSuccess implements Action {
-  readonly type = EDIT_ORDER_RECIPIENT_INFOS_SUCCESS;
-  constructor(public payload: any) {
-    // console.log('in actions get customer payload= ',payload);
+// ==================== recipient infos cascades ===============================
+export const EDIT_ORDER_RECIPIENT_INFOS_CASCADES = 'Edit Order Recipient Infos Cascades';
+export class EditOrderRecipientInfosCascades implements Action {
+  readonly type = EDIT_ORDER_RECIPIENT_INFOS_CASCADES;
+  constructor(public payload: Array<string>) {
+    // console.log('in actions get recipients infos cascades  payload= ',payload);
   }
 }
-
-export const EDIT_ORDER_RECIPIENT_INFOS_FAIL = 'Edit Order Recipient Infos Fail';
-export class EditOrderRecipientInfosFail implements Action {
-  readonly type = EDIT_ORDER_RECIPIENT_INFOS_FAIL;
-  constructor(public payload: string) {
-    // console.log('in actions get customer payload= ',payload);
-  }
-}
-
-//=================== options ================================
-
+// =================== options ================================
 export const EDIT_ORDER_OPTION = 'Edit Order option';
 export class EditOrderOption implements Action {
   readonly type = EDIT_ORDER_OPTION;
@@ -130,25 +73,7 @@ export class EditOrderOption implements Action {
     // console.log('in actions get customer payload= ',payload);
   }
 }
-
-export const EDIT_ORDER_OPTION_SUCCESS = 'Edit Order option Success';
-export class EditOrderOptionSuccess implements Action {
-  readonly type = EDIT_ORDER_OPTION_SUCCESS;
-  constructor(public payload: PurchasseOrder) {
-    // console.log('in actions get customer payload= ',payload);
-  }
-}
-
-export const EDIT_ORDER_OPTION_FAIL = 'Edit Order option Fail';
-export class EditOrderOptionFail implements Action {
-  readonly type = EDIT_ORDER_OPTION_FAIL;
-  constructor(public payload: string) {
-    // console.log('in actions get customer payload= ',payload);
-  }
-}
-
-//================= save order ==================================
-
+// ================= save order ==================================
 export const SAVE_ORDER = 'Save Order';
 export class SaveOrder implements Action {
   readonly type = SAVE_ORDER;
@@ -157,8 +82,8 @@ export class SaveOrder implements Action {
 export const SAVE_ORDER_SUCCESS = 'Save Order Success';
 export class SaveOrderSuccess implements Action {
   readonly type = SAVE_ORDER_SUCCESS;
-  constructor(public payload: any) {
-    console.log('in actions save Order  payload= ',payload);
+  constructor(public payload?: any) {
+     console.log('in actions save Order  payload= ',payload);
   }
 }
 
@@ -166,7 +91,41 @@ export const SAVE_ORDER_FAIL = 'Save Order Fail';
 export class SaveOrderFail implements Action {
   readonly type = SAVE_ORDER_FAIL;
   constructor(public payload: string) {
-    // console.log('in actions get customer payload= ',payload);
+     console.log('in actions save order fail payload= ',payload);
+  }
+}
+// =================== distance ================================
+export const EDIT_ORDER_DISTANCE = 'Edit Order Distance';
+export class EditOrderDistance implements Action {
+  readonly type = EDIT_ORDER_DISTANCE;
+  constructor(public payload: Distance) {
+    console.log('in actions edit order distnace payload= ',payload);
+  }
+}
+
+
+// =================== client zone ===========================================
+export const GET_CLIENT_ZONE = 'Get client Zone';
+export class GetClientZone implements Action {
+  readonly type = GET_CLIENT_ZONE;
+  constructor(public payload: number) {
+    console.log('in actions get client zone:', payload);
+  }
+}
+
+export const GET_CLIENT_ZONE_SUCCESS = 'Get client Zone Success';
+export class GetClientZoneSuccess implements Action {
+  readonly type = GET_CLIENT_ZONE_SUCCESS;
+  constructor(public payload: number) {
+    console.log('in actions get client zone success payload= ',payload);
+  }
+}
+
+export const GET_CLIENT_ZONE_FAIL = 'Get client Zone Fail';
+export class GetClientZoneFail implements Action {
+  readonly type = GET_CLIENT_ZONE_FAIL;
+  constructor(public payload: string) {
+    console.log('in actions get client zone fail payload= ',payload);
   }
 }
 
@@ -174,26 +133,23 @@ export type All =
       InitOrder
     | InitOrderSuccess
 
-    | EditOrderOption
-    | EditOrderOptionSuccess
-    | EditOrderOptionFail
-
     | EditOrderRemoval
-    | EditOrderRemovalSuccess
-    | EditOrderRemovalFail
-
     | EditOrderRecipient
-    | EditOrderRecipientSuccess
-    | EditOrderRecipientFail
+
+    | EditOrderRecipientCascades
 
     | EditOrderRemovalInfos
-    | EditOrderRemovalInfosSuccess
-    | EditOrderRemovalInfosFail
-
     | EditOrderRecipientInfos
-    | EditOrderRecipientInfosSuccess
-    | EditOrderRecipientInfosFail
+
+    | EditOrderRecipientInfosCascades
+
+    | EditOrderOption
+    | EditOrderDistance
 
     | SaveOrder
     | SaveOrderSuccess
-    | SaveOrderFail;
+    | SaveOrderFail
+
+    | GetClientZone
+    | GetClientZoneSuccess
+    | GetClientZoneFail;

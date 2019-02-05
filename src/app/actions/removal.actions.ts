@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import {DataForm} from "../models/DataForm";
+import {DataForm, DataDataFormState} from '../models/DataForm';
 
 
 export const GET_REMOVALS = 'Get Removals';
@@ -13,7 +13,7 @@ export class GetRemovals implements Action {
 export const GET_REMOVALS_SUCCESS = 'Get Removals Success';
 export class GetRemovalsSuccess implements Action {
   readonly type = GET_REMOVALS_SUCCESS;
-  constructor(public payload: DataForm[]) {
+  constructor(public payload: DataDataFormState) {
     // console.log('in actions get customer payload= ',payload);
   }
 }
@@ -26,13 +26,12 @@ export class GetRemovalsFail implements Action {
   }
 }
 
-//===================================================
-
+// ===================================================
 export const EDIT_REMOVAL = 'Edit Removal';
 export class EditRemoval implements Action {
   readonly type = EDIT_REMOVAL;
   constructor(public payload: DataForm) {
-    // console.log('in actions edit customer payload= ',payload);
+    // console.log('in actions edit removal payload= ',payload);
   }
 }
 
@@ -40,7 +39,7 @@ export const EDIT_REMOVAL_SUCCESS = 'Edit Removal Success';
 export class EditRemovalSuccess implements Action {
   readonly type = EDIT_REMOVAL_SUCCESS;
   constructor(public payload: DataForm) {
-    // console.log('in actions get customer payload= ',payload);
+    // console.log('in actions get removal payload= ',payload);
   }
 }
 
@@ -48,15 +47,103 @@ export const EDIT_REMOVAL_FAIL = 'Edit Removal Fail';
 export class EditRemovalFail implements Action {
   readonly type = EDIT_REMOVAL_FAIL;
   constructor(public payload: string) {
+    // console.log('in actions get removal payload= ',payload);
+  }
+}
+
+// ===================================================
+export const ADD_REMOVAL = 'Add Removal';
+export class AddRemoval implements Action {
+  readonly type = ADD_REMOVAL;
+  constructor(public payload: DataForm) {
+    console.log('in actions add removal payload= ',payload);
+  }
+}
+
+export const ADD_REMOVAL_SUCCESS = 'Add Removal Success';
+export class AddRemovalSuccess implements Action {
+  readonly type = ADD_REMOVAL_SUCCESS;
+  constructor(public payload: number) {
+    console.log('in actions add removal success payload= ',payload);
+  }
+}
+
+export const ADD_REMOVAL_FAIL = 'Add Removal Fail';
+export class AddRemovalFail implements Action {
+  readonly type = ADD_REMOVAL_FAIL;
+  constructor(public payload: string) {
+    console.log('in actions add removal payload= ',payload);
+  }
+}
+
+// ===================================================
+export const GET_LAST_REMOVAL = 'Get last Removal';
+export class GetLastRemoval implements Action {
+  readonly type = GET_LAST_REMOVAL;
+  constructor(public payload: DataForm) {
+     // console.log('in actions get removal payload= ',payload);
+  }
+}
+
+export const GET_LAST_REMOVAL_SUCCESS = 'Get Last Removal Success';
+export class GetLastRemovalSuccess implements Action {
+  readonly type = GET_LAST_REMOVAL_SUCCESS;
+  constructor(public payload: DataForm) {
+    // console.log('in actions get last removal success payload= ',payload);
+  }
+}
+
+export const GET_LAST_REMOVAL_FAIL = 'Get Last Removal Fail';
+export class GetLastRemovalFail implements Action {
+  readonly type = GET_LAST_REMOVAL_FAIL;
+  constructor(public payload: string) {
+    // console.log('in actions get customer payload= ',payload);
+  }
+}
+
+// ===================================================
+export const DELETE_REMOVAL = 'DELETE  Removal';
+export class DeleteRemoval implements Action {
+  readonly type = DELETE_REMOVAL;
+  constructor(public payload: DataForm) {
+    // console.log('in actions get removal payload= ',payload);
+  }
+}
+
+export const DELETE_REMOVAL_SUCCESS = 'DELETE Removal Success';
+export class DeleteRemovalSuccess implements Action {
+  readonly type = DELETE_REMOVAL_SUCCESS;
+  constructor(public payload: DataForm) {
+    // console.log('in actions get last removal success payload= ',payload);
+  }
+}
+
+export const DELETE_REMOVAL_FAIL = 'DELETE Removal Fail';
+export class DeleteRemovalFail implements Action {
+  readonly type = DELETE_REMOVAL_FAIL;
+  constructor(public payload: string) {
     // console.log('in actions get customer payload= ',payload);
   }
 }
 
 export type All =
-  GetRemovals
+      GetRemovals
     | GetRemovalsSuccess
     | GetRemovalsFail
 
     | EditRemoval
     | EditRemovalSuccess
-    | EditRemovalFail;
+    | EditRemovalFail
+
+    | AddRemoval
+    | AddRemovalSuccess
+    | AddRemovalFail
+
+    | GetLastRemoval
+    | GetLastRemovalSuccess
+    | GetLastRemovalFail
+
+    | DeleteRemoval
+    | DeleteRemovalSuccess
+    | DeleteRemovalFail;
+

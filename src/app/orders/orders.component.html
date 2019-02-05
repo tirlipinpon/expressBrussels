@@ -1,77 +1,156 @@
-<div class="example-header">
-  <mat-form-field>
-    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="données">
-  </mat-form-field>
-  <mat-form-field>
-    <input type="date" matInput (keyup)="applyFilter($event.target.value)" placeholder="date">
-  </mat-form-field>
-  <mat-form-field>
-    <input type="number" matInput (keyup)="applyFilter($event.target.value)" placeholder="numero">
-  </mat-form-field>
+<div id="contentToConvert">
+  <div class="example-header">
+    <mat-form-field>
+      <input type="number" #mati matInput (keyup)="applyFilterNumber($event.target.value, $event.target)"
+             placeholder="numero">
+    </mat-form-field>
+    <mat-form-field>
+      <input type="date" #mati matInput (keyup)="applyFilterDate($event.target.value, $event.target)"
+             placeholder="date">
+    </mat-form-field>
+    <mat-form-field>
+      <input type="text" matInput #mati (keyup)="applyFilterName($event.target.value, $event.target)" placeholder="nom">
+    </mat-form-field>
+    <mat-form-field *ngIf="isReferenceClient">
+      <input type="text" matInput #mati (keyup)="applyFilterRefClient($event.target.value, $event.target)"
+             placeholder="reference client">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select matInput #mati id="month"  placeholder="Mois ({{getCurrentDate() | date:'yyyy'}})"
+                  (selectionChange)="applyFilterMonth($event.value, $event)">
+        <mat-option [value]="'none'"></mat-option>
+        <mat-option *ngFor="let month of months" [value]="month">
+          {{month|numberTransformToMonth}} ({{month|countOrdersByMonth:dataSource.data}}) {{month|countOrdersPriceByMonth:dataSource.data}} €
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-stroked-button (click)="resetFilterButtonClick()" color="primary">
+      <fa-icon style="color: red!important;" [icon]="['fas', 'eraser']" size="sm"></fa-icon>
+      Reinitialiser le filtre</button>
+    <button mat-stroked-button
+            (click)="captureScreen('contentToConvert')"
+            matTooltip="Enregistrer en PDF tous les bons de commandes de la page (utiliser le filtre pour affiner)"
+            [matTooltipPosition]="'above'">
+      <fa-icon [icon]="['fas', 'file-pdf']" size="sm"></fa-icon>
+      Enregistrer le(s) bon(s) selectionnés
+    </button>
+
+
+  </div>
+
+  <div class="mat-elevation-z8" >
+    <table mat-table [dataSource]="dataSource" matSort matSortActive="created">
+      <!-- id Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header
+            matTooltip="Cliquez ici pour ordonnancer l'ordre croissant ou decroissant"
+            [matTooltipPosition]="'above'"> Numéro du bon </th>
+        <td mat-cell *matCellDef="let transaction"> {{transaction.id}} </td>
+        <td mat-footer-cell *matFooterCellDef matTooltip="Total des commandes pour l'année ({{getCurrentDate() | date:'yyyy'}})"
+            [matTooltipPosition]="'right'"> Total ({{getCurrentDate() | date:'yyyy'}})</td>
+      </ng-container>
+      <!-- created Column -->
+      <ng-container matColumnDef="created">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> date de création </th>
+        <td mat-cell *matCellDef="let transaction"> {{transaction.created }} </td>
+        <td mat-footer-cell *matFooterCellDef>  </td>
+      </ng-container>
+      <!-- removal Column -->
+      <ng-container matColumnDef="fk_removal_id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Enlèvement </th>
+        <td mat-cell *matCellDef="let transaction">
+          <p matTooltip="Nom de la compagnie"
+             [matTooltipPosition]="'left'"><fa-icon style="color: rgba(0,0,0,0.27)!important;" [icon]="['fas', 'user']" size="sm"></fa-icon> {{ transaction.removal_name  }}</p>
+          <p matTooltip="Reference client"
+             [matTooltipPosition]="'left'" *ngIf="transaction.removal_ref_client && transaction.removal_ref_client.length">
+            <fa-icon style="color: rgba(0,0,0,0.27)!important;" [icon]="['fas', 'id-card']" size="sm"></fa-icon>
+            {{ transaction.removal_ref_client }}</p>
+          <p matTooltip="Adresse d'enlevement"
+             [matTooltipPosition]="'left'">
+            <fa-icon style="color: rgba(0,0,0,0.27)!important;"  [icon]="['fas', 'home']" size="sm"></fa-icon>
+            {{ transaction.removal_address  }} {{ transaction.removal_number  }}<br>
+            <span style="margin:0 0 0 20px">{{ transaction.removal_cp  }} {{ transaction.removal_state  }}</span>
+          </p>
+          <p matTooltip="Nom de contact"
+             [matTooltipPosition]="'left'" *ngIf="transaction.contact_removal!==''">
+            <fa-icon style="color: rgba(0,0,0,0.27)!important;" [icon]="['fas', 'user-tag'] " size="xs"></fa-icon>
+            {{ transaction.contact_removal  }}</p>
+          <p matTooltip="Message/Commentaire"
+             [matTooltipPosition]="'left'" *ngIf="transaction.message_removal!==''">
+            <fa-icon style="color: rgba(0,0,0,0.27)!important;" [icon]="['fas', 'comment'] " size="xs"></fa-icon>
+            {{ transaction.message_removal  }}</p></td>
+        <td mat-footer-cell *matFooterCellDef>  </td>
+      </ng-container>
+      <!-- recipient Column -->
+      <ng-container matColumnDef="fk_recipient_id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Destination </th>
+        <td mat-cell *matCellDef="let transaction">
+          <p matTooltip="Nom de la compagnie"
+             [matTooltipPosition]="'left'"><fa-icon style="color: rgba(0,0,0,0.27)!important;"  [icon]="['fas', 'user']" size="sm"></fa-icon> {{ transaction.recipient_name  }}</p>
+          <p matTooltip="Reference client"
+             [matTooltipPosition]="'left'" *ngIf="transaction.recipient_ref_client && transaction.recipient_ref_client.length">
+            <fa-icon style="color: rgba(0,0,0,0.27)!important;"  [icon]="['fas', 'id-card']" size="sm"></fa-icon> {{ transaction.recipient_ref_client }}</p>
+          <!--<p>{{ row.recipient_address  }} {{ row.recipient_number  }}  </p>-->
+          <p matTooltip="Adresse de destination"
+             [matTooltipPosition]="'left'">
+            <fa-icon style="color: rgba(0,0,0,0.27)!important;"  [icon]="['fas', 'home']" size="sm"></fa-icon>
+            {{ transaction.recipient_address  }} {{ transaction.recipient_number  }}<br>
+            <span style="margin:0 0 0 20px">{{ transaction.recipient_cp  }} {{ transaction.recipient_state  }}</span>
+          </p>
+          <p matTooltip="Nom de contact "
+             [matTooltipPosition]="'left'" *ngIf="transaction.contact_recipient!==''">
+            <fa-icon style="color: rgba(0,0,0,0.27)!important;" [icon]="['fas', 'user-tag'] " size="xs"></fa-icon> {{ transaction.contact_recipient  }}</p>
+          <p matTooltip="Message/Commentaire"
+             [matTooltipPosition]="'left'" *ngIf="transaction.message_recipient!==''"><fa-icon style="color: rgba(0,0,0,0.27)!important;" [icon]="['fas', 'comment'] " size="xs"></fa-icon>
+            {{ transaction.message_recipient  }}</p>
+        </td>
+        <td mat-footer-cell *matFooterCellDef>  </td>
+      </ng-container>
+      <!-- options Column -->
+      <ng-container matColumnDef="options">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Options/prix </th>
+        <td mat-cell *matCellDef="let transaction">
+          <div style="display:flex;">
+            <p style="padding:0 10px 0 0">{{ transaction.options }} </p>
+            <p matTooltip="Type de transport {{transaction.transport}}"
+               [matTooltipPosition]="'left'" *ngIf="transaction.transport==='moto'"> <fa-icon [icon]="['fas', 'motorcycle']" size="sm"></fa-icon></p>
+            <p matTooltip="Type de transport {{transaction.transport}}"
+               [matTooltipPosition]="'left'" *ngIf="transaction.transport==='voiture'"> <fa-icon [icon]="['fas', 'car']" size="sm"></fa-icon></p>
+          </div>
+          <p matTooltip="Livraison le lendemain de la commande"
+             [matTooltipPosition]="'left'" *ngIf="transaction.tomorrow!=0">tomorrow</p>
+          <p>{{transaction.price}} €</p>
+        </td>
+
+        <td mat-footer-cell *matFooterCellDef> {{getTotalCost() | currency:'EUR':true}} </td>
+      </ng-container>
+      <!-- Disclaimer column -->
+      <ng-container matColumnDef="disclaimer">
+        <td mat-footer-cell *matFooterCellDef colspan="2">
+          Please note that the cost of items displayed are completely and totally made up.
+        </td>
+      </ng-container>
+      <!-- print Column -->
+      <ng-container matColumnDef="print">
+        <th mat-header-cell *matHeaderCellDef> PDF </th>
+        <td mat-cell *matCellDef="let transaction">
+          <button mat-stroked-button (click)="captureScreen('print-'+transaction.id)">
+          <fa-icon [icon]="['fas', 'file-pdf']" size="sm"></fa-icon>
+          Telecharger ce bon en PDF
+        </button>
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+      <!-- The table will render two header rows, one data row per data object, and two footer rows. -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"
+          class="example-first-header-row">
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" id="print-{{row.id}}"></tr>
+      <tr mat-footer-row *matFooterRowDef="displayedColumns;" class="example-first-footer-row"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[20, 50, 100, 200, 300]" showFirstLastButtons></mat-paginator>
+  </div>
 </div>
-
-<div class="example-container mat-elevation-z8">
-
-  <mat-table [dataSource]="dataSource" matSort>
-
-    <!-- ID Column -->
-    <ng-container matColumnDef="id">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> numero </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
-    </ng-container>
-
-    <!-- date Column -->
-    <ng-container matColumnDef="date">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> date </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.date | date:'d-MM-y'}} </mat-cell>
-    </ng-container>
-
-    <!-- removal Column -->
-    <ng-container matColumnDef="fk_removal_id">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> removal </mat-header-cell>
-      <mat-cell *matCellDef="let row">
-        <p>{{ row.removal_name  }}</p>
-        <p>{{ row.removal_address  }} {{ row.removal_number  }}  </p>
-        <p>{{ row.removal_cp  }} {{ row.removal_state  }}  </p>
-        <p>{{ row.contact_removal  }}</p>
-        <p>{{ row.message_removal  }}</p>
-      </mat-cell>
-    </ng-container>
-
-    <!-- recipient Column -->
-    <ng-container matColumnDef="fk_recipient_id">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> recipient </mat-header-cell>
-      <mat-cell *matCellDef="let row">
-        <p>{{ row.recipient_name  }}</p>
-        <p>{{ row.recipient_address  }} {{ row.recipient_number  }}  </p>
-        <p>{{ row.recipient_cp  }} {{ row.recipient_state  }}  </p>
-        <p>{{ row.contact_recipient  }}</p>
-        <p>{{ row.message_recipient  }}</p>
-      </mat-cell>
-    </ng-container>
-
-    <!-- options Column -->
-    <ng-container matColumnDef="options">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> options </mat-header-cell>
-      <mat-cell *matCellDef="let row">
-        <p>{{ row.options }}</p>
-        <p *ngIf="row.tomorrow!=0">tomorrow</p>
-      </mat-cell>
-    </ng-container>
-
-
-
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;">
-    </mat-row>
-  </mat-table>
-
-  <mat-paginator #paginator [pageSizeOptions]="[25, 50, 100]"></mat-paginator>
-</div>
-
-<!--<pre>-->
-  <!--{{datasOrders | json}}-->
-<!--</pre>-->
 
 <p-confirmDialog header="Confirmation"
                  icon="fa fa-question-circle" width="400">

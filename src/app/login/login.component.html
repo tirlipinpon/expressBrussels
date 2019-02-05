@@ -1,0 +1,60 @@
+<div class="limiter">
+  <div class="container-login100 img">
+
+    <div class="wrap-login100">
+      <form class="login100-form validate-form" name="form" (ngSubmit)="login()" [formGroup]="form">
+					<span class="login100-form-logo">
+						<i class="zmdi zmdi-landscape"></i>
+					</span>
+
+        <span class="login100-form-title p-b-34 p-t-27">
+						<a style="text-decoration:none;" href="https://www.expressbrussel.com">Express Brussel . com</a>
+					</span>
+
+        <div class="wrap-input100 validate-input" data-validate = "Enter username">
+          <input class="input100" type="text" formControlName="email" name="email" placeholder="email"  value="test" required />
+          <span class="focus-input100" data-placeholder="&#xf207;"></span>
+        </div>
+        <div *ngIf="form.get('email').dirty && !form.get('email').valid" class="input100" style="color:red;font-size:12px;height:25px;">email obligatoire</div>
+
+        <div *ngIf="!isforgotProcess">
+          <div class="wrap-input100 validate-input flex-between-baseline" data-validate="Enter password" >
+            <div>
+              <input type="{{typeInput}}" class="input100" formControlName="password"  name="password"  value="test" placeholder="Mot de passe" required />
+              <span class="focus-input100" data-placeholder="O"></span>
+            </div>
+            <div *ngIf="typeInput=='text'" style="color:white;" (mouseover)="changeTypeInputText()" (mouseleave)="changeTypeInputPassword()">
+              <fa-icon [icon]="['fas', 'eye']" size="sm"></fa-icon>
+            </div>
+            <div *ngIf="typeInput=='password'" style="color:white;" (mouseover)="changeTypeInputText()" (mouseleave)="changeTypeInputPassword()">
+              <fa-icon [icon]="['fas', 'eye-slash']" size="sm"></fa-icon>
+            </div>
+          </div>
+          <div *ngIf="form.get('password').dirty && !form.get('password').valid" class="input100" style="color:red;font-size:12px;height:25px;">Password is required</div>
+
+        </div>
+
+        <div *ngIf="!isforgotProcess" class="contact100-form-checkbox">
+          <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
+          <label class="label-checkbox100" for="ckb1">
+            Remember me
+          </label>
+        </div>
+
+        <div class="container-login100-form-btn">
+           <button *ngIf="isforgotProcess" (click)="sendEmail()" class="login100-form-btn">Restaurer le mot de passe</button>
+           <button *ngIf="!isforgotProcess" class="login100-form-btn">Connexion</button>
+          <span style="color:#ff8784;margin:20px 0;">{{error}}</span>
+        </div>
+
+        <div *ngIf="!isforgotProcess" class="text-center p-t-90">
+          <button class="txt1" (click)="forgotProcess()">
+            Mot de passe oublié?
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+

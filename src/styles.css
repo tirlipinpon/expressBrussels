@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
-@import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
+/*@import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";*/
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
 /*============= PRIMENG GROWL POPUP COLOR ======================*/
 .ui-growl-message-success {color: green!important}
@@ -7,3 +8,27 @@
 .ui-growl-message-info    {color: blue!important}
 .ui-growl-message-warn    {color: grey!important}
 
+.v-empty {
+  background-color: #c55f60;
+}
+.v-to-short {
+  background-color: rgba(100, 91, 113, 0.3)
+}
+.v-to-long {
+  background-color: rgba(197, 91, 113, 0.3);
+}
+mat-icon{
+  color: rgba(103, 58, 183, 0.87)!important;
+}
+
+.ui-dialog .ui-dialog-titlebar-icon::before{
+  content: "\f00d";
+  font-family: "FontAwesome";
+}
+.ui-dialog-resizable .ui-dialog-content {
+  background-color: white!important;
+}
+
+.not-allowed {
+  cursor: Not-Allowed;
+}

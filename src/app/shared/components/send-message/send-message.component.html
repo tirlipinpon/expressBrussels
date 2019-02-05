@@ -1,0 +1,15 @@
+<p-dialog header="Envoyer un message." [(visible)]="display">
+  <p>Si vous encouré une difficultée sur le site veuillez decrire le probleme.</p>
+  <form  novalidate [formGroup]="formMessage" style="display:flex;flex-direction:column;color:black">
+    <mat-form-field class="example-full-width">
+      <textarea matInput formControlName="message" placeholder="message"></textarea>
+    </mat-form-field>
+    <button mat-raised-button
+            type="button"
+            [disabled]="formMessage.invalid || formMessage.pristine"
+            (click)="sendMessage()">Envoyer</button>
+  </form>
+</p-dialog>
+<button mat-stroked-button (click)="showDialog()">Contact par mail</button>
+
+
