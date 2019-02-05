@@ -1,10 +1,8 @@
+/// <reference types="@types/googlemaps" />
 import {Component, OnInit, OnDestroy, HostListener, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, Validators, FormGroup} from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/skipWhile'
-import 'rxjs/add/operator/map';
-
+import { Observable } from 'rxjs';
 import * as RemovalActions from '../actions/removal.actions';
 import * as RecipientActions from '../actions/recipient.actions';
 import * as OrderActions from '../actions/purchasseOrder.actions';
@@ -16,7 +14,7 @@ import {DataForm} from '../models/DataForm';
 import {PurchasseOrder} from '../models/PurchasseOrder';
 import {ComponentDeactivable} from '../services/can-deactivate-form-guard.service';
 import * as fromRoot from '../shared/appState';
-import {} from '@types/googlemaps';
+
 import {GetDistanceMatrixService} from "../services/google/get-distance-matrix.service";
 import {Distance} from "../models/distance";
 import * as CONST from '../models/googleMatrixStatus';
@@ -26,6 +24,7 @@ import {PrixZone} from "../models/prixZone";
 import {Contact} from "../models/contact";
 
 import { map } from 'rxjs/operators';
+import {NotificationService} from "../services/notification.service";
 
 @Component({
   selector: 'app-purchasse-order',
@@ -42,7 +41,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   prixZoneCamionnette$: Observable<PrixZone>;
   contact$: Observable<Contact[]>;
 
-  private distance: Distance;
+  distance: Distance;
   distances: Distance[] = [];
   datas: any;
   nameForm = ['removals','recipients'];
@@ -54,6 +53,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   formDistance: FormGroup;
   contactRemoval$: Observable<Contact[]>;
   contactRecipient$: Observable<Contact[]>;
+  private toast$: Observable<any>;
   private allFormGroup: FormGroup[] = [];
   private valueRemovalChanges$;
   private valueRecipientChanges$;
@@ -70,7 +70,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     private getDistanceMatrixService: GetDistanceMatrixService,
     private cdr: ChangeDetectorRef,
     private customerService: CustomerService,
-    private route: ActivatedRoute)
+    private route: ActivatedRoute,
+    private notificationsService: NotificationService)
   {
     this.storeDispatch();
     this.initFormsRemoval();
@@ -99,6 +100,13 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.prixZoneMoto$ = this.store.select(fromRoot.selectors.getPrixZoneMotoData);
     this.prixZoneCamionnette$ = this.store.select(fromRoot.selectors.getPrixZoneCamionnetteData);
     this.contact$ = this.store.select(fromRoot.selectors.getContactData);
+    this.toast$ = this.store.select(fromRoot.selectors.getToasterData);
+    this.toast$.subscribe(data => {
+      if (data && data[0]) {
+        this.notificationsService.notify(data[0].severity, data[0].summary, data[0].detail);
+        this.cdr.markForCheck();
+      }
+    })
   }
   storeDispatch() {
     this.customerService.currentCustomerId.subscribe(id => {
@@ -210,12 +218,12 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       id: ['', Validators.required],
       name: ['', Validators.required],
       ref_client: [''],
-      address: ['', Validators.required],
-      number: ['', Validators.required],
-      cp: ['', Validators.required],
-      state: ['', Validators.required],
+      address: [{value: '', disabled: true}, Validators.required],
+      number: [{value: '', disabled: true}, Validators.required],
+      cp: [{value: '', disabled: true}, Validators.required],
+      state: [{value: '', disabled: true}, Validators.required],
       clientZone: [0, Validators.required],
-      phone: ['', Validators.required],
+      phone: [{value: '', disabled: true}, Validators.required],
       infos: this.fb.group({
         info1: ['', { updateOn: 'blur'} ],
         info2: ['', { updateOn: 'blur'} ],
@@ -233,12 +241,12 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       id: ['', Validators.required],
       name: ['', Validators.required],
       ref_client: [''],
-      address: ['', Validators.required],
-      number: ['', Validators.required],
-      cp: ['', Validators.required],
-      state: ['', Validators.required],
+      address: [{value: '', disabled: true}, Validators.required],
+      number: [{value: '', disabled: true}, Validators.required],
+      cp: [{value: '', disabled: true}, Validators.required],
+      state: [{value: '', disabled: true}, Validators.required],
       clientZone: [0, Validators.required],
-      phone: ['', Validators.required],
+      phone: [{value: '', disabled: true}, Validators.required],
       infos: this.fb.group({
         info1: ['', { updateOn: 'blur'} ],
         info2: ['', { updateOn: 'blur'} ],
@@ -288,31 +296,33 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   resetOrder() {
     this.allFormGroup.forEach( form => {
       form.reset();
+      // this.markAsPristine(form)
     });
+    this.formOptions.reset();
     this.store.dispatch(new OrderActions.InitOrder(this.customerId));
     this.resetDistance();
   }
-
   addContacts(removalForm: FormGroup, recipientForm: FormGroup): void {
-    // const c1 = removalForm.get('infos.info1').value;
-    // let removC = null;
-    // if (c1 && c1.length > 2) {
-    //   removC  = {
-    //     name: c1,
-    //     fk_client_id: removalForm.get('fk_client').value,
-    //     fk_resp_dest_id: removalForm.get('id').value}
-    // }
-    // const c2 = recipientForm.get('infos.info1').value;
-    // let recipC = null;
-    // if (c2 && c2.length > 2) {
-    //   recipC  = {
-    //     name: c2,
-    //     fk_client_id: recipientForm.get('fk_client').value,
-    //     fk_resp_dest_id: recipientForm.get('id').value}
-    // }
-    //   this.store.dispatch(new ContactActions.AddContacts([removC, recipC]));
-  }
+    let  contact  = {
+      name: null,
+      fk_client_id: this.formRecipient.get('fk_client').value,
+      fk_resp_dest_id: null
+    };
 
+    const c1 = removalForm.get('infos.info1').value;
+    if (c1 && c1.length > 2) {
+      contact.name = c1 ;
+      contact.fk_resp_dest_id = removalForm.get('id').value ;
+      this.store.dispatch(new ContactActions.AddContacts(contact));
+    }
+
+    const c2 = recipientForm.get('infos.info1').value;
+    if (c2 && c2.length > 2) {
+      contact.name = c2;
+      contact.fk_resp_dest_id = recipientForm.get('id').value ;
+      this.store.dispatch(new ContactActions.AddContacts(contact));
+    }
+  }
   recapOrder() {
     this.store.dispatch(new OrderActions.SaveOrder());
     this.addContacts(this.formRemoval, this.formRecipient);
@@ -360,7 +370,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     // after15h
     //
   }
-
   calculTransportAndOptionBxl(prixZoneTransport: Observable<PrixZone>, zone: number): void {
     prixZoneTransport.subscribe(data => {
       let price = +data['zone'+zone];
@@ -382,7 +391,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       });
     });
   }
-
   calculTransportAndOptionNational(prixZoneTransport: Observable<PrixZone>, price: number): void {
   prixZoneTransport.subscribe(data => {
     price *= data.prixKm;
@@ -423,7 +431,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       status: status
     });
   }
-
   // distance
   setDistance(respGoogleMatrix: any, whichForm: string ): void {
        respGoogleMatrix.then(result => {
@@ -505,18 +512,4 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
         country: ''
       });
   }
-
-  // success() {
-  //   this.notificationsService.notify('success', 'some alert', 'push was called!');
-  // }
-  // info() {
-  //   this.notificationsService.notify('info', 'some alert', 'push was called!');
-  // }
-  // warn() {
-  //   this.notificationsService.notify('warn', 'some alert', 'push was called!');
-  // }
-  // error() {
-  //   this.notificationsService.notify('error', 'some alert', 'push was called!');
-  // }
-
 }

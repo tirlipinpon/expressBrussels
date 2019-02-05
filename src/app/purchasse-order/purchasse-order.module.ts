@@ -5,6 +5,7 @@ import { PurchasseOrderComponent } from './purchasse-order.component';
 import {SharedModule} from '../shared/shared.module';
 import {CommonModule} from '@angular/common';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatTooltipModule} from "@angular/material";
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     HttpClientModule,
     BrowserAnimationsModule,
     SharedModule,
+    MatTooltipModule
   ],
   exports: [
   ],

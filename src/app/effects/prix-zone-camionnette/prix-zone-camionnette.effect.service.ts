@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import {NotificationService} from "../../services/notification.service";
-import {Actions, Effect} from "@ngrx/effects";
+import {Actions, Effect, ofType} from "@ngrx/effects";
 import {Action} from "@ngrx/store";
-import {Observable} from "rxjs";
+import {Observable, of} from "rxjs";
 import {GetPrixZoneService} from "../../services/get-prix-zone.service";
 import * as PrixZoneCamionnetteActions  from '../../actions/prixZoneCamionnette.actions';
+import {switchMap, map, catchError} from "rxjs/internal/operators";
 
 
 @Injectable()
@@ -14,20 +15,23 @@ export class PrixZoneCamionnetteEffectService {
               private notif: NotificationService,
               private getPrixZoneService: GetPrixZoneService) { }
 
-  @Effect() getPrizZoneCamionnette$: Observable<Action> = this.action$
-    .ofType(PrixZoneCamionnetteActions.GET_PRIX_ZONE_CAMIONNETTE)
-    // .do(action => console.log(action['payload']))
-    .switchMap(action =>
-      this.getPrixZoneService.getPrixZoneByType(action['payload'])
-        .map(payload => {
+  @Effect() getPrizZoneCamionnette$ = this.action$.pipe(
+    ofType(PrixZoneCamionnetteActions.GET_PRIX_ZONE_CAMIONNETTE),
+    switchMap(action =>
+      this.getPrixZoneService.getPrixZoneByType(action['payload']).pipe(
+        map(payload => {
           const data = ' zone1: ' + payload['data']['zone1'] + ' zone2: ' + (payload['data']['zone2']) + ' zone3: ' + (payload['data']['zone3'])
-          this.notif.notify('info', 'get prix zones Camionnette', data);
+          // this.notif.notify('info', 'get prix zones Camionnette', data);
           return new PrixZoneCamionnetteActions.GetPrixZoneCamionnetteSuccess(payload);
+        }),
+        catchError(err => {
+          // this.notif.notify('error', 'Get prix zone Camionnette', err);
+          return of(new PrixZoneCamionnetteActions.GetPrixZoneCamionnetteFail(err))
         })
-        .catch(err => {
-          this.notif.notify('error', 'Get prix zone Camionnette', err);
-          return Observable.of(new PrixZoneCamionnetteActions.GetPrixZoneCamionnetteFail(err))
-        })
+      )
+
     )
+  )
+
 
 }

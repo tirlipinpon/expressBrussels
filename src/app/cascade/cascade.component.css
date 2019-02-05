@@ -1,7 +1,5 @@
-.conatinerFormData {
-  border: 1px solid blue;
-  margin:1px;
-  padding:1px;
-  display: flex;
+.container {
+  margin: auto;
+  height: 1200px;
+  width: 800px;
 }
-

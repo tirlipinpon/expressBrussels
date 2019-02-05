@@ -1,11 +1,11 @@
-import {Component, Input, Output, EventEmitter, AfterViewInit, ChangeDetectorRef} from '@angular/core';
+import {Component, Input, Output, EventEmitter, AfterViewInit, ChangeDetectorRef, OnInit} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {DataForm} from '../../../models/DataForm';
 import {Contact} from "../../../models/contact";
-import { Observable } from 'rxjs/Observable';
-import {} from "@angular/material";
+import { Observable } from 'rxjs';
 import {MatAutocompleteSelectedEvent} from "@angular/material";
 import {Router} from "@angular/router";
+import {map, startWith} from "rxjs/operators";
 
 @Component({
   selector: 'app-form',
@@ -13,7 +13,7 @@ import {Router} from "@angular/router";
   styleUrls: ['form.component.css'],
 
 })
-export class FormComponent implements AfterViewInit {
+export class FormComponent implements OnInit, AfterViewInit {
 
   @Input('isCustomer') isCustomer: string;
   @Input('formGroup') formGroup: FormGroup;
@@ -21,8 +21,44 @@ export class FormComponent implements AfterViewInit {
   @Input('contact') contact: Observable<Contact[]>;
   @Input('datas') dataValues:  DataForm[];
   @Output() updateDataForm: EventEmitter<string> = new EventEmitter<string>();
+  filteredName: Observable<string[]>;
+  filteredRefClient: Observable<string[]>;
 
   constructor(private router: Router) {}
+
+  ngOnInit() {
+    this.filteredName = this.formGroup.get('name').valueChanges
+      .pipe(
+        startWith(''),
+        map(value => {
+          if (this.dataValues) {
+            return this._filter(value, 'name');
+          }else{
+            return;
+          }
+        })
+      );
+    this.filteredRefClient = this.formGroup.get('ref_client').valueChanges
+      .pipe(
+        startWith(''),
+        map(value => {
+          if (this.dataValues) {
+            return this._filter(value, 'ref_client');
+          } else {
+            return;
+          }
+        })
+      );
+  }
+
+  private _filter(value: string, target: string): any[] {
+    if (value && value.length) {
+      const filterValue = value.toLowerCase();
+      return this.dataValues.filter(option => option[target].toLowerCase().includes(filterValue));
+    }
+    return;
+  }
+
 
   goPlaces(nameform: string): void {
     this.router.navigate(['/', 'menu', nameform]).then(nav => {

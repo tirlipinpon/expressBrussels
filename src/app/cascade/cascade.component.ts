@@ -1,10 +1,9 @@
-import {Component, OnInit, ViewEncapsulation, HostListener, OnDestroy} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation, HostListener, OnDestroy, ChangeDetectorRef} from '@angular/core';
 import {ComponentDeactivable} from '../services/can-deactivate-form-guard.service';
 import {PurchasseOrder} from '../models/PurchasseOrder';
 import {DataForm} from '../models/DataForm';
-import {Observable} from 'rxjs/Observable';
-import {Subscription} from 'rxjs/Subscription';
-import {FormBuilder, FormGroup, Validators, FormArray} from '@angular/forms';
+import {Observable, Subscription} from 'rxjs';
+import {FormBuilder, FormGroup, Validators, FormArray, ValidationErrors} from '@angular/forms';
 import {Store} from '@ngrx/store';
 import * as RemovalActions  from '../actions/removal.actions';
 import * as RecipientActions  from '../actions/recipient.actions';
@@ -39,23 +38,21 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
   constructor (
     private store: Store<fromRoot.AppState>,
     private fb: FormBuilder,
-    private customerService: CustomerService)
-  {
-    this.storeDispatch();
-    this.initFormsRemoval();
-    // this.initFormsRecipient();
-    this.initFormsOptions();
+    private customerService: CustomerService,
+    private cdr: ChangeDetectorRef) {
+    // this.storeDispatch();
+    // this.initFormsRemoval();
+    // // this.initFormsRecipient();
+    // this.initFormsOptions();
   }
-
   ngOnInit() {
-    this.storeSelect();
-    this.formRecipientCascade = this.fb.group({
-      items: this.fb.array([ this.createItemCascade() ])
-    });
-    this.allFormGroup = this.pushAllForms(this.allFormGroup);
-    this.onValueOrderChanged();
+    // this.storeSelect();
+    // this.formRecipientCascade = this.fb.group({
+    //   items: this.fb.array([])
+    // });
+    // this.allFormGroup = this.pushAllForms(this.allFormGroup);
+    // this.onValueOrderChanged();
   }
-
   createItemCascade(): FormGroup {
     return this.fb.group({
       id: ['', Validators.required],
@@ -78,6 +75,7 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
       fk_type: ['', Validators.required],
       cascades: [1, Validators.required],
     });
+    this.cdr.markForCheck();
   }
   addItemCascade(): void {
     this.itemsCascade = this.formRecipientCascade.get('items') as FormArray;
@@ -89,11 +87,11 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
     }
   }
   ngOnDestroy() {
-    this.valueRemovalChanges$.unsubscribe();
-    // this.valueRecipientChanges$.unsubscribe();
-    this.valueOptionsChanges$.unsubscribe();
-    this.valueRemovalInfosChanges$.unsubscribe();
-    this.valueRecipientInfosChanges$.unsubscribe();
+    // this.valueRemovalChanges$.unsubscribe();
+    // // this.valueRecipientChanges$.unsubscribe();
+    // this.valueOptionsChanges$.unsubscribe();
+    // this.valueRemovalInfosChanges$.unsubscribe();
+    // this.valueRecipientInfosChanges$.unsubscribe();
   }
   storeSelect() {
     // this.customerId$ = this.store.select(fromRoot.selectors.getCustomerId);
@@ -139,6 +137,7 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
     });
     this.valueOptionsChanges$ = this.formOptions.valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderOption(val));
+      this.getFormValidationErrors()
     });
     this.formRemoval.valueChanges.subscribe(val => {
       this.chackIsFormAsValue(this.formRemoval, val);
@@ -204,31 +203,31 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
   }
   initFormsRemoval(): void {
     this.formRemoval = this.fb.group({
-      id: ['', Validators.required],
-      name: ['', Validators.required],
+      id: [''],
+      name: [''],
       ref_client: [''],
-      address: ['', Validators.required],
-      number: ['', Validators.required],
-      cp: ['', Validators.required],
-      state: ['', Validators.required],
-      clientZone: [0, Validators.required],
-      phone: ['', Validators.required],
+      address: [''],
+      number: [''],
+      cp: [''],
+      state: [''],
+      clientZone: [0],
+      phone: [''],
       infos: this.fb.group({
-        info1: ['', { updateOn: 'blur', validators: [Validators.required]} ],
-        info2: ['', { updateOn: 'blur', validators: [Validators.required]} ],
+        info1: ['', { updateOn: 'blur'} ],
+        info2: ['', { updateOn: 'blur'} ],
       }),
-      type: ['', Validators.required],
-      fk_client: ['', Validators.required],
-      active: ['', Validators.required],
-      created: ['', Validators.required],
-      fk_type: ['', Validators.required],
+      type: [''],
+      fk_client: [''],
+      active: [''],
+      created: [''],
+      fk_type: [''],
     });
   }
   initFormsOptions(): void {
     this.formOptions = this.fb.group({
-      options: ['express', Validators.required],
+      options: ['', Validators.required],
       tomorrow: [false, Validators.required],
-      transport: ['moto', Validators.required],
+      transport: ['', Validators.required],
     });
   }
   @HostListener('window:beforeunload')
@@ -256,5 +255,15 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
   recapOrder() {
     this.store.dispatch(new OrderActions.SaveOrder());
   }
+  getFormValidationErrors() {
+    Object.keys(this.formRemoval.controls).forEach(key => {
 
+      const controlErrors: ValidationErrors = this.formRemoval.get(key).errors;
+      if (controlErrors != null) {
+        Object.keys(controlErrors).forEach(keyError => {
+          console.log('Key control: ' + key + ', keyError: ' + keyError + ', err value: ', controlErrors[keyError]);
+        });
+      }
+    });
+  }
 }

@@ -14,7 +14,6 @@ import {CustomerService} from './services/customer.service';
 import {OrderService} from './services/order.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MessageService} from 'primeng/components/common/messageservice';
-import {NotificationService} from './services/notification.service';
 import { CommonModule } from '@angular/common';
 import {SharedModule} from './shared/shared.module';
 import {HttpClientModule} from '@angular/common/http';
@@ -22,7 +21,10 @@ import {RemovalsEditModule} from './removals-edit/removals-edit.module';
 import {RemovalService} from './services/removal.service';
 import { OrdersComponent } from './orders/orders.component';
 import {MatTableModule} from '@angular/material/table';
-import {MatFormFieldModule, MatSortModule, MatPaginatorModule, MatInputModule} from '@angular/material'; // TODO: import refrences
+import {
+  MatFormFieldModule, MatSortModule, MatPaginatorModule, MatInputModule, MatMenuModule,
+  MatButtonModule, MatRadioModule, MatSelectModule, MatTooltipModule
+} from '@angular/material'; // TODO: import refrences
 import {CanDeactivateFormGuardService} from './services/can-deactivate-form-guard.service';
 import { LoginComponent } from './login/login.component';
 import {AuthenticationService} from './services/authentication.service';
@@ -35,6 +37,7 @@ import {GetDistanceMatrixService} from "./services/google/get-distance-matrix.se
 import {RouteResolverService} from "./services/route-resolver.service";
 import {GetPrixZoneService} from "./services/get-prix-zone.service";
 import { ContactService } from './services/contact.service';
+import {NumberTransformToMonthPipe} from "./shared/pipe/number-transform-to-month.pipe";
 
 
 
@@ -59,8 +62,8 @@ const appRoutes: Routes = [
       {
         path: 'order',
         component: PurchasseOrderComponent,
-        // canActivate: [AlwaysAuthGuardService],
-        // canDeactivate: [CanDeactivateFormGuardService],
+        canActivate: [AlwaysAuthGuardService],
+        canDeactivate: [CanDeactivateFormGuardService],
         resolve: { id: RouteResolverService }
       },
       {
@@ -115,11 +118,16 @@ const appRoutes: Routes = [
     MatPaginatorModule,
     MatInputModule,
     MatSortModule,
+    MatMenuModule,
 
     PurchasseModule,
     RemovalsEditModule,
     SharedModule,
     CascadeModule,
+    MatButtonModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatTooltipModule,
 
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyCdhzqNNDkWkbpqgajvi_66wx1dLoGoac0&language=fr&region=BE',
@@ -144,7 +152,6 @@ const appRoutes: Routes = [
     AlwaysAuthGuardService,
     UnsearchedTermGuard,
     MessageService,
-    NotificationService,
     CanDeactivateFormGuardService,
     AuthenticationService,
     ClientZonesService,

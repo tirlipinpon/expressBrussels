@@ -1,10 +1,17 @@
-<nav>
-  <a routerLink="/menu/order" routerLinkActive="active">Bondecom</a>
-  <!--<a routerLink="/menu/orders" routerLinkActive="active">orders</a>-->
-  <a routerLink="/menu/removals" routerLinkActive="active">enlevements</a>
-  <a routerLink="/menu/recipients" routerLinkActive="active">destinations</a>
-  <a routerLink="/menu/cascade" routerLinkActive="active">cascade</a>
-</nav>
-<app-profile></app-profile>
+<div class="flex-menu">
+  <div>
+    <img src="assets/img/logo_sfe_long.jpg">
+  </div>
+  <div>
+    <button mat-button routerLink="/menu/order" routerLinkActive="active-link">Bon de commande</button>
+    <button mat-button routerLink="/menu/orders" routerLinkActive="active-link">Factures</button>
+    <button mat-button routerLink="/menu/removals" routerLinkActive="active-link">Enlèvements</button>
+    <button mat-button routerLink="/menu/recipients" routerLinkActive="active-link">Destinataires</button>
+    <button  mat-button routerLink="/menu/cascade" routerLinkActive="active-link">Légalisation (bientôt)</button>
+    <app-profile></app-profile>
+    <app-send-message></app-send-message>
+    <button mat-button (click)="goPlaces()" color="warn">Déconnection</button>
+  </div>
+</div>
 <app-notification></app-notification>
 <router-outlet></router-outlet>

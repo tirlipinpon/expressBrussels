@@ -1,8 +1,7 @@
 import {CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
 import {PurchasseOrderComponent} from '../purchasse-order/purchasse-order.component';
 import {ConfirmationService} from 'primeng/components/common/confirmationservice';
-import { Observer} from 'rxjs/Observer';
-import { Observable} from 'rxjs/Observable';
+import { Observer,  Observable} from 'rxjs';
 import {Injectable} from '@angular/core';
 
 @Injectable()
@@ -25,7 +24,7 @@ export class UnsearchedTermGuard implements CanDeactivate<PurchasseOrderComponen
       // console.log('component.canDeactivate() 2 ', component.canDeactivate());
       return Observable.create((observer: Observer<boolean>) => {
         this.confirmationService.confirm({
-          message: 'You have unsaved changes. Are you sure you want to leave this page?',
+          message: 'La page contient des informations non sauvegardées, voulez vous quand même quiter la page ?',
           accept: () => {
             component.resetOrder();
             observer.next(true);

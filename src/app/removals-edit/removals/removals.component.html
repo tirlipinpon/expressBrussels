@@ -1,102 +1,132 @@
 <p-confirmDialog header="Confirmation"
                  icon="fa fa-question-circle" width="400">
 </p-confirmDialog>
+
+
 <div class="container">
-  <div class="formRemoval" >
-    <form  novalidate [formGroup]="allFormGroup[0]">
+  <div class="formRemoval">
+    <form novalidate [formGroup]="allFormGroup[0]">
       <input type="hidden" formControlName="id">
 
+      <div style="display:flex;align-items:flex-end;">
+        <mat-form-field style="border-right:1px solid grey;">
+          <input matInput
+                 formControlName="name"
+                 minlength="3"
+                 autocomplete="off"
+                 #input_name
+                 placeholder="nom"
+                 required>
+          <mat-icon matSuffix>
+            <fa-icon [icon]="['fas', 'user'] " size="xs"></fa-icon>
+          </mat-icon>
+          <mat-error *ngIf="allFormGroup[0].get('name')?.errors?.required">Nom est obligatoire.</mat-error>
+          <mat-error *ngIf="allFormGroup[0].get('name')?.errors?.minLength">Nom min 3 characteres.</mat-error>
+          <mat-error *ngIf="allFormGroup[0].get('name')?.errors?.duplicate">Ce nom exist déja</mat-error>
+          <mat-hint *ngIf="input_name.value?.length<3" align="end">min {{input_name.value?.length || 0}}/3</mat-hint>
+        </mat-form-field>
 
-      <mat-form-field >
-        <input matInput
-               formControlName="name"
-               minlength="3"
-               autocomplete="off"
-               #input_name
-               placeholder="name"
-               required>
-        <mat-icon matSuffix><fa-icon [icon]="['fas', 'user'] " size="xs"></fa-icon></mat-icon>
-        <mat-error *ngIf="allFormGroup[0].get('name')?.errors?.required">Name is required.</mat-error>
-        <mat-error *ngIf="allFormGroup[0].get('name')?.errors?.minLength">Name min 3 character.</mat-error>
-        <mat-error *ngIf="allFormGroup[0].get('name')?.errors?.duplicate">This name exist</mat-error>
-        <mat-hint *ngIf="input_name.value?.length<3" align="end">min {{input_name.value?.length || 0}}/3</mat-hint>
-      </mat-form-field>
-
-      <mat-form-field >
-        <input matInput
-               formControlName="ref_client"
-               minlength="3"
-               autocomplete="off"
-               #input_ref_client
-               placeholder="ref_client">
-        <mat-icon matSuffix><fa-icon [icon]="['fas', 'id-card'] " size="xs"></fa-icon></mat-icon>
-        <mat-hint *ngIf="input_ref_client.value?.length<4"  align="end">min {{input_ref_client.value?.length || 0}}/4</mat-hint>
-      </mat-form-field>
+        <mat-form-field>
+          <input matInput
+                 formControlName="ref_client"
+                 minlength="3"
+                 autocomplete="off"
+                 #input_ref_client
+                 placeholder="reference client">
+          <mat-icon matSuffix>
+            <fa-icon [icon]="['fas', 'id-card'] " size="xs"></fa-icon>
+          </mat-icon>
+          <mat-error *ngIf="allFormGroup[0].get('ref_client')?.errors?.minLength">reference client min 4 characteres.</mat-error>
+          <mat-error *ngIf="allFormGroup[0].get('ref_client')?.errors?.duplicate">Cette ref_client exist déja</mat-error>
+          <mat-hint *ngIf="input_ref_client.value?.length<4" align="end">min {{input_ref_client.value?.length || 0}}/4
+          </mat-hint>
+        </mat-form-field>
+      </div>
 
 
       <app-address [formGroup]="allFormGroup[0]" [data]="clientZones"></app-address>
 
-        <mat-form-field>
-          <mat-label>Fill form phone</mat-label>
-          <input matInput
-                 formControlName="phone"
-                 autocomplete="off"
-                 #input_phone
-                 placeholder="phone">
-          <mat-icon matSuffix><fa-icon [icon]="['fas', 'phone'] " size="xs"></fa-icon></mat-icon>
-        </mat-form-field>
+      <mat-form-field>
+        <mat-label>Telephone</mat-label>
+        <input matInput
+               formControlName="phone"
+               autocomplete="off"
+               #input_phone
+               placeholder="telephone">
+        <mat-icon matSuffix>
+          <fa-icon [icon]="['fas', 'phone'] " size="xs"></fa-icon>
+        </mat-icon>
+      </mat-form-field>
 
       <input type="hidden" formControlName="fk_type">
       <input type="hidden" formControlName="active" value="1">
       <input type="hidden" formControlName="clientZone">
-      <button mat-raised-button [disabled]="allFormGroup[0].invalid" (click)="add(allFormGroup[0])"> add </button>
+      <button mat-raised-button [disabled]="allFormGroup[0].invalid" (click)="add(allFormGroup[0])"> add</button>
     </form>
   </div>
-  <div class="formRemoval" *ngFor="let removal of allFormGroup | slice:1" let index="index" >
-      <form  novalidate [formGroup]="removal" >
-        <input type="hidden" formControlName="id" >
-        <mat-form-field >
+
+
+  <div class="formRemoval" *ngFor="let removal of allFormGroup | slice:1" let index="index">
+    <form novalidate [formGroup]="removal">
+      <input type="hidden" formControlName="id">
+      <div style="display:flex;align-items:flex-end;">
+        <mat-form-field style="border-right:1px solid grey;">
           <input matInput
                  formControlName="name"
                  autocomplete="off"
                  #s_input_name
-                 placeholder="name"
+                 placeholder="nom"
                  required>
-          <mat-icon matSuffix><fa-icon [icon]="['fas', 'user'] " size="xs"></fa-icon></mat-icon>
+          <mat-icon matSuffix>
+            <fa-icon [icon]="['fas', 'user'] " size="xs"></fa-icon>
+          </mat-icon>
           <mat-error *ngIf="removal.get('name')?.errors?.required">Name is required.</mat-error>
           <mat-error *ngIf="removal.get('name')?.errors?.minLength">Name min 3 character.</mat-error>
           <mat-hint *ngIf="s_input_name.value?.length<3" align="end">min {{s_input_name.value?.length || 0}}/3</mat-hint>
         </mat-form-field>
-        <mat-form-field >
+        <mat-form-field>
           <input matInput
                  formControlName="ref_client"
                  autocomplete="off"
                  #s_input_ref_client
-                 placeholder="ref_client">
-          <mat-hint *ngIf="s_input_ref_client.value?.length<4" align="end">min {{s_input_ref_client.value?.length || 0}}/4</mat-hint>
+                 placeholder="reference client">
+          <mat-hint *ngIf="s_input_ref_client.value?.length<4" align="end">min {{s_input_ref_client.value?.length ||
+            0}}/4
+          </mat-hint>
         </mat-form-field>
-        <app-address [formGroup]="removal" [data]="clientZones"></app-address>
-        <mat-form-field appearance="fill">
-          <mat-label>Fill form field</mat-label>
-          <input matInput
-                 formControlName="phone"
-                 autocomplete="off"
-                 placeholder="phone">
-          <mat-icon matSuffix><fa-icon [icon]="['fas', 'phone'] " size="xs"></fa-icon></mat-icon>
-        </mat-form-field>
+      </div>
+      <app-address [formGroup]="removal" [data]="clientZones"></app-address>
+      <mat-form-field appearance="fill">
+        <mat-label>Telephone</mat-label>
+        <input matInput
+               formControlName="phone"
+               autocomplete="off"
+               placeholder="telephone">
+        <mat-icon matSuffix>
+          <fa-icon [icon]="['fas', 'phone'] " size="xs"></fa-icon>
+        </mat-icon>
+      </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <input matInput
-                 formControlName="created"
-                 autocomplete="off"
-                 placeholder="created">
-          <mat-icon matSuffix><fa-icon [icon]="['fas', 'clock'] " size="xs"></fa-icon></mat-icon>
-        </mat-form-field>
+      <mat-form-field appearance="fill">
+        <input matInput
+               formControlName="created"
+               autocomplete="off"
+               placeholder="creeer">
+        <mat-icon matSuffix>
+          <fa-icon [icon]="['fas', 'clock'] " size="xs"></fa-icon>
+        </mat-icon>
+      </mat-form-field>
 
-        <input type="hidden" formControlName="fk_type">
-        <button mat-raised-button [disabled]="!removal.dirty || !removal.valid  " (click)="update(removal)">update</button>
-        <button mat-raised-button color="{{removal.get('active').value==1 ? 'warn' : 'primary'}}"(click)="delete(removal)"> {{removal.get('active').value==1 ? 'desactive' : 'active'}} </button>
-      </form>
+      <input type="hidden" formControlName="fk_type">
+      <div style="display:flex;">
+        <button mat-raised-button [disabled]="!removal.dirty || !removal.valid  " (click)="update(removal)">Mettre a
+          jour
+        </button>
+        <button mat-raised-button color="{{removal.get('active').value==1 ? 'primary' : 'warn'}}"
+                (click)="delete(removal)"> {{removal.get('active').value==1 ? 'activé' : 'désactivé'}}
+        </button>
+      </div>
+    </form>
   </div>
 </div>
 

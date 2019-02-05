@@ -1,11 +1,12 @@
-import {Component, OnInit, ViewEncapsulation, OnDestroy} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation, OnDestroy, HostListener} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {DataForm} from '../../../models/DataForm';
-import {Observable} from 'rxjs/Observable';
+import {Observable, Subject} from 'rxjs';
 import * as fromRoot from '../../appState';
 import {Store} from '@ngrx/store';
 import * as CustomerActions from '../../../actions/customer.actions';
 import {CustomerService} from "../../../services/customer.service";
+import {debounceTime, distinctUntilChanged} from "rxjs/internal/operators";
 
 @Component({
   selector: 'app-profile',
@@ -18,6 +19,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   customer$: Observable<DataForm>;
   formCustomer: FormGroup;
   private formValueChanges$;
+  private registered = false;
 
   customer: any;
   customerId: number;
@@ -35,13 +37,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   }
   ngOnDestroy() {
-    this.formValueChanges$.unsubscribe();
-  }
-
-  onValueCustomerChanged() {
-    this.formValueChanges$ = this.formCustomer.valueChanges.subscribe(val => {
-      this.store.dispatch(new CustomerActions.EditCustomer(val));
-    });
   }
 
   showDialog() {
@@ -50,10 +45,25 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   storeSelect(){
     this.customer$ = this.store.select(fromRoot.selectors.getCustomer);
-    this.customer$.subscribe(data => {
-      this.initFormsCustomer(data);
-      this.onValueCustomerChanged();
+    this.customer$.pipe(distinctUntilChanged()).subscribe(data => {
+      if (data && +data.id !== 0) {
+        if (!this.registered) {
+          this.registered = true;
+          this.initFormsCustomer(data);
+          this.onValueCustomerChanged();
+        }
+      }
     })
+  }
+  onValueCustomerChanged() {
+    this.formCustomer.valueChanges.pipe(
+      debounceTime(1000),
+      distinctUntilChanged()
+    ).subscribe(val => {
+      if (val) {
+        this.store.dispatch(new CustomerActions.EditCustomer(val));
+      }
+    });
   }
   storeDispatch() {
     // this.store.dispatch(new CustomerActions.GetCustomer(1));
@@ -71,24 +81,41 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   initFormsCustomer(data: DataForm): void {
     this.formCustomer = this.fb.group({
-      id: [data['id'], [Validators.required]],
+      id: [data['id']],
       name: [data['name'], Validators.required],
       ref_client: [''],
       address: [data['address'], Validators.required],
       number: [data['number'], Validators.required],
       cp: [data['cp'], Validators.required],
       state: [data['state'], Validators.required],
+      addressValidated: [1],
       phone: [data['phone'], Validators.required],
       infos: this.fb.group({
-        info1: [data['infos.info1'], { updateOn: 'blur', validators: [Validators.required]} ],
-        info2: [data['infos.info2'], { updateOn: 'blur', validators: [Validators.required]} ],
+        info1: [data['infos']['info1'] ],
+        info2: [data['infos']['info2'] ],
       }),
-      type: [data['type'], Validators.required],
-      fk_client: [data['fk_client'], Validators.required],
-      active: [data['active'], Validators.required],
-      created: [data['created'], Validators.required],
-      fk_type: [10, Validators.required]
+      type: [data['type']],
+      fk_client: [data['fk_client']],
+      active: [data['active']],
+      created: [data['created']],
+      fk_type: [10]
     });
   }
 
+  @HostListener('window:beforeunload')
+  canDeactivate(): boolean {
+    let canDeactive = true;
+    if (this.formCustomer.dirty && this.formCustomer.touched) {
+        canDeactive = false;
+      }
+    return canDeactive;
+  }
+
+  // onBeforeDialogHide(event){
+  //   console.log("Just before the dialog is closing");
+  //   if (event.target.className === "ng-tns-c5-0 ui-dialog-titlebar-icon ui-dialog-titlebar-close ui-corner-all ng-star-inserted") {
+  //     event.preventDefault();
+  //     return false;
+  //   }
+  // }
 }

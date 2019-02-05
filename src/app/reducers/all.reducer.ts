@@ -7,12 +7,16 @@ import * as ClientZonesActions from '../actions/clientZones.actions';
 import * as PrixZoneMotoActions from '../actions/prixZoneMoto.actions';
 import * as PrixZoneCamionnetteActions from '../actions/prixZoneCamionnette.actions';
 import * as ContactActions from '../actions/contact.actions';
-
+import * as ToasterActions from '../actions/toaster.actions';
+import * as _ from 'lodash';
 import {DataForm, DataDataFormState} from '../models/DataForm';
 import {PurchasseOrder} from '../models/PurchasseOrder';
 import {MyClientZones, MyClientZonesState} from '../models/my-client-zones';
 import {PrixZone, MyPrixZoneState} from "../models/prixZone";
 import {ContactState} from "../models/contact";
+import {DeleteRemovalSuccess} from "../actions/removal.actions";
+import {DeleteRecipientSuccess} from "../actions/recipient.actions";
+import {ToasterState} from "../models/toaster";
 
 export type ActionCustomer = CustomerActions.All;
 export type ActionRemoval = RemovalActions.All;
@@ -23,6 +27,7 @@ export type ActionClientZones = ClientZonesActions.All;
 export type ActionPrixZoneMoto = PrixZoneMotoActions.All;
 export type ActionPrixZoneCamionnette = PrixZoneCamionnetteActions.All;
 export type ActionContact = ContactActions.All;
+export type ActionToaster = ToasterActions.All;
 
 // ======================================================
 // customer reducer
@@ -49,19 +54,15 @@ const initCustomer: DataForm = {
   fk_type: 0
 };
 export function customerReducer(state = initCustomer , action: ActionCustomer): DataForm {
-  // console.log('2 - Reducer customer :', action.type, state);
   switch (action.type) {
     case CustomerActions.SET_CUSTOMER:
-
       if (state.id===0 || !state.id) {
         return {...state, ...action.payload};
       }
     case CustomerActions.GET_CUSTOMER_SUCCESS:
-      //console.log('in customer reducer getCustomer payload = ',action.payload);
       return {...state, ...action.payload};
     case CustomerActions.EDIT_CUSTOMER:
-      // console.log('in customer reducer editCustomer payload = ',action.payload);
-      return {...state, ...action.payload}; //Object.assign({}, state, action.payload );
+      return {...state, ...action.payload};
     // case CustomerActions.VALID_CUSTOMER:
     //   return state;
     default:
@@ -91,6 +92,8 @@ export function removalReducer(state = initRemoval, action: ActionRemoval): Data
     //   return handleRemovalState(state, action);
     case RemovalActions.GET_LAST_REMOVAL_SUCCESS:
       return handleAddRemovalState(state, action);
+    case RemovalActions.DELETE_REMOVAL_SUCCESS:
+      return handleDeleteRemovalState(state, action);
     default:
       return state;
   }
@@ -116,10 +119,22 @@ function handleEditRemovalState(state: DataDataFormState, action: ActionRemoval)
   };
   return newState;
 }
+function handleDeleteRemovalState(state: DataDataFormState, action: DeleteRemovalSuccess): any {
+  const newState = _.clone(state);
+  const paylaod = action.payload;
+  const newState2 = newState.data.map(data => {
+    if (data.id === paylaod.id) {
+      return action.payload;
+    }
+    return data;
+  });
+  return {...state, ...newState2};
+}
 export const RemovalSelectors = {
   data: (state: DataDataFormState) => { return state.data },
   count: (state: DataDataFormState) => { return state.count }
 };
+
 
 // ======================================================
 // recipient reducer
@@ -137,6 +152,8 @@ export function recipientReducer(state = initRecipient, action: ActionRecipient)
       return handleEditRecipientState(state, action);
     case RecipientActions.GET_LAST_RECIPIENT_SUCCESS:
       return handleAddRecipientState(state, action);
+    case RecipientActions.DELETE_RECIPIENT_SUCCESS:
+      return handleDeleteRecipientState(state, action);
     default:
       return state;
   }
@@ -162,6 +179,16 @@ function handleEditRecipientState(state: DataDataFormState, action: ActionRecipi
   };
   return newState;
 }
+function handleDeleteRecipientState(state: DataDataFormState, action: DeleteRecipientSuccess): any {
+  const newState = _.clone(state);
+  const newState2 =  newState.data.map(data => {
+    if (data.id === action.payload.id) {
+      return action.payload;
+    }
+    return data;
+  });
+  return {...state, ...newState2};
+}
 export const RecipientSelectors = {
   data: (state: DataDataFormState) => { return state.data },
   count: (state: DataDataFormState) => { return state.count }
@@ -182,7 +209,7 @@ const orderInitOrder: PurchasseOrder =  {
     contact_recipient: '',
     message_recipient: '',
 
-    date: new Date(),
+    created: new Date(),
 
     price: 0,
     distance: 0,
@@ -392,4 +419,34 @@ export function contactReducer(state = contactInit, action: ActionContact): Cont
 export const ContactSelector = {
   data: (state: ContactState) => { return state.data },
   count: (state: ContactState) => { return state.count }
+};
+
+
+// ======================================================
+// toaster
+// ======================================================
+const toasterInit: ToasterState = {
+  data: [],
+  count: 0
+};
+export function toasterReducer(state = toasterInit, action: ActionToaster): ToasterState {
+  switch(action.type){
+    case ToasterActions.SET_TOASTER:
+     return handleAddToaster(state, action);
+    default:
+      return state;
+  }
+
+};
+
+export function handleAddToaster(state: ToasterState, action: ActionToaster): ToasterState {
+  const newState = Object.assign({}, state, {
+    data: [action.payload]
+  });
+  return newState;
+}
+
+export const ToasterSelector = {
+  data: (state: ToasterState) => { return state.data },
+  count: (state: ToasterState) => { return state.count }
 };

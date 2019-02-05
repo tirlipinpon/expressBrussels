@@ -33,17 +33,33 @@ import { AddressComponent } from './components/form/address/address.component';
 import {PrixZoneMotoEffectService} from "../effects/prix-zone-moto/prix-zone-moto.effect.service";
 import {PrixZoneCamionnetteEffectService} from "../effects/prix-zone-camionnette/prix-zone-camionnette.effect.service";
 import {ContactEffectService} from "../effects/contact/contact-effect.service";
-import {MatAutocompleteModule, MatSelectModule} from "@angular/material";
+import {
+  MatAutocompleteModule,
+  MatSelectModule,
+  MatRadioModule,
+  MatCheckboxModule,
+  MatToolbarModule,
+  MatTooltipModule
+} from "@angular/material";
 import { ValidatorClassDirective } from './directives/validator-class.directive';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material';
 import {MatIconModule} from '@angular/material/icon';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import {faPhone, faHome, faClock, faUser, faUniversity, faIdCard} from '@fortawesome/free-solid-svg-icons';
+import {faPhone, faHome, faClock, faUser, faUniversity, faIdCard, faComment, faUserTie, faUserTag, faEraser,
+  faEuroSign, faMapMarkedAlt, faMotorcycle, faCar, faFilePdf, faEye, faEyeSlash} from '@fortawesome/free-solid-svg-icons';
 import {MatButtonModule} from '@angular/material/button';
+import { NotEmptyPipe } from './pipe/not-empty.pipe';
+import { NotDesactivePipe } from './pipe/not-desactive.pipe';
+import { NumberTransformToMonthPipe } from './pipe/number-transform-to-month.pipe';
+import { CountOrdersByMonthPipe } from './pipe/count-orders-by-month.pipe';
+import { CountOrdersPriceByMonthPipe } from './pipe/count-orders-price-by-month.pipe';
+import {ToasterEffectService} from "../effects/toaster/toaster-effect.service";
+import { SendMessageComponent } from './components/send-message/send-message.component';
 
-library.add(faPhone, faHome, faClock, faUser, faUniversity, faIdCard);
+library.add(faPhone, faHome, faClock, faUser, faUniversity, faFilePdf, faEraser,
+  faIdCard, faComment, faUserTie, faUserTag, faEuroSign, faMapMarkedAlt, faClock, faMotorcycle, faCar, faEye, faEyeSlash);
 
 @NgModule({
   imports: [
@@ -65,8 +81,10 @@ library.add(faPhone, faHome, faClock, faUser, faUniversity, faIdCard);
     MatIconModule,
     FontAwesomeModule,
     MatButtonModule,
-
-
+    MatRadioModule,
+    MatCheckboxModule,
+    MatToolbarModule,
+    MatTooltipModule,
     EffectsModule.forRoot([
       CustomerEffectService,
       ClientZonesEffectService,
@@ -76,7 +94,8 @@ library.add(faPhone, faHome, faClock, faUser, faUniversity, faIdCard);
       PrixZoneCamionnetteEffectService,
       RecipientEffectService,
       RemovalEffectService,
-      ContactEffectService
+      ContactEffectService,
+      ToasterEffectService
     ]),
     // StoreModule.forFeature('todo', customerReducer)
     StoreModule.forRoot(reducers),
@@ -97,7 +116,12 @@ library.add(faPhone, faHome, faClock, faUser, faUniversity, faIdCard);
     MatInputModule,
     FontAwesomeModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatRadioModule,
+    NumberTransformToMonthPipe,
+    CountOrdersByMonthPipe,
+    CountOrdersPriceByMonthPipe,
+    SendMessageComponent
   ],
   declarations: [
     // component
@@ -109,14 +133,19 @@ library.add(faPhone, faHome, faClock, faUser, faUniversity, faIdCard);
     InputAutocompletionComponent,
     AutocompleteGoogleComponent,
     AddressComponent,
+    SendMessageComponent,
     // directive
     DropDownDirective,
     OnBlurDirective,
     ValidatorClassDirective,
     // pipe
     ClientCpPipe,
-    SearchFilterPipe
-
+    SearchFilterPipe,
+    NotEmptyPipe,
+    NotDesactivePipe,
+    NumberTransformToMonthPipe,
+    CountOrdersByMonthPipe,
+    CountOrdersPriceByMonthPipe,
   ],
   providers: [
     ConfirmationService

@@ -1,9 +1,18 @@
 <div [formGroup]="formGroup">
-  <input type="text" matInput placeholder="contact"  [matAutocomplete]="auto"   formControlName="info1">
-  <mat-autocomplete #auto="matAutocomplete">
-    <mat-option *ngFor="let option of contacts"  [value]="option?.name">
-      {{ option.name }}
-    </mat-option>
-  </mat-autocomplete>
-  <textarea  formControlName="info2" placeholder="message"></textarea>
+
+  <mat-form-field class="example-full-width">
+    <input type="text" matInput placeholder="contact" [matAutocomplete]="auto" formControlName="info1" aria-label="Number">
+    <mat-icon matSuffix><fa-icon [icon]="['fas', 'user-tag'] " size="xs"></fa-icon></mat-icon>
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let option of (filteredContact|async) | notEmpty: 'name'"  [value]="option?.name">
+        {{ option.name }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <textarea matInput formControlName="info2" placeholder="message"></textarea>
+    <mat-icon matSuffix><fa-icon [icon]="['fas', 'comment'] " size="xs"></fa-icon></mat-icon>
+  </mat-form-field>
+
 </div>

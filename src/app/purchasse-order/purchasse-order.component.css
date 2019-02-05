@@ -1,14 +1,26 @@
 .conatinerFormData {
-  border: 1px solid blue;
-  margin:1px;
+  /*border: 1px solid blue;*/
+  /*background-color: rgba(0, 0, 0, 0.15);*/
   padding:1px;
   display: flex;
+  margin: auto;
 }
 
 .options-distance {
-  border: 1px solid green;
+  /*border: 1px solid green;*/
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
+.price-result {
+  font-family: "Arial", Gadget, sans-serif;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.price-result  div {
+  margin: 0 0 10px 0;
+}

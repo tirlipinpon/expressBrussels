@@ -1,6 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild, NgZone, Input} from '@angular/core';
 import { MapsAPILoader} from '@agm/core';
-import {} from '@types/googlemaps';
 import {FormGroup} from "@angular/forms";
 import {InputAutocompletionComponent} from "../input-completion/input-autocompletion.component";
 
@@ -23,7 +22,7 @@ export class AutocompleteGoogleComponent implements OnInit {
       () => {
         let options = {
           types: ['address'],
-          componentRestrictions: {country: 'be'}
+          componentRestrictions: {country: ['be','fr', 'lu', 'nl']}
         };
         let autocomplete = new google.maps.places.Autocomplete(this.searchElement.nativeElement, options);
 

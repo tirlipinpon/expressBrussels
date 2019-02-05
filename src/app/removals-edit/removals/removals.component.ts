@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Store} from '@ngrx/store';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import * as actionsRemoval  from '../../actions/removal.actions';
 import * as actionsRecipient  from '../../actions/recipient.actions';
 import * as fromRoot from '../../shared/appState';
@@ -11,11 +11,11 @@ import {DataForm} from '../../models/DataForm';
 import * as moment from 'moment';
 import * as ClientZonesActions  from '../../actions/clientZones.actions';
 import {MyClientZones} from '../../models/my-client-zones';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
+
+
 import {CustomerService} from "../../services/customer.service";
 import {ActivatedRoute} from "@angular/router";
-import {ValidatorforbiddenName} from "../../shared/validators/validators-conflict.directive";
+import {ValidatorDuplicateString} from "../../shared/validators/validators-conflict.directive";
 
 
 @Component({
@@ -27,7 +27,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
 
   private customerId: number;
   private typeDataForm: number;
-  storeData$: Observable<DataForm[]>;
+  storeDataForm$: Observable<DataForm[]>;
   allFormGroup: FormGroup[] = [];
   clientZones$: Observable<MyClientZones[]>;
   clientZones: MyClientZones[];
@@ -69,9 +69,9 @@ export class RemovalsComponent implements OnInit, OnDestroy {
   }
   storeSelect() {
     if (this.witchComponent === 'removals') {
-      this.storeData$ = this.store.select(fromRoot.selectors.getRemovalsData); // diff
+      this.storeDataForm$ = this.store.select(fromRoot.selectors.getRemovalsData); // diff
     }else if (this.witchComponent === 'recipients') {
-      this.storeData$ = this.store.select(fromRoot.selectors.getRecipientsData); // diff
+      this.storeDataForm$ = this.store.select(fromRoot.selectors.getRecipientsData); // diff
     }
 
     this.clientZones$ = this.store.select(fromRoot.selectors.getClientZonesData);
@@ -80,9 +80,9 @@ export class RemovalsComponent implements OnInit, OnDestroy {
     });
   }
   initFormsRemoval(): void {
-    this.storeData$.subscribe(data => {
+    this.storeDataForm$.subscribe(data => {
       this.cd.markForCheck(); // TODO: remove ?
-      if (data.length ) {
+      if (data && data.length ) {
         // init data
         if (this.allFormGroup.length === 1) {
           data.forEach(elem => {
@@ -100,31 +100,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
     });
   }
 
-  disableForm() {
-    this.allFormGroup.forEach(elem => {
-      const ctrl = elem.controls;
-      if (ctrl.active.value === '0') {
-        ctrl.name.disable();
-        ctrl.ref_client.disable();
-        ctrl.address.disable();
-        ctrl.number.disable();
-        ctrl.cp.disable();
-        ctrl.state.disable();
-        ctrl.phone.disable();
-        ctrl.phone.disable();
-      }else if (ctrl.active.value === '1'){
-        ctrl.name.enable();
-        ctrl.ref_client.enable();
-        ctrl.address.enable();
-        ctrl.number.enable();
-        ctrl.cp.enable();
-        ctrl.state.enable();
-        ctrl.phone.enable();
-        ctrl.phone.enable();
-      }
-    });
-    this.cd.markForCheck();
-  }
+
   createFormGroup(data?: DataForm): FormGroup {
     let active;
     if (!data){
@@ -134,8 +110,8 @@ export class RemovalsComponent implements OnInit, OnDestroy {
     }
     return this.fb.group({
       id: [data ? data.id : ''],
-      name: [data? data.name : '', [Validators.required, Validators.minLength(3) ], [ValidatorforbiddenName(this.storeData$)] ],
-      ref_client: [data ? data.ref_client : '', [Validators.minLength(4)]],
+      name: [data? data.name : '', [Validators.required, Validators.minLength(3) ], [ValidatorDuplicateString(this.storeDataForm$, 'name')] ],
+      ref_client: [data ? data.ref_client : '', [Validators.minLength(4)], [ValidatorDuplicateString(this.storeDataForm$, 'ref_client')]],
       address: [data ? data.address : '', Validators.required],
       number: [data ? data.number : ''],
       cp: [data? data.cp : '', Validators.required],

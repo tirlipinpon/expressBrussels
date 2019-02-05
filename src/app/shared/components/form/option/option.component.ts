@@ -10,6 +10,9 @@ export class OptionComponent implements OnInit {
 
   @Input('formGroup') formGroup: FormGroup;
   @Output() updateDataForm: EventEmitter<string> = new EventEmitter<string>();
+  optionsSpeed: string[] = ['express', 'double_express', 'go_and_back'];
+  optionsType: string[] = ['moto', 'voiture'];
+  optionsIcones: string[] = ['motorcycle', 'car'];
 
   constructor() {}
 

@@ -1,8 +1,10 @@
+
+import {throwError as observableThrowError, Observable} from 'rxjs';
 import { Injectable } from '@angular/core';
 import {environment} from '../../environments/environment';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
 import {MyClientZonesState} from '../models/my-client-zones';
+import {catchError} from "rxjs/internal/operators";
 
 @Injectable()
 export class ClientZonesService {
@@ -13,8 +15,9 @@ export class ClientZonesService {
   getClientZones(): Observable<MyClientZonesState> {
     // console.log('in service client zones');
     let url = this.apiUrl+'php//read_client_zones.php';
-    return this.http.get(url)
-      .catch(error => Observable.throw('error in service get client zones with message from server -> ', error));
+    return this.http.get<MyClientZonesState>(url).pipe(
+  catchError(error => observableThrowError('error in service get client zones with message from server -> ', error))
+    )
   }
 
 }

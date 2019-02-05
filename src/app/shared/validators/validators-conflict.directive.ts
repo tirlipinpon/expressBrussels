@@ -1,30 +1,31 @@
 import {AbstractControl, ValidatorFn, AsyncValidatorFn} from "@angular/forms";
-import {Observable} from "rxjs";
+import {Observable, of} from "rxjs";
 import {DataForm} from "../../models/DataForm";
-import 'rxjs/add/operator/toPromise';
+
 
 /** A hero's name can't match the given regular expression */
-export function ValidatorforbiddenName(nameRe: Observable<DataForm[]>): AsyncValidatorFn  {
+export function ValidatorDuplicateString(nameRe: Observable<DataForm[]>, type: string): AsyncValidatorFn  {
   return (control: AbstractControl): Promise<{[key: string]: any}> | null  | Observable<{ [key: string]: any } | null> => {
 
     if (isEmptyInputValue(control.value)) {
-      return Observable.of(null);
+      return of(null);
     }else {
-
-
       // const id = ctrl.id.value;
       return new Promise((resolve, reject) => {
         return nameRe.subscribe(datas => {
-         const forbidden = datas.filter(data => {
-           if (control.parent) {
-             const ctrl = control.parent.controls;
-             const ctrlId = ctrl['id'].value;
-             return data.name === control.value && data.id != ctrlId;
-           }else {
-             resolve(null)
-           }
-          });
-          resolve(forbidden.length > 0 ? { 'duplicate': { value: control.value } } : null);
+          if (datas) {
+            const forbidden = datas.filter(data => {
+              if (control.parent) {
+                const ctrl = control.parent.controls;
+                const ctrlId = ctrl['id'].value;
+                return data[type] === control.value && data.id != ctrlId;
+              }else {
+                resolve(null)
+              }
+            });
+            resolve(forbidden.length > 0 ? { 'duplicate': { value: control.value } } : null);
+          }
+          resolve(null)
         })
       });
     }

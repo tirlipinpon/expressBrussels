@@ -1,6 +1,6 @@
 import {Injectable, NgZone} from '@angular/core';
 import {MapsAPILoader} from "@agm/core";
-import 'rxjs/add/operator/toPromise';
+
 import {Address} from "../../models/address";
 
 

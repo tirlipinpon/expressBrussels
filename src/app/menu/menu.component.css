@@ -1,0 +1,14 @@
+.active-link {
+  background-color: rgba(0, 0, 0, 0.13);
+}
+
+.flex-menu {
+  display:flex;
+  align-items:baseline;
+  margin: 0 0 100px 0;
+}
+@media screen and (max-width: 1000px) {
+  .flex-menu {
+    flex-direction: column;
+  }
+}

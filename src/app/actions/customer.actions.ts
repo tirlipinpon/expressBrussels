@@ -1,6 +1,21 @@
 import { Action } from '@ngrx/store';
 import {DataForm} from '../models/DataForm';
 
+export const SEND_CUSTOMER_EMAIL = 'Send Customer Email';
+export class SendCustomerEmail implements Action {
+  readonly type = SEND_CUSTOMER_EMAIL;
+  constructor(public payload: string) {
+    // console.log('in actions set customer payload= ',payload);
+  }
+}
+
+export const SEND_CUSTOMER_MESSAGE = 'Send Customer Message';
+export class SendCustomerMessage implements Action {
+  readonly type = SEND_CUSTOMER_MESSAGE;
+  constructor(public payload: string) {
+    // console.log('in actions set customer payload= ',payload);
+  }
+}
 
 export const SET_CUSTOMER = 'Set Customer';
 export class SetCustomer implements Action {
@@ -74,5 +89,7 @@ export type All =
     | SaveCustomer
     | SaveCustomerSuccess
     | SaveCustomerFail
+
+    | SendCustomerEmail
 
 
