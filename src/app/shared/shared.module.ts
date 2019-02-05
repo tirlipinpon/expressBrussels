@@ -41,6 +41,7 @@ import {MatIconModule} from '@angular/material/icon';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {faPhone, faHome, faClock, faUser, faUniversity, faIdCard} from '@fortawesome/free-solid-svg-icons';
+import {MatButtonModule} from '@angular/material/button';
 
 library.add(faPhone, faHome, faClock, faUser, faUniversity, faIdCard);
 
@@ -63,6 +64,7 @@ library.add(faPhone, faHome, faClock, faUser, faUniversity, faIdCard);
     MatSelectModule,
     MatIconModule,
     FontAwesomeModule,
+    MatButtonModule,
 
 
     EffectsModule.forRoot([
@@ -94,7 +96,8 @@ library.add(faPhone, faHome, faClock, faUser, faUniversity, faIdCard);
     MatFormFieldModule,
     MatInputModule,
     FontAwesomeModule,
-    MatIconModule
+    MatIconModule,
+    MatButtonModule
   ],
   declarations: [
     // component

@@ -4,9 +4,10 @@
 }
 .formRemoval {
   display: flex;
-  border: 1px solid black;
+  border: 1px solid #ccc;
   margin: 5px;
   flex: 0 0 10%;
+  padding: 5px;
 }
 .formRemoval form {
   display: flex;
@@ -14,9 +15,7 @@
 
   flex: 1;
 }
-.formRemoval form input {
-  padding: 5px;
-}
+
 input[type="text"]:disabled, input[type="number"]:disabled, input[type="date"]:disabled    {
   background-color: #ccc;
 }
