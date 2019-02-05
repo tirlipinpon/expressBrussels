@@ -1,4 +1,7 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import {Observable} from "rxjs";
+import {Store} from "@ngrx/store";
+import * as fromRoot from './shared/appState';
 
 @Component({
   selector: 'app-root',
@@ -8,10 +11,12 @@ import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 })
 export class AppComponent implements OnInit {
   title = 'app';
+  customerId$: Observable<number>;
 
-  constructor() {}
+  constructor(private store: Store<fromRoot.AppState>) {
+    this.customerId$ = this.store.select(fromRoot.selectors.getCustomerId)
+  }
 
   ngOnInit() { }
-
 
 }
