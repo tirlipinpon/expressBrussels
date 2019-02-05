@@ -381,7 +381,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       }
       const hour = new Date().getHours();
       if (''+data.after15h !== '0' && hour >= 15) {
-        price = (+data['zone'+zone])*(+data.after15h); // TODO: check hour 15h
+        price = (+data['zone'+zone])*(+data.after15h);
       }
       this.formDistance.patchValue({
         price: price.toFixed(2),

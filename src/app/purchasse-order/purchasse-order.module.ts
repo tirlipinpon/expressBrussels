@@ -6,6 +6,8 @@ import {SharedModule} from '../shared/shared.module';
 import {CommonModule} from '@angular/common';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatTooltipModule} from "@angular/material";
+import {StoreModule} from "@ngrx/store";
+import {purchasseOrderReducer} from "../reducers/all.reducer";
 
 @NgModule({
   imports: [
@@ -15,7 +17,8 @@ import {MatTooltipModule} from "@angular/material";
     HttpClientModule,
     BrowserAnimationsModule,
     SharedModule,
-    MatTooltipModule
+    MatTooltipModule,
+    StoreModule.forFeature('order', purchasseOrderReducer)
   ],
   exports: [
   ],

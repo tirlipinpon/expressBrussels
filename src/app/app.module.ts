@@ -24,7 +24,7 @@ import {MatTableModule} from '@angular/material/table';
 import {
   MatFormFieldModule, MatSortModule, MatPaginatorModule, MatInputModule, MatMenuModule,
   MatButtonModule, MatRadioModule, MatSelectModule, MatTooltipModule
-} from '@angular/material'; // TODO: import refrences
+} from '@angular/material';
 import {CanDeactivateFormGuardService} from './services/can-deactivate-form-guard.service';
 import { LoginComponent } from './login/login.component';
 import {AuthenticationService} from './services/authentication.service';
@@ -38,6 +38,8 @@ import {RouteResolverService} from "./services/route-resolver.service";
 import {GetPrixZoneService} from "./services/get-prix-zone.service";
 import { ContactService } from './services/contact.service';
 import {NumberTransformToMonthPipe} from "./shared/pipe/number-transform-to-month.pipe";
+import {reducers} from "./shared/appState";
+import {StoreModule} from "@ngrx/store";
 
 
 
@@ -128,6 +130,7 @@ const appRoutes: Routes = [
     MatRadioModule,
     MatSelectModule,
     MatTooltipModule,
+    StoreModule.forRoot(reducers),
 
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyCdhzqNNDkWkbpqgajvi_66wx1dLoGoac0&language=fr&region=BE',

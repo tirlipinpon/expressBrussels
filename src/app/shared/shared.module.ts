@@ -57,6 +57,7 @@ import { CountOrdersByMonthPipe } from './pipe/count-orders-by-month.pipe';
 import { CountOrdersPriceByMonthPipe } from './pipe/count-orders-price-by-month.pipe';
 import {ToasterEffectService} from "../effects/toaster/toaster-effect.service";
 import { SendMessageComponent } from './components/send-message/send-message.component';
+import {ordersReducer} from "../reducers/all.reducer";
 
 library.add(faPhone, faHome, faClock, faUser, faUniversity, faFilePdf, faEraser,
   faIdCard, faComment, faUserTie, faUserTag, faEuroSign, faMapMarkedAlt, faClock, faMotorcycle, faCar, faEye, faEyeSlash);
@@ -97,8 +98,8 @@ library.add(faPhone, faHome, faClock, faUser, faUniversity, faFilePdf, faEraser,
       ContactEffectService,
       ToasterEffectService
     ]),
-    // StoreModule.forFeature('todo', customerReducer)
-    StoreModule.forRoot(reducers),
+
+    // StoreModule.forRoot(reducers),
   ],
   exports: [
     GrowlModule,
