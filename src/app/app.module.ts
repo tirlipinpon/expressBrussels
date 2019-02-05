@@ -41,6 +41,7 @@ import {NumberTransformToMonthPipe} from "./shared/pipe/number-transform-to-mont
 import {reducers} from "./shared/appState";
 import {StoreModule} from "@ngrx/store";
 import { RootStoreModule } from './admin/root-store/root-store.module';
+import {AdminAlwaysAuthGuardService} from "./services/admin-always-auth-guard.service";
 
 
 
@@ -97,6 +98,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'admin/clients',
+    canActivate: [AdminAlwaysAuthGuardService],
     loadChildren: './admin/clients/clients.module#ClientsModule'
   },
   // otherwise redirect to home
