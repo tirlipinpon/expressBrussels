@@ -94,6 +94,10 @@ const appRoutes: Routes = [
       },
     ]
   },
+  {
+    path: 'admin/clients',
+    loadChildren: './admin/clients/clients.module#ClientsModule'
+  },
   // otherwise redirect to home
   // { path: '**',  redirectTo: ''}
 ];
