@@ -40,6 +40,7 @@ import { ContactService } from './services/contact.service';
 import {NumberTransformToMonthPipe} from "./shared/pipe/number-transform-to-month.pipe";
 import {reducers} from "./shared/appState";
 import {StoreModule} from "@ngrx/store";
+import { RootStoreModule } from './admin/root-store/root-store.module';
 
 
 
@@ -149,7 +150,8 @@ const appRoutes: Routes = [
     ),
     StoreDevtoolsModule.instrument({
       maxAge: 50
-    })
+    }),
+    RootStoreModule
 
   ],
   providers: [

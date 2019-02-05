@@ -1,3 +1,36 @@
-<p>
-  clients-list works!
-</p>
+
+<button (click)="addOne()">add one</button>
+
+<div>
+  <input #inputIdRemove>
+  <button (click)="removeOne(inputIdRemove.value)">remove by id</button>
+</div>
+<div>
+  <input #inputIdUpdate>
+  <button (click)="updateOne(inputIdUpdate.value)">update by id</button>
+</div>
+<div>
+  <input #inputIdUpsert>
+  <button (click)="upsertOne(inputIdUpsert.value)">upsert</button>
+</div>
+<div>
+  <input #inputIdSelectById>
+  <button (click)="selectClientById(inputIdSelectById.value)">select by id</button>
+</div>
+<div>
+  <input #inputIdSelectByName>
+  <button (click)="selectByName(inputIdSelectByName.value)">select by name</button>
+</div>
+
+<div style="display:flex;">
+  <pre style="flex:1;border:1px solid grey;">allItems$ : {{allItems$|async|json}}</pre>
+  <pre style="flex:1;border:1px solid grey;">clientsItems$ : {{clientsItems$|async|json}}</pre>
+  <pre style="flex:1;border:1px solid grey;">clientsById$ : {{clientsById$|async|json}}</pre>
+  <pre style="flex:1;border:1px solid grey;">removalsByClientId$ : {{removalsByClientId$|async|json}}</pre>
+  <pre style="flex:1;border:1px solid grey;">isLoading$: {{isLoading$|async}}</pre>
+  <pre style="flex:1;border:1px solid grey;">selectTotal$ : {{selectTotal$|async}}</pre>
+  <!--<pre style="flex:1;">error$: {{error$|async}}</pre>-->
+</div>
+
+
+
