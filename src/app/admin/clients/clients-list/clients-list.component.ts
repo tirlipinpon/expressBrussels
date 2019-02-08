@@ -7,6 +7,8 @@ import {
   ClientsStoreSelectors
 } from '../../root-store';
 import {DataForm} from "../../../models/DataForm";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {ValidatorDuplicateString} from "../../../shared/validators/validators-conflict.directive";
 
 @Component({
   selector: 'app-clients-list',
@@ -24,11 +26,14 @@ export class ClientsListComponent implements OnInit {
   selectTotal$: Observable<number>;
   isLoading$: Observable<boolean>;
   private cpt: number;
+  myClientForm: FormGroup;
 
-  constructor(private store$: Store<RootStoreState.State>) { }
+  constructor(private store$: Store<RootStoreState.State>, private fb: FormBuilder) {
+
+  }
 
   ngOnInit() {
-    this.cpt = 3;
+
     this.allItems$ = this.store$.select(
       ClientsStoreSelectors.selectAllItems
     );
@@ -37,20 +42,41 @@ export class ClientsListComponent implements OnInit {
       ClientsStoreSelectors.selectClientsItems
     );
 
-    this.error$ = this.store$.select(
-      ClientsStoreSelectors.selectClientsError
-    );
-
-    this.isLoading$ = this.store$.select(
-      ClientsStoreSelectors.selectClientsIsLoading
-    );
-
     this.selectTotal$ = this.store$.select(
       ClientsStoreSelectors.selectTotal
     );
 
     this.store$.dispatch( new ClientsStoreActions.LoadRequestAction({id: 1}) );
 
+    this.createFormClient();
+  }
+
+  addClient(client: DataForm) {
+    this.store$.dispatch(new ClientsStoreActions.AddRequestAction({ item: client }));
+  }
+
+  createFormClient(): void {
+    this.myClientForm = this.fb.group({
+      id: [null],
+      name: [null, [Validators.required, Validators.minLength(3) ], [ValidatorDuplicateString(this.clientsItems$, 'name')] ],
+      ref_client: [null],
+      address: [null, Validators.required],
+      number: [null],
+      cp: [null, Validators.required],
+      state: [null, Validators.required],
+      addressValidated: [1],
+      clientZone: [0],
+      phone: [null],
+      infos: this.fb.group({
+        info1: [''],
+        info2: [''],
+      }),
+      type: [0],
+      fk_client: [null],
+      active: [1],
+      created: [null],
+      fk_type: [0],
+    });
   }
 
   selectClientById(id: string) {
@@ -59,24 +85,19 @@ export class ClientsListComponent implements OnInit {
     );
     this.selectRemovalsByClientId(id);
   }
-
   selectRemovalsByClientId(id: string) {
     this.removalsByClientId$ = this.store$.select(
       ClientsStoreSelectors.selectRemovalsByClientId(+id)
     );
   }
-
   selectByName(name: string) {
     this.clientsByName$ = this.store$.select(
       ClientsStoreSelectors.selectClientByName(name)
     );
   }
-
-
   removeOne(id: string): void {
     this.store$.dispatch( new ClientsStoreActions.RemoveRequestAction(id) );
   }
-
   updateOne(id: string): void {
     this.store$.dispatch( new ClientsStoreActions.UpdateRequestAction({
       id: id,
@@ -103,7 +124,6 @@ export class ClientsListComponent implements OnInit {
       }
     }) );
   }
-
   addOne(): void {
     this.store$.dispatch(new ClientsStoreActions.AddRequestAction({
         item: {
@@ -130,7 +150,6 @@ export class ClientsListComponent implements OnInit {
       }
     ));
   }
-
   upsertOne(id: string): void {
     let upsertId: number;
     if (id) { // update

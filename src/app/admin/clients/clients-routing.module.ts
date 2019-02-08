@@ -4,7 +4,7 @@ import {ClientsListComponent} from "./clients-list/clients-list.component";
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'admin/clients',
     component: ClientsListComponent
   }
 ];

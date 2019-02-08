@@ -30,7 +30,7 @@ export function clientsReducer(state = initalClientsState, action: Actions): Cli
         error: action.payload.error
       };
     }
-    case ClientsActionTypes.ADD_REQUEST: {
+    case ClientsActionTypes.ADD_SUCCESS: {
       return clientsAdapter.addOne(
         action.payload.item,
         {

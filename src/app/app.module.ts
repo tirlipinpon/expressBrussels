@@ -42,6 +42,7 @@ import {reducers} from "./shared/appState";
 import {StoreModule} from "@ngrx/store";
 import { RootStoreModule } from './admin/root-store/root-store.module';
 import {AdminAlwaysAuthGuardService} from "./services/admin-always-auth-guard.service";
+import {ClientsModule} from "./admin/clients/clients.module";
 
 
 
@@ -121,6 +122,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     BrowserAnimationsModule,
     CommonModule,
+    ClientsModule,
 
     MatTableModule,
     MatFormFieldModule,

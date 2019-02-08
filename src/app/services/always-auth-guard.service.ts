@@ -17,7 +17,8 @@ export class AlwaysAuthGuardService implements CanActivate {
     // console.log('AlwaysAuthGuard');
     const resp1 = this.authenticationService.isToken();
     const resp2 = this.authenticationService.isTokenExpired();
-    if (resp1 && resp2) {
+    const resp3 = this.authenticationService.getDecodedTokenValid();
+    if (resp1 && resp2 && resp3 === 1) {
       // this.authenticationService.setCustomerDecoded();
       const id = this.authenticationService.getDecodedTokenId();
       this.store.dispatch(new GetCustomer(id));

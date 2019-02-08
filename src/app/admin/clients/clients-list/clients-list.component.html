@@ -1,26 +1,50 @@
+<div style="border: 3px solid blue">
+  <form [formGroup]="myClientForm" (ngSubmit)="addClient(myClientForm.value)">
+    <div>
+      <span>name</span><input formControlName="name">
+      <div *ngIf="myClientForm.get('name')?.errors?.duplicate">Ce nom exist déja</div>
+    </div>
+    <div><span>address</span><input formControlName="address"></div>
+    <div><span>number</span><input formControlName="number"></div>
+    <div><span>cp</span><input formControlName="cp"></div>
+    <div><span>state</span><input formControlName="state"></div>
+    <div><span>phone</span><input formControlName="phone"></div>
+    <div formGroupName="infos">
+      <div><span>mail</span><input formControlName="info1"></div>
+      <div><span>password</span><input formControlName="info2"></div>
+    </div>
+    <button type="submit" [disabled]="myClientForm.invalid">add client</button>
+  </form>
 
-<button (click)="addOne()">add one</button>
 
-<div>
-  <input #inputIdRemove>
-  <button (click)="removeOne(inputIdRemove.value)">remove by id</button>
 </div>
-<div>
-  <input #inputIdUpdate>
-  <button (click)="updateOne(inputIdUpdate.value)">update by id</button>
+
+
+<div *ngIf="false">
+  <button (click)="addOne()">add one</button>
+
+  <div>
+    <input #inputIdRemove>
+    <button (click)="removeOne(inputIdRemove.value)">remove by id</button>
+  </div>
+  <div>
+    <input #inputIdUpdate>
+    <button (click)="updateOne(inputIdUpdate.value)">update by id</button>
+  </div>
+  <div>
+    <input #inputIdUpsert>
+    <button (click)="upsertOne(inputIdUpsert.value)">upsert</button>
+  </div>
+  <div>
+    <input #inputIdSelectById>
+    <button (click)="selectClientById(inputIdSelectById.value)">select by id</button>
+  </div>
+  <div>
+    <input #inputIdSelectByName>
+    <button (click)="selectByName(inputIdSelectByName.value)">select by name</button>
+  </div>
 </div>
-<div>
-  <input #inputIdUpsert>
-  <button (click)="upsertOne(inputIdUpsert.value)">upsert</button>
-</div>
-<div>
-  <input #inputIdSelectById>
-  <button (click)="selectClientById(inputIdSelectById.value)">select by id</button>
-</div>
-<div>
-  <input #inputIdSelectByName>
-  <button (click)="selectByName(inputIdSelectByName.value)">select by name</button>
-</div>
+
 
 <div style="display:flex;">
   <pre style="flex:1;border:1px solid grey;">allItems$ : {{allItems$|async|json}}</pre>

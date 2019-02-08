@@ -6,7 +6,7 @@ import {Injectable} from "@angular/core";
 import {Actions, Effect, ofType} from "@ngrx/effects";
 import {Observable, of} from "rxjs";
 import {Action} from "@ngrx/store";
-import {switchMap, map, catchError} from "rxjs/internal/operators";
+import {switchMap, map, catchError, tap} from "rxjs/internal/operators";
 import * as clientsActions from './actions';
 
 @Injectable()
@@ -36,4 +36,26 @@ export class ClientsStoreEffects {
         )
     )
   );
+
+  @Effect()
+  addRequestEffect$: Observable<Action> = this.actions$.pipe(
+    ofType<clientsActions.AddRequestAction>( clientsActions.ClientsActionTypes.ADD_REQUEST ),
+    switchMap(action =>
+      this.dataService
+        .addItem(action.payload.item)
+        .pipe(
+          tap(data => console.log(data)),
+          map(
+            item =>
+              new clientsActions.AddSuccessAction({
+                item
+              })
+          ),
+          catchError(error =>
+            of(new clientsActions.LoadFailureAction({ error }))
+          )
+        )
+    )
+  );
+
 }

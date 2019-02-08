@@ -108,6 +108,10 @@ export class AuthenticationService {
     const decoded = jwt_decode(this.getToken());
     return +decoded.id;
   }
+  getDecodedTokenValid(): number {
+    const decoded = jwt_decode(this.getToken());
+    return +decoded.active;
+  }
   logout(): void {
     // clear token remove user from local storage to log user out
     this.token = null;
