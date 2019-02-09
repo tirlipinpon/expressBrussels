@@ -17,7 +17,7 @@ import {DataForm} from "../../../models/DataForm";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ValidatorDuplicateString} from "../../../shared/validators/validators-conflict.directive";
 import {PrixZone} from "../../../models/prixZone";
-import {skipWhile} from "rxjs/internal/operators";
+import {skipWhile, distinctUntilChanged} from "rxjs/internal/operators";
 import {NotificationService} from "../../../services/notification.service";
 
 @Component({
@@ -88,7 +88,6 @@ export class ClientsListComponent implements OnInit {
     this.store$.dispatch(new PrixZonesCarStoreActions.UpdateRequestAction({id: prixZoneCar.id, changes: prixZoneCar}))
   }
 
-
   createFormClient(): void {
     this.myClientForm = this.fb.group({
       id: [null],
@@ -149,10 +148,14 @@ export class ClientsListComponent implements OnInit {
             this.myClientForm.patchValue(client);
 
             this.clientsPrixZoneMoto$ = this.store$.pipe(select(PrixZonesMotoStoreSelectors.selectZonesByClientId(+id)));
-            this.clientsPrixZoneMoto$.subscribe(pzm => this.myPrixZoneMotoForm.patchValue(pzm));
+            this.clientsPrixZoneMoto$.pipe(distinctUntilChanged(), skipWhile(d => !d)).subscribe(pzm => {
+              this.myPrixZoneMotoForm.patchValue(pzm)
+            });
 
             this.clientsPrixZoneCar$ = this.store$.pipe(select(PrixZonesCarStoreSelectors.selectZonesByClientId(+id)));
-            this.clientsPrixZoneCar$.subscribe(pzm => this.myPrixZoneCarForm.patchValue(pzm));
+            this.clientsPrixZoneCar$.pipe(distinctUntilChanged(), skipWhile(d => !d)).subscribe(pzm => {
+              this.myPrixZoneCarForm.patchValue(pzm)
+            });
 
             this.selectRemovalsByClientId(id);
           } else {

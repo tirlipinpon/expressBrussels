@@ -10,11 +10,14 @@ import {switchMap, map, catchError, tap} from "rxjs/internal/operators";
 import * as clientsActions from './actions';
 import * as prixZoneMotoActions from '../prix-zone-moto-store/actions';
 import * as prixZoneCarActions from '../prix-zone-car-store/actions';
+import {NotificationService} from "../../../services/notification.service";
 
 @Injectable()
 export class ClientsStoreEffects {
 
-  constructor(private dataService: ClientsService, private actions$: Actions) {}
+  constructor(private dataService: ClientsService,
+              private actions$: Actions,
+              private notificationsService: NotificationService) {}
 
   @Effect()
   loadRequestEffect$: Observable<Action> = this.actions$.pipe(
@@ -34,6 +37,17 @@ export class ClientsStoreEffects {
             of(new clientsActions.LoadFailureAction({ error }))
           )
         )
+    )
+  );
+
+  @Effect({dispatch: false})
+  addSuccessEffect$  = this.actions$.pipe(
+    ofType<clientsActions.AddSuccessAction>( clientsActions.ClientsActionTypes.ADD_SUCCESS ),
+    map(action => {
+      this.notificationsService.notify('success',
+        'Client '+ action.payload.item.name +' added success',
+        'with id : '+ action.payload.item.id)
+      }
     )
   );
 

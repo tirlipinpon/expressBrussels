@@ -2,6 +2,7 @@
 <div style="border: 3px solid blue; display:flex;">
   <form [formGroup]="myClientForm">
     <div><span>id</span><input [attr.disabled]="true" formControlName="id"></div>
+    <div><span>active</span><input [attr.disabled]="myClientForm.get('id').value ? null : true" formControlName="active"></div>
     <!--    -->
     <div>
       <span>name</span><input formControlName="name">
@@ -24,8 +25,7 @@
             [disabled]="myClientForm.invalid"
             (click)="updateClient(myClientForm.value)">update client</button>
   </form>
-
-  <div style="border: 3px solid green" *ngIf="myPrixZoneMotoForm.get('id').value">
+  <div style="border: 3px solid green" *ngIf="myClientForm.get('id').value">
     <form [formGroup]="myPrixZoneMotoForm">
       <div><span>id</span><input type="number" step="0.1" min="0" [attr.disabled]="true" formControlName="id"></div>
       <div><span>zone1</span><input type="number" step="0.1" min="0"  formControlName="zone1"></div>
@@ -41,7 +41,7 @@
               (click)="updatePrixZoneMoto(myPrixZoneMotoForm.value)">update  moto</button>
     </form>
   </div>
-  <div style="border: 3px solid purple" *ngIf="myPrixZoneCarForm.get('id').value">
+  <div style="border: 3px solid purple" *ngIf="myClientForm.get('id').value">
     <form [formGroup]="myPrixZoneCarForm">
       <div><span>id</span><input type="number" step="0.1" min="0" [attr.disabled]="true" formControlName="id"></div>
       <div><span>zone1</span><input type="number" step="0.1" min="0"  formControlName="zone1"></div>
@@ -94,7 +94,7 @@
 
 
 <div style="display:flex;">
-  <pre style="flex:1;border:1px solid grey;">allItems$ : {{allItems$|async|json}}</pre>
+  <pre *ngIf="false" style="flex:1;border:1px solid grey;">allItems$ : {{allItems$|async|json}}</pre>
   <pre style="flex:1;border:1px solid grey;">clientsItems$ : {{clientsItems$|async|json}}</pre>
   <pre style="flex:1;border:1px solid grey;">clientsById$ : {{clientsById$|async|json}}</pre>
   <pre style="flex:1;border:1px solid grey;">removalsByClientId$ : {{removalsByClientId$|async|json}}</pre>
