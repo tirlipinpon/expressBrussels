@@ -9,3 +9,4 @@ export { RootStoreState, RootStoreSelectors, RootStoreModule };
 
 export * from './clients-store';
 export * from './prix-zone-moto-store';
+export * from './prix-zone-car-store';
