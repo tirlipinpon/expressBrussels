@@ -19,10 +19,14 @@ export class ClientsService {
     let url = this.apiUrl+'php//read_all_dataform.php';
     return  this.http.get<DataDataFormState>(url);
   }
-
   addItem(client: DataForm): Observable<DataForm> {
     // return of(DUMMY_CLIENTS);
     let url = this.apiUrl+'php//add_client.php';
+    return this.http.post<DataForm>(url, client);
+  }
+  updateItem(client: DataForm): Observable<DataForm> {
+    // return of(DUMMY_CLIENTS);
+    let url = this.apiUrl+'php//update.php';
     return this.http.post<DataForm>(url, client);
   }
 }

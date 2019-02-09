@@ -75,7 +75,7 @@ export class UpdateFailureAction implements Action {
 }
 export class UpdateSuccessAction implements Action {
   readonly type = ClientsActionTypes.UPDATE_SUCCESS;
-  constructor(public payload: { items: DataForm[] }) {}
+  constructor(public payload: { item: DataForm }) {}
 }
 // ================= UPSERT ONE ===============
 export class UpsertRequestAction implements Action {

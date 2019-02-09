@@ -1,20 +1,20 @@
 /**
  * Created by tirli on 30-01-19.
  */
-import {Actions, ClientsActionTypes} from "./actions";
-import {initalClientsState, ClientsState, clientsAdapter} from "./state";
+import {Actions, PrixZonesMotoActionTypes} from "./actions";
+import {initalPrixZonesMotoState, PrixZonesMotoState, prixZonesMotoAdapter} from "./state";
 
-export function clientsReducer(state = initalClientsState, action: Actions): ClientsState {
+export function prixZonesMotoReducer(state = initalPrixZonesMotoState, action: Actions): PrixZonesMotoState {
   switch (action.type) {
-    // case ClientsActionTypes.LOAD_REQUEST: {
+    // case PrixZonesMotoActionTypes.LOAD_REQUEST: {
     //   return {
     //     ...state,
     //     isLoading: true,
     //     error: null
     //   };
     // }
-    case ClientsActionTypes.LOAD_SUCCESS: {
-      return clientsAdapter.addAll(
+    case PrixZonesMotoActionTypes.LOAD_SUCCESS: {
+      return prixZonesMotoAdapter.addAll(
         action.payload.items,
         {
           ...state,
@@ -23,15 +23,15 @@ export function clientsReducer(state = initalClientsState, action: Actions): Cli
         }
       )
     }
-    case ClientsActionTypes.LOAD_FAILURE: {
+    case PrixZonesMotoActionTypes.LOAD_FAILURE: {
       return {
         ...state,
         isLoading: false,
         error: action.payload.error
       };
     }
-    case ClientsActionTypes.ADD_SUCCESS: {
-      return clientsAdapter.addOne(
+    case PrixZonesMotoActionTypes.ADD_SUCCESS: {
+      return prixZonesMotoAdapter.addOne(
         action.payload.item,
         {
           ...state,
@@ -40,8 +40,8 @@ export function clientsReducer(state = initalClientsState, action: Actions): Cli
         }
       )
     }
-    case ClientsActionTypes.REMOVE_REQUEST: {
-      return clientsAdapter.removeOne(
+    case PrixZonesMotoActionTypes.REMOVE_REQUEST: {
+      return prixZonesMotoAdapter.removeOne(
         action.payload,
         {
           ...state,
@@ -50,8 +50,8 @@ export function clientsReducer(state = initalClientsState, action: Actions): Cli
         }
       )
     }
-    case ClientsActionTypes.UPDATE_SUCCESS: {
-      return clientsAdapter.updateOne({
+    case PrixZonesMotoActionTypes.UPDATE_SUCCESS: {
+      return prixZonesMotoAdapter.updateOne({
           id: action.payload.item.id,
           changes: action.payload.item
         },
@@ -63,8 +63,8 @@ export function clientsReducer(state = initalClientsState, action: Actions): Cli
 
       )
     }
-    case ClientsActionTypes.UPSERT_REQUEST: {
-      return clientsAdapter.upsertOne(
+    case PrixZonesMotoActionTypes.UPSERT_REQUEST: {
+      return prixZonesMotoAdapter.upsertOne(
         action.payload.item,
         {
           ...state,

@@ -1,5 +1,7 @@
-<div style="border: 3px solid blue">
-  <form [formGroup]="myClientForm" (ngSubmit)="addClient(myClientForm.value)">
+<div style="border: 3px solid blue; display:flex;">
+  <form [formGroup]="myClientForm">
+    <div><span>id</span><input [attr.disabled]="true" formControlName="id"></div>
+    <!--    -->
     <div>
       <span>name</span><input formControlName="name">
       <div *ngIf="myClientForm.get('name')?.errors?.duplicate">Ce nom exist déja</div>
@@ -13,10 +15,38 @@
       <div><span>mail</span><input formControlName="info1"></div>
       <div><span>password</span><input formControlName="info2"></div>
     </div>
-    <button type="submit" [disabled]="myClientForm.invalid">add client</button>
+    <div><span>type</span><input [attr.disabled]="true" formControlName="type" ></div>
+    <button *ngIf="!myClientForm.get('id').value" type="submit"
+            [disabled]="myClientForm.invalid"
+            (click)="addClient(myClientForm.value)">add client</button>
+    <button *ngIf="myClientForm.get('id').value" type="submit"
+            [disabled]="myClientForm.invalid"
+            (click)="updateClient(myClientForm.value)">update client</button>
   </form>
 
+  <div style="border: 3px solid green" *ngIf="myPrixZoneMotoForm.get('id').value">
+    <form [formGroup]="myPrixZoneMotoForm">
+      <div><span>id</span><input type="number" [attr.disabled]="true" formControlName="id"></div>
+      <div><span>zone1</span><input type="number" formControlName="zone1"></div>
+      <div><span>zone2</span><input type="number" formControlName="zone2"></div>
+      <div><span>zone3</span><input type="number" formControlName="zone3"></div>
+      <div><span>prixKm</span><input type="number" formControlName="prixKm"></div>
+      <div><span>after15h</span><input type="number" formControlName="after15h"></div>
+      <div><span>double_express</span><input type="number" formControlName="double_express"></div>
+      <div><span>go_and_back</span><input type="number" formControlName="go_and_back"></div>
+      <div><span>id_client</span><input type="number" [attr.disabled]="true" formControlName="id_client"></div>
+      <button  type="submit"
+              [disabled]="myPrixZoneMotoForm.invalid"
+              (click)="updatePrixZone(myPrixZoneMotoForm.value)">update prix zone moto</button>
+    </form>
+  </div>
 
+
+</div>
+
+<div style="border: 3px solid red">
+  <input #inputIdSelectById>
+  <button (click)="selectClientById(inputIdSelectById.value)">select id or reset for new client</button>
 </div>
 
 
@@ -51,7 +81,7 @@
   <pre style="flex:1;border:1px solid grey;">clientsItems$ : {{clientsItems$|async|json}}</pre>
   <pre style="flex:1;border:1px solid grey;">clientsById$ : {{clientsById$|async|json}}</pre>
   <pre style="flex:1;border:1px solid grey;">removalsByClientId$ : {{removalsByClientId$|async|json}}</pre>
-  <pre style="flex:1;border:1px solid grey;">isLoading$: {{isLoading$|async}}</pre>
+  <pre style="flex:1;border:1px solid grey;">clientsPrixZoneMoto$: {{clientsPrixZoneMoto$|async|json}}</pre>
   <pre style="flex:1;border:1px solid grey;">selectTotal$ : {{selectTotal$|async}}</pre>
   <!--<pre style="flex:1;">error$: {{error$|async}}</pre>-->
 </div>

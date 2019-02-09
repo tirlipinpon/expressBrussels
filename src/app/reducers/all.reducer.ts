@@ -353,6 +353,7 @@ export const ClientZonesSelector = {
 // ======================================================
 const prixZoneMotoInit: MyPrixZoneState = {
   data: {
+    id: 0,
     zone1: 0,
     zone2: 0,
     zone3: 0,
@@ -369,7 +370,7 @@ export function prixZoneMotoReducer(state = prixZoneMotoInit, action: ActionPrix
     default:
       return state;
   }
-};
+}
 export const PrixZoneMotoSelector = {
   data: (state: MyPrixZoneState) => { return state.data }
 };
@@ -379,6 +380,7 @@ export const PrixZoneMotoSelector = {
 // ======================================================
 const prixZoneCamionnetteInit: MyPrixZoneState = {
   data: {
+    id: 0,
     zone1: 0,
     zone2: 0,
     zone3: 0,

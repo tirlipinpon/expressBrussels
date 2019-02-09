@@ -4,11 +4,15 @@ import {Store} from "@ngrx/store";
 import {
   RootStoreState,
   ClientsStoreActions,
-  ClientsStoreSelectors
+  ClientsStoreSelectors,
+
+  PrixZonesMotoStoreActions,
+  PrixZonesMotoStoreSelectors
 } from '../../root-store';
 import {DataForm} from "../../../models/DataForm";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ValidatorDuplicateString} from "../../../shared/validators/validators-conflict.directive";
+import {PrixZone} from "../../../models/prixZone";
 
 @Component({
   selector: 'app-clients-list',
@@ -20,6 +24,7 @@ export class ClientsListComponent implements OnInit {
   allItems$: Observable<DataForm[]>;
   clientsItems$: Observable<DataForm[]>;
   clientsById$: Observable<DataForm>;
+  clientsPrixZoneMoto$: Observable<PrixZone>;
   clientsByName$: Observable<DataForm>;
   removalsByClientId$: Observable<DataForm[]>;
   error$: Observable<string>;
@@ -27,32 +32,39 @@ export class ClientsListComponent implements OnInit {
   isLoading$: Observable<boolean>;
   private cpt: number;
   myClientForm: FormGroup;
+  myPrixZoneMotoForm: FormGroup;
 
   constructor(private store$: Store<RootStoreState.State>, private fb: FormBuilder) {
-
   }
 
   ngOnInit() {
-
     this.allItems$ = this.store$.select(
       ClientsStoreSelectors.selectAllItems
     );
-
     this.clientsItems$ = this.store$.select(
       ClientsStoreSelectors.selectClientsItems
     );
-
     this.selectTotal$ = this.store$.select(
       ClientsStoreSelectors.selectTotal
     );
-
     this.store$.dispatch( new ClientsStoreActions.LoadRequestAction({id: 1}) );
-
+    this.store$.dispatch( new PrixZonesMotoStoreActions.LoadRequestAction() );
     this.createFormClient();
+    this.createFormPrixZoneMoto();
   }
 
   addClient(client: DataForm) {
+    // add client ad after addes load prix zone moto in effect
     this.store$.dispatch(new ClientsStoreActions.AddRequestAction({ item: client }));
+  }
+  updateClient(client: DataForm) {
+    this.store$.dispatch(new ClientsStoreActions.UpdateRequestAction({
+      id: client.id,
+      changes: client
+    }));
+  }
+  updatePrixZone(prixZoneMoto: PrixZone) {
+    this.store$.dispatch(new PrixZonesMotoStoreActions.UpdateRequestAction({id: prixZoneMoto.id, changes: prixZoneMoto}))
   }
 
   createFormClient(): void {
@@ -68,8 +80,8 @@ export class ClientsListComponent implements OnInit {
       clientZone: [0],
       phone: [null],
       infos: this.fb.group({
-        info1: [''],
-        info2: [''],
+        info1: [null],
+        info2: [null],
       }),
       type: [0],
       fk_client: [null],
@@ -78,12 +90,31 @@ export class ClientsListComponent implements OnInit {
       fk_type: [0],
     });
   }
+  createFormPrixZoneMoto(): void {
+    this.myPrixZoneMotoForm = this.fb.group({
+      id: [null, Validators.required],
+      zone1: [null, Validators.required],
+      zone2: [null, Validators.required],
+      zone3: [null, Validators.required],
+      prixKm: [null, Validators.required],
+      after15h: [null, Validators.required],
+      double_express: [null, Validators.required],
+      go_and_back: [null, Validators.required],
+      id_client: [null, Validators.required],
+    });
+  }
 
   selectClientById(id: string) {
-    this.clientsById$ = this.store$.select(
-      ClientsStoreSelectors.selectClientById(+id)
-    );
-    this.selectRemovalsByClientId(id);
+    if (id.length) {
+      this.clientsById$ = this.store$.select( ClientsStoreSelectors.selectClientById(+id) );
+      this.clientsById$.subscribe(client => this.myClientForm.patchValue(client) );
+      this.clientsPrixZoneMoto$ = this.store$.select( PrixZonesMotoStoreSelectors.selectZonesByClientId(+id) );
+      this.clientsPrixZoneMoto$.subscribe(pzm => this.myPrixZoneMotoForm.patchValue(pzm) );
+      this.selectRemovalsByClientId(id);
+    }else{
+      this.myClientForm.reset();
+      this.myPrixZoneMotoForm.reset();
+    }
   }
   selectRemovalsByClientId(id: string) {
     this.removalsByClientId$ = this.store$.select(
@@ -122,7 +153,8 @@ export class ClientsListComponent implements OnInit {
         created: '',
         fk_type: Math.floor(Math.random() * 1000) + 3,
       }
-    }) );
+    })
+    );
   }
   addOne(): void {
     this.store$.dispatch(new ClientsStoreActions.AddRequestAction({

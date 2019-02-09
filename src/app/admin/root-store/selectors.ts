@@ -1,11 +1,16 @@
 /**
  * Created by tirli on 05-02-19.
  */
+
 import {createSelector, MemoizedSelector} from "@ngrx/store";
+
 import {
   ClientsStoreSelectors
 } from './clients-store';
 
+import {
+  PrixZonesMotoStoreSelectors
+} from './prix-zone-moto-store';
 
 export const selectError: MemoizedSelector<object, string> =
   createSelector (

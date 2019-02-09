@@ -8,6 +8,7 @@ import {Observable, of} from "rxjs";
 import {Action} from "@ngrx/store";
 import {switchMap, map, catchError, tap} from "rxjs/internal/operators";
 import * as clientsActions from './actions';
+import * as prixZoneActions from '../prix-zone-moto-store/actions';
 
 @Injectable()
 export class ClientsStoreEffects {
@@ -26,9 +27,7 @@ export class ClientsStoreEffects {
           map(result => result.data),
           map(
             items =>
-              new clientsActions.LoadSuccessAction({
-                items
-              })
+              new clientsActions.LoadSuccessAction({ items })
           ),
           catchError(error =>
             of(new clientsActions.LoadFailureAction({ error }))
@@ -45,9 +44,30 @@ export class ClientsStoreEffects {
         .addItem(action.payload.item)
         .pipe(
           tap(data => console.log(data)),
+          switchMap(  item =>
+            [
+                new clientsActions.AddSuccessAction({ item }),
+                new prixZoneActions.LoadRequestAction()
+            ]
+          ),
+          catchError(error =>
+            of(new clientsActions.AddFailureAction({ error }))
+          )
+        )
+    )
+  );
+
+  @Effect()
+  updateRequestEffect$: Observable<Action> = this.actions$.pipe(
+    ofType<clientsActions.UpdateRequestAction>( clientsActions.ClientsActionTypes.UPDATE_REQUEST ),
+    switchMap(action =>
+      this.dataService
+        .updateItem(action.payload.changes)
+        .pipe(
+          tap(data => console.log(data)),
           map(
             item =>
-              new clientsActions.AddSuccessAction({
+              new clientsActions.UpdateSuccessAction({
                 item
               })
           ),
