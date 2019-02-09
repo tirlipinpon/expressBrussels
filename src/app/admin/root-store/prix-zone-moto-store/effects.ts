@@ -59,7 +59,7 @@ export class PrixZonesMotoStoreEffects {
     ofType<prixZonesMotoActions.UpdateRequestAction>( prixZonesMotoActions.PrixZonesMotoActionTypes.UPDATE_REQUEST ),
     switchMap(action =>
       this.dataService
-        .updateItem(action.payload.changes)
+        .updateItem(action.payload.changes, 'moto')
         .pipe(
           tap(data => console.log(data)),
           map(

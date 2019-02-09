@@ -1,18 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Observable} from "rxjs";
-import {Store} from "@ngrx/store";
+import {Store, select} from "@ngrx/store";
 import {
   RootStoreState,
+
   ClientsStoreActions,
   ClientsStoreSelectors,
 
   PrixZonesMotoStoreActions,
-  PrixZonesMotoStoreSelectors
+  PrixZonesMotoStoreSelectors,
+
+  PrixZonesCarStoreActions,
+  PrixZonesCarStoreSelectors
 } from '../../root-store';
 import {DataForm} from "../../../models/DataForm";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ValidatorDuplicateString} from "../../../shared/validators/validators-conflict.directive";
 import {PrixZone} from "../../../models/prixZone";
+import {skipWhile} from "rxjs/internal/operators";
+import {NotificationService} from "../../../services/notification.service";
 
 @Component({
   selector: 'app-clients-list',
@@ -25,16 +31,19 @@ export class ClientsListComponent implements OnInit {
   clientsItems$: Observable<DataForm[]>;
   clientsById$: Observable<DataForm>;
   clientsPrixZoneMoto$: Observable<PrixZone>;
+  clientsPrixZoneCar$: Observable<PrixZone>;
   clientsByName$: Observable<DataForm>;
   removalsByClientId$: Observable<DataForm[]>;
   error$: Observable<string>;
   selectTotal$: Observable<number>;
-  isLoading$: Observable<boolean>;
   private cpt: number;
   myClientForm: FormGroup;
   myPrixZoneMotoForm: FormGroup;
+  myPrixZoneCarForm: FormGroup;
 
-  constructor(private store$: Store<RootStoreState.State>, private fb: FormBuilder) {
+  constructor(private store$: Store<RootStoreState.State>,
+              private fb: FormBuilder,
+              private notificationsService: NotificationService) {
   }
 
   ngOnInit() {
@@ -47,30 +56,43 @@ export class ClientsListComponent implements OnInit {
     this.selectTotal$ = this.store$.select(
       ClientsStoreSelectors.selectTotal
     );
-    this.store$.dispatch( new ClientsStoreActions.LoadRequestAction({id: 1}) );
-    this.store$.dispatch( new PrixZonesMotoStoreActions.LoadRequestAction() );
+    this.store$.dispatch(new ClientsStoreActions.LoadRequestAction({id: 1}));
+    this.store$.dispatch(new PrixZonesMotoStoreActions.LoadRequestAction());
+    this.store$.dispatch(new PrixZonesCarStoreActions.LoadRequestAction());
     this.createFormClient();
     this.createFormPrixZoneMoto();
+    this.createFormPrixZoneCar();
   }
 
   addClient(client: DataForm) {
     // add client ad after addes load prix zone moto in effect
-    this.store$.dispatch(new ClientsStoreActions.AddRequestAction({ item: client }));
+    this.store$.dispatch(new ClientsStoreActions.AddRequestAction({item: client}));
+    this.resetforms();
   }
+
   updateClient(client: DataForm) {
     this.store$.dispatch(new ClientsStoreActions.UpdateRequestAction({
       id: client.id,
       changes: client
     }));
   }
-  updatePrixZone(prixZoneMoto: PrixZone) {
-    this.store$.dispatch(new PrixZonesMotoStoreActions.UpdateRequestAction({id: prixZoneMoto.id, changes: prixZoneMoto}))
+
+  updatePrixZoneMoto(prixZoneMoto: PrixZone) {
+    this.store$.dispatch(new PrixZonesMotoStoreActions.UpdateRequestAction({
+      id: prixZoneMoto.id,
+      changes: prixZoneMoto
+    }))
   }
+
+  updatePrixZoneCar(prixZoneCar: PrixZone) {
+    this.store$.dispatch(new PrixZonesCarStoreActions.UpdateRequestAction({id: prixZoneCar.id, changes: prixZoneCar}))
+  }
+
 
   createFormClient(): void {
     this.myClientForm = this.fb.group({
       id: [null],
-      name: [null, [Validators.required, Validators.minLength(3) ], [ValidatorDuplicateString(this.clientsItems$, 'name')] ],
+      name: [null, [Validators.required, Validators.minLength(3)], [ValidatorDuplicateString(this.clientsItems$, 'name')]],
       ref_client: [null],
       address: [null, Validators.required],
       number: [null],
@@ -90,6 +112,7 @@ export class ClientsListComponent implements OnInit {
       fk_type: [0],
     });
   }
+
   createFormPrixZoneMoto(): void {
     this.myPrixZoneMotoForm = this.fb.group({
       id: [null, Validators.required],
@@ -104,58 +127,95 @@ export class ClientsListComponent implements OnInit {
     });
   }
 
+  createFormPrixZoneCar(): void {
+    this.myPrixZoneCarForm = this.fb.group({
+      id: [null, Validators.required],
+      zone1: [null, Validators.required],
+      zone2: [null, Validators.required],
+      zone3: [null, Validators.required],
+      prixKm: [null, Validators.required],
+      after15h: [null, Validators.required],
+      double_express: [null, Validators.required],
+      go_and_back: [null, Validators.required],
+      id_client: [null, Validators.required],
+    });
+  }
+
   selectClientById(id: string) {
     if (id.length) {
-      this.clientsById$ = this.store$.select( ClientsStoreSelectors.selectClientById(+id) );
-      this.clientsById$.subscribe(client => this.myClientForm.patchValue(client) );
-      this.clientsPrixZoneMoto$ = this.store$.select( PrixZonesMotoStoreSelectors.selectZonesByClientId(+id) );
-      this.clientsPrixZoneMoto$.subscribe(pzm => this.myPrixZoneMotoForm.patchValue(pzm) );
-      this.selectRemovalsByClientId(id);
-    }else{
-      this.myClientForm.reset();
-      this.myPrixZoneMotoForm.reset();
+      this.clientsById$ = this.store$.pipe(select(ClientsStoreSelectors.selectClientById(+id)));
+      this.clientsById$.subscribe(client => {
+          if (client) {
+            this.myClientForm.patchValue(client);
+
+            this.clientsPrixZoneMoto$ = this.store$.pipe(select(PrixZonesMotoStoreSelectors.selectZonesByClientId(+id)));
+            this.clientsPrixZoneMoto$.subscribe(pzm => this.myPrixZoneMotoForm.patchValue(pzm));
+
+            this.clientsPrixZoneCar$ = this.store$.pipe(select(PrixZonesCarStoreSelectors.selectZonesByClientId(+id)));
+            this.clientsPrixZoneCar$.subscribe(pzm => this.myPrixZoneCarForm.patchValue(pzm));
+
+            this.selectRemovalsByClientId(id);
+          } else {
+            this.notificationsService.notify('error', 'Client not found', 'This id "' + id + '" not exist.');
+          }
+        }
+      );
+    } else {
+
+      this.resetforms();
     }
   }
+
+  resetforms() {
+    this.myClientForm.reset();
+    this.myPrixZoneMotoForm.reset();
+    this.myPrixZoneCarForm.reset();
+  }
+
   selectRemovalsByClientId(id: string) {
     this.removalsByClientId$ = this.store$.select(
       ClientsStoreSelectors.selectRemovalsByClientId(+id)
     );
   }
+
   selectByName(name: string) {
     this.clientsByName$ = this.store$.select(
       ClientsStoreSelectors.selectClientByName(name)
     );
   }
+
   removeOne(id: string): void {
-    this.store$.dispatch( new ClientsStoreActions.RemoveRequestAction(id) );
+    this.store$.dispatch(new ClientsStoreActions.RemoveRequestAction(id));
   }
+
   updateOne(id: string): void {
-    this.store$.dispatch( new ClientsStoreActions.UpdateRequestAction({
-      id: id,
-      changes: {
-        id: +id,
-        name: '',
-        ref_client: '',
-        address: '',
-        number: '',
-        cp: Math.floor(Math.random() * 1000) + 3,
-        state: '',
-        addressValidated: true,
-        clientZone: Math.floor(Math.random() * 1000) + 3,
-        phone: '',
-        infos: {
-          info1: '',
-          info2: ''
-        },
-        type: Math.floor(Math.random() * 1000) + 3,
-        fk_client: Math.floor(Math.random() * 1000) + 3,
-        active:  Math.floor(Math.random() * 1000) + 3,
-        created: '',
-        fk_type: Math.floor(Math.random() * 1000) + 3,
-      }
-    })
+    this.store$.dispatch(new ClientsStoreActions.UpdateRequestAction({
+        id: id,
+        changes: {
+          id: +id,
+          name: '',
+          ref_client: '',
+          address: '',
+          number: '',
+          cp: Math.floor(Math.random() * 1000) + 3,
+          state: '',
+          addressValidated: true,
+          clientZone: Math.floor(Math.random() * 1000) + 3,
+          phone: '',
+          infos: {
+            info1: '',
+            info2: ''
+          },
+          type: Math.floor(Math.random() * 1000) + 3,
+          fk_client: Math.floor(Math.random() * 1000) + 3,
+          active: Math.floor(Math.random() * 1000) + 3,
+          created: '',
+          fk_type: Math.floor(Math.random() * 1000) + 3,
+        }
+      })
     );
   }
+
   addOne(): void {
     this.store$.dispatch(new ClientsStoreActions.AddRequestAction({
         item: {
@@ -182,11 +242,12 @@ export class ClientsListComponent implements OnInit {
       }
     ));
   }
+
   upsertOne(id: string): void {
     let upsertId: number;
     if (id) { // update
       upsertId = +id;
-    }else { // add
+    } else { // add
       upsertId = Math.floor(Math.random() * 1000) + 3;
     }
     this.store$.dispatch(new ClientsStoreActions.UpsertRequestAction({
@@ -207,7 +268,7 @@ export class ClientsListComponent implements OnInit {
           },
           type: Math.floor(Math.random() * 1000) + 3,
           fk_client: Math.floor(Math.random() * 1000) + 3,
-          active:  Math.floor(Math.random() * 1000) + 3,
+          active: Math.floor(Math.random() * 1000) + 3,
           created: '',
           fk_type: Math.floor(Math.random() * 1000) + 3,
         }

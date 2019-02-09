@@ -8,7 +8,8 @@ import {Observable, of} from "rxjs";
 import {Action} from "@ngrx/store";
 import {switchMap, map, catchError, tap} from "rxjs/internal/operators";
 import * as clientsActions from './actions';
-import * as prixZoneActions from '../prix-zone-moto-store/actions';
+import * as prixZoneMotoActions from '../prix-zone-moto-store/actions';
+import * as prixZoneCarActions from '../prix-zone-car-store/actions';
 
 @Injectable()
 export class ClientsStoreEffects {
@@ -47,7 +48,8 @@ export class ClientsStoreEffects {
           switchMap(  item =>
             [
                 new clientsActions.AddSuccessAction({ item }),
-                new prixZoneActions.LoadRequestAction()
+                new prixZoneMotoActions.LoadRequestAction(),
+                new prixZoneCarActions.LoadRequestAction()
             ]
           ),
           catchError(error =>

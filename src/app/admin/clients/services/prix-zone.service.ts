@@ -22,9 +22,9 @@ export class PrixZoneService {
     let url = this.apiUrl+'php//add_prix_zone.php';
     return this.http.post<PrixZone>(url, payload);
   }
-  updateItem(client: PrixZone): Observable<PrixZone> {
+  updateItem(client: PrixZone, type: string): Observable<PrixZone> {
     // return of(DUMMY_CLIENTS);
     let url = this.apiUrl+'php//update_prix_zone.php';
-    return this.http.post<PrixZone>(url, client, { params:  new HttpParams().set('table', 'moto') });
+    return this.http.post<PrixZone>(url, client, { params:  new HttpParams().set('table', type) });
   }
 }
