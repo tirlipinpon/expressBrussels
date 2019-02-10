@@ -40,7 +40,9 @@ import { ContactService } from './services/contact.service';
 import {NumberTransformToMonthPipe} from "./shared/pipe/number-transform-to-month.pipe";
 import {reducers} from "./shared/appState";
 import {StoreModule} from "@ngrx/store";
-
+import { RootStoreModule } from './admin/root-store/root-store.module';
+import {AdminAlwaysAuthGuardService} from "./services/admin-always-auth-guard.service";
+import {ClientsModule} from "./admin/clients/clients.module";
 
 
 const appRoutes: Routes = [
@@ -94,6 +96,11 @@ const appRoutes: Routes = [
       },
     ]
   },
+  {
+    path: 'admin/clients',
+    canActivate: [AdminAlwaysAuthGuardService],
+    loadChildren: './admin/clients/clients.module#ClientsModule'
+  },
   // otherwise redirect to home
   // { path: '**',  redirectTo: ''}
 ];
@@ -114,6 +121,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     BrowserAnimationsModule,
     CommonModule,
+    ClientsModule,
 
     MatTableModule,
     MatFormFieldModule,
@@ -145,7 +153,8 @@ const appRoutes: Routes = [
     ),
     StoreDevtoolsModule.instrument({
       maxAge: 50
-    })
+    }),
+    RootStoreModule
 
   ],
   providers: [
