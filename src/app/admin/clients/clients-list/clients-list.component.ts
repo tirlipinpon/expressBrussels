@@ -94,15 +94,15 @@ export class ClientsListComponent implements OnInit {
       name: [null, [Validators.required, Validators.minLength(3)], [ValidatorDuplicateString(this.clientsItems$, 'name')]],
       ref_client: [null],
       address: [null, Validators.required],
-      number: [null],
+      number: [null, Validators.required],
       cp: [null, Validators.required],
       state: [null, Validators.required],
       addressValidated: [1],
       clientZone: [0],
-      phone: [null],
+      phone: [null, Validators.required],
       infos: this.fb.group({
-        info1: [null],
-        info2: [null],
+        info1: [null, Validators.required],
+        info2: [null, Validators.required],
       }),
       type: [0],
       fk_client: [null],
@@ -160,6 +160,7 @@ export class ClientsListComponent implements OnInit {
             this.selectRemovalsByClientId(id);
           } else {
             this.notificationsService.notify('error', 'Client not found', 'This id "' + id + '" not exist.');
+            this.resetforms();
           }
         }
       );

@@ -1,16 +1,19 @@
 <app-notification></app-notification>
 <div style="border: 3px solid blue; display:flex;">
   <form [formGroup]="myClientForm">
+    <div *ngIf="myClientForm.get('type').value==1">Attention ceci est un enlevement, lié au client {{myClientForm.get('fk_client').value}}.</div>
+    <div *ngIf="myClientForm.get('type').value==2">Attention ceci est un destinataire, lié au client {{myClientForm.get('fk_client').value}}.</div>
+
     <div><span>id</span><input [attr.disabled]="true" formControlName="id"></div>
     <div><span>active</span><input [attr.disabled]="myClientForm.get('id').value ? null : true" formControlName="active"></div>
     <!--    -->
     <div>
       <span>name</span><input formControlName="name">
-      <div *ngIf="myClientForm.get('name')?.errors?.duplicate">Ce nom exist déja</div>
+      <div *ngIf="myClientForm.get('name')?.errors?.duplicate"><span style="color:red;">Ce nom exist déja</span></div>
     </div>
     <div><span>address</span><input formControlName="address"></div>
     <div><span>number</span><input formControlName="number"></div>
-    <div><span>cp</span><input formControlName="cp"></div>
+    <div><span>cp</span><input type="number" formControlName="cp"></div>
     <div><span>state</span><input formControlName="state"></div>
     <div><span>phone</span><input formControlName="phone"></div>
     <div formGroupName="infos">
@@ -25,14 +28,14 @@
             [disabled]="myClientForm.invalid"
             (click)="updateClient(myClientForm.value)">update client</button>
   </form>
-  <div style="border: 3px solid green" *ngIf="myClientForm.get('id').value">
+  <div style="border: 3px solid green" *ngIf="myClientForm.get('id').value && myClientForm.get('type').value==0">
     <form [formGroup]="myPrixZoneMotoForm">
       <div><span>id</span><input type="number" step="0.1" min="0" [attr.disabled]="true" formControlName="id"></div>
       <div><span>zone1</span><input type="number" step="0.1" min="0"  formControlName="zone1"></div>
       <div><span>zone2</span><input type="number" step="0.1" min="0"  formControlName="zone2"></div>
       <div><span>zone3</span><input type="number" step="0.1" min="0"  formControlName="zone3"></div>
       <div><span>prixKm</span><input type="number" step="0.1" min="0"  formControlName="prixKm"></div>
-      <div><span>after15h</span><input type="number" step="0.1" min="0"  formControlName="after15h"></div>
+      <div><span>after15h</span><input type="number" step="1" min="0" max="1"  formControlName="after15h"></div>
       <div><span>double_express</span><input type="number" step="1" min="0"  formControlName="double_express"></div>
       <div><span>go_and_back</span><input type="number" step="1" min="0"  formControlName="go_and_back"></div>
       <div><span>id_client</span><input type="number" [attr.disabled]="true" formControlName="id_client"></div>
@@ -41,14 +44,14 @@
               (click)="updatePrixZoneMoto(myPrixZoneMotoForm.value)">update  moto</button>
     </form>
   </div>
-  <div style="border: 3px solid purple" *ngIf="myClientForm.get('id').value">
+  <div style="border: 3px solid purple" *ngIf="myClientForm.get('id').value && myClientForm.get('type').value==0">
     <form [formGroup]="myPrixZoneCarForm">
       <div><span>id</span><input type="number" step="0.1" min="0" [attr.disabled]="true" formControlName="id"></div>
       <div><span>zone1</span><input type="number" step="0.1" min="0"  formControlName="zone1"></div>
       <div><span>zone2</span><input type="number" step="0.1" min="0"  formControlName="zone2"></div>
       <div><span>zone3</span><input type="number" step="0.1" min="0"  formControlName="zone3"></div>
       <div><span>prixKm</span><input type="number" step="0.1" min="0"  formControlName="prixKm"></div>
-      <div><span>after15h</span><input type="number" step="0.1" min="0"  formControlName="after15h"></div>
+      <div><span>after15h</span><input type="number" step="1" min="0" max="1" formControlName="after15h"></div>
       <div><span>double_express</span><input type="number" step="1" min="0"  formControlName="double_express"></div>
       <div><span>go_and_back</span><input type="number" step="1" min="0"  formControlName="go_and_back"></div>
       <div><span>id_client</span><input type="number" [attr.disabled]="true" formControlName="id_client"></div>
@@ -63,7 +66,7 @@
 
 <div style="border: 3px solid red">
   <input #inputIdSelectById>
-  <button (click)="selectClientById(inputIdSelectById.value)">select id or reset for new client</button>
+  <button (click)="selectClientById(inputIdSelectById.value)">write id or erase data for create new client</button>
 </div>
 
 
