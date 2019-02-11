@@ -376,7 +376,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       else if(this.formOptions.get('options').value === 'go_and_back') {
         price +=  (price * (+data.go_and_back) / 100);
       }
-      price = this.afte15h(price, data);
+      price = this.afte15h(price, data, zone);
       this.formDistance.patchValue({
         price: price.toFixed(2),
         distance: '',
