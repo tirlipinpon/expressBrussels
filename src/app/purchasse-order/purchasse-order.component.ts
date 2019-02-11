@@ -63,7 +63,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   private customerId: number;
   private idClient: any;
 
-
   constructor (
     private store: Store<fromRoot.AppState>,
     private fb: FormBuilder,
@@ -367,8 +366,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     }else if(this.formOptions.get('transport').value === 'voiture') {
       this.calculTransportAndOptionBxl(this.prixZoneCamionnette$, zone);
     }
-    // after15h
-    //
   }
   calculTransportAndOptionBxl(prixZoneTransport: Observable<PrixZone>, zone: number): void {
     prixZoneTransport.subscribe(data => {
@@ -379,10 +376,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       else if(this.formOptions.get('options').value === 'go_and_back') {
         price +=  (price * (+data.go_and_back) / 100);
       }
-      const hour = new Date().getHours();
-      if (''+data.after15h !== '0' && hour >= 15) {
-        price = (+data['zone'+zone])*(+data.after15h);
-      }
+      price = this.afte15h(price, data);
       this.formDistance.patchValue({
         price: price.toFixed(2),
         distance: '',
@@ -390,6 +384,13 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
         status: 'Zone origine: ' + this.formRemoval.get('clientZone').value + ' To zone dest: ' + this.formRecipient.get('clientZone').value
       });
     });
+  }
+  afte15h(price: number, data: any, zone: number): number {
+    const hour = new Date().getHours();
+    if (+data.after15h !== 0 && hour >= 15) {
+      price += (+data['zone'+zone])*(+data.after15h);
+    }
+    return price
   }
   calculTransportAndOptionNational(prixZoneTransport: Observable<PrixZone>, price: number): void {
   prixZoneTransport.subscribe(data => {
