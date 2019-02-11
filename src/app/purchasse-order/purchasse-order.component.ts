@@ -370,13 +370,14 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   calculTransportAndOptionBxl(prixZoneTransport: Observable<PrixZone>, zone: number): void {
     prixZoneTransport.subscribe(data => {
       let price = +data['zone'+zone];
-      if(this.formOptions.get('options').value === 'double_express') {
+      price = this.afte15h(price, data, zone);
+      if (this.formOptions.get('options').value === 'double_express') {
         price +=  (price * (+data.double_express) / 100);
       }
       else if(this.formOptions.get('options').value === 'go_and_back') {
         price +=  (price * (+data.go_and_back) / 100);
       }
-      price = this.afte15h(price, data, zone);
+
       this.formDistance.patchValue({
         price: price.toFixed(2),
         distance: '',
@@ -387,8 +388,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   }
   afte15h(price: number, data: any, zone: number): number {
     const hour = new Date().getHours();
-    if (+data.after15h !== 0 && hour >= 15) {
-      price += (+data['zone'+zone])*(+data.after15h);
+    if (this.formOptions.get('options').value !== 'double_express' && +data.after15h !== 0 && hour >= 15) {
+      price = (+data['zone'+zone])*(+data.after15h);
     }
     return price
   }
