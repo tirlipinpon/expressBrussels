@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import {CanActivate, Router} from '@angular/router';
+import {CanActivate} from '@angular/router';
 import {AuthenticationService} from './authentication.service';
-import {Store, select} from '@ngrx/store';
-import * as fromRoot from '../shared/appState';
 
 @Injectable({
   providedIn: 'root',
@@ -10,9 +8,7 @@ import * as fromRoot from '../shared/appState';
 export class AdminAlwaysAuthGuardService implements CanActivate {
 
   // constructor(private customerService: CustomerService) { }
-  constructor(private router: Router,
-              private authenticationService: AuthenticationService,
-              private store: Store<fromRoot.AppState>) { }
+  constructor(private authenticationService: AuthenticationService) { }
 
   canActivate() {
       // this.authenticationService.setCustomerDecoded();

@@ -50,7 +50,7 @@
       <!-- created Column -->
       <ng-container matColumnDef="created">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> date de création </th>
-        <td mat-cell *matCellDef="let transaction" class="mat-h1 mat-title">{{transaction.created | date:'dd/mm/yyyy'}}</td>
+        <td mat-cell *matCellDef="let transaction" class="mat-h1 mat-title">{{transaction.created | date:'dd/MM/yyyy'}}</td>
         <td mat-footer-cell *matFooterCellDef>  </td>
       </ng-container>
       <!-- removal Column -->
@@ -58,25 +58,23 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Enlèvement </th>
         <td mat-cell *matCellDef="let transaction">
           <p matTooltip="Nom de la compagnie"
-             [matTooltipPosition]="'left'"><fa-icon style="color: rgba(0,0,0,0.27)!important;" [icon]="['fas', 'user']" size="sm"></fa-icon> {{ transaction.removal_name  }}</p>
-          <p matTooltip="Reference client"
-             [matTooltipPosition]="'left'" *ngIf="transaction.removal_ref_client && transaction.removal_ref_client.length">
-            <fa-icon style="color: rgba(0,0,0,0.27)!important;" [icon]="['fas', 'id-card']" size="sm"></fa-icon>
-            {{ transaction.removal_ref_client }}</p>
+             [matTooltipPosition]="'left'"><fa-icon style="color: rgba(0,0,0,0.27)!important;" [icon]="['fas', 'user']" size="sm"></fa-icon>
+            {{ transaction.removal_name  }} (ref: {{ transaction.removal_ref_client }} )</p>
           <p matTooltip="Adresse d'enlevement"
              [matTooltipPosition]="'left'">
             <fa-icon style="color: rgba(0,0,0,0.27)!important;"  [icon]="['fas', 'home']" size="sm"></fa-icon>
             {{ transaction.removal_address  }} {{ transaction.removal_number  }}<br>
             <span style="margin:0 0 0 20px">{{ transaction.removal_cp  }} {{ transaction.removal_state  }}</span>
           </p>
-          <p matTooltip="Nom de contact"
-             [matTooltipPosition]="'left'" *ngIf="transaction.contact_removal!==''">
-            <fa-icon style="color: rgba(0,0,0,0.27)!important;" [icon]="['fas', 'user-tag'] " size="xs"></fa-icon>
-            {{ transaction.contact_removal  }}</p>
-          <p matTooltip="Message/Commentaire"
-             [matTooltipPosition]="'left'" *ngIf="transaction.message_removal!==''">
-            <fa-icon style="color: rgba(0,0,0,0.27)!important;" [icon]="['fas', 'comment'] " size="xs"></fa-icon>
-            {{ transaction.message_removal  }}</p></td>
+          <!--<p matTooltip="Nom de contact"-->
+             <!--[matTooltipPosition]="'left'" *ngIf="transaction.contact_removal!==''">-->
+            <!--<fa-icon style="color: rgba(0,0,0,0.27)!important;" [icon]="['fas', 'user-tag'] " size="xs"></fa-icon>-->
+            <!--{{ transaction.contact_removal  }}</p>-->
+          <!--<p matTooltip="Message/Commentaire"-->
+             <!--[matTooltipPosition]="'left'" *ngIf="transaction.message_removal!==''">-->
+            <!--<fa-icon style="color: rgba(0,0,0,0.27)!important;" [icon]="['fas', 'comment'] " size="xs"></fa-icon>-->
+            <!--{{ transaction.message_removal  }}</p>-->
+        </td>
         <td mat-footer-cell *matFooterCellDef>  </td>
       </ng-container>
       <!-- recipient Column -->
@@ -84,10 +82,8 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Destination </th>
         <td mat-cell *matCellDef="let transaction">
           <p matTooltip="Nom de la compagnie"
-             [matTooltipPosition]="'left'"><fa-icon style="color: rgba(0,0,0,0.27)!important;"  [icon]="['fas', 'user']" size="sm"></fa-icon> {{ transaction.recipient_name  }}</p>
-          <p matTooltip="Reference client"
-             [matTooltipPosition]="'left'" *ngIf="transaction.recipient_ref_client && transaction.recipient_ref_client.length">
-            <fa-icon style="color: rgba(0,0,0,0.27)!important;"  [icon]="['fas', 'id-card']" size="sm"></fa-icon> {{ transaction.recipient_ref_client }}</p>
+             [matTooltipPosition]="'left'"><fa-icon style="color: rgba(0,0,0,0.27)!important;"  [icon]="['fas', 'user']" size="sm"></fa-icon>
+            {{ transaction.recipient_name }} (ref: {{ transaction.recipient_ref_client }})</p>
           <!--<p>{{ row.recipient_address  }} {{ row.recipient_number  }}  </p>-->
           <p matTooltip="Adresse de destination"
              [matTooltipPosition]="'left'">
@@ -95,12 +91,12 @@
             {{ transaction.recipient_address  }} {{ transaction.recipient_number  }}<br>
             <span style="margin:0 0 0 20px">{{ transaction.recipient_cp  }} {{ transaction.recipient_state  }}</span>
           </p>
-          <p matTooltip="Nom de contact "
-             [matTooltipPosition]="'left'" *ngIf="transaction.contact_recipient!==''">
-            <fa-icon style="color: rgba(0,0,0,0.27)!important;" [icon]="['fas', 'user-tag'] " size="xs"></fa-icon> {{ transaction.contact_recipient  }}</p>
-          <p matTooltip="Message/Commentaire"
-             [matTooltipPosition]="'left'" *ngIf="transaction.message_recipient!==''"><fa-icon style="color: rgba(0,0,0,0.27)!important;" [icon]="['fas', 'comment'] " size="xs"></fa-icon>
-            {{ transaction.message_recipient  }}</p>
+          <!--<p matTooltip="Nom de contact "-->
+             <!--[matTooltipPosition]="'left'" *ngIf="transaction.contact_recipient!==''">-->
+            <!--<fa-icon style="color: rgba(0,0,0,0.27)!important;" [icon]="['fas', 'user-tag'] " size="xs"></fa-icon> {{ transaction.contact_recipient  }}</p>-->
+          <!--<p matTooltip="Message/Commentaire"-->
+             <!--[matTooltipPosition]="'left'" *ngIf="transaction.message_recipient!==''"><fa-icon style="color: rgba(0,0,0,0.27)!important;" [icon]="['fas', 'comment'] " size="xs"></fa-icon>-->
+            <!--{{ transaction.message_recipient  }}</p>-->
         </td>
         <td mat-footer-cell *matFooterCellDef>  </td>
       </ng-container>
@@ -134,7 +130,7 @@
         <td mat-cell *matCellDef="let transaction">
           <button mat-stroked-button (click)="captureScreen('print-'+transaction.id)">
           <fa-icon [icon]="['fas', 'file-pdf']" size="sm"></fa-icon>
-          Telecharger ce bon en PDF
+          PDF
         </button>
         </td>
         <td mat-footer-cell *matFooterCellDef></td>
@@ -143,10 +139,10 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"
           class="example-first-header-row">
       </tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" id="print-{{row.id}}"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="to-print" id="print-{{row.id}}"></tr>
       <tr mat-footer-row *matFooterRowDef="displayedColumns;" class="example-first-footer-row"></tr>
     </table>
-    <mat-paginator [pageSizeOptions]="[20, 50, 100, 200, 300]" showFirstLastButtons></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[1000]" showFirstLastButtons></mat-paginator>
   </div>
 </div>
 

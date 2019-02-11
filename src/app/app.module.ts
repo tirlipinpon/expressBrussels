@@ -37,12 +37,12 @@ import {GetDistanceMatrixService} from "./services/google/get-distance-matrix.se
 import {RouteResolverService} from "./services/route-resolver.service";
 import {GetPrixZoneService} from "./services/get-prix-zone.service";
 import { ContactService } from './services/contact.service';
-import {NumberTransformToMonthPipe} from "./shared/pipe/number-transform-to-month.pipe";
 import {reducers} from "./shared/appState";
 import {StoreModule} from "@ngrx/store";
 import { RootStoreModule } from './admin/root-store/root-store.module';
 import {AdminAlwaysAuthGuardService} from "./services/admin-always-auth-guard.service";
 import {ClientsModule} from "./admin/clients/clients.module";
+import {OrdersModule} from "./admin/orders/orders.module";
 
 
 const appRoutes: Routes = [
@@ -101,6 +101,11 @@ const appRoutes: Routes = [
     canActivate: [AdminAlwaysAuthGuardService],
     loadChildren: './admin/clients/clients.module#ClientsModule'
   },
+  {
+    path: 'admin/orders',
+    canActivate: [AdminAlwaysAuthGuardService],
+    loadChildren: './admin/orders/orders.module#OrdersModule'
+  },
   // otherwise redirect to home
   // { path: '**',  redirectTo: ''}
 ];
@@ -122,6 +127,7 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     CommonModule,
     ClientsModule,
+    OrdersModule,
 
     MatTableModule,
     MatFormFieldModule,
