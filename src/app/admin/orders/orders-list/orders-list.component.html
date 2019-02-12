@@ -1,3 +1,8 @@
-<p>
-  orders-list works!
-</p>
+
+
+<form>
+  Select pdf to upload:
+  <input type="file" (change)="handleFileInput($event.target.files)" id="file">
+  <button type="submit" value="Upload Image" (click)="uploadFileToActivity()" name="submit">upload</button>
+</form>
+{{message}}
