@@ -6,7 +6,7 @@ import {PurchasseOrder} from "../../../models/PurchasseOrder";
 
 
 export const ordersAdapter: EntityAdapter<PurchasseOrder> = createEntityAdapter<PurchasseOrder>({
-  selectId: model => +model.id,
+  selectId: model => model.id,
   sortComparer: (a: PurchasseOrder, b: PurchasseOrder): number =>
     b.created.toString().localeCompare(a.created.toString())
 });

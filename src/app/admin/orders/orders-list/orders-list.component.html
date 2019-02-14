@@ -8,30 +8,68 @@
   </mat-form-field>
 </div>
 
+<div  style="margin:5px;">
+  <mat-form-field>
+    <mat-select [(value)]="selectedOption" #matSelect (selectionChange)="selectOrdersByMonth($event.value)"
+                placeholder="Select month">
+      <mat-option [value]="'-1'">-- SELECT MONTH --</mat-option>
+      <mat-option *ngFor="let month of months" [value]="month.id">
+        {{month.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
 <form style="display:flex;flex-wrap:wrap;" [formGroup]="myOrderForm">
   <div style="" formArrayName="items" *ngFor="let item of myOrderForm.get('items').controls; let i = index;">
     <div #orderGroupRef style="margin:5px;border:1px solid grey;padding:5px;width: 200px;" [formGroupName]="i">
-      <mat-form-field class="order-d"> <input matInput formControlName="id" placeholder="id"></mat-form-field>
-      <mat-form-field class="order-d"> <input matInput formControlName="fk_customer_id" placeholder="fk_customer_id"></mat-form-field>
-      <mat-form-field class="order-d"> <input matInput formControlName="fk_removal_id" placeholder="fk_removal_id"></mat-form-field>
-      <mat-form-field class="order-d"> <input matInput formControlName="fk_recipient_id" placeholder="fk_recipient_id"></mat-form-field>
-      <mat-form-field class="order-d"> <input matInput formControlName="message_removal" placeholder="message_removal"></mat-form-field>
-      <mat-form-field class="order-d"> <input matInput formControlName="message_recipient" placeholder="message_recipient"></mat-form-field>
-      <mat-form-field class="order-d"> <input matInput formControlName="created" placeholder="created"></mat-form-field>
-      <mat-form-field class="order-d"> <input matInput formControlName="price" placeholder="price"></mat-form-field>
-      <mat-form-field class="order-d"> <input matInput formControlName="options" placeholder="options"></mat-form-field>
-      <mat-form-field class="order-d"> <input matInput formControlName="tomorrow" placeholder="tomorrow"></mat-form-field>
-      <mat-form-field class="order-d"> <input matInput formControlName="transport" placeholder="transport"></mat-form-field>
-      <mat-form-field class="order-d"> <input matInput formControlName="valide" placeholder="valide"></mat-form-field>
+      <mat-form-field class="order-d"><input matInput formControlName="id" placeholder="id"></mat-form-field>
+      <mat-form-field class="order-d"><input matInput formControlName="fk_customer_id" placeholder="fk_customer_id">
+      </mat-form-field>
+      <mat-form-field class="order-d"><input matInput formControlName="fk_removal_id" placeholder="fk_removal_id">
+      </mat-form-field>
+      <mat-form-field class="order-d"><input matInput formControlName="fk_recipient_id" placeholder="fk_recipient_id">
+      </mat-form-field>
+      <mat-form-field class="order-d"><input matInput formControlName="message_removal" placeholder="message_removal">
+      </mat-form-field>
+      <mat-form-field class="order-d"><input matInput formControlName="message_recipient"
+                                             placeholder="message_recipient"></mat-form-field>
+      <mat-form-field class="order-d"><input matInput formControlName="created" placeholder="created"></mat-form-field>
+      <mat-form-field class="order-d"><input matInput formControlName="price" placeholder="price"></mat-form-field>
+      <mat-form-field>
+        <mat-select formControlName="options" placeholder="options">
+          <mat-option [value]="'express'">express</mat-option>
+          <mat-option [value]="'go_and_back'">go_and_back</mat-option>
+          <mat-option [value]="'double_express'">double_express</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select formControlName="tomorrow" placeholder="tomorrow">
+          <mat-option [value]="'0'">non</mat-option>
+          <mat-option [value]="'1'">oui</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select formControlName="transport" placeholder="transport">
+          <mat-option [value]="'moto'">moto</mat-option>
+          <mat-option [value]="'voiture'">voiture</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select formControlName="valide" placeholder="validé">
+          <mat-option [value]="'0'">non validé</mat-option>
+          <mat-option [value]="'1'">validé</mat-option>
+        </mat-select>
+        </mat-form-field>
       <button class="order-d" (click)="updateOrder(item.value)">Update</button>
     </div>
   </div>
 </form>
 
 
-<div>
-  <!--<pre>{{ordersItems$|async|json}}</pre>-->
-  <pre>{{myOrderForm.value|json}}</pre>
+<div style="display:flex;flex:1">
+  <pre>ordersItems$: {{ordersItems$|async|json}}</pre>
+  <pre>myOrderForm: {{myOrderForm.value|json}}</pre>
 </div>
 
 <div style="border:3px solid red;">

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ElementRef, ViewChild} from '@angular/core';
 import {Store, select} from "@ngrx/store";
 import {
   RootStoreState,
@@ -11,6 +11,7 @@ import {DataForm} from "../../../models/DataForm";
 import {Observable} from "rxjs";
 import {PurchasseOrder} from "../../../models/PurchasseOrder";
 import {FormBuilder, FormGroup, FormArray } from "@angular/forms";
+import {MatSelect} from "@angular/material";
 
 @Component({
   selector: 'app-orders-list',
@@ -24,14 +25,74 @@ export class OrdersListComponent implements OnInit {
   ordersItems$: Observable<PurchasseOrder[]>;
   error$: Observable<string>;
   myOrderForm: FormGroup;
+  selectedOption: string;
+  months: {id:number, name:string}[];
+
+  @ViewChild('matSelect') matSelect: MatSelect;
 
   constructor(private store$: Store<RootStoreState.State>, private fb: FormBuilder) {
     this.store$.dispatch(new ClientsStoreActions.LoadRequestAction());
     this.crateFormOrder();
+    this.createMonths();
+  }
+  createMonths() {
+    let i = 0;
+    this.months = [
+      { id: i++, name: 'january' },
+      { id: i++, name: 'february' },
+      { id: i++, name: 'March' },
+      { id: i++, name: 'April' },
+      { id: i++, name: 'May' },
+      { id: i++, name: 'June' },
+      { id: i++, name: 'July' },
+      { id: i++, name: 'August' },
+      { id: i++, name: 'September' },
+      { id: i++, name: 'October' },
+      { id: i++, name: 'November' },
+      { id: i++, name: 'December' }
+      ]
   }
   ngOnInit() {
     this.select();
-    this.ordersItems$.subscribe(data => {
+  }
+  crateFormOrder() {
+    this.myOrderForm = this.fb.group({
+      items: this.fb.array([ ])
+    });
+  }
+  select() {
+    this.clientsItems$ = this.store$.pipe(
+      select(  ClientsStoreSelectors.selectClientsItems )
+    );
+    this.ordersItems$ = this.store$.pipe(
+      select( OrdersStoreSelectors.selectOrdersItems )
+    );
+    this.error$ = this.store$.pipe(
+      select( OrdersStoreSelectors.selectOrdersError )
+    );
+  }
+  selectClientById(id: string) {
+    this.selectedOption = '-1';
+    if (id && id.length && id != '0') {
+      this.store$.dispatch(new OrdersStoreActions.LoadRequestAction(+id));
+      this.ordersItems$ = this.store$.pipe(
+        select( OrdersStoreSelectors.selectOrdersItems )
+      );
+      this.setOrderFormFromSelect(this.ordersItems$);
+    }
+  }
+  updateOrder(order: PurchasseOrder): void {
+    this.store$.dispatch(new OrdersStoreActions.UpdateRequestAction({id: order.id, changes: order}));
+  }
+  selectOrdersByMonth(month: number) {
+    console.log(this.matSelect);
+    this.ordersItems$ = this.store$.pipe(
+      select( OrdersStoreSelectors.selectOrdersByMonth(+month) )
+    );
+    this.setOrderFormFromSelect(this.ordersItems$);
+  }
+  setOrderFormFromSelect(ordersItems$: Observable<PurchasseOrder[]>) {
+    ordersItems$.subscribe(data => {
       let items = this.myOrderForm.get('items') as FormArray;
       while (items.length !== 0) {
         items.removeAt(0)
@@ -39,13 +100,11 @@ export class OrdersListComponent implements OnInit {
       data.forEach(item => this.addItem(items, item));
     });
   }
-  crateFormOrder() {
-    this.myOrderForm = this.fb.group({
-      items: this.fb.array([ ])
-    });
+  addItem(items: FormArray, order: PurchasseOrder): void {
+    items.push(this.createItem(order));
   }
   createItem(order: PurchasseOrder): FormGroup {
-     let form = this.fb.group({
+    let form = this.fb.group({
       id: [null],
       fk_customer_id: [null],
       fk_removal_id: [null],
@@ -67,28 +126,5 @@ export class OrdersListComponent implements OnInit {
     });
     form.patchValue(order);
     return form;
-  }
-  select() {
-    this.clientsItems$ = this.store$.pipe(
-      select(  ClientsStoreSelectors.selectClientsItems )
-    );
-    this.ordersItems$ = this.store$.pipe(
-      select( OrdersStoreSelectors.selectOrdersItems )
-    );
-    this.error$ = this.store$.pipe(
-      select( OrdersStoreSelectors.selectOrdersError )
-    );
-  }
-  addItem(items: FormArray, order: PurchasseOrder): void {
-    items.push(this.createItem(order));
-  }
-  selectClientById(id: string) {
-    if (id && id.length && id != '0') {
-      this.store$.dispatch(new OrdersStoreActions.LoadRequestAction(+id));
-    }
-  }
-  updateOrder(order: PurchasseOrder): void {
-    console.log(order);
-    this.store$.dispatch(new OrdersStoreActions.UpdateRequestAction({id: order.id, changes: order}));
   }
 }
