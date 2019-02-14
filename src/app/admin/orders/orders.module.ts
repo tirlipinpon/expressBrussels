@@ -5,9 +5,13 @@ import { OrdersRoutingModule } from './orders-routing.module';
 import { OrdersListComponent } from './orders-list/orders-list.component';
 import {ReactiveFormsModule, FormsModule} from "@angular/forms";
 import {MatSelectModule, MatInputModule} from "@angular/material";
+import {GetNameByIdPipe} from "../pipe/get-name-by-id.pipe";
 
 @NgModule({
-  declarations: [OrdersListComponent],
+  declarations: [
+    OrdersListComponent,
+    GetNameByIdPipe
+  ],
   imports: [
     CommonModule,
     FormsModule,

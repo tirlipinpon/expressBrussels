@@ -10,7 +10,7 @@ import {
 import {DataForm} from "../../../models/DataForm";
 import {Observable} from "rxjs";
 import {PurchasseOrder} from "../../../models/PurchasseOrder";
-import {FormBuilder, FormGroup, FormArray } from "@angular/forms";
+import {FormBuilder, FormGroup, FormArray, Validators} from "@angular/forms";
 import {MatSelect} from "@angular/material";
 
 @Component({
@@ -21,6 +21,8 @@ import {MatSelect} from "@angular/material";
 export class OrdersListComponent implements OnInit {
 
   clientsItems$: Observable<DataForm[]>;
+  removalsItems$: Observable<DataForm[]>;
+  recipientsItems$: Observable<DataForm[]>;
   clientsById$: Observable<DataForm>;
   ordersItems$: Observable<PurchasseOrder[]>;
   error$: Observable<string>;
@@ -29,6 +31,7 @@ export class OrdersListComponent implements OnInit {
   months: {id:number, name:string}[];
 
   @ViewChild('matSelect') matSelect: MatSelect;
+  get formData() { return <FormArray>this.myOrderForm.get('items'); }
 
   constructor(private store$: Store<RootStoreState.State>, private fb: FormBuilder) {
     this.store$.dispatch(new ClientsStoreActions.LoadRequestAction());
@@ -61,8 +64,14 @@ export class OrdersListComponent implements OnInit {
     });
   }
   select() {
+    this.removalsItems$ = this.store$.pipe(
+      select(  ClientsStoreSelectors.selectClientsItems(1) )
+    );
+    this.recipientsItems$ = this.store$.pipe(
+      select(  ClientsStoreSelectors.selectClientsItems(2) )
+    );
     this.clientsItems$ = this.store$.pipe(
-      select(  ClientsStoreSelectors.selectClientsItems )
+      select(  ClientsStoreSelectors.selectClientsItems(0) )
     );
     this.ordersItems$ = this.store$.pipe(
       select( OrdersStoreSelectors.selectOrdersItems )
@@ -105,24 +114,24 @@ export class OrdersListComponent implements OnInit {
   }
   createItem(order: PurchasseOrder): FormGroup {
     let form = this.fb.group({
-      id: [null],
-      fk_customer_id: [null],
-      fk_removal_id: [null],
-      fk_recipient_id: [null],
+      id: [null, Validators.required],
+      fk_customer_id: [null, Validators.required],
+      fk_removal_id: [null, Validators.required],
+      fk_recipient_id: [null, Validators.required],
       contact_removal: [null],
       message_removal: [null],
       contact_recipient: [null],
       message_recipient: [null],
       created: [null],
-      price: [null],
+      price: [null, Validators.required],
       distance: [null],
       elapse_time: [null],
       status: [null],
-      options: [null],
-      tomorrow: [null],
-      transport: [null],
+      options: [null, Validators.required],
+      tomorrow: [null, Validators.required],
+      transport: [null, Validators.required],
       cascades: [null],
-      valide: [null]
+      valide: [null, Validators.required]
     });
     form.patchValue(order);
     return form;

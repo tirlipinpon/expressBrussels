@@ -58,7 +58,7 @@ export class ClientsListComponent implements OnInit {
       select( ClientsStoreSelectors.selectAllItems )
     );
     this.clientsItems$ = this.store$.pipe(
-      select( ClientsStoreSelectors.selectClientsItems )
+      select( ClientsStoreSelectors.selectClientsItems(0) )
     );
     this.selectTotal$ = this.store$.pipe(
       select( ClientsStoreSelectors.selectTotal )

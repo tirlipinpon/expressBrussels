@@ -24,12 +24,12 @@ export const selectClientById = (id: number) =>
       }
     });
 
-export const selectClientsItems =
+export const selectClientsItems = (type: number) =>
   createSelector(
     selectAllItems,
     (allMyFeatures: DataForm[]) => {
       if (allMyFeatures) {
-        return allMyFeatures.filter(p => +p.type === 0);
+        return allMyFeatures.filter(p => +p.type === type);
       } else {
         return null;
       }
