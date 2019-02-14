@@ -26,7 +26,7 @@ export class ClientsStoreEffects {
     ),
     switchMap(action =>
       this.dataService
-        .getItems(action.payload.id)
+        .getItems()
         .pipe(
           map(result => result.data),
           map(

@@ -14,9 +14,11 @@ export class AppComponent implements OnInit {
   customerId$: Observable<number>;
 
   constructor(private store: Store<fromRoot.AppState>) {
-    this.customerId$ = this.store.select(fromRoot.selectors.getCustomerId)
+
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.customerId$ = this.store.select(fromRoot.selectors.getCustomerId)
+  }
 
 }

@@ -1,5 +1,16 @@
-import {Component, OnInit, ChangeDetectorRef} from '@angular/core';
-import {FileUploadService} from "../services/file-upload.service";
+import {Component, OnInit} from '@angular/core';
+import {Store, select} from "@ngrx/store";
+import {
+  RootStoreState,
+  OrdersStoreSelectors,
+  OrdersStoreActions,
+  ClientsStoreActions,
+  ClientsStoreSelectors
+} from '../../root-store';
+import {DataForm} from "../../../models/DataForm";
+import {Observable} from "rxjs";
+import {PurchasseOrder} from "../../../models/PurchasseOrder";
+import {FormBuilder, FormGroup, FormArray } from "@angular/forms";
 
 @Component({
   selector: 'app-orders-list',
@@ -8,34 +19,76 @@ import {FileUploadService} from "../services/file-upload.service";
 })
 export class OrdersListComponent implements OnInit {
 
-  fileToUpload: File = null;
-  message: string;
+  clientsItems$: Observable<DataForm[]>;
+  clientsById$: Observable<DataForm>;
+  ordersItems$: Observable<PurchasseOrder[]>;
+  error$: Observable<string>;
+  myOrderForm: FormGroup;
 
-  constructor(private fileUploadService: FileUploadService, private cdr: ChangeDetectorRef) { }
-
-  ngOnInit() { }
-
-  handleFileInput(files: FileList) {
-    this.fileToUpload = files.item(0);
+  constructor(private store$: Store<RootStoreState.State>, private fb: FormBuilder) {
+    this.store$.dispatch(new ClientsStoreActions.LoadRequestAction());
+    this.crateFormOrder();
   }
-  uploadFileToActivity() {
-    this.fileUploadService.postFile(this.fileToUpload).subscribe(data => {
-      // do something, if upload success
-      console.log(data);
-      let msg: string;
-      if (data == true) {
-        msg = 'File uploaded.' + data;
-      }else if(data == false) {
-        msg = 'error upload' + data;
-      }else{
-        msg = 'Unknow error.';
+  ngOnInit() {
+    this.select();
+    this.ordersItems$.subscribe(data => {
+      let items = this.myOrderForm.get('items') as FormArray;
+      while (items.length !== 0) {
+        items.removeAt(0)
       }
-      this.message = msg;
-      this.cdr.markForCheck();
-    }, error => {
-      console.log(error);
-      this.message = 'error';
+      data.forEach(item => this.addItem(items, item));
     });
   }
-
+  crateFormOrder() {
+    this.myOrderForm = this.fb.group({
+      items: this.fb.array([ ])
+    });
+  }
+  createItem(order: PurchasseOrder): FormGroup {
+     let form = this.fb.group({
+      id: [null],
+      fk_customer_id: [null],
+      fk_removal_id: [null],
+      fk_recipient_id: [null],
+      contact_removal: [null],
+      message_removal: [null],
+      contact_recipient: [null],
+      message_recipient: [null],
+      created: [null],
+      price: [null],
+      distance: [null],
+      elapse_time: [null],
+      status: [null],
+      options: [null],
+      tomorrow: [null],
+      transport: [null],
+      cascades: [null],
+      valide: [null]
+    });
+    form.patchValue(order);
+    return form;
+  }
+  select() {
+    this.clientsItems$ = this.store$.pipe(
+      select(  ClientsStoreSelectors.selectClientsItems )
+    );
+    this.ordersItems$ = this.store$.pipe(
+      select( OrdersStoreSelectors.selectOrdersItems )
+    );
+    this.error$ = this.store$.pipe(
+      select( OrdersStoreSelectors.selectOrdersError )
+    );
+  }
+  addItem(items: FormArray, order: PurchasseOrder): void {
+    items.push(this.createItem(order));
+  }
+  selectClientById(id: string) {
+    if (id && id.length && id != '0') {
+      this.store$.dispatch(new OrdersStoreActions.LoadRequestAction(+id));
+    }
+  }
+  updateOrder(order: PurchasseOrder): void {
+    console.log(order);
+    this.store$.dispatch(new OrdersStoreActions.UpdateRequestAction({id: order.id, changes: order}));
+  }
 }
