@@ -25,7 +25,7 @@ export enum ClientsActionTypes {
 // ================= LOAD ===============
 export class LoadRequestAction implements Action {
   readonly type = ClientsActionTypes.LOAD_REQUEST;
-  constructor(public payload: {id: number}) {}
+  constructor() {}
 }
 export class LoadFailureAction implements Action {
   readonly type = ClientsActionTypes.LOAD_FAILURE;

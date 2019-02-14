@@ -7,7 +7,9 @@ import {createSelector, MemoizedSelector} from "@ngrx/store";
 import {
   ClientsStoreSelectors
 } from './clients-store';
-
+import {
+  OrdersStoreSelectors
+} from './orders-store';
 import {
   PrixZonesMotoStoreSelectors
 } from './prix-zone-moto-store';

@@ -1,5 +1,19 @@
 <app-notification></app-notification>
-<div style="border: 3px solid blue; display:flex;">
+
+<div style="margin:5px;">
+  <mat-form-field>
+    <mat-select (selectionChange)="selectClientById($event.value)" placeholder="Select client">
+      <mat-option  [value]="'0'">-- NEW CLIENT --</mat-option>
+      <mat-option *ngFor="let client of clientsItems$|async" [value]="client.id">
+        {{client.id}} - {{client.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+
+
+<div style="border: 3px solid blue; display:flex;margin:10px;flex-wrap: wrap;">
   <form [formGroup]="myClientForm">
     <div *ngIf="myClientForm.get('type').value==1">Attention ceci est un enlevement, lié au client {{myClientForm.get('fk_client').value}}.</div>
     <div *ngIf="myClientForm.get('type').value==2">Attention ceci est un destinataire, lié au client {{myClientForm.get('fk_client').value}}.</div>
@@ -35,7 +49,7 @@
       <div><span>zone2</span><input type="number" step="0.1" min="0"  formControlName="zone2"></div>
       <div><span>zone3</span><input type="number" step="0.1" min="0"  formControlName="zone3"></div>
       <div><span>prixKm</span><input type="number" step="0.1" min="0"  formControlName="prixKm"></div>
-      <div><span>after15h</span><input type="number" step="1" min="0" max="1"  formControlName="after15h"></div>
+      <div><span>after15h</span><input type="number" step="1" min="0"   formControlName="after15h"></div>
       <div><span>double_express</span><input type="number" step="1" min="0"  formControlName="double_express"></div>
       <div><span>go_and_back</span><input type="number" step="1" min="0"  formControlName="go_and_back"></div>
       <div><span>id_client</span><input type="number" [attr.disabled]="true" formControlName="id_client"></div>
@@ -64,11 +78,14 @@
 
 </div>
 
-<div style="border: 3px solid red">
-  <input #inputIdSelectById>
-  <button (click)="selectClientById(inputIdSelectById.value)">write id or erase data for create new client</button>
+<div style="border: 3px solid green;margin:10px;padding:5px;">
+  <form *ngIf="myClientForm.get('id').value">
+    Select pdf to upload:
+    <input type="file" (change)="handleFileInput($event.target.files)" id="file">
+    <button type="submit" value="Upload Image" (click)="uploadFileToActivity()" name="submit">upload</button>
+  </form>
+  {{message}}
 </div>
-
 
 <div *ngIf="false">
   <button (click)="addOne()">add one</button>
@@ -95,15 +112,14 @@
   </div>
 </div>
 
-
+<pre style="flex:1;border:1px solid grey;">selectTotal$ : {{selectTotal$|async}}</pre>
 <div style="display:flex;">
   <pre *ngIf="false" style="flex:1;border:1px solid grey;">allItems$ : {{allItems$|async|json}}</pre>
   <pre style="flex:1;border:1px solid grey;">clientsItems$ : {{clientsItems$|async|json}}</pre>
   <pre style="flex:1;border:1px solid grey;">clientsById$ : {{clientsById$|async|json}}</pre>
-  <pre style="flex:1;border:1px solid grey;">removalsByClientId$ : {{removalsByClientId$|async|json}}</pre>
+  <pre *ngIf="false" style="flex:1;border:1px solid grey;">removalsByClientId$ : {{removalsByClientId$|async|json}}</pre>
   <pre style="flex:1;border:1px solid grey;">clientsPrixZoneMoto$: {{clientsPrixZoneMoto$|async|json}}</pre>
   <pre style="flex:1;border:1px solid grey;">clientsPrixZoneCar$: {{clientsPrixZoneCar$|async|json}}</pre>
-  <pre style="flex:1;border:1px solid grey;">selectTotal$ : {{selectTotal$|async}}</pre>
   <!--<pre style="flex:1;">error$: {{error$|async}}</pre>-->
 </div>
 

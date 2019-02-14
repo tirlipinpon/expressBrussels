@@ -5,14 +5,14 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build-teatime": "ng build --base-href=http://teatime.be/expressbrussels/dist/ --prod --source-map",
+    "build-test": "ng build --base-href=https://www.expressbrussel.com/logintest/ --prod --source-map",
     "build-express": "ng build --base-href=https://www.expressbrussel.com/login/ --prod --source-map",
     "test": "ng test",
     "lint": "./node_modules/.bin/tslint -c tslint.json -p tsconfig.json",
     "e2e": "ng e2e",
     "sme": "./node_modules/.bin/source-map-explorer",
-    "buildOptim-teatime": "ng build --prod --base-href=http://teatime.be/expressbrussels/dist/ --build-optimizer -sm",
-    "buildOptim-express": "ng build --prod --base-href=https://www.expressbrussel.com/login/dist/ --build-optimizer -sm"
+    "buildOptim-test": "ng build --prod --base-href=https://www.expressbrussel.com/logintest/ --build-optimizer -sm",
+    "buildOptim-express": "ng build --prod --base-href=https://www.expressbrussel.com/login/ --build-optimizer -sm"
   },
   "private": true,
   "dependencies": {

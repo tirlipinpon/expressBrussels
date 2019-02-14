@@ -5,6 +5,7 @@ import { ClientsRoutingModule } from './clients-routing.module';
 import { ClientsListComponent } from './clients-list/clients-list.component';
 import {ReactiveFormsModule, FormsModule} from "@angular/forms";
 import {SharedModule} from "../../shared/shared.module";
+import {MatSelectModule} from "@angular/material";
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import {SharedModule} from "../../shared/shared.module";
     FormsModule,
     ReactiveFormsModule,
     ClientsRoutingModule,
-    SharedModule
+    SharedModule,
+    MatSelectModule
   ]
 })
 export class ClientsModule { }

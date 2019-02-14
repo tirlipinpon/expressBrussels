@@ -5,11 +5,10 @@ import {ClientsState, clientsAdapter} from "./state";
 import {MemoizedSelector, createFeatureSelector, createSelector} from "@ngrx/store";
 import {DataForm} from "../../../models/DataForm";
 
+export const selectClientsState: MemoizedSelector<object, ClientsState> = createFeatureSelector<ClientsState>('admin-clients');
 
 export const getError = (state: ClientsState): any => state.error;
 export const getIsLoading = (state: ClientsState): boolean => state.isLoading;
-
-export const selectClientsState: MemoizedSelector<object, ClientsState> = createFeatureSelector<ClientsState>('admin-clients');
 
 export const selectAllItems: (state: object) => DataForm[] = clientsAdapter.getSelectors(selectClientsState).selectAll;
 export const selectTotal: (state: object) => number = clientsAdapter.getSelectors(selectClientsState).selectTotal;
@@ -25,12 +24,12 @@ export const selectClientById = (id: number) =>
       }
     });
 
-export const selectClientsItems =
+export const selectClientsItems = (type: number) =>
   createSelector(
     selectAllItems,
     (allMyFeatures: DataForm[]) => {
       if (allMyFeatures) {
-        return allMyFeatures.filter(p => +p.type === 0);
+        return allMyFeatures.filter(p => +p.type === type);
       } else {
         return null;
       }

@@ -18,6 +18,7 @@ import {CustomerService} from "../services/customer.service";
 
 import * as jspdf from 'jspdf';
 import * as html2canvas from "html2canvas"
+import {environment} from "../../environments/environment.prod";
 
 @Component({
   selector: 'app-orders',
@@ -46,6 +47,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChildren('mati') matInput: QueryList<any>;
   months: string[] = [];
+  apiUrl = environment.apiUrl;
 
   constructor(
     private store: Store<fromRoot.AppState>,
@@ -293,5 +295,9 @@ export class OrdersComponent implements OnInit, OnDestroy {
       }).reduce((acc, value) => acc + value, 0);
     }
     return null;
+  }
+  downloadPdf(url: string): void {
+
+    console.log(url);
   }
 }

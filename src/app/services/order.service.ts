@@ -28,7 +28,7 @@ export class OrderService {
 
   getOrders(data): Observable<PurchasseOrder[]> {
     // console.log('in order service get orders from db with this id_customer->', data.payload);
-    let url = this.apiUrl+'php//read_all_orders.php?fk_customer_id='+data.payload;
+    let url = this.apiUrl+'php//read_all_orders_by_client_id.php?fk_customer_id='+data.payload;
     return this.http.get<PurchasseOrder[]>(url).pipe(
       catchError(error => observableThrowError('error in service get orders with message from server -> '+ error))
     )

@@ -8,5 +8,6 @@ import * as RootStoreSelectors from './selectors';
 export { RootStoreState, RootStoreSelectors, RootStoreModule };
 
 export * from './clients-store';
+export * from './orders-store';
 export * from './prix-zone-moto-store';
 export * from './prix-zone-car-store';

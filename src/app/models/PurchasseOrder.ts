@@ -23,3 +23,8 @@ export interface PurchasseOrder {
 
   cascades: boolean
 }
+
+export interface DataPurchasseOrderState {
+  data: PurchasseOrder[];
+  count: number;
+}

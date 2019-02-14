@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectorRef} from '@angular/core';
 import {Observable} from "rxjs";
 import {Store, select} from "@ngrx/store";
 import {
@@ -19,6 +19,8 @@ import {ValidatorDuplicateString} from "../../../shared/validators/validators-co
 import {PrixZone} from "../../../models/prixZone";
 import {skipWhile, distinctUntilChanged} from "rxjs/internal/operators";
 import {NotificationService} from "../../../services/notification.service";
+import {ClientsService} from "../services/clients.service";
+
 
 @Component({
   selector: 'app-clients-list',
@@ -41,22 +43,27 @@ export class ClientsListComponent implements OnInit {
   myPrixZoneMotoForm: FormGroup;
   myPrixZoneCarForm: FormGroup;
 
+  fileToUpload: File = null;
+  message: string;
+
   constructor(private store$: Store<RootStoreState.State>,
               private fb: FormBuilder,
-              private notificationsService: NotificationService) {
+              private notificationsService: NotificationService,
+              private cdr: ChangeDetectorRef,
+              private clientsService: ClientsService) {
   }
 
   ngOnInit() {
-    this.allItems$ = this.store$.select(
-      ClientsStoreSelectors.selectAllItems
+    this.allItems$ = this.store$.pipe(
+      select( ClientsStoreSelectors.selectAllItems )
     );
-    this.clientsItems$ = this.store$.select(
-      ClientsStoreSelectors.selectClientsItems
+    this.clientsItems$ = this.store$.pipe(
+      select( ClientsStoreSelectors.selectClientsItems(0) )
     );
-    this.selectTotal$ = this.store$.select(
-      ClientsStoreSelectors.selectTotal
+    this.selectTotal$ = this.store$.pipe(
+      select( ClientsStoreSelectors.selectTotal )
     );
-    this.store$.dispatch(new ClientsStoreActions.LoadRequestAction({id: 1}));
+    this.store$.dispatch(new ClientsStoreActions.LoadRequestAction());
     this.store$.dispatch(new PrixZonesMotoStoreActions.LoadRequestAction());
     this.store$.dispatch(new PrixZonesCarStoreActions.LoadRequestAction());
     this.createFormClient();
@@ -69,25 +76,21 @@ export class ClientsListComponent implements OnInit {
     this.store$.dispatch(new ClientsStoreActions.AddRequestAction({item: client}));
     this.resetforms();
   }
-
   updateClient(client: DataForm) {
     this.store$.dispatch(new ClientsStoreActions.UpdateRequestAction({
       id: client.id,
       changes: client
     }));
   }
-
   updatePrixZoneMoto(prixZoneMoto: PrixZone) {
     this.store$.dispatch(new PrixZonesMotoStoreActions.UpdateRequestAction({
       id: prixZoneMoto.id,
       changes: prixZoneMoto
     }))
   }
-
   updatePrixZoneCar(prixZoneCar: PrixZone) {
     this.store$.dispatch(new PrixZonesCarStoreActions.UpdateRequestAction({id: prixZoneCar.id, changes: prixZoneCar}))
   }
-
   createFormClient(): void {
     this.myClientForm = this.fb.group({
       id: [null],
@@ -111,7 +114,6 @@ export class ClientsListComponent implements OnInit {
       fk_type: [0],
     });
   }
-
   createFormPrixZoneMoto(): void {
     this.myPrixZoneMotoForm = this.fb.group({
       id: [null, Validators.required],
@@ -125,7 +127,6 @@ export class ClientsListComponent implements OnInit {
       id_client: [null, Validators.required],
     });
   }
-
   createFormPrixZoneCar(): void {
     this.myPrixZoneCarForm = this.fb.group({
       id: [null, Validators.required],
@@ -139,9 +140,8 @@ export class ClientsListComponent implements OnInit {
       id_client: [null, Validators.required],
     });
   }
-
   selectClientById(id: string) {
-    if (id.length) {
+    if (id && id.length && id != '0') {
       this.clientsById$ = this.store$.pipe(select(ClientsStoreSelectors.selectClientById(+id)));
       this.clientsById$.subscribe(client => {
           if (client) {
@@ -165,33 +165,44 @@ export class ClientsListComponent implements OnInit {
         }
       );
     } else {
-
       this.resetforms();
     }
   }
-
   resetforms() {
     this.myClientForm.reset();
     this.myPrixZoneMotoForm.reset();
     this.myPrixZoneCarForm.reset();
   }
-
   selectRemovalsByClientId(id: string) {
     this.removalsByClientId$ = this.store$.select(
       ClientsStoreSelectors.selectRemovalsByClientId(+id)
     );
   }
-
   selectByName(name: string) {
     this.clientsByName$ = this.store$.select(
       ClientsStoreSelectors.selectClientByName(name)
     );
   }
-
   removeOne(id: string): void {
     this.store$.dispatch(new ClientsStoreActions.RemoveRequestAction(id));
   }
 
+  handleFileInput(files: FileList) {
+    this.fileToUpload = files.item(0);
+  }
+  uploadFileToActivity() {
+    if (this.myClientForm.get('id').value && this.myClientForm.get('id').value.length) {
+      this.clientsService.postFile(this.fileToUpload, this.myClientForm.get('id').value).subscribe(data => {
+        this.message = 'File uploaded'
+        this.cdr.markForCheck();
+      });
+    }else {
+      this.message = 'Wrong client id -> '+this.myClientForm.get('id').value;
+      this.cdr.markForCheck();
+    }
+  }
+
+// useless
   updateOne(id: string): void {
     this.store$.dispatch(new ClientsStoreActions.UpdateRequestAction({
         id: id,
@@ -219,7 +230,6 @@ export class ClientsListComponent implements OnInit {
       })
     );
   }
-
   addOne(): void {
     this.store$.dispatch(new ClientsStoreActions.AddRequestAction({
         item: {
@@ -246,7 +256,6 @@ export class ClientsListComponent implements OnInit {
       }
     ));
   }
-
   upsertOne(id: string): void {
     let upsertId: number;
     if (id) { // update
