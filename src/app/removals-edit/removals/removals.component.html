@@ -22,7 +22,7 @@
           </mat-icon>
           <mat-error *ngIf="allFormGroup[0].get('name')?.errors?.required">Nom est obligatoire.</mat-error>
           <mat-error *ngIf="allFormGroup[0].get('name')?.errors?.minLength">Nom min 3 characteres.</mat-error>
-          <mat-error *ngIf="allFormGroup[0].get('name')?.errors?.duplicate">Ce nom exist déja</mat-error>
+          <mat-error *ngIf="allFormGroup[0].get('name')?.errors?.duplicate">Ce nom existe déja</mat-error>
           <mat-hint *ngIf="input_name.value?.length<3" align="end">min {{input_name.value?.length || 0}}/3</mat-hint>
         </mat-form-field>
 

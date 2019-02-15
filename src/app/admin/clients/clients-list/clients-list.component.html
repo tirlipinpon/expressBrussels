@@ -30,7 +30,7 @@
     </mat-form-field>
     <div>
       <mat-form-field class="order-d"><input matInput formControlName="name" placeholder="name"></mat-form-field>
-      <div *ngIf="myClientForm.get('name')?.errors?.duplicate"><span style="color:red;">Ce nom exist déja</span></div>
+      <div *ngIf="myClientForm.get('name')?.errors?.duplicate"><span style="color:red;">Ce nom existe déja</span></div>
     </div>
     <mat-form-field class="order-d"><input matInput formControlName="address" placeholder="address"></mat-form-field>
     <mat-form-field class="order-d"><input matInput formControlName="number" placeholder="number"></mat-form-field>
