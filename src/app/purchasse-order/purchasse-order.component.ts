@@ -412,7 +412,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     let distM = 0;
     this.distances.map(w => { distM += w.distanceValue; });
     distM += 10000;
-    distM *= 2;
     let distKm = distM / 1000;
     let price = distKm;
 

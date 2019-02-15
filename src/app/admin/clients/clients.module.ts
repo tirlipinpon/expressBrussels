@@ -16,8 +16,8 @@ import {MatSelectModule} from "@angular/material";
     FormsModule,
     ReactiveFormsModule,
     ClientsRoutingModule,
-    SharedModule,
-    MatSelectModule
+    MatSelectModule,
+    SharedModule
   ]
 })
 export class ClientsModule { }

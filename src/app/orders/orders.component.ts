@@ -48,6 +48,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
   @ViewChildren('mati') matInput: QueryList<any>;
   months: string[] = [];
   apiUrl = environment.apiUrl;
+  isAllMonthOrdersValide: boolean;
 
   constructor(
     private store: Store<fromRoot.AppState>,
@@ -59,6 +60,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
         this.storeDispatch();
       }
     });
+    this.isAllMonthOrdersValide = false;
   }
 
   ngOnInit() {
@@ -174,6 +176,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
   applyFilterName(filterValue: string, target: any): void {
     if (this.dataSource) {
+      this.isAllMonthOrdersValide = false;
       this.dataSource.filterPredicate = (data: any, filter: string) =>
       data.recipient_name.indexOf(filter) != -1 || data.removal_name.indexOf(filter) != -1;
       this.filterTable(filterValue, target);
@@ -182,12 +185,14 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
   applyFilterDate(filterValue: string, target: any): void {
     if (this.dataSource) {
+      this.isAllMonthOrdersValide = false;
       this.dataSource.filterPredicate = (data: any, filter: string) => data.created.indexOf(filter) != -1;
       this.filterTable(filterValue, target);
     }
   }
   applyFilterRefClient(filterValue: string, target: any): void {
     if (this.dataSource) {
+      this.isAllMonthOrdersValide = false;
       this.dataSource.filterPredicate = (data: any, filter: string) =>
         data.recipient_ref_client ? data.recipient_ref_client.indexOf(filter) != -1 : false
           ||
@@ -197,12 +202,20 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
   applyFilterMonth(filterValue: string, target: any): void {
     if (this.dataSource) {
+      this.isAllMonthOrdersValide = false;
       if (filterValue !== 'none') {
+        this.isAllMonthOrdersValide = true;
         this.dataSource.filterPredicate = (data: any, filter: string) => {
           const year = data.created.slice(0, 4);
           const current_year = (new Date()).getFullYear();
           if (current_year === +year) {
-            return data.created.slice(5, 7).indexOf(filter) != -1
+            let resp = data.created.slice(5, 7).indexOf(filter) != -1;
+            if (resp) {
+              if (+data.valide === 0) {
+                this.isAllMonthOrdersValide = false;
+              }
+            }
+            return resp;
           }
         };
         this.filterTable(filterValue, target);
@@ -213,7 +226,12 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
   applyFilterNumber(filterValue: string, target: any): void {
     if (this.dataSource) {
-      this.dataSource.filterPredicate = (data: any, filter: string) => data.id.indexOf(filter) != -1;
+      this.isAllMonthOrdersValide = false;
+      this.dataSource.filterPredicate = (data: any, filter: string) => {
+        let data_id = ''+data.id;
+       let resp = data_id.indexOf(filter) != -1;
+       return resp;
+      };
       this.filterTable(filterValue, target);
     }
   }
@@ -235,6 +253,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
     }
   }
   resetFilterButtonClick(): void {
+    this.isAllMonthOrdersValide = false;
     this.resetFilter();
     this.resetCriteriaInputFilter();
   }
@@ -262,7 +281,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
     let data = document.getElementById(elem);
     html2canvas(data).then(canvas => {
       let imgWidth = 210;
-      let pageHeight = 295;
+      let pageHeight = 280;
       let imgHeight = canvas.height * imgWidth / canvas.width;
       let heightLeft = imgHeight;
 
@@ -271,6 +290,9 @@ export class OrdersComponent implements OnInit, OnDestroy {
       let doc = new jspdf('p', 'mm');
       let position = 10;
 
+      doc.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+      doc.text('Hello world!', 30, 30);
+      doc.addPage();
 
       doc.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
       heightLeft -= pageHeight;

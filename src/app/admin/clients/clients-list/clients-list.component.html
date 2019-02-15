@@ -1,9 +1,10 @@
 <app-notification></app-notification>
 
+<!-- SEARCH -->
 <div style="margin:5px;">
   <mat-form-field>
     <mat-select (selectionChange)="selectClientById($event.value)" placeholder="Select client">
-      <mat-option  [value]="'0'">-- NEW CLIENT --</mat-option>
+      <mat-option [value]="'0'">-- NEW CLIENT --</mat-option>
       <mat-option *ngFor="let client of clientsItems$|async" [value]="client.id">
         {{client.id}} - {{client.name}}
       </mat-option>
@@ -12,70 +13,82 @@
 </div>
 
 
-
 <div style="border: 3px solid blue; display:flex;margin:10px;flex-wrap: wrap;">
-  <form [formGroup]="myClientForm">
-    <div *ngIf="myClientForm.get('type').value==1">Attention ceci est un enlevement, lié au client {{myClientForm.get('fk_client').value}}.</div>
-    <div *ngIf="myClientForm.get('type').value==2">Attention ceci est un destinataire, lié au client {{myClientForm.get('fk_client').value}}.</div>
-
-    <div><span>id</span><input [attr.disabled]="true" formControlName="id"></div>
-    <div><span>active</span><input [attr.disabled]="myClientForm.get('id').value ? null : true" formControlName="active"></div>
-    <!--    -->
+  <!-- CLIENT -->
+  <form style="width: 200px;border: 1px solid grey;" [formGroup]="myClientForm">
+    <div *ngIf="myClientForm.get('type').value==1">Ceci est un enlevement, du client {{myClientForm.get('fk_client').value}}.
+    </div>
+    <div *ngIf="myClientForm.get('type').value==2">Ceci est un destinataire, duclient {{myClientForm.get('fk_client').value}}.
+    </div>
+    <mat-form-field class="order-d"><input matInput disabled value="{{myClientForm.get('id').value}}" placeholder="id">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select formControlName="active" placeholder="active">
+        <mat-option [value]="'1'">oui</mat-option>
+        <mat-option [value]="'0'">non</mat-option>
+      </mat-select>
+    </mat-form-field>
     <div>
-      <span>name</span><input formControlName="name">
+      <mat-form-field class="order-d"><input matInput formControlName="name" placeholder="name"></mat-form-field>
       <div *ngIf="myClientForm.get('name')?.errors?.duplicate"><span style="color:red;">Ce nom exist déja</span></div>
     </div>
-    <div><span>address</span><input formControlName="address"></div>
-    <div><span>number</span><input formControlName="number"></div>
-    <div><span>cp</span><input type="number" formControlName="cp"></div>
-    <div><span>state</span><input formControlName="state"></div>
-    <div><span>phone</span><input formControlName="phone"></div>
+    <mat-form-field class="order-d"><input matInput formControlName="address" placeholder="address"></mat-form-field>
+    <mat-form-field class="order-d"><input matInput formControlName="number" placeholder="number"></mat-form-field>
+    <mat-form-field class="order-d"><input matInput type="number" min="0" formControlName="cp" placeholder="cp">
+    </mat-form-field>
+    <mat-form-field class="order-d"><input matInput formControlName="state" placeholder="state"></mat-form-field>
+    <mat-form-field class="order-d"><input matInput formControlName="phone" placeholder="phone"></mat-form-field>
     <div formGroupName="infos">
-      <div><span>mail</span><input formControlName="info1"></div>
-      <div><span>password</span><input formControlName="info2"></div>
+      <mat-form-field class="order-d"><input matInput formControlName="info1" placeholder="mail"></mat-form-field>
+      <mat-form-field class="order-d"><input matInput formControlName="info2" placeholder="password"></mat-form-field>
     </div>
-    <div><span>type</span><input [attr.disabled]="true" formControlName="type" ></div>
+    <mat-form-field class="order-d"><input matInput disabled value="{{myClientForm.get('type').value}}"
+                                           placeholder="type"></mat-form-field>
     <button *ngIf="!myClientForm.get('id').value" type="submit"
             [disabled]="myClientForm.invalid"
-            (click)="addClient(myClientForm.value)">add client</button>
+            (click)="addClient(myClientForm.value)">add client
+    </button>
     <button *ngIf="myClientForm.get('id').value" type="submit"
             [disabled]="myClientForm.invalid"
-            (click)="updateClient(myClientForm.value)">update client</button>
+            (click)="updateClient(myClientForm.value)">update client
+    </button>
   </form>
-  <div style="border: 3px solid green" *ngIf="myClientForm.get('id').value && myClientForm.get('type').value==0">
+  <!-- MOTO -->
+  <div style="width: 200px;border: 1px solid grey;" *ngIf="myClientForm.get('id').value && myClientForm.get('type').value==0">
     <form [formGroup]="myPrixZoneMotoForm">
-      <div><span>id</span><input type="number" step="0.1" min="0" [attr.disabled]="true" formControlName="id"></div>
-      <div><span>zone1</span><input type="number" step="0.1" min="0"  formControlName="zone1"></div>
-      <div><span>zone2</span><input type="number" step="0.1" min="0"  formControlName="zone2"></div>
-      <div><span>zone3</span><input type="number" step="0.1" min="0"  formControlName="zone3"></div>
-      <div><span>prixKm</span><input type="number" step="0.1" min="0"  formControlName="prixKm"></div>
-      <div><span>after15h</span><input type="number" step="1" min="0"   formControlName="after15h"></div>
-      <div><span>double_express</span><input type="number" step="1" min="0"  formControlName="double_express"></div>
-      <div><span>go_and_back</span><input type="number" step="1" min="0"  formControlName="go_and_back"></div>
-      <div><span>id_client</span><input type="number" [attr.disabled]="true" formControlName="id_client"></div>
-      <button  type="submit"
+      <mat-form-field class="order-d"><input matInput disabled value="{{myPrixZoneMotoForm.get('id').value}}" placeholder="id"></mat-form-field>
+        <mat-form-field class="order-d"><input matInput type="number" step="0.1" min="0" formControlName="zone1" placeholder="zone1"></mat-form-field>
+        <mat-form-field class="order-d"><input matInput type="number" step="0.1" min="0" formControlName="zone2" placeholder="zone2"></mat-form-field>
+        <mat-form-field class="order-d"><input matInput type="number" step="0.1" min="0" formControlName="zone3" placeholder="zone3"></mat-form-field>
+        <mat-form-field class="order-d"><input matInput type="number" step="0.1" min="0" formControlName="prixKm" placeholder="prixKm"></mat-form-field>
+        <mat-form-field class="order-d"><input matInput type="number" step="1" min="0" formControlName="after15h" placeholder="after15h"></mat-form-field>
+        <mat-form-field class="order-d"><input matInput type="number" step="1" min="0" formControlName="double_express" placeholder="double_express"></mat-form-field>
+        <mat-form-field class="order-d"><input matInput type="number" step="1" min="0" formControlName="go_and_back" placeholder="go_and_back"></mat-form-field>
+        <mat-form-field class="order-d"><input matInput disabled value="{{myPrixZoneMotoForm.get('id_client').value}}" placeholder="client"></mat-form-field>
+      <button type="submit"
               [disabled]="myPrixZoneMotoForm.invalid"
-              (click)="updatePrixZoneMoto(myPrixZoneMotoForm.value)">update  moto</button>
+              (click)="updatePrixZoneMoto(myPrixZoneMotoForm.value)">update moto
+      </button>
     </form>
   </div>
-  <div style="border: 3px solid purple" *ngIf="myClientForm.get('id').value && myClientForm.get('type').value==0">
+  <!-- CAR -->
+  <div style="width: 200px;border: 1px solid grey;" *ngIf="myClientForm.get('id').value && myClientForm.get('type').value==0">
     <form [formGroup]="myPrixZoneCarForm">
-      <div><span>id</span><input type="number" step="0.1" min="0" [attr.disabled]="true" formControlName="id"></div>
-      <div><span>zone1</span><input type="number" step="0.1" min="0"  formControlName="zone1"></div>
-      <div><span>zone2</span><input type="number" step="0.1" min="0"  formControlName="zone2"></div>
-      <div><span>zone3</span><input type="number" step="0.1" min="0"  formControlName="zone3"></div>
-      <div><span>prixKm</span><input type="number" step="0.1" min="0"  formControlName="prixKm"></div>
-      <div><span>after15h</span><input type="number" step="1" min="0" max="1" formControlName="after15h"></div>
-      <div><span>double_express</span><input type="number" step="1" min="0"  formControlName="double_express"></div>
-      <div><span>go_and_back</span><input type="number" step="1" min="0"  formControlName="go_and_back"></div>
-      <div><span>id_client</span><input type="number" [attr.disabled]="true" formControlName="id_client"></div>
-      <button  type="submit"
-               [disabled]="myPrixZoneCarForm.invalid"
-               (click)="updatePrixZoneCar(myPrixZoneCarForm.value)">update  car</button>
+      <mat-form-field class="order-d"><input matInput disabled value="{{myPrixZoneCarForm.get('id').value}}" placeholder="id"></mat-form-field>
+      <mat-form-field class="order-d"><input matInput type="number" step="0.1" min="0" formControlName="zone1" placeholder="zone1"></mat-form-field>
+      <mat-form-field class="order-d"><input matInput type="number" step="0.1" min="0" formControlName="zone2" placeholder="zone2"></mat-form-field>
+      <mat-form-field class="order-d"><input matInput type="number" step="0.1" min="0" formControlName="zone3" placeholder="zone3"></mat-form-field>
+      <mat-form-field class="order-d"><input matInput type="number" step="0.1" min="0" formControlName="prixKm" placeholder="prixKm"></mat-form-field>
+      <mat-form-field class="order-d"><input matInput type="number" step="1" min="0" formControlName="after15h" placeholder="after15h"></mat-form-field>
+      <mat-form-field class="order-d"><input matInput type="number" step="1" min="0" formControlName="double_express" placeholder="double_express"></mat-form-field>
+      <mat-form-field class="order-d"><input matInput type="number" step="1" min="0" formControlName="go_and_back" placeholder="go_and_back"></mat-form-field>
+      <mat-form-field class="order-d"><input matInput disabled value="{{myPrixZoneCarForm.get('id_client').value}}" placeholder="client"></mat-form-field>
+      <button type="submit"
+              [disabled]="myPrixZoneCarForm.invalid"
+              (click)="updatePrixZoneCar(myPrixZoneCarForm.value)">update car
+      </button>
     </form>
   </div>
-
-
 </div>
 
 <div style="border: 3px solid green;margin:10px;padding:5px;">
@@ -117,7 +130,8 @@
   <pre *ngIf="false" style="flex:1;border:1px solid grey;">allItems$ : {{allItems$|async|json}}</pre>
   <pre style="flex:1;border:1px solid grey;">clientsItems$ : {{clientsItems$|async|json}}</pre>
   <pre style="flex:1;border:1px solid grey;">clientsById$ : {{clientsById$|async|json}}</pre>
-  <pre *ngIf="false" style="flex:1;border:1px solid grey;">removalsByClientId$ : {{removalsByClientId$|async|json}}</pre>
+  <pre *ngIf="false"
+       style="flex:1;border:1px solid grey;">removalsByClientId$ : {{removalsByClientId$|async|json}}</pre>
   <pre style="flex:1;border:1px solid grey;">clientsPrixZoneMoto$: {{clientsPrixZoneMoto$|async|json}}</pre>
   <pre style="flex:1;border:1px solid grey;">clientsPrixZoneCar$: {{clientsPrixZoneCar$|async|json}}</pre>
   <!--<pre style="flex:1;">error$: {{error$|async}}</pre>-->
