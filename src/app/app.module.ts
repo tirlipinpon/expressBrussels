@@ -46,7 +46,10 @@ import {OrdersModule} from "./admin/orders/orders.module";
 
 
 const appRoutes: Routes = [
-  { path: 'login',                component: LoginComponent },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
   {
     path: '',
     component: LoginComponent
@@ -93,6 +96,10 @@ const appRoutes: Routes = [
         component: CascadeComponent,
         canActivate: [AlwaysAuthGuardService],
         canDeactivate: [CanDeactivateFormGuardService]
+      },
+      {
+        path: 'translate-order',
+        loadChildren: './translate/translate.module#TranslateModule'
       },
     ]
   },

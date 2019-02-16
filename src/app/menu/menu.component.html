@@ -3,7 +3,21 @@
     <img src="assets/img/logo_sfe_long.jpg">
   </div>
   <div>
-    <button mat-button routerLink="/menu/order" routerLinkActive="active-link">Bon de commande</button>
+
+    <mat-form-field>
+      <mat-select placeholder="Type de commande">
+        <mat-option [value]="'Livraison'">
+          <button mat-button routerLink="/menu/order" routerLinkActive="active-link">Livraison</button>
+        </mat-option>
+        <mat-option [value]="'Traduction'">
+          <button mat-button routerLink="/menu/translate-order" routerLinkActive="active-link">Traduction</button>
+        </mat-option>
+        <!--<mat-option>-->
+          <!--<button mat-button routerLink="/menu/import-export-order" routerLinkActive="active-link">Import/export</button>-->
+        <!--</mat-option>-->
+      </mat-select>
+    </mat-form-field>
+
     <button mat-button routerLink="/menu/orders" routerLinkActive="active-link">Factures</button>
     <button mat-button routerLink="/menu/removals" routerLinkActive="active-link">Enlèvements</button>
     <button mat-button routerLink="/menu/recipients" routerLinkActive="active-link">Destinataires</button>

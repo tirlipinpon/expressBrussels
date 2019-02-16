@@ -3,9 +3,8 @@
  */
 import { RootStoreModule } from './root-store.module';
 import * as RootStoreState from './root-state';
-import * as RootStoreSelectors from './selectors';
 
-export { RootStoreState, RootStoreSelectors, RootStoreModule };
+export { RootStoreState, RootStoreModule };
 
 export * from './clients-store';
 export * from './orders-store';
