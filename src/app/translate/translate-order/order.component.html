@@ -1,8 +1,8 @@
-<button mat-raised-button (click)="isLinear = !isLinear" id="toggle-linear">
-  {{!isLinear ? 'Enable linear mode' : 'Disable linear mode'}}
-</button>
+<!--<button mat-raised-button (click)="isLinear = !isLinear" id="toggle-linear">-->
+  <!--{{!isLinear ? 'Enable linear mode' : 'Disable linear mode'}}-->
+<!--</button>-->
 
-<mat-horizontal-stepper [linear]="isLinear" #stepper>
+<mat-horizontal-stepper style="display:flex;margin:auto;flex-direction:column;width:1000px" [linear]="isLinear" #stepper>
   <mat-step [stepControl]="myOrderForm.get('step1')">
     <form [formGroup]="myOrderForm">
       <ng-template matStepLabel>Documents</ng-template>
@@ -57,7 +57,7 @@
   <mat-step [stepControl]="myOrderForm.get('step2')">
     <form [formGroup]="myOrderForm">
       <ng-template matStepLabel>Destination(s)</ng-template>
-      <div style="display:flex;margin:auto;width:500px;" [formGroupName]="'step2'">
+      <div style="display:flex;margin:auto;width:932px;" [formGroupName]="'step2'">
         <mat-card>
           <mat-card-content>
             <h2 class="example-h2">Obligatoire</h2>
