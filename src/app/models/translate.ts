@@ -3,7 +3,7 @@
  */
 import {Destination} from "./destination";
 
-export interface Translate {
+export interface OrderTranslate {
   id: number;
   uuid: string;
   country: string;
@@ -31,6 +31,6 @@ export interface Translate {
 }
 
 export interface TranslateState {
-  data: Translate[];
+  data: OrderTranslate[];
   count: number;
 }

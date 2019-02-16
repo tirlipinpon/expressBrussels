@@ -8,6 +8,7 @@ import {
   MatButtonModule
 } from "@angular/material";
 import {ReactiveFormsModule, FormsModule} from "@angular/forms";
+import {RootStoreModule} from "./root-store/root-store.module";
 
 @NgModule({
   declarations: [OrderComponent],
@@ -21,7 +22,8 @@ import {ReactiveFormsModule, FormsModule} from "@angular/forms";
     MatInputModule,
     MatCheckboxModule,
     MatCardModule,
-    MatButtonModule
+    MatButtonModule,
+    RootStoreModule
   ]
 })
 export class TranslateModule { }
