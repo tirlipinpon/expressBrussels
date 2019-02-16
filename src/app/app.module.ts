@@ -100,7 +100,9 @@ const appRoutes: Routes = [
       },
       {
         path: 'translate-order',
-        loadChildren: './translate/translate.module#TranslateModule'
+        loadChildren: './translate/translate.module#TranslateModule',
+        canActivate: [AlwaysAuthGuardService],
+        canDeactivate: [CanDeactivateFormGuardService]
       },
     ]
   },
@@ -169,7 +171,6 @@ const appRoutes: Routes = [
       maxAge: 50
     }),
     RootStoreModule, // admin store
-    TranslateModule
 
   ],
   providers: [

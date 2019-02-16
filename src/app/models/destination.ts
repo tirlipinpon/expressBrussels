@@ -3,7 +3,7 @@
  */
 export interface Destination {
   id?: number;
-  type: string; // translate/import-export
+  orderType: string; // translate/import-export
   kind: string; // removal/recipient/commune/notaire
   name: string;
   contact?: string;

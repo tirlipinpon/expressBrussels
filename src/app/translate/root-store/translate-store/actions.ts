@@ -20,7 +20,7 @@ export enum ActionTypes {
 // ====================   ADD   =================================
 export class AddRequestAction implements Action {
   readonly type = ActionTypes.ADD_REQUEST;
-  constructor(public payload: { items: OrderTranslate }) {}
+  constructor(public payload: { item: OrderTranslate }) {}
 }
 export class AddSuccessAction implements Action {
   readonly type = ActionTypes.ADD_SUCCESS;

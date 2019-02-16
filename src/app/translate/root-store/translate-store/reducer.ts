@@ -1,13 +1,14 @@
 /**
  * Created by tirli on 16-02-19.
  */
-import { Actions, ActionTypes } from './actions';
-import { featureAdapter, initialState, State } from './state';
 
-export function featureReducer(state = initialState, action: Actions): State {
+import {initialState, OrderTranslateState, orderTranslateAdapter} from './state';
+import {Actions, ActionTypes} from "./actions";
+
+export function orderTranslateReducer(state = initialState, action: Actions): OrderTranslateState {
   switch (action.type) {
     case ActionTypes.ADD_SUCCESS: {
-      return featureAdapter.add(action.payload.item, {
+      return orderTranslateAdapter.addOne(action.payload.item, {
         ...state,
         isLoading: false,
         error: null
@@ -21,7 +22,7 @@ export function featureReducer(state = initialState, action: Actions): State {
       };
     }
     case ActionTypes.READ_SUCCESS: {
-      return featureAdapter.addAll(action.payload.items, {
+      return orderTranslateAdapter.addAll(action.payload.items, {
         ...state,
         isLoading: false,
         error: null
@@ -35,7 +36,7 @@ export function featureReducer(state = initialState, action: Actions): State {
       };
     }
     case ActionTypes.UPDATE_SUCCESS: {
-      return featureAdapter.updateOne({
+      return orderTranslateAdapter.updateOne({
           id: action.payload.id,
           changes: action.payload.changes
         },

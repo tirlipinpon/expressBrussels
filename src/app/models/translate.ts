@@ -21,11 +21,11 @@ export interface OrderTranslate {
   spfJusticeCheck: boolean;
   communeCheck: boolean;
   notaireCheck: boolean;
-  procedureCheck: string;
-  creation: string;
+  procedureType: string; // normal/urgent
+  created: string;
   valid: boolean;
   price: number;
-  type: string // normal/urgent
+  typeProcedure: string // normal/urgent
   fk_client_id: number;
   destination: Destination[]
 }

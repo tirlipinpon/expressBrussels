@@ -11,12 +11,12 @@ export const orderTranslateAdapter: EntityAdapter<OrderTranslate> = createEntity
     b.created.toString().localeCompare(a.created.toString())
 });
 
-export interface State extends EntityState<OrderTranslate> {
+export interface OrderTranslateState extends EntityState<OrderTranslate> {
   isLoading?: boolean;
   error?: any;
 }
 
-export const initialState: State = orderTranslateAdapter.getInitialState(
+export const initialState: OrderTranslateState = orderTranslateAdapter.getInitialState(
   {
     isLoading: false,
     error: null

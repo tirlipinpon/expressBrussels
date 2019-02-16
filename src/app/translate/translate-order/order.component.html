@@ -160,7 +160,7 @@
       <ng-template matStepLabel>Procédure</ng-template>
       <div style="display:flex;flex-direction:column;margin:auto;width:685px;" [formGroupName]="'step3'">
         <mat-form-field style="width:685px;">
-          <mat-select placeholder="procedure" formControlName="procedureCheck" required>
+          <mat-select placeholder="procedure" formControlName="procedureType" required>
             <mat-option></mat-option>
             <mat-option [value]="'normale'">normale</mat-option>
             <mat-option [value]="'urgente'">Urgente</mat-option>
