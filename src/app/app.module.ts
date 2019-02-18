@@ -43,6 +43,7 @@ import { RootStoreModule } from './admin/root-store/root-store.module';
 import {AdminAlwaysAuthGuardService} from "./services/admin-always-auth-guard.service";
 import {ClientsModule} from "./admin/clients/clients.module";
 import {OrdersModule} from "./admin/orders/orders.module";
+import {TranslateModule} from "./translate/translate.module";
 
 
 const appRoutes: Routes = [
@@ -99,7 +100,9 @@ const appRoutes: Routes = [
       },
       {
         path: 'translate-order',
-        loadChildren: './translate/translate.module#TranslateModule'
+        loadChildren: './translate/translate.module#TranslateModule',
+        canActivate: [AlwaysAuthGuardService],
+        canDeactivate: [CanDeactivateFormGuardService]
       },
     ]
   },
@@ -167,7 +170,7 @@ const appRoutes: Routes = [
     StoreDevtoolsModule.instrument({
       maxAge: 50
     }),
-    RootStoreModule
+    RootStoreModule, // admin store
 
   ],
   providers: [

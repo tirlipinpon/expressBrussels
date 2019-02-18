@@ -1,12 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, HostListener} from '@angular/core';
 import {FormBuilder, FormGroup, Validators, FormArray} from "@angular/forms";
+import {ComponentDeactivable} from "../../services/can-deactivate-form-guard.service";
+import * as uuid from 'uuid';
 
 @Component({
   selector: 'app-order',
   templateUrl: 'order.component.html',
   styleUrls: ['order.component.css']
 })
-export class OrderComponent implements OnInit {
+export class OrderComponent implements OnInit, ComponentDeactivable {
 
   myOrderForm: FormGroup;
   isLinear = false;
@@ -41,7 +43,7 @@ export class OrderComponent implements OnInit {
   createForm(): void {
     this.myOrderForm = this.fb.group({
       id: [null],
-      uuid: [null, Validators.required],
+      uuid: [uuid.v4(), Validators.required],
       step1: this.fb.group({
         country: [null, Validators.required],
         reference: [null, Validators.required],
@@ -63,16 +65,16 @@ export class OrderComponent implements OnInit {
         destination: this.fb.array([ ])
       }),
       step3: this.fb.group({
-        procedureCheck: [null, Validators.required],
+        procedureType: [null, Validators.required], // normal/urgent
         destination: this.fb.array([
           this.createItem('removal'),
           this.createItem('recipient')
         ])
       }),
-      creation: [null],
+      created: [null],
       valid: [null],
       price: [null],
-      type: [null, Validators.required],
+      typeProcedure: [null, Validators.required],
       fk_client_id: [null, Validators.required],
     });
   }
@@ -94,7 +96,7 @@ export class OrderComponent implements OnInit {
   createItem(kind: string): FormGroup {
     return this.fb.group({
       id: [null],
-      type: ['translate', Validators.required], // translate/import-export
+      orderType: ['translate', Validators.required], // translate/import-export
       kind: [kind, Validators.required], // removal/recipient/commune/notaire
       name: [null, Validators.required],
       contact: [null],
@@ -108,5 +110,12 @@ export class OrderComponent implements OnInit {
     })
 
   }
-
+  @HostListener('window:beforeunload')
+  canDeactivate(): boolean {
+    let canDeactive = true;
+      if (this.myOrderForm.dirty && this.myOrderForm.touched) {
+        canDeactive = false;
+      }
+    return canDeactive;
+  }
 }

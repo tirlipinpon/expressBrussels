@@ -13,6 +13,9 @@ export class CanDeactivateFormGuardService implements CanDeactivate<ComponentDea
   constructor(private confirmationService: ConfirmationService) { }
 
   canDeactivate(component: ComponentDeactivable): boolean {
+    if (!component) {
+      return true;
+    }
     return component.canDeactivate ? this.actionConfirm(component) : true;
   }
   actionConfirm(component): boolean {
