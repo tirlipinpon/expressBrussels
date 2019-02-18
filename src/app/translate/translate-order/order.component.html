@@ -2,11 +2,11 @@
   <!--{{!isLinear ? 'Enable linear mode' : 'Disable linear mode'}}-->
 <!--</button>-->
 
-<mat-horizontal-stepper style="display:flex;margin:auto;flex-direction:column;width:1000px" [linear]="isLinear" #stepper>
+<mat-horizontal-stepper style="display:flex;margin:auto;flex-direction:column;width:1400px" [linear]="isLinear" #stepper>
   <mat-step [stepControl]="myOrderForm.get('step1')">
-    <form [formGroup]="myOrderForm">
+    <form [formGroup]="myOrderForm.get('step1')">
       <ng-template matStepLabel>Documents</ng-template>
-      <div style="display:flex;margin:auto;width:500px;" [formGroupName]="'step1'">
+      <div style="display:flex;margin:auto;width:500px;" >
         <mat-card>
           <mat-card-content>
             <h2 class="example-h2">Obligatoire</h2>
@@ -55,15 +55,16 @@
     </form>
   </mat-step>
   <mat-step [stepControl]="myOrderForm.get('step2')">
-    <form [formGroup]="myOrderForm">
+    <form [formGroup]="myOrderForm.get('step2')">
       <ng-template matStepLabel>Destination(s)</ng-template>
-      <div style="display:flex;margin:auto;width:932px;" [formGroupName]="'step2'">
+      <div style="display:flex;margin:auto;width:1400px;" >
         <mat-card>
           <mat-card-content>
             <h2 class="example-h2">Obligatoire</h2>
             <div style="display:flex;flex-direction:column;width:200px;margin:10px;">
               <mat-checkbox [labelPosition]="'after'" formControlName="communeCheck">Commune</mat-checkbox>
               <mat-checkbox [labelPosition]="'after'" formControlName="notaireCheck">Notaire</mat-checkbox>
+              <mat-checkbox [labelPosition]="'after'" formControlName="consulatCheck">Consulat</mat-checkbox>
               <mat-checkbox [labelPosition]="'after'" formControlName="greffeInstanceCheck">Greffe de 1ère instance
               </mat-checkbox>
               <mat-checkbox [labelPosition]="'after'" formControlName="coursAppelCheck">Cours d’appel</mat-checkbox>
@@ -145,6 +146,42 @@
             </div>
           </mat-card-content>
         </mat-card>
+        <mat-card *ngIf="myOrderForm.get(['step2','consulatCheck']).value">
+          <mat-card-content>
+            <h2 class="example-h2">Consulat</h2>
+            <div style="display:flex;flex-direction:column;width:300px;margin:10px;">
+              <div formArrayName="destination"
+                   *ngFor="let item of arrayFormDataStep2.controls; let i = index;">
+                <div *ngIf="item.get('kind').value==='notaire'" [formGroupName]="i">
+                  <mat-form-field style="width:300px;">
+                    <input matInput placeholder="name" formControlName="name" required>
+                  </mat-form-field>
+                  <mat-form-field style="width:250px;">
+                    <input matInput placeholder="address" formControlName="address" required>
+                  </mat-form-field>
+                  <mat-form-field style="width:50px;">
+                    <input matInput placeholder="number" formControlName="number" required>
+                  </mat-form-field>
+                  <mat-form-field style="width:60px;">
+                    <input type="number" min="0" matInput placeholder="cp" formControlName="cp" required>
+                  </mat-form-field>
+                  <mat-form-field style="width:240px;">
+                    <input matInput placeholder="state" formControlName="state" required>
+                  </mat-form-field>
+                  <mat-form-field style="width:300px;">
+                    <input matInput placeholder="phone" formControlName="phone" required>
+                  </mat-form-field>
+                  <mat-form-field style="width:300px;">
+                    <input matInput placeholder="contact" formControlName="contact">
+                  </mat-form-field>
+                  <mat-form-field style="width:300px;">
+                    <textarea matInput placeholder="message" formControlName="message"></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
       </div>
       <div style="display:flex;margin:25px auto;width:220px;">
         <button mat-raised-button color="primary" matStepperPrevious>Retour</button>
@@ -156,9 +193,9 @@
     </form>
   </mat-step>
   <mat-step [stepControl]="myOrderForm.get('step3')">
-    <form [formGroup]="myOrderForm">
+    <form [formGroup]="myOrderForm.get('step3')">
       <ng-template matStepLabel>Procédure</ng-template>
-      <div style="display:flex;flex-direction:column;margin:auto;width:685px;" [formGroupName]="'step3'">
+      <div style="display:flex;flex-direction:column;margin:auto;width:685px;" >
         <mat-form-field style="width:685px;">
           <mat-select placeholder="procedure" formControlName="procedureType" required>
             <mat-option></mat-option>
@@ -217,7 +254,7 @@
     <pre>{{myOrderForm.value|json}}</pre>
     <div>
       <button mat-button matStepperPrevious>Back</button>
-      <button mat-button>send</button>
+      <button mat-button (click)="send()">send</button>
     </div>
   </mat-step>
 </mat-horizontal-stepper>

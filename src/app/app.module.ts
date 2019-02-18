@@ -104,6 +104,11 @@ const appRoutes: Routes = [
         canActivate: [AlwaysAuthGuardService],
         canDeactivate: [CanDeactivateFormGuardService]
       },
+      {
+        path: 'import-export-order',
+        loadChildren: './import-export/i-e-order.module#IEOrderModule',
+        canActivate: [AlwaysAuthGuardService],
+      }
     ]
   },
   {
