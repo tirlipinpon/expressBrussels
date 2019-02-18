@@ -43,7 +43,6 @@ import { RootStoreModule } from './admin/root-store/root-store.module';
 import {AdminAlwaysAuthGuardService} from "./services/admin-always-auth-guard.service";
 import {ClientsModule} from "./admin/clients/clients.module";
 import {OrdersModule} from "./admin/orders/orders.module";
-import {TranslateModule} from "./translate/translate.module";
 
 
 const appRoutes: Routes = [
@@ -104,6 +103,11 @@ const appRoutes: Routes = [
         canActivate: [AlwaysAuthGuardService],
         canDeactivate: [CanDeactivateFormGuardService]
       },
+      {
+        path: 'import-export-order',
+        loadChildren: './import-export/i-e-order.module#IEOrderModule',
+        canActivate: [AlwaysAuthGuardService],
+      }
     ]
   },
   {

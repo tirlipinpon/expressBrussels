@@ -2,7 +2,10 @@ import {Component, OnInit, HostListener} from '@angular/core';
 import {FormBuilder, FormGroup, Validators, FormArray} from "@angular/forms";
 import {ComponentDeactivable} from "../../services/can-deactivate-form-guard.service";
 import * as uuid from 'uuid';
-
+import {Store} from "@ngrx/store";
+import {
+  RootStoreState
+} from '../root-store';
 @Component({
   selector: 'app-order',
   templateUrl: 'order.component.html',
@@ -15,7 +18,7 @@ export class OrderComponent implements OnInit, ComponentDeactivable {
   get arrayFormDataStep2() { return <FormArray>this.myOrderForm.get(['step2','destination']); }
   get arrayFormDataStep3() { return <FormArray>this.myOrderForm.get(['step3','destination']); }
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private store$: Store<RootStoreState.RootState>) {
     this.createForm();
   }
 
@@ -36,6 +39,13 @@ export class OrderComponent implements OnInit, ComponentDeactivable {
         this.addItem('step2', 'notaire', 1);
       }else {
         this.removeItem('step2', 'notaire');
+      }
+    });
+    this.myOrderForm.get(['step2', 'consulatCheck']).valueChanges.subscribe(val => {
+      if (val) {
+        this.addItem('step2', 'consulat', 2);
+      }else {
+        this.removeItem('step2', 'consulat');
       }
     });
   }
@@ -61,6 +71,7 @@ export class OrderComponent implements OnInit, ComponentDeactivable {
         spfEtrangereCheck: [null],
         spfJusticeCheck: [null],
         communeCheck: [null],
+        consulatCheck: [null],
         notaireCheck: [null],
         destination: this.fb.array([ ])
       }),
@@ -117,5 +128,10 @@ export class OrderComponent implements OnInit, ComponentDeactivable {
         canDeactive = false;
       }
     return canDeactive;
+  }
+  send() {
+    // this.store$.dispatch(
+    //   new OrderTranslateStoreActions.AddRequestAction()
+    // );
   }
 }
