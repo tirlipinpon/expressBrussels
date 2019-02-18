@@ -43,7 +43,6 @@ import { RootStoreModule } from './admin/root-store/root-store.module';
 import {AdminAlwaysAuthGuardService} from "./services/admin-always-auth-guard.service";
 import {ClientsModule} from "./admin/clients/clients.module";
 import {OrdersModule} from "./admin/orders/orders.module";
-import {TranslateModule} from "./translate/translate.module";
 
 
 const appRoutes: Routes = [
