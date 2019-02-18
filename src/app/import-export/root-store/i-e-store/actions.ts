@@ -2,6 +2,7 @@
  * Created by tirli on 18-02-19.
  */
 import { Action } from '@ngrx/store';
+import {ImportExport} from "../../../models/import-export";
 
 export enum ActionTypes {
   ADD_REQUEST = '[Import/Export] Add Request',
@@ -11,14 +12,15 @@ export enum ActionTypes {
 
 export class AddRequestAction implements Action {
   readonly type = ActionTypes.ADD_REQUEST;
+  constructor(public payload: { item: ImportExport}) {}
 }
 export class AddSuccessAction implements Action {
   readonly type = ActionTypes.ADD_SUCCESS;
-  constructor(public payload: { items: MyModel[] }) {}
+  constructor(public payload: { item: ImportExport}) {}
 }
 export class AddFailureAction implements Action {
   readonly type = ActionTypes.ADD_FAILURE;
   constructor(public payload: { error: string }) {}
 }
 
-export type Actions = AddRequestAction | AddFailureAction | AddSuccessAction;
+export type IEActions = AddRequestAction | AddFailureAction | AddSuccessAction;
