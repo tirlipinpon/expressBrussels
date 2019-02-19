@@ -2,10 +2,16 @@ import {Component, OnInit, HostListener} from '@angular/core';
 import {FormBuilder, FormGroup, Validators, FormArray} from "@angular/forms";
 import {ComponentDeactivable} from "../../services/can-deactivate-form-guard.service";
 import * as uuid from 'uuid';
-import {Store} from "@ngrx/store";
+import {Store, select} from "@ngrx/store";
 import {
-  RootStoreState
+  RootStoreState,
+  OrderTranslateStoreActions,
+  OrderTranslateSelectors
 } from '../root-store';
+import {OrderTranslate} from "../../models/translate";
+import {CustomerService} from "../../services/customer.service";
+import {Observable} from "rxjs";
+
 @Component({
   selector: 'app-order',
   templateUrl: 'order.component.html',
@@ -14,16 +20,34 @@ import {
 export class OrderComponent implements OnInit, ComponentDeactivable {
 
   myOrderForm: FormGroup;
+  myOrderFormTemp: FormGroup;
   isLinear = false;
+  order: OrderTranslate;
+  orderTemp: OrderTranslate;
+  customerId: number;
+  cptDestinationChecked: number;
+  error$: Observable<string>;
   get arrayFormDataStep2() { return <FormArray>this.myOrderForm.get(['step2','destination']); }
   get arrayFormDataStep3() { return <FormArray>this.myOrderForm.get(['step3','destination']); }
 
-  constructor(private fb: FormBuilder, private store$: Store<RootStoreState.RootState>) {
+  constructor(private fb: FormBuilder,
+              private store$: Store<RootStoreState.RootState>,
+              private customerService: CustomerService) {
+    this.cptDestinationChecked = 0;
+    this.customerService.currentCustomerId.subscribe(id => {
+      if(+id !== 0) {
+
+      }
+    });
+    this.customerId = 1;
     this.createForm();
+    this.onChanges();
   }
 
   ngOnInit() {
-    this.onChanges();
+    this.error$ = this.store$.pipe(
+      select( OrderTranslateSelectors.selectOrderTranslateError )
+    );
   }
 
   onChanges(): void {
@@ -52,8 +76,14 @@ export class OrderComponent implements OnInit, ComponentDeactivable {
 
   createForm(): void {
     this.myOrderForm = this.fb.group({
-      id: [null],
-      uuid: [uuid.v4(), Validators.required],
+      step0: this.fb.group({
+        id: [null],
+        uuid: [uuid.v4(), Validators.required],
+        created: [null],
+        valid: [null],
+        price: [null],
+        fk_client_id: [this.customerId, Validators.required]
+      }),
       step1: this.fb.group({
         country: [null, Validators.required],
         reference: [null, Validators.required],
@@ -81,12 +111,7 @@ export class OrderComponent implements OnInit, ComponentDeactivable {
           this.createItem('removal'),
           this.createItem('recipient')
         ])
-      }),
-      created: [null],
-      valid: [null],
-      price: [null],
-      typeProcedure: [null, Validators.required],
-      fk_client_id: [null, Validators.required],
+      })
     });
   }
   addItem(step: string, kind: string, index: number): void {
@@ -130,8 +155,47 @@ export class OrderComponent implements OnInit, ComponentDeactivable {
     return canDeactive;
   }
   send() {
-    // this.store$.dispatch(
-    //   new OrderTranslateStoreActions.AddRequestAction()
-    // );
+    this.mapFormToOrderTranslate();
+    this.store$.dispatch( new OrderTranslateStoreActions.AddRequestAction({item: this.order}) );
   }
+  mapFormToOrderTranslate() {
+    this.order = {
+      ...this.myOrderForm.get('step0').value,
+      ...this.myOrderForm.get('step1').value,
+      ...this.myOrderForm.get('step2').value,
+      ...this.myOrderForm.get('step3').value
+    };
+    let dest1 = this.myOrderForm.get(['step2', 'destination']).value;
+    let dest2 = this.myOrderForm.get(['step3', 'destination']).value;
+    this.order.destination = [
+      ...dest1, ...dest2
+    ];
+  }
+  incDestination(value) {
+    if (value) {
+      this.cptDestinationChecked++
+    } else {
+      this.cptDestinationChecked--;
+    }
+  }
+
+  initiateTemp(value) {
+    this.myOrderFormTemp = value;
+    this.myOrderFormTemp  = this.removeEmpty(this.myOrderFormTemp.value)
+  }
+  removeEmpty(obj: any): any {
+    Object.keys(obj).forEach((key) => {
+      if (obj[key] && typeof obj[key] === 'object') {
+        const childObject = this.removeEmpty(obj[key]);
+        if (childObject === undefined) {
+          delete obj[key];
+        }
+      } else if (obj[key] === '' || obj[key] === null || obj[key] === undefined) {
+        delete obj[key];
+      }
+    });
+    let resp =  Object.keys(obj).length > 0 || obj instanceof Array ? obj : undefined;
+    console.log(resp);
+    return resp;
+  };
 }

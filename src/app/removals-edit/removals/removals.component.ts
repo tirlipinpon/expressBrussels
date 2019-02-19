@@ -57,7 +57,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
   storeDispatch() {
     this.store.dispatch(new ClientZonesActions.GetClientZones());
     this.customerService.currentCustomerId.subscribe(id => {
-      if (id !== 0) {
+      if (+id !== 0) {
         this.customerId = id;
         if (this.witchComponent === 'removals') {
           this.store.dispatch(new actionsRemoval.GetRemovals(this.customerId*10+this.typeDataForm)); // (id + type)  eg: id = 69; type=1 fk_type=691

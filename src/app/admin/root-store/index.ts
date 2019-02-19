@@ -8,5 +8,6 @@ export { RootStoreState, RootStoreModule };
 
 export * from './clients-store';
 export * from './orders-store';
+export * from './translates-store';
 export * from './prix-zone-moto-store';
 export * from './prix-zone-car-store';

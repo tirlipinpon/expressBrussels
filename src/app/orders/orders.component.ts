@@ -55,7 +55,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
     @Attribute('type') type,
     private customerService: CustomerService) {
     this.customerService.currentCustomerId.subscribe(id => {
-      if (id && +id !== 0) {
+      if (+id && +id !== 0) {
         this.customerId = id;
         this.storeDispatch();
       }

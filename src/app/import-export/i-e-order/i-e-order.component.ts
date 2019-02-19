@@ -1,4 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import {Observable} from "rxjs";
+import {ImportExport} from "../../models/import-export";
+import {Store} from "@ngrx/store";
+import {
+  RootStoreState,
+  ImportExportStoreActions,
+  ImportExportStoreSelectors
+} from '../root-store';
 
 @Component({
   selector: 'app-i-e-order',
@@ -7,9 +15,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class IEOrderComponent implements OnInit {
 
-  constructor() { }
+  importExportItems$: Observable<ImportExport[]>;
+  error$: Observable<string>;
+  isLoading$: Observable<boolean>;
+
+  constructor(private store$: Store<RootStoreState.RootState>) { }
 
   ngOnInit() {
+    this.store$.dispatch( new ImportExportStoreActions.AddRequestAction({item: null}) );
   }
 
 }

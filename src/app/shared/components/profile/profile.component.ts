@@ -68,7 +68,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   storeDispatch() {
     // this.store.dispatch(new CustomerActions.GetCustomer(1));
     this.customerService.currentCustomerId.subscribe(id => {
-      if(id !== 0) {
+      if(+id !== 0) {
         this.customerId = id;
       }
     });

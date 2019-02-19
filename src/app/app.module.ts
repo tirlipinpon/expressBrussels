@@ -43,6 +43,8 @@ import { RootStoreModule } from './admin/root-store/root-store.module';
 import {AdminAlwaysAuthGuardService} from "./services/admin-always-auth-guard.service";
 import {ClientsModule} from "./admin/clients/clients.module";
 import {OrdersModule} from "./admin/orders/orders.module";
+import {GetNameByIdPipe} from "./admin/pipe/get-name-by-id.pipe";
+import {TranslateModule} from "./admin/translate/translate.module";
 
 
 const appRoutes: Routes = [
@@ -57,56 +59,54 @@ const appRoutes: Routes = [
   {
     path: 'menu',
     component: MenuComponent,
-    canActivate: [AlwaysAuthGuardService],
+    // canActivate: [AlwaysAuthGuardService],
     children: [
       {
         path: '',
         component: PurchasseOrderComponent,
-        canActivate: [AlwaysAuthGuardService],
+        // canActivate: [AlwaysAuthGuardService],
         canDeactivate: [CanDeactivateFormGuardService],
         resolve: { id: RouteResolverService }
       },
       {
         path: 'order',
         component: PurchasseOrderComponent,
-        canActivate: [AlwaysAuthGuardService],
+        // canActivate: [AlwaysAuthGuardService],
         canDeactivate: [CanDeactivateFormGuardService],
         resolve: { id: RouteResolverService }
       },
       {
         path: 'orders',
         component: OrdersComponent,
-        canActivate: [AlwaysAuthGuardService],
+        // canActivate: [AlwaysAuthGuardService],
         canDeactivate: [CanDeactivateFormGuardService]
       },
       {
         path: 'removals',
         component: RemovalsComponent,
-        canActivate: [AlwaysAuthGuardService],
+        // canActivate: [AlwaysAuthGuardService],
         canDeactivate: [CanDeactivateFormGuardService]
       },
       {
         path: 'recipients',
         component: RemovalsComponent,
-        canActivate: [AlwaysAuthGuardService],
+        // canActivate: [AlwaysAuthGuardService],
         canDeactivate: [CanDeactivateFormGuardService]
       },
       {
         path: 'cascade',
         component: CascadeComponent,
-        canActivate: [AlwaysAuthGuardService],
+        // canActivate: [AlwaysAuthGuardService],
         canDeactivate: [CanDeactivateFormGuardService]
       },
       {
         path: 'translate-order',
-        loadChildren: './translate/translate.module#TranslateModule',
-        canActivate: [AlwaysAuthGuardService],
-        canDeactivate: [CanDeactivateFormGuardService]
+        loadChildren: './translate/translate.module#TranslateModule'
       },
       {
         path: 'import-export-order',
         loadChildren: './import-export/i-e-order.module#IEOrderModule',
-        canActivate: [AlwaysAuthGuardService],
+        // canActivate: [AlwaysAuthGuardService],
       }
     ]
   },
@@ -119,6 +119,11 @@ const appRoutes: Routes = [
     path: 'admin/orders',
     canActivate: [AdminAlwaysAuthGuardService],
     loadChildren: './admin/orders/orders.module#OrdersModule'
+  },
+  {
+    path: 'admin/translate',
+    canActivate: [AdminAlwaysAuthGuardService],
+    loadChildren: './admin/translate/translate.module#TranslateModule'
   },
   // otherwise redirect to home
   // { path: '**',  redirectTo: ''}
@@ -142,6 +147,7 @@ const appRoutes: Routes = [
     CommonModule,
     ClientsModule,
     OrdersModule,
+    TranslateModule,
 
     MatTableModule,
     MatFormFieldModule,

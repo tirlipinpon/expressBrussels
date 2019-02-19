@@ -25,7 +25,6 @@ export interface OrderTranslate {
   created: string;
   valid: boolean;
   price: number;
-  typeProcedure: string // normal/urgent
   fk_client_id: number;
   destination: Destination[]
 }

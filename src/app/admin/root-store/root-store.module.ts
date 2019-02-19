@@ -4,6 +4,7 @@ import { ClientsStoreModule } from './clients-store/clients-store.module';
 import { PrixZonesMotoStoreModule } from "./prix-zone-moto-store/prix-zone-moto-store.module";
 import { PrixZonesCarStoreModule } from "./prix-zone-car-store/prix-zone-car-store.module";
 import {OrdersStoreModule} from "./orders-store/orders-store.module";
+import {TranslatesStoreModule} from "./translates-store/translate-store.module";
 
 @NgModule({
   declarations: [],
@@ -12,7 +13,8 @@ import {OrdersStoreModule} from "./orders-store/orders-store.module";
     ClientsStoreModule,
     PrixZonesMotoStoreModule,
     PrixZonesCarStoreModule,
-    OrdersStoreModule
+    OrdersStoreModule,
+    TranslatesStoreModule
   ]
 })
 
