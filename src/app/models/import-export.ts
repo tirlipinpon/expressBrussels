@@ -11,7 +11,8 @@ export interface ImportExport {
   price: number;
   valid: boolean;
   fk_client_id: number;
-  destination: Destination[];
+  destination?: Destination[];
+  administration?: Administration[];
 }
 
 export interface Administration {

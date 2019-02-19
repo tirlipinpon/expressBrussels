@@ -1,3 +1,14 @@
-<p>
-  i-e-order works!
-</p>
+<form [formGroup]="ieForm">
+  <mat-form-field class="example-full-width">
+    <input matInput placeholder="Favorite food" formControlName="uuid">
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <input matInput placeholder="Favorite food" formControlName="country">
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <input matInput placeholder="Favorite food" formControlName="reference">
+  </mat-form-field>
+  <button (click)="send()">Send</button>
+</form>
+
+{{ieForm.value|json}}

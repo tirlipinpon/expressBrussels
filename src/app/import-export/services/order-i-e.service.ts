@@ -21,7 +21,8 @@ export class OrderIEService {
   addItem(order: ImportExport): Observable<ImportExport> {
     // return of(DUMMY_CLIENTS);
     let url = this.apiUrl+'php//add_translate_order.php';
-    return this.http.post<ImportExport>(url, order);
+    // return this.http.post<ImportExport>(url, order);
+    return of(order);
   }
   updateItem(client: ImportExport): Observable<ImportExport> {
     // return of(DUMMY_CLIENTS);

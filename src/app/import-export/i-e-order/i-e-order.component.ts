@@ -7,6 +7,8 @@ import {
   ImportExportStoreActions,
   ImportExportStoreSelectors
 } from '../root-store';
+import {FormBuilder, Validators, FormGroup} from "@angular/forms";
+import * as uuid from 'uuid';
 
 @Component({
   selector: 'app-i-e-order',
@@ -18,11 +20,27 @@ export class IEOrderComponent implements OnInit {
   importExportItems$: Observable<ImportExport[]>;
   error$: Observable<string>;
   isLoading$: Observable<boolean>;
+  ieForm: FormGroup;
 
-  constructor(private store$: Store<RootStoreState.RootState>) { }
+  constructor(private store$: Store<RootStoreState.RootState>, private fb: FormBuilder) {
+   this.ieForm =  fb.group({
+      id: [null],
+      uuid: [uuid.v4(), Validators.required],
+      country: [null, Validators.required],
+      reference: [null, Validators.required],
+      creation: [null],
+      price: [null],
+      valid: [null],
+      fk_client_id: [null, Validators.required]
+    });
+  }
 
   ngOnInit() {
-    this.store$.dispatch( new ImportExportStoreActions.AddRequestAction({item: null}) );
+    // this.store$.dispatch( new ImportExportStoreActions.AddRequestAction({item: null}) );
+  }
+
+  send(): void{
+    this.store$.dispatch( new ImportExportStoreActions.AddRequestAction({item: this.ieForm.value}) );
   }
 
 }

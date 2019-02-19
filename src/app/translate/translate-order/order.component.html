@@ -205,8 +205,7 @@
           </mat-select>
         </mat-form-field>
         <div style="display:flex;width:300px;margin:10px;">
-          <div  formArrayName="destination"
-               *ngFor="let item of arrayFormDataStep3.controls; let i = index;">
+          <div  formArrayName="destination"  *ngFor="let item of arrayFormDataStep3.controls; let i = index;">
             <mat-card>
               <mat-card-content>
                 <h2 class="example-h2">{{item.get('kind').value==='removal'?'Enlevement':'Destination'}}</h2>

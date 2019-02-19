@@ -8,9 +8,7 @@ import {EffectsModule} from "@ngrx/effects";
   declarations: [],
   imports: [
     CommonModule,
-    IEStoreModule,
-    StoreModule.forRoot({}),
-    EffectsModule.forRoot([])
+    IEStoreModule
   ]
 })
 export class RootStoreModule { }
