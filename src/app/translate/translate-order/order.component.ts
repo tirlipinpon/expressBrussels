@@ -27,6 +27,7 @@ export class OrderComponent implements OnInit, ComponentDeactivable {
   customerId: number;
   cptDestinationChecked: number;
   error$: Observable<string>;
+
   get arrayFormDataStep2() { return <FormArray>this.myOrderForm.get(['step2','destination']); }
   get arrayFormDataStep3() { return <FormArray>this.myOrderForm.get(['step3','destination']); }
 
@@ -45,9 +46,7 @@ export class OrderComponent implements OnInit, ComponentDeactivable {
   }
 
   ngOnInit() {
-    this.error$ = this.store$.pipe(
-      select( OrderTranslateSelectors.selectOrderTranslateError )
-    );
+    this.error$ = this.store$.pipe( select( OrderTranslateSelectors.selectOrderTranslateError ) );
   }
 
   onChanges(): void {
@@ -144,7 +143,6 @@ export class OrderComponent implements OnInit, ComponentDeactivable {
       cp: [null, Validators.required],
       state: [null, Validators.required]
     })
-
   }
   @HostListener('window:beforeunload')
   canDeactivate(): boolean {

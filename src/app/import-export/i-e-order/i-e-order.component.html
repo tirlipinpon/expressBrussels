@@ -1,14 +1,52 @@
-<form [formGroup]="ieForm">
-  <mat-form-field class="example-full-width">
-    <input matInput placeholder="Favorite food" formControlName="uuid">
-  </mat-form-field>
-  <mat-form-field class="example-full-width">
-    <input matInput placeholder="Favorite food" formControlName="country">
-  </mat-form-field>
-  <mat-form-field class="example-full-width">
-    <input matInput placeholder="Favorite food" formControlName="reference">
-  </mat-form-field>
-  <button (click)="send()">Send</button>
-</form>
+<mat-horizontal-stepper [linear]="false" #stepper>
+  <mat-step [stepControl]="ieForm">
+    <form [formGroup]="ieForm">
+      <ng-template matStepLabel>Fill out your name</ng-template>
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="Favorite food" formControlName="uuid">
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="Favorite food" formControlName="country">
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="Favorite food" formControlName="reference">
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="ieForm">
+    <form [formGroup]="ieForm">
+      <ng-template matStepLabel>Procédure</ng-template>
+      <div style="display:flex;flex-direction:column;margin:auto;width:685px;" >
+        <div style="display:flex;width:300px;margin:10px;">
+          <div  formArrayName="destination"  *ngFor="let item of arrayFormDataStep.controls; let i = index;">
+            <mat-card>
+              <mat-card-content>
+                <h2 class="example-h2">{{item.get('kind').value==='removal'?'Enlevement':'Destination'}}</h2>
+                <app-destination  [formDestination]="item"></app-destination>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;margin:25px auto;width:220px;">
+        <button mat-raised-button color="primary" matStepperPrevious>Retour</button>
+        <div *ngIf="ieForm.valid">
+          <button  mat-raised-button color="primary" matStepperNext>Verification de la commande</button>
+        </div>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    You are now done.
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
 
-{{ieForm.value|json}}
+

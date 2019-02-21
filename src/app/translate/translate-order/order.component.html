@@ -80,36 +80,13 @@
           <mat-card-content>
             <h2 class="example-h2">Commune</h2>
             <div style="display:flex;flex-direction:column;width:300px;margin:10px;">
-              <div formArrayName="destination"
-                   *ngFor="let item of myOrderForm.get(['step2','destination']).controls; let i = index;">
+              <div formArrayName="destination" *ngFor="let item of myOrderForm.get(['step2','destination']).controls; let i = index;">
                 <div *ngIf="item.get('kind').value==='commune'" [formGroupName]="i">
-                  <mat-form-field style="width:300px;">
-                    <input  matInput placeholder="Nom" formControlName="name" required>
-                  </mat-form-field>
-                  <mat-form-field style="width:250px;">
-                    <input matInput placeholder="Adresse" formControlName="address" required>
-                  </mat-form-field>
-                  <mat-form-field style="width:50px;">
-                    <input matInput placeholder="N°" formControlName="number" required>
-                  </mat-form-field>
-                  <mat-form-field style="width:60px;">
-                    <input type="number" min="0" matInput placeholder="c.p." formControlName="cp" required>
-                  </mat-form-field>
-                  <mat-form-field style="width:240px;">
-                    <input matInput placeholder="Ville" formControlName="state" required>
-                  </mat-form-field>
-                  <mat-form-field style="width:300px;">
-                    <input matInput placeholder="Telephone" formControlName="phone" required>
-                  </mat-form-field>
-                  <mat-form-field style="width:300px;">
-                    <input matInput placeholder="Contact" formControlName="contact">
-                  </mat-form-field>
-                  <mat-form-field style="width:300px;">
-                    <textarea matInput placeholder="Message" formControlName="message"></textarea>
-                  </mat-form-field>
+                  <app-destination [formDestination]="item"></app-destination>
                 </div>
               </div>
             </div>
+
           </mat-card-content>
         </mat-card>
         <mat-card *ngIf="myOrderForm.get(['step2','notaireCheck']).value">
@@ -119,30 +96,7 @@
               <div formArrayName="destination"
                    *ngFor="let item of arrayFormDataStep2.controls; let i = index;">
                 <div *ngIf="item.get('kind').value==='notaire'" [formGroupName]="i">
-                  <mat-form-field style="width:300px;">
-                    <input matInput placeholder="Nom" formControlName="name" required>
-                  </mat-form-field>
-                  <mat-form-field style="width:250px;">
-                    <input matInput placeholder="Adresse" formControlName="address" required>
-                  </mat-form-field>
-                  <mat-form-field style="width:50px;">
-                    <input matInput placeholder="N°" formControlName="number" required>
-                  </mat-form-field>
-                  <mat-form-field style="width:60px;">
-                    <input type="number" min="0" matInput placeholder="c.p." formControlName="cp" required>
-                  </mat-form-field>
-                  <mat-form-field style="width:240px;">
-                    <input matInput placeholder="Ville" formControlName="state" required>
-                  </mat-form-field>
-                  <mat-form-field style="width:300px;">
-                    <input matInput placeholder="Telephone" formControlName="phone" required>
-                  </mat-form-field>
-                  <mat-form-field style="width:300px;">
-                    <input matInput placeholder="Contact" formControlName="contact">
-                  </mat-form-field>
-                  <mat-form-field style="width:300px;">
-                    <textarea matInput placeholder="Message" formControlName="message"></textarea>
-                  </mat-form-field>
+                  <app-destination [formDestination]="item"></app-destination>
                 </div>
               </div>
             </div>
@@ -155,30 +109,7 @@
               <div formArrayName="destination"
                    *ngFor="let item of arrayFormDataStep2.controls; let i = index;">
                 <div *ngIf="item.get('kind').value==='consulat'" [formGroupName]="i">
-                  <mat-form-field style="width:300px;">
-                    <input matInput placeholder="Nom" formControlName="name" required>
-                  </mat-form-field>
-                  <mat-form-field style="width:250px;">
-                    <input matInput placeholder="Adresse" formControlName="address" required>
-                  </mat-form-field>
-                  <mat-form-field style="width:50px;">
-                    <input matInput placeholder="N°" formControlName="number" required>
-                  </mat-form-field>
-                  <mat-form-field style="width:60px;">
-                    <input type="number" min="0" matInput placeholder="c.p." formControlName="cp" required>
-                  </mat-form-field>
-                  <mat-form-field style="width:240px;">
-                    <input matInput placeholder="Ville" formControlName="state" required>
-                  </mat-form-field>
-                  <mat-form-field style="width:300px;">
-                    <input matInput placeholder="Telephone" formControlName="phone" required>
-                  </mat-form-field>
-                  <mat-form-field style="width:300px;">
-                    <input matInput placeholder="Contact" formControlName="contact">
-                  </mat-form-field>
-                  <mat-form-field style="width:300px;">
-                    <textarea matInput placeholder="Message" formControlName="message"></textarea>
-                  </mat-form-field>
+                  <app-destination [formDestination]="item" ></app-destination>
                 </div>
               </div>
             </div>
@@ -209,35 +140,9 @@
             <mat-card>
               <mat-card-content>
                 <h2 class="example-h2">{{item.get('kind').value==='removal'?'Enlevement':'Destination'}}</h2>
-                <div [formGroupName]="i">
-                  <mat-form-field style="width:300px;">
-                    <input matInput placeholder="Nom" formControlName="name" required>
-                  </mat-form-field>
-                  <mat-form-field style="width:250px;">
-                    <input matInput placeholder="Adresse" formControlName="address" required>
-                  </mat-form-field>
-                  <mat-form-field style="width:50px;">
-                    <input matInput placeholder="N°" formControlName="number" required>
-                  </mat-form-field>
-                  <mat-form-field style="width:60px;">
-                    <input type="number" min="0" matInput placeholder="c.p." formControlName="cp" required>
-                  </mat-form-field>
-                  <mat-form-field style="width:240px;">
-                    <input matInput placeholder="Ville" formControlName="state" required>
-                  </mat-form-field>
-                  <mat-form-field style="width:300px;">
-                    <input matInput placeholder="Telephone" formControlName="phone" required>
-                  </mat-form-field>
-                  <mat-form-field style="width:300px;">
-                    <input matInput placeholder="Contact" formControlName="contact">
-                  </mat-form-field>
-                  <mat-form-field style="width:300px;">
-                    <textarea matInput placeholder="Message" formControlName="message"></textarea>
-                  </mat-form-field>
-                </div>
+                <app-destination  [formDestination]="item"></app-destination>
               </mat-card-content>
             </mat-card>
-
           </div>
         </div>
       </div>
