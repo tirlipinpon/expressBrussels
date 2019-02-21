@@ -103,7 +103,7 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
   }
   storeDispatch() {
     this.customerService.currentCustomerId.subscribe(id => {
-      if(id !== 0) {
+      if(+id !== 0) {
         this.customerId = id;
         this.store.dispatch(new RemovalActions.GetRemovals(this.customerId*10 + 1)); // (id + type)  eg: id = 69; type=1 fk_type=691
         this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10 + 2)); // (id + type)  eg: id = 69; type=2 fk_type=692

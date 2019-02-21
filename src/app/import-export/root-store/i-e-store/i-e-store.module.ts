@@ -9,7 +9,7 @@ import {ImportExportStoreEffects} from "./effects";
   declarations: [],
   imports: [
     CommonModule,
-    StoreModule.forFeature('ImportExportReducer', ImportExportReducer),
+    StoreModule.forFeature('order-import-export', ImportExportReducer),
     EffectsModule.forFeature([ImportExportStoreEffects])
   ],
   providers: [ImportExportStoreEffects]

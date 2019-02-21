@@ -5,7 +5,7 @@ import { PurchasseOrderComponent } from './purchasse-order.component';
 import {SharedModule} from '../shared/shared.module';
 import {CommonModule} from '@angular/common';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatTooltipModule} from "@angular/material";
+import {MatTooltipModule, MatCardModule} from "@angular/material";
 import {StoreModule} from "@ngrx/store";
 import {purchasseOrderReducer} from "../reducers/all.reducer";
 
@@ -18,6 +18,7 @@ import {purchasseOrderReducer} from "../reducers/all.reducer";
     BrowserAnimationsModule,
     SharedModule,
     MatTooltipModule,
+    MatCardModule,
     StoreModule.forFeature('order', purchasseOrderReducer)
   ],
   exports: [

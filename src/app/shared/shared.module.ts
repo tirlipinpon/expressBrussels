@@ -39,7 +39,7 @@ import {
   MatRadioModule,
   MatCheckboxModule,
   MatToolbarModule,
-  MatTooltipModule
+  MatTooltipModule, MatCardModule
 } from "@angular/material";
 import { ValidatorClassDirective } from './directives/validator-class.directive';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -57,20 +57,19 @@ import { CountOrdersByMonthPipe } from './pipe/count-orders-by-month.pipe';
 import { CountOrdersPriceByMonthPipe } from './pipe/count-orders-price-by-month.pipe';
 import {ToasterEffectService} from "../effects/toaster/toaster-effect.service";
 import { SendMessageComponent } from './components/send-message/send-message.component';
+import {GetNameByIdPipe} from "../admin/pipe/get-name-by-id.pipe";
+import { DestinationComponent } from './components/form/destination/destination.component';
 
 library.add(faPhone, faHome, faClock, faUser, faUniversity, faFilePdf, faEraser,
   faIdCard, faComment, faUserTie, faUserTag, faEuroSign, faMapMarkedAlt, faClock, faMotorcycle, faCar, faEye, faEyeSlash);
 
 @NgModule({
   imports: [
-    BrowserModule,
     RouterModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    BrowserAnimationsModule,
-    CommonModule,
     GrowlModule,
     DialogModule,
     ConfirmDialogModule,
@@ -85,6 +84,7 @@ library.add(faPhone, faHome, faClock, faUser, faUniversity, faFilePdf, faEraser,
     MatCheckboxModule,
     MatToolbarModule,
     MatTooltipModule,
+    MatCardModule,
     EffectsModule.forRoot([
       CustomerEffectService,
       ClientZonesEffectService,
@@ -121,7 +121,9 @@ library.add(faPhone, faHome, faClock, faUser, faUniversity, faFilePdf, faEraser,
     NumberTransformToMonthPipe,
     CountOrdersByMonthPipe,
     CountOrdersPriceByMonthPipe,
-    SendMessageComponent
+    SendMessageComponent,
+    GetNameByIdPipe,
+    DestinationComponent
   ],
   declarations: [
     // component
@@ -146,6 +148,8 @@ library.add(faPhone, faHome, faClock, faUser, faUniversity, faFilePdf, faEraser,
     NumberTransformToMonthPipe,
     CountOrdersByMonthPipe,
     CountOrdersPriceByMonthPipe,
+    GetNameByIdPipe,
+    DestinationComponent
   ],
   providers: [
     ConfirmationService

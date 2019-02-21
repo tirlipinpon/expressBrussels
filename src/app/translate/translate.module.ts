@@ -9,10 +9,12 @@ import {
 } from "@angular/material";
 import {ReactiveFormsModule, FormsModule} from "@angular/forms";
 import {RootStoreModule} from "./root-store/root-store.module";
+import {SharedModule} from "../shared/shared.module";
 
 @NgModule({
   declarations: [OrderComponent],
   imports: [
+    SharedModule,
     CommonModule,
     TranslateRoutingModule,
     FormsModule,

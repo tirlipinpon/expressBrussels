@@ -1,9 +1,7 @@
 /**
- * Created by tirli on 18-02-19.
+ * Created by tirli on 19-02-19.
  */
-
 import { RootStoreModule } from './root-store.module';
-import * as RootStoreState from './ie-store/state';
-export * from './my-feature-store';
-export * from './my-other-feature-store';
-export { RootStoreState, RootStoreSelectors, RootStoreModule };
+import * as RootStoreState from './root-state';
+export * from './i-e-store';
+export { RootStoreState, RootStoreModule };

@@ -84,9 +84,7 @@ export class OrdersListComponent implements OnInit {
     this.selectedOption = '-1';
     if (id && id.length && id != '0') {
       this.store$.dispatch(new OrdersStoreActions.LoadRequestAction(+id));
-      this.ordersItems$ = this.store$.pipe(
-        select( OrdersStoreSelectors.selectOrdersItems )
-      );
+      this.ordersItems$ = this.store$.pipe( select( OrdersStoreSelectors.selectOrdersItems ) );
       this.setOrderFormFromSelect(this.ordersItems$);
     }
   }

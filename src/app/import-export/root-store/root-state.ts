@@ -1,5 +1,5 @@
-import {ImportExportState} from "./i-e-store/state";
+import {ImportExportStoreState} from "./i-e-store";
 
 export interface RootState {
-  myFeature: ImportExportState;
+  importExport: ImportExportStoreState.ImportExportState;
 }

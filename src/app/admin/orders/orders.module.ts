@@ -5,12 +5,11 @@ import { OrdersRoutingModule } from './orders-routing.module';
 import { OrdersListComponent } from './orders-list/orders-list.component';
 import {ReactiveFormsModule, FormsModule} from "@angular/forms";
 import {MatSelectModule, MatInputModule} from "@angular/material";
-import {GetNameByIdPipe} from "../pipe/get-name-by-id.pipe";
+import {SharedModule} from "../../shared/shared.module";
 
 @NgModule({
   declarations: [
-    OrdersListComponent,
-    GetNameByIdPipe
+    OrdersListComponent
   ],
   imports: [
     CommonModule,
@@ -18,7 +17,8 @@ import {GetNameByIdPipe} from "../pipe/get-name-by-id.pipe";
     ReactiveFormsModule,
     OrdersRoutingModule,
     MatSelectModule,
-    MatInputModule
+    MatInputModule,
+    SharedModule
   ]
 })
 export class OrdersModule { }

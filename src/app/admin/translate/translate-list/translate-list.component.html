@@ -1,0 +1,87 @@
+<div style="margin:5px;">
+  <mat-form-field>
+    <mat-select (selectionChange)="selectClientById($event.value)" placeholder="Select client">
+      <mat-option *ngFor="let client of clientsItems$|async" [value]="client.id">
+        {{client.id}} - {{client.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<div  style="margin:5px;">
+  <mat-form-field>
+    <mat-select [(value)]="selectedOption" #matSelect (selectionChange)="selectTranslateByMonth($event.value)"
+                placeholder="Select month">
+      <mat-option [value]="'-1'">-- SELECT MONTH --</mat-option>
+      <mat-option *ngFor="let month of months" [value]="month.id">
+        {{month.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<form style="display:flex;flex-wrap:wrap;" [formGroup]="myTranslateForm">
+  <div style="" formArrayName="items" *ngFor="let item of formData.controls; let i = index;">
+    <div #orderGroupRef style="margin:5px;border:1px solid grey;padding:5px;width: 200px;" [formGroupName]="i">
+      <mat-form-field class="order-d"><input matInput disabled value="{{item.get('id').value}}" placeholder="id"></mat-form-field>
+      <mat-form-field class="order-d"><input matInput disabled value="{{item.get('uuid').value}}" placeholder="uuid"></mat-form-field>
+      <mat-form-field class="order-d"><input matInput disabled value="{{item.get('created').value}}" placeholder="created"></mat-form-field>
+      <mat-form-field class="order-d"><input matInput disabled value="{{item.get('fk_client_id').value|getNameById:(clientsItems$|async)}}" placeholder="client"></mat-form-field>
+      <mat-form-field>
+        <mat-select formControlName="valid" placeholder="validé">
+          <mat-option [value]="'0'">non validé</mat-option>
+          <mat-option [value]="'1'">validé</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field><input type="number" step="0.01" matInput placeholder="price" formControlName="price" required></mat-form-field>
+      <mat-form-field><input matInput placeholder="Pays" formControlName="country" required></mat-form-field>
+      <mat-form-field><input matInput placeholder="Reference" formControlName="reference" required></mat-form-field>
+      <mat-form-field><textarea matInput placeholder="Nom des documents" formControlName="docName" required></textarea></mat-form-field>
+      <div style="display:flex;align-items:baseline;justify-content: space-between;">
+        <mat-form-field style="width:70px;"><input type="number" min="0" matInput placeholder="Original" formControlName="originalNbr"></mat-form-field>
+        <mat-checkbox [labelPosition]="'before'" formControlName="originalCheck">Original</mat-checkbox>
+      </div>
+      <div style="display:flex;align-items:baseline;justify-content: space-between;">
+        <mat-form-field style="width:70px;"><input type="number" min="0" matInput placeholder="Traduction" formControlName="translateNbr"></mat-form-field>
+        <mat-checkbox [labelPosition]="'before'" formControlName="translateCheck">Traduction</mat-checkbox>
+      </div>
+      <div style="display:flex;align-items:baseline;justify-content: space-between;">
+        <mat-form-field style="width:70px;"><input type="number" min="0" matInput placeholder="Copie" formControlName="copyNbr"></mat-form-field>
+        <mat-checkbox [labelPosition]="'before'" formControlName="copyCheck">Copie</mat-checkbox>
+      </div>
+      <div style="display:flex;flex-direction:column;">
+        <mat-checkbox  [labelPosition]="'after'" formControlName="communeCheck">Commune</mat-checkbox>
+        <mat-checkbox  [labelPosition]="'after'" formControlName="notaireCheck">Notaire</mat-checkbox>
+        <mat-checkbox  [labelPosition]="'after'" formControlName="consulatCheck">Consulat</mat-checkbox>
+        <mat-checkbox  [labelPosition]="'after'" formControlName="greffeInstanceCheck">Greffe de 1ère instance</mat-checkbox>
+        <mat-checkbox  [labelPosition]="'after'" formControlName="coursAppelCheck">Cours d’appel</mat-checkbox>
+        <mat-checkbox  [labelPosition]="'after'" formControlName="spfEtrangereCheck">SPF affaires étrangères</mat-checkbox>
+        <mat-checkbox  [labelPosition]="'after'" formControlName="spfJusticeCheck">SPF justice</mat-checkbox>
+      </div>
+      <mat-form-field>
+        <mat-select placeholder="Procédure" formControlName="procedureType" required>
+          <mat-option [value]="'normale'">normale</mat-option>
+          <mat-option [value]="'urgente'">Urgente</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+      <button class="order-d" [disabled]="item.invalid || item.pristine" (click)="updateOrder(item.value)">Update</button>
+    </div>
+</form>
+
+
+<pre>{{translateItems$|async|json}}</pre>
+
+<!--<div style="border:3px solid red;">-->
+  <!--<pre>{{(error$|async)?.message}}</pre>-->
+  <!--<pre>{{(error$|async)?.error?.text}}</pre>-->
+<!--</div>-->
+
+
+<!--<div *ngIf="false">-->
+  <!--<div style="display:flex;flex:1">-->
+    <!--<pre>ordersItems$: {{ordersItems$|async|json}}</pre>-->
+    <!--<pre>myOrderForm: {{myOrderForm.value|json}}</pre>-->
+  <!--</div>-->
+<!--</div>-->
+
