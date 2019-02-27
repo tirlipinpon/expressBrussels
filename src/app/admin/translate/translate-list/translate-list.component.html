@@ -10,7 +10,7 @@
 
 <div  style="margin:5px;">
   <mat-form-field>
-    <mat-select [(value)]="selectedOption" #matSelect (selectionChange)="selectTranslateByMonth($event.value)"
+    <mat-select [(value)]="selectedOption" #matSelect (selectionChange)="selectByMonth($event.value)"
                 placeholder="Select month">
       <mat-option [value]="'-1'">-- SELECT MONTH --</mat-option>
       <mat-option *ngFor="let month of months" [value]="month.id">
@@ -20,20 +20,13 @@
   </mat-form-field>
 </div>
 
-<form style="display:flex;flex-wrap:wrap;" [formGroup]="myTranslateForm">
+<form style="display:flex;flex-wrap:wrap;" [formGroup]="myForm">
   <div style="" formArrayName="items" *ngFor="let item of formData.controls; let i = index;">
     <div #orderGroupRef style="margin:5px;border:1px solid grey;padding:5px;width: 200px;" [formGroupName]="i">
       <mat-form-field class="order-d"><input matInput disabled value="{{item.get('id').value}}" placeholder="id"></mat-form-field>
       <mat-form-field class="order-d"><input matInput disabled value="{{item.get('uuid').value}}" placeholder="uuid"></mat-form-field>
       <mat-form-field class="order-d"><input matInput disabled value="{{item.get('created').value}}" placeholder="created"></mat-form-field>
       <mat-form-field class="order-d"><input matInput disabled value="{{item.get('fk_client_id').value|getNameById:(clientsItems$|async)}}" placeholder="client"></mat-form-field>
-      <mat-form-field>
-        <mat-select formControlName="valid" placeholder="validé">
-          <mat-option [value]="'0'">non validé</mat-option>
-          <mat-option [value]="'1'">validé</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field><input type="number" step="0.01" matInput placeholder="price" formControlName="price" required></mat-form-field>
       <mat-form-field><input matInput placeholder="Pays" formControlName="country" required></mat-form-field>
       <mat-form-field><input matInput placeholder="Reference" formControlName="reference" required></mat-form-field>
       <mat-form-field><textarea matInput placeholder="Nom des documents" formControlName="docName" required></textarea></mat-form-field>
@@ -64,8 +57,15 @@
           <mat-option [value]="'urgente'">Urgente</mat-option>
         </mat-select>
       </mat-form-field>
+      <mat-form-field><input type="number" step="0.01" matInput placeholder="price" formControlName="price" required></mat-form-field>
+      <mat-form-field>
+        <mat-select formControlName="valid" placeholder="validé">
+          <mat-option [value]="'0'">non validé</mat-option>
+          <mat-option [value]="'1'">validé</mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
-      <button class="order-d" [disabled]="item.invalid || item.pristine" (click)="updateOrder(item.value)">Update</button>
+      <button class="order-d" [disabled]="item.invalid || item.pristine" (click)="update(item.value)">Update</button>
     </div>
 </form>
 

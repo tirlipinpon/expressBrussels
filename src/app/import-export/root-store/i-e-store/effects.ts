@@ -14,7 +14,7 @@ export class ImportExportStoreEffects {
   constructor(private dataService: OrderIEService, private actions$: Actions) {}
 
   @Effect()
-  loadRequestEffect$: Observable<Action> = this.actions$.pipe(
+  addRequestEffect$: Observable<Action> = this.actions$.pipe(
     ofType<IEActions.AddRequestAction>( IEActions.ActionTypes.ADD_REQUEST  ),
     switchMap(action =>
       this.dataService

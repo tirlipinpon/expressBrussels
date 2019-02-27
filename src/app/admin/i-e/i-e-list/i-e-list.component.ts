@@ -2,8 +2,8 @@ import {Component, OnInit, ElementRef, ViewChild} from '@angular/core';
 import {Store, select} from "@ngrx/store";
 import {
   RootStoreState,
-  TranslatesStoreSelectors,
-  TranslatesStoreActions,
+  ImportExportStoreSelectors,
+  ImportExportStoreActions,
   ClientsStoreActions,
   ClientsStoreSelectors
 } from '../../root-store';
@@ -11,33 +11,33 @@ import {DataForm} from "../../../models/DataForm";
 import {Observable} from "rxjs";
 import {FormBuilder, FormGroup, FormArray, Validators} from "@angular/forms";
 import {MatSelect} from "@angular/material";
-import {OrderTranslate} from "../../../models/translate";
+import {ImportExport} from "../../../models/import-export";
 
 @Component({
-  selector: 'app-translate-list',
-  templateUrl: './translate-list.component.html',
-  styleUrls: ['./translate-list.component.css']
+  selector: 'app-i-e-list',
+  templateUrl: './i-e-list.component.html',
+  styleUrls: ['./i-e-list.component.css']
 })
-export class TranslateListComponent implements OnInit {
+export class ImportExportListComponent implements OnInit {
 
   clientsItems$: Observable<DataForm[]>;
   clientsById$: Observable<DataForm>;
-  translateItems$: Observable<OrderTranslate[]>;
+  ieItems$: Observable<ImportExport[]>;
   error$: Observable<string>;
-  myTranslateForm: FormGroup;
+  myForm: FormGroup;
   selectedOption: string;
   months: {id:number, name:string}[];
 
   @ViewChild('matSelect') matSelect: MatSelect;
-  get formData() { return <FormArray>this.myTranslateForm.get('items'); }
+  get formData() { return <FormArray>this.myForm.get('items'); }
 
   constructor(private store$: Store<RootStoreState.State>, private fb: FormBuilder) {
     this.dispatch();
-    this.crateFormTranslate();
+    this.crateForm();
     this.createMonths();
   }
   dispatch(): void {
-    this.store$.dispatch(new TranslatesStoreActions.LoadRequestAction());
+    this.store$.dispatch(new ImportExportStoreActions.LoadRequestAction());
     this.store$.dispatch(new ClientsStoreActions.LoadRequestAction());
   }
   createMonths() {
@@ -60,11 +60,11 @@ export class TranslateListComponent implements OnInit {
   ngOnInit() {
     this.select();
   }
-  updateOrder(order: OrderTranslate): void {
-    this.store$.dispatch(new TranslatesStoreActions.UpdateRequestAction({id: order.id, changes: order}));
+  update(order: ImportExport): void {
+    this.store$.dispatch(new ImportExportStoreActions.UpdateRequestAction({id: order.id, changes: order}));
   }
-  crateFormTranslate() {
-    this.myTranslateForm = this.fb.group({
+  crateForm() {
+    this.myForm = this.fb.group({
       items: this.fb.array([ ])
     });
   }
@@ -72,44 +72,41 @@ export class TranslateListComponent implements OnInit {
     this.clientsItems$ = this.store$.pipe(
       select(  ClientsStoreSelectors.selectClientsItems(0) )
     );
-    this.translateItems$ = this.store$.pipe(
-      select( TranslatesStoreSelectors.selectTranslatesItems )
+    this.ieItems$ = this.store$.pipe(
+      select( ImportExportStoreSelectors.selectImportExportItems )
     );
     this.error$ = this.store$.pipe(
-      select( TranslatesStoreSelectors.selectTranslatesError )
+      select( ImportExportStoreSelectors.selectImportExportError )
     );
   }
   selectClientById(id: string) {
     this.selectedOption = '-1';
     if (id && id.length && id != '0') {
-      this.translateItems$ = this.store$.pipe(
-        select( TranslatesStoreSelectors.selectTranslatesItemsById(+id) )
+      this.ieItems$ = this.store$.pipe(
+        select( ImportExportStoreSelectors.selectImportExportItemsById(+id) )
       );
-      this.setTranslateFormFromSelect(this.translateItems$);
+      this.setImportExportFormFromSelect(this.ieItems$);
     }
   }
-  updateTranslate(order: OrderTranslate): void {
-    this.store$.dispatch(new TranslatesStoreActions.UpdateRequestAction({id: order.id, changes: order}));
-  }
-  selectTranslateByMonth(month: number) {
-    this.translateItems$ = this.store$.pipe(
-      select( TranslatesStoreSelectors.selectTranslatesByMonth(+month) )
+  selectByMonth(month: number) {
+    this.ieItems$ = this.store$.pipe(
+      select( ImportExportStoreSelectors.selectImportExportByMonth(+month) )
     );
-    this.setTranslateFormFromSelect(this.translateItems$);
+    this.setImportExportFormFromSelect(this.ieItems$);
   }
-  setTranslateFormFromSelect(translateItems$: Observable<OrderTranslate[]>) {
-    translateItems$.subscribe(data => {
-      let items = this.myTranslateForm.get('items') as FormArray;
+  setImportExportFormFromSelect(ieItems$: Observable<ImportExport[]>) {
+    ieItems$.subscribe(data => {
+      let items = this.myForm.get('items') as FormArray;
       while (items.length !== 0) {
         items.removeAt(0)
       }
       data.forEach(item => this.addItem(items, item));
     });
   }
-  addItem(items: FormArray, order: OrderTranslate): void {
+  addItem(items: FormArray, order: ImportExport): void {
     items.push(this.createItem(order));
   }
-  createItem(order: OrderTranslate): FormGroup {
+  createItem(order: ImportExport): FormGroup {
     let form = this.fb.group({
         id: [null],
         uuid: [null, Validators.required],
@@ -119,21 +116,7 @@ export class TranslateListComponent implements OnInit {
         fk_client_id: [null, Validators.required],
         country: [null, Validators.required],
         reference: [null, Validators.required],
-        docName: [null, Validators.required],
-        originalNbr: [null],
-        translateNbr: [null],
-        copyNbr: [null],
-        originalCheck: [null],
-        translateCheck: [null],
-        copyCheck: [null],
-        greffeInstanceCheck: [null],
-        coursAppelCheck: [null],
-        spfEtrangereCheck: [null],
-        spfJusticeCheck: [null],
-        communeCheck: [null],
-        consulatCheck: [null],
-        notaireCheck: [null],
-        procedureType: [null, Validators.required], // normal/urgent
+        procedureType: [null, Validators.required] // normal/urgent
     });
     form.patchValue(order);
     return form;

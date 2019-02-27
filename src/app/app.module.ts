@@ -43,8 +43,9 @@ import { RootStoreModule } from './admin/root-store/root-store.module';
 import {AdminAlwaysAuthGuardService} from "./services/admin-always-auth-guard.service";
 import {ClientsModule} from "./admin/clients/clients.module";
 import {OrdersModule} from "./admin/orders/orders.module";
-import {GetNameByIdPipe} from "./admin/pipe/get-name-by-id.pipe";
 import {TranslateModule} from "./admin/translate/translate.module";
+import {TranslateOrderModule} from "./translate/translate.module";
+import {ImportExportModule} from "./admin/i-e/i-e.module";
 
 
 const appRoutes: Routes = [
@@ -101,7 +102,7 @@ const appRoutes: Routes = [
       },
       {
         path: 'translate-order',
-        loadChildren: './translate/translate.module#TranslateModule'
+        loadChildren: './translate/translate.module#TranslateOrderModule'
       },
       {
         path: 'import-export-order',
@@ -124,6 +125,11 @@ const appRoutes: Routes = [
     path: 'admin/translate',
     canActivate: [AdminAlwaysAuthGuardService],
     loadChildren: './admin/translate/translate.module#TranslateModule'
+  },
+  {
+    path: 'admin/import-export',
+    canActivate: [AdminAlwaysAuthGuardService],
+    loadChildren: './admin/i-e/i-e.module#ImportExportModule'
   },
   // otherwise redirect to home
   // { path: '**',  redirectTo: ''}
@@ -148,6 +154,7 @@ const appRoutes: Routes = [
     ClientsModule,
     OrdersModule,
     TranslateModule,
+    ImportExportModule,
 
     MatTableModule,
     MatFormFieldModule,

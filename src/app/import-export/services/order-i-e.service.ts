@@ -15,18 +15,17 @@ export class OrderIEService {
 
   getItems(): Observable<ImportExport> {
     // return of(DUMMY_CLIENTS);
-    let url = this.apiUrl+'php//read_all_dataform.php';
+    let url = this.apiUrl+'php//read_all_ie_orders.php';
     return  this.http.get<ImportExport>(url);
   }
   addItem(order: ImportExport): Observable<ImportExport> {
     // return of(DUMMY_CLIENTS);
-    let url = this.apiUrl+'php//add_translate_order.php';
-    // return this.http.post<ImportExport>(url, order);
-    return of(order);
+    let url = this.apiUrl+'php//add_ie_order.php';
+    return this.http.post<ImportExport>(url, order);
   }
   updateItem(client: ImportExport): Observable<ImportExport> {
     // return of(DUMMY_CLIENTS);
-    let url = this.apiUrl+'php//update.php';
-    return this.http.post<ImportExport>(url, client);
+    let url = this.apiUrl+'php//update_ie_order.php';
+    return this.http.put<ImportExport>(url, client);
   }
 }

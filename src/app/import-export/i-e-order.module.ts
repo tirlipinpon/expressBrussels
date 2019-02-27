@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { IEOrderRoutingModule } from './i-e-order-routing.module';
 import { IEOrderComponent } from './i-e-order/i-e-order.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {MatInputModule, MatStepperModule, MatSelectModule, MatCardModule} from "@angular/material";
+import {MatInputModule, MatStepperModule, MatSelectModule, MatCardModule, MatCheckboxModule} from "@angular/material";
 import {RootStoreModule} from "./root-store/root-store.module";
 import {SharedModule} from "../shared/shared.module";
 
@@ -20,6 +20,7 @@ import {SharedModule} from "../shared/shared.module";
     MatStepperModule,
     MatSelectModule,
     MatCardModule,
+    MatCheckboxModule,
     RootStoreModule
   ]
 })

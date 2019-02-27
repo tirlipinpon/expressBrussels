@@ -28,4 +28,4 @@ import {SharedModule} from "../shared/shared.module";
     RootStoreModule
   ]
 })
-export class TranslateModule { }
+export class TranslateOrderModule { }

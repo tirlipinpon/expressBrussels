@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TranslateListComponent } from './translate-list.component';
+import { ImportExportListComponent } from './i-e-list.component';
 
-describe('TranslateListComponent', () => {
-  let component: TranslateListComponent;
-  let fixture: ComponentFixture<TranslateListComponent>;
+describe('ImportExportListComponent', () => {
+  let component: ImportExportListComponent;
+  let fixture: ComponentFixture<ImportExportListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TranslateListComponent ]
+      declarations: [ ImportExportListComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TranslateListComponent);
+    fixture = TestBed.createComponent(ImportExportListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

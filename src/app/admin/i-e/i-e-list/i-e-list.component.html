@@ -10,7 +10,7 @@
 
 <div  style="margin:5px;">
   <mat-form-field>
-    <mat-select [(value)]="selectedOption" #matSelect (selectionChange)="selectTranslateByMonth($event.value)"
+    <mat-select [(value)]="selectedOption" #matSelect (selectionChange)="selectByMonth($event.value)"
                 placeholder="Select month">
       <mat-option [value]="'-1'">-- SELECT MONTH --</mat-option>
       <mat-option *ngFor="let month of months" [value]="month.id">
@@ -20,7 +20,7 @@
   </mat-form-field>
 </div>
 
-<form style="display:flex;flex-wrap:wrap;" [formGroup]="myTranslateForm">
+<form style="display:flex;flex-wrap:wrap;" [formGroup]="myForm">
   <div style="" formArrayName="items" *ngFor="let item of formData.controls; let i = index;">
     <div #orderGroupRef style="margin:5px;border:1px solid grey;padding:5px;width: 200px;" [formGroupName]="i">
       <mat-form-field class="order-d"><input matInput disabled value="{{item.get('id').value}}" placeholder="id"></mat-form-field>
@@ -29,28 +29,7 @@
       <mat-form-field class="order-d"><input matInput disabled value="{{item.get('fk_client_id').value|getNameById:(clientsItems$|async)}}" placeholder="client"></mat-form-field>
       <mat-form-field><input matInput placeholder="Pays" formControlName="country" required></mat-form-field>
       <mat-form-field><input matInput placeholder="Reference" formControlName="reference" required></mat-form-field>
-      <mat-form-field><textarea matInput placeholder="Nom des documents" formControlName="docName" required></textarea></mat-form-field>
-      <div style="display:flex;align-items:baseline;justify-content: space-between;">
-        <mat-form-field style="width:70px;"><input type="number" min="0" matInput placeholder="Original" formControlName="originalNbr"></mat-form-field>
-        <mat-checkbox [labelPosition]="'before'" formControlName="originalCheck">Original</mat-checkbox>
-      </div>
-      <div style="display:flex;align-items:baseline;justify-content: space-between;">
-        <mat-form-field style="width:70px;"><input type="number" min="0" matInput placeholder="Traduction" formControlName="translateNbr"></mat-form-field>
-        <mat-checkbox [labelPosition]="'before'" formControlName="translateCheck">Traduction</mat-checkbox>
-      </div>
-      <div style="display:flex;align-items:baseline;justify-content: space-between;">
-        <mat-form-field style="width:70px;"><input type="number" min="0" matInput placeholder="Copie" formControlName="copyNbr"></mat-form-field>
-        <mat-checkbox [labelPosition]="'before'" formControlName="copyCheck">Copie</mat-checkbox>
-      </div>
-      <div style="display:flex;flex-direction:column;">
-        <mat-checkbox  [labelPosition]="'after'" formControlName="communeCheck">Commune</mat-checkbox>
-        <mat-checkbox  [labelPosition]="'after'" formControlName="notaireCheck">Notaire</mat-checkbox>
-        <mat-checkbox  [labelPosition]="'after'" formControlName="consulatCheck">Consulat</mat-checkbox>
-        <mat-checkbox  [labelPosition]="'after'" formControlName="greffeInstanceCheck">Greffe de 1ère instance</mat-checkbox>
-        <mat-checkbox  [labelPosition]="'after'" formControlName="coursAppelCheck">Cours d’appel</mat-checkbox>
-        <mat-checkbox  [labelPosition]="'after'" formControlName="spfEtrangereCheck">SPF affaires étrangères</mat-checkbox>
-        <mat-checkbox  [labelPosition]="'after'" formControlName="spfJusticeCheck">SPF justice</mat-checkbox>
-      </div>
+
       <mat-form-field>
         <mat-select placeholder="Procédure" formControlName="procedureType" required>
           <mat-option [value]="'normale'">normale</mat-option>
@@ -65,12 +44,12 @@
         </mat-select>
       </mat-form-field>
     </div>
-      <button class="order-d" [disabled]="item.invalid || item.pristine" (click)="updateOrder(item.value)">Update</button>
+      <button class="order-d" [disabled]="item.invalid || item.pristine" (click)="update(item.value)">Update</button>
     </div>
 </form>
 
 
-<pre>{{translateItems$|async|json}}</pre>
+<pre>{{ieItems$|async|json}}</pre>
 
 <!--<div style="border:3px solid red;">-->
   <!--<pre>{{(error$|async)?.message}}</pre>-->

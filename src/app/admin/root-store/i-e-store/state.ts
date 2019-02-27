@@ -1,8 +1,10 @@
 /**
- * Created by tirli on 18-02-19.
+ * Created by tirli on 13-02-19.
  */
-import {createEntityAdapter, EntityAdapter, EntityState} from '@ngrx/entity';
+import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import {ImportExport} from "../../../models/import-export";
+
+
 
 export const importExportAdapter: EntityAdapter<ImportExport> = createEntityAdapter<ImportExport>({
   selectId: model => model.id,
@@ -15,9 +17,7 @@ export interface ImportExportState extends EntityState<ImportExport> {
   error?: any;
 }
 
-export const initialState: ImportExportState = importExportAdapter.getInitialState(
-  {
-    isLoading: false,
-    error: null
-  }
-);
+export const initalImportExportState: ImportExportState = importExportAdapter.getInitialState({
+  isLoading: false,
+  error: null
+});

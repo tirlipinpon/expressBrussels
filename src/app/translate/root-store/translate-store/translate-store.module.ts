@@ -4,6 +4,7 @@ import {StoreModule} from "@ngrx/store";
 import {EffectsModule} from "@ngrx/effects";
 import {orderTranslateReducer} from "./reducer";
 import {OrderTranslateStoreEffects} from "./effects";
+import {NotificationService} from "../../../services/notification.service";
 
 @NgModule({
   declarations: [],
@@ -12,6 +13,6 @@ import {OrderTranslateStoreEffects} from "./effects";
     StoreModule.forFeature('order-translate', orderTranslateReducer),
     EffectsModule.forFeature([OrderTranslateStoreEffects])
   ],
-  providers: [OrderTranslateStoreEffects]
+  providers: [OrderTranslateStoreEffects, NotificationService]
 })
 export class TranslateStoreModule { }

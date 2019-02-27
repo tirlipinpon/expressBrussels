@@ -8,6 +8,14 @@ export interface OrderTranslate {
   uuid: string;
   country: string;
   reference: string;
+  procedureType: string; // normal/urgent
+  created: string;
+  valid: boolean;
+  price: number;
+  fk_client_id: number;
+
+  destination?: Destination[]
+
   docName: string;
   originalNbr: number;
   translateNbr: number;
@@ -21,12 +29,8 @@ export interface OrderTranslate {
   spfJusticeCheck: boolean;
   communeCheck: boolean;
   notaireCheck: boolean;
-  procedureType: string; // normal/urgent
-  created: string;
-  valid: boolean;
-  price: number;
-  fk_client_id: number;
-  destination: Destination[]
+
+
 }
 
 export interface TranslateState {

@@ -24,16 +24,16 @@ export class TranslateListComponent implements OnInit {
   clientsById$: Observable<DataForm>;
   translateItems$: Observable<OrderTranslate[]>;
   error$: Observable<string>;
-  myTranslateForm: FormGroup;
+  myForm: FormGroup;
   selectedOption: string;
   months: {id:number, name:string}[];
 
   @ViewChild('matSelect') matSelect: MatSelect;
-  get formData() { return <FormArray>this.myTranslateForm.get('items'); }
+  get formData() { return <FormArray>this.myForm.get('items'); }
 
   constructor(private store$: Store<RootStoreState.State>, private fb: FormBuilder) {
     this.dispatch();
-    this.crateFormTranslate();
+    this.crateForm();
     this.createMonths();
   }
   dispatch(): void {
@@ -60,11 +60,11 @@ export class TranslateListComponent implements OnInit {
   ngOnInit() {
     this.select();
   }
-  updateOrder(order: OrderTranslate): void {
+  update(order: OrderTranslate): void {
     this.store$.dispatch(new TranslatesStoreActions.UpdateRequestAction({id: order.id, changes: order}));
   }
-  crateFormTranslate() {
-    this.myTranslateForm = this.fb.group({
+  crateForm() {
+    this.myForm = this.fb.group({
       items: this.fb.array([ ])
     });
   }
@@ -88,10 +88,7 @@ export class TranslateListComponent implements OnInit {
       this.setTranslateFormFromSelect(this.translateItems$);
     }
   }
-  updateTranslate(order: OrderTranslate): void {
-    this.store$.dispatch(new TranslatesStoreActions.UpdateRequestAction({id: order.id, changes: order}));
-  }
-  selectTranslateByMonth(month: number) {
+  selectByMonth(month: number) {
     this.translateItems$ = this.store$.pipe(
       select( TranslatesStoreSelectors.selectTranslatesByMonth(+month) )
     );
@@ -99,7 +96,7 @@ export class TranslateListComponent implements OnInit {
   }
   setTranslateFormFromSelect(translateItems$: Observable<OrderTranslate[]>) {
     translateItems$.subscribe(data => {
-      let items = this.myTranslateForm.get('items') as FormArray;
+      let items = this.myForm.get('items') as FormArray;
       while (items.length !== 0) {
         items.removeAt(0)
       }

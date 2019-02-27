@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {TranslateListComponent} from "./translate-list/translate-list.component";
+import {ImportExportListComponent} from "./i-e-list/i-e-list.component";
 
 const routes: Routes = [
   {
-    path: 'admin/translate',
-    component: TranslateListComponent
+    path: 'admin/import-export',
+    component: ImportExportListComponent
   }
 ];
 
@@ -13,4 +13,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class TranslateRoutingModule { }
+export class ImportExportRoutingModule { }

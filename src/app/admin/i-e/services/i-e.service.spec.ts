@@ -1,12 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { TranslatesService } from './translates.service';
+import { ImportExportService } from './i-e.service';
 
-describe('TranslatesService', () => {
+
+describe('ImportExportService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: TranslatesService = TestBed.get(TranslatesService);
+    const service: ImportExportService = TestBed.get(ImportExportService);
     expect(service).toBeTruthy();
   });
 });
