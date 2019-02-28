@@ -1,0 +1,10 @@
+<div style="margin:5px;">
+  <mat-form-field>
+    <mat-select (selectionChange)="selectClientById($event.value)" placeholder="Select client">
+      <mat-option [value]="'0'">-- NEW CLIENT --</mat-option>
+      <mat-option *ngFor="let client of clients" [value]="client.id">
+        {{client.id}} - {{client.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>

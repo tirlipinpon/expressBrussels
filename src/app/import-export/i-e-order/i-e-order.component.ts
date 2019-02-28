@@ -206,7 +206,7 @@ export class IEOrderComponent implements OnInit {
       ...this.ieForm.get('step2').value
     };
     let dest1 = this.ieForm.get(['step2', 'destination']).value;
-    this.order.destination = [
+    this.order.destinations = [
       ...dest1
     ];
     delete this.order.adminName;

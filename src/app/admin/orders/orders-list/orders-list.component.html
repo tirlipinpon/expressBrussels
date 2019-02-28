@@ -1,12 +1,5 @@
-<div style="margin:5px;">
-  <mat-form-field>
-    <mat-select (selectionChange)="selectClientById($event.value)" placeholder="Select client">
-      <mat-option *ngFor="let client of clientsItems$|async" [value]="client.id">
-        {{client.id}} - {{client.name}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-</div>
+<!-- SEARCH -->
+<app-select-client [clients]="clientsItems$|async" (selectedClient)="selectClientById($event)"></app-select-client>
 
 <div  style="margin:5px;">
   <mat-form-field>

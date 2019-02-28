@@ -13,9 +13,9 @@ export interface ImportExport {
   fk_client_id: number;
   procedureType: string; // normal/urgent
 
-  destination?: Destination[];
+  destinations?: Destination[];
 
-  administration?: Administration[];
+  administrations?: Administration[];
   adminName?: any // debug form step purpose
 }
 
