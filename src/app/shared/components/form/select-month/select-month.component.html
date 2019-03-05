@@ -1,0 +1,14 @@
+changeClient: {{changeClient}}
+value: {{value}}
+<div  style="margin:5px;">
+  <mat-form-field>
+    <mat-select [(value)]="value" #matSelect
+                (selectionChange)="selectOrdersByMonth($event.value)"
+                placeholder="Select month">
+      <mat-option [value]="-1">-- SELECT MONTH --</mat-option>
+      <mat-option *ngFor="let month of months" [value]="month.id">
+        {{month.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>

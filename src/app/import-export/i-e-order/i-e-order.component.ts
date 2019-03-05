@@ -32,6 +32,10 @@ export class IEOrderComponent implements OnInit {
   constructor(private store$: Store<RootStoreState.RootState>,
               private fb: FormBuilder,
               private customerService: CustomerService) {
+
+  }
+
+  ngOnInit() {
     this.customerService.currentCustomerId.subscribe(id => {
       if(+id !== 0) {
         this.customerId = +id;
@@ -40,9 +44,6 @@ export class IEOrderComponent implements OnInit {
     this.createForm();
     this.addItemAdmin();
     this.onChanges();
-  }
-
-  ngOnInit() {
     // this.store$.dispatch( new ImportExportStoreActions.AddRequestAction({item: null}) );
     this.isAtLeasOneAdminCheck = 0;
   }
@@ -55,8 +56,6 @@ export class IEOrderComponent implements OnInit {
     this.addItem('step1', 'ambassade', 5);
   }
   onChanges(): void {
-
-
     this.ieForm.get(['step1', 'adminName', 'beci']).valueChanges.subscribe(val => {
       if (val) {
         this.isAtLeasOneAdminCheck++;

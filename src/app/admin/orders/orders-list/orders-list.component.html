@@ -1,17 +1,10 @@
 <!-- SEARCH -->
-<app-select-client [clients]="clientsItems$|async" (selectedClient)="selectClientById($event)"></app-select-client>
+<app-select-client [clients]="clientsItems$|async"
+                   (selectedClient)="selectClientById($event)"></app-select-client>
 
-<div  style="margin:5px;">
-  <mat-form-field>
-    <mat-select [(value)]="selectedOption" #matSelect (selectionChange)="selectOrdersByMonth($event.value)"
-                placeholder="Select month">
-      <mat-option [value]="'-1'">-- SELECT MONTH --</mat-option>
-      <mat-option *ngFor="let month of months" [value]="month.id">
-        {{month.name}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-</div>
+<app-select-month [months]="months"
+                  [changeClient]="selectedOption"
+                  (selectedMonth)="selectOrdersByMonth($event)"></app-select-month>
 
 <form style="display:flex;flex-wrap:wrap;" [formGroup]="myOrderForm">
   <div style="" formArrayName="items" *ngFor="let item of formData.controls; let i = index;">
@@ -55,13 +48,10 @@
     </div>
   </div>
 </form>
-
 <div style="border:3px solid red;">
   <pre>{{(error$|async)?.message}}</pre>
   <pre>{{(error$|async)?.error?.text}}</pre>
 </div>
-
-
 <div *ngIf="false">
   <div style="display:flex;flex:1">
     <pre>ordersItems$: {{ordersItems$|async|json}}</pre>

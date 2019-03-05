@@ -4,8 +4,7 @@
   </mat-card-content>
 </mat-card>
 
-<mat-horizontal-stepper [linear]="false" #stepper>
-
+<mat-horizontal-stepper [linear]="true" #stepper>
   <mat-step [stepControl]="ieForm.get('step1')">
     <form [formGroup]="ieForm.get('step1')">
       <ng-template matStepLabel>Commande</ng-template>
@@ -22,7 +21,6 @@
                     <input matInput placeholder="Reference" formControlName="reference" required>
                   </mat-form-field>
                 </div>
-
               </mat-card-content>
             </mat-card>
         </div>
@@ -44,11 +42,11 @@
           <div style="display:flex;">
             <div formArrayName="administration" style="display:flex;width:150px;margin:10px;" *ngFor="let item of arrayFormDataStep1.controls; let i = index;">
               <div [formGroupName]="i" style="display:flex;flex-direction:column;width:150px;">
-                <mat-checkbox style="margin:10px 0 0 0" [labelPosition]="'after'" formControlName="certifCheck">certifCheck</mat-checkbox>
-                <mat-checkbox style="margin:10px 0 0 0" [labelPosition]="'after'" formControlName="annexeCheck">annexeCheck</mat-checkbox>
-                <mat-checkbox style="margin:10px 0 0 0" [labelPosition]="'after'" formControlName="copyCheck">copyCheck</mat-checkbox>
-                <mat-checkbox style="margin:10px 0 0 0" [labelPosition]="'after'" formControlName="invoicesCheck">invoicesCheck</mat-checkbox>
-                <mat-checkbox style="margin:10px 0 0 0" [labelPosition]="'after'" formControlName="copyInvoicesCheck">copyInvoicesCheck</mat-checkbox>
+                <mat-checkbox style="margin:10px 0 0 0" [labelPosition]="'after'" formControlName="certifCheck">Certificat origin</mat-checkbox>
+                <mat-checkbox style="margin:10px 0 0 0" [labelPosition]="'after'" formControlName="annexeCheck">Annexe</mat-checkbox>
+                <mat-checkbox style="margin:10px 0 0 0" [labelPosition]="'after'" formControlName="copyCheck">Copy</mat-checkbox>
+                <mat-checkbox style="margin:10px 0 0 0" [labelPosition]="'after'" formControlName="invoicesCheck">Invoices</mat-checkbox>
+                <mat-checkbox style="margin:10px 0 0 0" [labelPosition]="'after'" formControlName="copyInvoicesCheck">Copy invoices</mat-checkbox>
               </div>
             </div>
           </div>
@@ -61,12 +59,11 @@
       <div style="display:flex;margin:25px auto;width:220px;">
         <button mat-raised-button color="primary" matStepperPrevious>Retour</button>
         <div *ngIf="ieForm.get('step1').valid && isAtLeasOneAdminCheck>0">
-          <button  mat-raised-button color="primary" matStepperNext>Verification de la commande</button>
+          <button  mat-raised-button color="primary" matStepperNext>Procédure</button>
         </div>
       </div>
     </form>
   </mat-step>
-
   <mat-step [stepControl]="ieForm.get('step2')">
     <form [formGroup]="ieForm.get('step2')">
       <ng-template matStepLabel>Procédure</ng-template>
@@ -94,17 +91,18 @@
       <div style="display:flex;margin:25px auto;width:220px;">
         <button mat-raised-button color="primary" matStepperPrevious>Retour</button>
         <div *ngIf="ieForm.get('step2').valid">
-          <button  mat-raised-button color="primary" matStepperNext>Verification de la commande</button>
+          <button  mat-raised-button color="primary" matStepperNext>Terminer</button>
         </div>
       </div>
     </form>
   </mat-step>
-
   <mat-step>
     <ng-template matStepLabel>Terminer</ng-template>
-    <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button (click)="send()">send</button>
+    <div style="display:flex;margin:25px auto;width:220px;">
+      <button mat-raised-button color="primary" matStepperPrevious>Retour</button>
+      <div>
+        <button  mat-raised-button color="primary" >Envoyer la commande</button>
+      </div>
     </div>
 
     <div *ngIf="(error$|async)?.message" style="border:3px solid red;">
@@ -115,6 +113,6 @@
 </mat-horizontal-stepper>
 
 
-<pre>{{ieForm.get(['step1', 'administration']).value|json}}</pre>
+<!--<pre>{{ieForm.get(['step1', 'administration']).value|json}}</pre>-->
 
 

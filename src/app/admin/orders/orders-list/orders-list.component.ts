@@ -1,4 +1,4 @@
-import {Component, OnInit, ElementRef, ViewChild} from '@angular/core';
+import {Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 import {Store, select} from "@ngrx/store";
 import {
   RootStoreState,
@@ -16,7 +16,8 @@ import {MatSelect} from "@angular/material";
 @Component({
   selector: 'app-orders-list',
   templateUrl: './orders-list.component.html',
-  styleUrls: ['./orders-list.component.css']
+  styleUrls: ['./orders-list.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OrdersListComponent implements OnInit {
 
@@ -27,13 +28,13 @@ export class OrdersListComponent implements OnInit {
   ordersItems$: Observable<PurchasseOrder[]>;
   error$: Observable<string>;
   myOrderForm: FormGroup;
-  selectedOption: string;
+  selectedOption: number;
   months: {id:number, name:string}[];
 
   @ViewChild('matSelect') matSelect: MatSelect;
   get formData() { return <FormArray>this.myOrderForm.get('items'); }
 
-  constructor(private store$: Store<RootStoreState.State>, private fb: FormBuilder) {
+  constructor(private store$: Store<RootStoreState.State>, private fb: FormBuilder, private cdr: ChangeDetectorRef) {
     this.store$.dispatch(new ClientsStoreActions.LoadRequestAction());
     this.crateFormOrder();
     this.createMonths();
@@ -81,7 +82,7 @@ export class OrdersListComponent implements OnInit {
     );
   }
   selectClientById(id: string) {
-    this.selectedOption = '-1';
+    this.selectedOption = -1;
     if (id && id.length && id != '0') {
       this.store$.dispatch(new OrdersStoreActions.LoadRequestAction(+id));
       this.ordersItems$ = this.store$.pipe( select( OrdersStoreSelectors.selectOrdersItems ) );
@@ -92,7 +93,7 @@ export class OrdersListComponent implements OnInit {
     this.store$.dispatch(new OrdersStoreActions.UpdateRequestAction({id: order.id, changes: order}));
   }
   selectOrdersByMonth(month: number) {
-    console.log(this.matSelect);
+    this.selectedOption = month;
     this.ordersItems$ = this.store$.pipe(
       select( OrdersStoreSelectors.selectOrdersByMonth(+month) )
     );
