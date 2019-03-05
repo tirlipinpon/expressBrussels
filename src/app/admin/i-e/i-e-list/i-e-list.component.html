@@ -22,28 +22,7 @@
       <mat-form-field class="order-d"><input matInput disabled value="{{item.get('fk_client_id').value|getNameById:(clientsItems$|async)}}" placeholder="client"></mat-form-field>
       <mat-form-field><input matInput placeholder="Pays" formControlName="country" required></mat-form-field>
       <mat-form-field><input matInput placeholder="Reference" formControlName="reference" required></mat-form-field>
-      <mat-form-field><textarea matInput placeholder="Nom des documents" formControlName="docName" required></textarea></mat-form-field>
-      <div style="display:flex;align-items:baseline;justify-content: space-between;">
-        <mat-form-field style="width:70px;"><input type="number" min="0" matInput placeholder="Original" formControlName="originalNbr"></mat-form-field>
-        <mat-checkbox [labelPosition]="'before'" formControlName="originalCheck">Original</mat-checkbox>
-      </div>
-      <div style="display:flex;align-items:baseline;justify-content: space-between;">
-        <mat-form-field style="width:70px;"><input type="number" min="0" matInput placeholder="Traduction" formControlName="translateNbr"></mat-form-field>
-        <mat-checkbox [labelPosition]="'before'" formControlName="translateCheck">Traduction</mat-checkbox>
-      </div>
-      <div style="display:flex;align-items:baseline;justify-content: space-between;">
-        <mat-form-field style="width:70px;"><input type="number" min="0" matInput placeholder="Copie" formControlName="copyNbr"></mat-form-field>
-        <mat-checkbox [labelPosition]="'before'" formControlName="copyCheck">Copie</mat-checkbox>
-      </div>
-      <div style="display:flex;flex-direction:column;">
-        <mat-checkbox  [labelPosition]="'after'" formControlName="communeCheck">Commune</mat-checkbox>
-        <mat-checkbox  [labelPosition]="'after'" formControlName="notaireCheck">Notaire</mat-checkbox>
-        <mat-checkbox  [labelPosition]="'after'" formControlName="consulatCheck">Consulat</mat-checkbox>
-        <mat-checkbox  [labelPosition]="'after'" formControlName="greffeInstanceCheck">Greffe de 1ère instance</mat-checkbox>
-        <mat-checkbox  [labelPosition]="'after'" formControlName="coursAppelCheck">Cours d’appel</mat-checkbox>
-        <mat-checkbox  [labelPosition]="'after'" formControlName="spfEtrangereCheck">SPF affaires étrangères</mat-checkbox>
-        <mat-checkbox  [labelPosition]="'after'" formControlName="spfJusticeCheck">SPF justice</mat-checkbox>
-      </div>
+
       <mat-form-field>
         <mat-select placeholder="Procédure" formControlName="procedureType" required>
           <mat-option [value]="'normale'">normale</mat-option>
@@ -52,9 +31,9 @@
       </mat-form-field>
       <mat-form-field><input type="number" step="0.01" matInput placeholder="price" formControlName="price" required></mat-form-field>
       <mat-form-field>
-        <mat-select formControlName="valid" placeholder="validé">
-          <mat-option [value]="'0'">non validé</mat-option>
-          <mat-option [value]="'1'">validé</mat-option>
+        <mat-select formControlName="valid" placeholder="valide ?">
+          <mat-option [value]="0">non validé</mat-option>
+          <mat-option [value]="1">validé</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -63,7 +42,7 @@
 </form>
 
 
-<pre>{{translateItems$|async|json}}</pre>
+<pre>{{ieItems$|async|json}}</pre>
 
 <!--<div style="border:3px solid red;">-->
   <!--<pre>{{(error$|async)?.message}}</pre>-->

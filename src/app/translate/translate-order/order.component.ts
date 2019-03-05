@@ -1,4 +1,4 @@
-import {Component, OnInit, HostListener} from '@angular/core';
+import {Component, OnInit, HostListener, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators, FormArray} from "@angular/forms";
 import {ComponentDeactivable} from "../../services/can-deactivate-form-guard.service";
 import * as uuid from 'uuid';
@@ -11,6 +11,7 @@ import {
 import {OrderTranslate} from "../../models/translate";
 import {CustomerService} from "../../services/customer.service";
 import {Observable} from "rxjs";
+import {MatStepper} from "@angular/material";
 
 @Component({
   selector: 'app-order',
@@ -27,6 +28,7 @@ export class OrderComponent implements OnInit, ComponentDeactivable {
   customerId: number;
   cptDestinationChecked: number;
   error$: Observable<string>;
+  @ViewChild('stepper') stepper: MatStepper;
 
   get arrayFormDataStep2() { return <FormArray>this.myOrderForm.get(['step2','destination']); }
   get arrayFormDataStep3() { return <FormArray>this.myOrderForm.get(['step3','destination']); }
@@ -37,10 +39,9 @@ export class OrderComponent implements OnInit, ComponentDeactivable {
     this.cptDestinationChecked = 0;
     this.customerService.currentCustomerId.subscribe(id => {
       if(+id !== 0) {
-
+        this.customerId = +id;
       }
     });
-    this.customerId = 1;
     this.createForm();
     this.onChanges();
   }
@@ -155,6 +156,8 @@ export class OrderComponent implements OnInit, ComponentDeactivable {
   send() {
     this.mapFormToOrderTranslate();
     this.store$.dispatch( new OrderTranslateStoreActions.AddRequestAction({item: this.order}) );
+    this.stepper.reset();
+    this.createForm();
   }
   mapFormToOrderTranslate() {
     this.order = {
@@ -176,7 +179,6 @@ export class OrderComponent implements OnInit, ComponentDeactivable {
       this.cptDestinationChecked--;
     }
   }
-
   initiateTemp(value) {
     this.myOrderFormTemp = value;
     this.myOrderFormTemp  = this.removeEmpty(this.myOrderFormTemp.value)
@@ -192,8 +194,6 @@ export class OrderComponent implements OnInit, ComponentDeactivable {
         delete obj[key];
       }
     });
-    let resp =  Object.keys(obj).length > 0 || obj instanceof Array ? obj : undefined;
-    console.log(resp);
-    return resp;
+    return  Object.keys(obj).length > 0 || obj instanceof Array ? obj : undefined;
   };
 }

@@ -23,12 +23,7 @@ export class OrderTranslateStoreEffects {
       this.orderTranslateService
         .addItem(action.payload.item)
         .pipe(
-          tap(data => console.log(data)),
-          switchMap(  item =>
-            [
-              new orderTranslateActions.AddSuccessAction({ item })
-            ]
-          ),
+          map(  item =>  new orderTranslateActions.AddSuccessAction({ item }) ),
           catchError(error =>
             of(new orderTranslateActions.AddFailureAction({ error }))
           )

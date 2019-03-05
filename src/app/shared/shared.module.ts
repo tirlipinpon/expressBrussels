@@ -59,6 +59,8 @@ import {ToasterEffectService} from "../effects/toaster/toaster-effect.service";
 import { SendMessageComponent } from './components/send-message/send-message.component';
 import {GetNameByIdPipe} from "../admin/pipe/get-name-by-id.pipe";
 import { DestinationComponent } from './components/form/destination/destination.component';
+import { SelectClientComponent } from './components/form/select-client/select-client.component';
+import { SelectMonthComponent } from './components/form/select-month/select-month.component';
 
 library.add(faPhone, faHome, faClock, faUser, faUniversity, faFilePdf, faEraser,
   faIdCard, faComment, faUserTie, faUserTag, faEuroSign, faMapMarkedAlt, faClock, faMotorcycle, faCar, faEye, faEyeSlash);
@@ -123,7 +125,9 @@ library.add(faPhone, faHome, faClock, faUser, faUniversity, faFilePdf, faEraser,
     CountOrdersPriceByMonthPipe,
     SendMessageComponent,
     GetNameByIdPipe,
-    DestinationComponent
+    DestinationComponent,
+    SelectClientComponent,
+    SelectMonthComponent
   ],
   declarations: [
     // component
@@ -149,7 +153,9 @@ library.add(faPhone, faHome, faClock, faUser, faUniversity, faFilePdf, faEraser,
     CountOrdersByMonthPipe,
     CountOrdersPriceByMonthPipe,
     GetNameByIdPipe,
-    DestinationComponent
+    DestinationComponent,
+    SelectClientComponent,
+    SelectMonthComponent
   ],
   providers: [
     ConfirmationService

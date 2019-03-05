@@ -10,7 +10,7 @@ export class GetNameByIdPipe implements PipeTransform {
     if (!value || !args.length) {
       return;
     }
-    let resp =  args.find(data => +data.id === value);
+    let resp =  args.find(data => +data.id === +value);
     return resp.name;
   }
 

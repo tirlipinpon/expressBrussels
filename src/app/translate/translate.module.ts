@@ -8,8 +8,9 @@ import {
   MatButtonModule
 } from "@angular/material";
 import {ReactiveFormsModule, FormsModule} from "@angular/forms";
-import {RootStoreModule} from "./root-store/root-store.module";
 import {SharedModule} from "../shared/shared.module";
+import {TranslateStoreModule} from "./root-store/translate-store/translate-store.module";
+import {RootStoreModule} from "./root-store/root-store.module";
 
 @NgModule({
   declarations: [OrderComponent],
@@ -17,6 +18,7 @@ import {SharedModule} from "../shared/shared.module";
     SharedModule,
     CommonModule,
     TranslateRoutingModule,
+    TranslateStoreModule,
     FormsModule,
     ReactiveFormsModule,
     MatStepperModule,
@@ -28,4 +30,4 @@ import {SharedModule} from "../shared/shared.module";
     RootStoreModule
   ]
 })
-export class TranslateModule { }
+export class TranslateOrderModule { }

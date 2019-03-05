@@ -1,27 +1,83 @@
-<mat-horizontal-stepper [linear]="false" #stepper>
-  <mat-step [stepControl]="ieForm">
-    <form [formGroup]="ieForm">
-      <ng-template matStepLabel>Fill out your name</ng-template>
-      <mat-form-field class="example-full-width">
-        <input matInput placeholder="Favorite food" formControlName="uuid">
-      </mat-form-field>
-      <mat-form-field class="example-full-width">
-        <input matInput placeholder="Favorite food" formControlName="country">
-      </mat-form-field>
-      <mat-form-field class="example-full-width">
-        <input matInput placeholder="Favorite food" formControlName="reference">
-      </mat-form-field>
-      <div>
-        <button mat-button matStepperNext>Next</button>
+<mat-card style="display:flex;margin:auto;flex-direction:column;width:1400px">
+  <mat-card-content>
+    <h2 class="example-h2">Commande Import/Export.</h2>
+  </mat-card-content>
+</mat-card>
+
+<mat-horizontal-stepper [linear]="true" #stepper>
+  <mat-step [stepControl]="ieForm.get('step1')">
+    <form [formGroup]="ieForm.get('step1')">
+      <ng-template matStepLabel>Commande</ng-template>
+      <div style="display:flex;flex-direction:column;margin:auto;width:685px;" >
+        <div style="margin:10px;">
+            <mat-card>
+              <mat-card-content>
+                <h2 class="example-h2">Obligatoire</h2>
+                <div style="display:flex;justify-content:space-around;width:100%;">
+                  <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Pays" formControlName="country" required>
+                  </mat-form-field>
+                  <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Reference" formControlName="reference" required>
+                  </mat-form-field>
+                </div>
+              </mat-card-content>
+            </mat-card>
+        </div>
+      </div>
+      <div style="display:flex;margin:auto;width:1000px;" >
+      <mat-card>
+        <mat-card-content style="display:flex;flex-direction:column;">
+            <h2 class="example-h2">({{isAtLeasOneAdminCheck}}) administration{{isAtLeasOneAdminCheck>1?'s':''}} </h2>
+
+            <div formGroupName="adminName" style="display:flex;margin:10px 10px 30px 10px;justify-content:space-between;">
+              <mat-checkbox style="width:150px;margin:0px;" [labelPosition]="'after'" formControlName="beci">beci</mat-checkbox>
+              <mat-checkbox style="width:150px;margin:0px;" [labelPosition]="'after'" formControlName="traduction">traduction</mat-checkbox>
+              <mat-checkbox style="width:150px;margin:0px;" [labelPosition]="'after'" formControlName="spfae">spfae</mat-checkbox>
+              <mat-checkbox style="width:150px;margin:0px;" [labelPosition]="'after'" formControlName="afsca">afsca</mat-checkbox>
+              <mat-checkbox style="width:150px;margin:0px;" [labelPosition]="'after'" formControlName="chambrebelgo">chambrebelgo</mat-checkbox>
+              <mat-checkbox style="width:150px;margin:0px;" [labelPosition]="'after'" formControlName="ambassade">ambassade</mat-checkbox>
+            </div>
+
+          <div style="display:flex;">
+            <div formArrayName="administration" style="display:flex;width:150px;margin:10px;" *ngFor="let item of arrayFormDataStep1.controls; let i = index;">
+              <div [formGroupName]="i" style="display:flex;flex-direction:column;width:150px;">
+                <mat-checkbox style="margin:10px 0 0 0" [labelPosition]="'after'" formControlName="certifCheck">Certificat origin</mat-checkbox>
+                <mat-checkbox style="margin:10px 0 0 0" [labelPosition]="'after'" formControlName="annexeCheck">Annexe</mat-checkbox>
+                <mat-checkbox style="margin:10px 0 0 0" [labelPosition]="'after'" formControlName="copyCheck">Copy</mat-checkbox>
+                <mat-checkbox style="margin:10px 0 0 0" [labelPosition]="'after'" formControlName="invoicesCheck">Invoices</mat-checkbox>
+                <mat-checkbox style="margin:10px 0 0 0" [labelPosition]="'after'" formControlName="copyInvoicesCheck">Copy invoices</mat-checkbox>
+              </div>
+            </div>
+          </div>
+
+
+        </mat-card-content>
+      </mat-card>
+      </div>
+
+      <div style="display:flex;margin:25px auto;width:220px;">
+        <button mat-raised-button color="primary" matStepperPrevious>Retour</button>
+        <div *ngIf="ieForm.get('step1').valid && isAtLeasOneAdminCheck>0">
+          <button  mat-raised-button color="primary" matStepperNext>Procédure</button>
+        </div>
       </div>
     </form>
   </mat-step>
-  <mat-step [stepControl]="ieForm">
-    <form [formGroup]="ieForm">
+  <mat-step [stepControl]="ieForm.get('step2')">
+    <form [formGroup]="ieForm.get('step2')">
       <ng-template matStepLabel>Procédure</ng-template>
       <div style="display:flex;flex-direction:column;margin:auto;width:685px;" >
+        <mat-form-field style="width:685px;">
+          <mat-select placeholder="Procédure" formControlName="procedureType" required>
+            <mat-option></mat-option>
+            <mat-option [value]="'normale'">normale</mat-option>
+            <mat-option [value]="'urgente'">Urgente</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div style="display:flex;flex-direction:column;margin:auto;width:685px;" >
         <div style="display:flex;width:300px;margin:10px;">
-          <div  formArrayName="destination"  *ngFor="let item of arrayFormDataStep.controls; let i = index;">
+          <div  formArrayName="destination"  *ngFor="let item of arrayFormDataStep2.controls; let i = index;">
             <mat-card>
               <mat-card-content>
                 <h2 class="example-h2">{{item.get('kind').value==='removal'?'Enlevement':'Destination'}}</h2>
@@ -31,22 +87,32 @@
           </div>
         </div>
       </div>
+      </div>
       <div style="display:flex;margin:25px auto;width:220px;">
         <button mat-raised-button color="primary" matStepperPrevious>Retour</button>
-        <div *ngIf="ieForm.valid">
-          <button  mat-raised-button color="primary" matStepperNext>Verification de la commande</button>
+        <div *ngIf="ieForm.get('step2').valid">
+          <button  mat-raised-button color="primary" matStepperNext>Terminer</button>
         </div>
       </div>
     </form>
   </mat-step>
   <mat-step>
-    <ng-template matStepLabel>Done</ng-template>
-    You are now done.
-    <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button (click)="stepper.reset()">Reset</button>
+    <ng-template matStepLabel>Terminer</ng-template>
+    <div style="display:flex;margin:25px auto;width:220px;">
+      <button mat-raised-button color="primary" matStepperPrevious>Retour</button>
+      <div>
+        <button  mat-raised-button color="primary" >Envoyer la commande</button>
+      </div>
+    </div>
+
+    <div *ngIf="(error$|async)?.message" style="border:3px solid red;">
+      <pre>{{(error$|async)?.message}}</pre>
+      <pre>{{(error$|async)?.error?.text}}</pre>
     </div>
   </mat-step>
 </mat-horizontal-stepper>
+
+
+<!--<pre>{{ieForm.get(['step1', 'administration']).value|json}}</pre>-->
 
 

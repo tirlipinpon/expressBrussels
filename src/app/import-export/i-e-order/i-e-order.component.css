@@ -1,0 +1,9 @@
+.mat-checkbox-layout{
+  display: flex!important;
+  justify-content: space-between!important;
+  width: 115px!important;
+  border: 1px solid red;
+}
+.mat-checkbox-label-before .mat-checkbox-inner-container{
+  order: 0!important;
+}

@@ -1,12 +1,13 @@
 <!--<button mat-raised-button (click)="isLinear = !isLinear" id="toggle-linear">-->
   <!--{{!isLinear ? 'Enable linear mode' : 'Disable linear mode'}}-->
 <!--</button>-->
+
 <mat-card style="display:flex;margin:auto;flex-direction:column;width:1400px">
   <mat-card-content>
-    <h2 class="example-h2">Commande de livraison de traduction.</h2>
+    <h2 class="example-h2">Livraison de traduction.</h2>
   </mat-card-content>
 </mat-card>
-<mat-horizontal-stepper style="display:flex;margin:auto;flex-direction:column;width:1400px" [linear]="isLinear" #stepper>
+<mat-horizontal-stepper style="display:flex;margin:auto;flex-direction:column;width:1400px" [linear]="true" #stepper>
   <mat-step [stepControl]="myOrderForm.get('step1')">
     <form [formGroup]="myOrderForm.get('step1')">
       <ng-template matStepLabel>Documents</ng-template>
@@ -154,23 +155,23 @@
       </div>
     </form>
   </mat-step>
+
   <mat-step>
     <ng-template matStepLabel>Terminer</ng-template>
-    <div style="display:flex;" *ngIf="myOrderFormTemp">
-      <pre>{{myOrderFormTemp.value|json}}</pre>
-      <!--<pre>Etape 1 :{{myOrderForm.get('step1').value|json}}</pre>-->
-      <!--<pre>Etape 2 :{{myOrderForm.get('step2').value|json}}</pre>-->
-      <!--<pre>Etape 3 :{{myOrderForm.get('step3').value|json}}</pre>-->
-    </div>
-    <div *ngIf="(error$|async)?.message" style="border:3px solid red;">
-      <pre>{{(error$|async)?.message}}</pre>
-      <pre>{{(error$|async)?.error?.text}}</pre>
-    </div>
-
     <div>
       <button mat-button matStepperPrevious>Back</button>
       <button mat-button (click)="send()">send</button>
     </div>
+
+    <div style="display:flex;" *ngIf="myOrderFormTemp">
+      <pre>{{myOrderFormTemp.value|json}}</pre>
+    </div>
+
+    <div *ngIf="(error$|async)?.message" style="border:3px solid red;">
+      <pre>{{(error$|async)?.message}}</pre>
+      <pre>{{(error$|async)?.error?.text}}</pre>
+    </div>
   </mat-step>
+
 </mat-horizontal-stepper>
-<pre>{{myOrderForm.get(['step2', 'destination']).value|json}}</pre>
+<!--<pre>{{myOrderForm.get(['step2', 'destination']).value|json}}</pre>-->
