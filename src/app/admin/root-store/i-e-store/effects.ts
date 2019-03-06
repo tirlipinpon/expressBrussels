@@ -29,10 +29,7 @@ export class ImportExportStoreEffects {
         .getItems()
         .pipe(
           map(result => result),
-          map(
-            items =>
-              new ImportExportActions.LoadSuccessAction({ items })
-          ),
+          map( items => new ImportExportActions.LoadSuccessAction({ items }) ),
           catchError(error =>
             [
               new ImportExportActions.LoadFailureAction({ error }),
@@ -51,10 +48,7 @@ export class ImportExportStoreEffects {
       this.dataService
         .updateItem(action.payload.changes)
         .pipe(
-          map(
-            item =>
-              new ImportExportActions.UpdateSuccessAction({item})
-          ),
+          map( item => new ImportExportActions.UpdateSuccessAction({item}) ),
           catchError(error =>
             of(new ImportExportActions.LoadFailureAction({ error }))
           )
@@ -64,14 +58,11 @@ export class ImportExportStoreEffects {
 
   @Effect()
   updateAdministrationRequestEffect$: Observable<Action> = this.actions$.pipe(
-    ofType<ImportExportActions.UpdateAdminRequestAction>(ImportExportActions.ImportExportActionTypes.UPDATE_ADMIN_REQUEST),
+    ofType<ImportExportActions.UpdateAdminRequestAction>
+    (ImportExportActions.ImportExportActionTypes.UPDATE_ADMINISTRATIONS_REQUEST),
     switchMap(action =>
-      this.dataService
-        .updateItemAdministration(action.payload.changes)
-        .pipe(
-          map( item =>
-            new ImportExportActions.UpdateAdminSuccessAction({item})
-          ),
+      this.dataService.updateItemAdministration(action.payload.items).pipe(
+          map( items => new ImportExportActions.UpdateAdminSuccessAction({items}) ),
           catchError(error =>
             of(new ImportExportActions.LoadFailureAction({ error }))
           )

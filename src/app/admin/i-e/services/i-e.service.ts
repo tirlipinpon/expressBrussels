@@ -31,9 +31,9 @@ export class ImportExportService {
     return this.http.post<ImportExport>(url, order);
   }
 
-  updateItemAdministration(order: Administration): Observable<Administration> {
+  updateItemAdministration(items: Administration[]): Observable<Administration[]> {
     // return of(DUMMY_CLIENTS);
     let url = this.apiUrl+'php//update_ie_administration.php';
-    return this.http.post<Administration>(url, order);
+    return this.http.post<Administration[]>(url, items);
   }
 }
