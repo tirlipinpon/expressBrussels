@@ -11,7 +11,7 @@ import {DataForm} from "../../../models/DataForm";
 import {Observable} from "rxjs";
 import {FormBuilder, FormGroup, FormArray, Validators} from "@angular/forms";
 import {MatSelect} from "@angular/material";
-import {ImportExport} from "../../../models/import-export";
+import {ImportExport, Administration} from "../../../models/import-export";
 
 @Component({
   selector: 'app-i-e-list',
@@ -62,6 +62,9 @@ export class ImportExportListComponent implements OnInit {
   }
   update(order: ImportExport): void {
     this.store$.dispatch(new ImportExportStoreActions.UpdateRequestAction({id: order.id, changes: order}));
+    order.administrations.forEach( admini => {
+      this.store$.dispatch(new ImportExportStoreActions.UpdateAdminRequestAction({id: admini.id, changes: admini}));
+    })
   }
   crateForm() {
     this.myForm = this.fb.group({
@@ -101,6 +104,7 @@ export class ImportExportListComponent implements OnInit {
         items.removeAt(0)
       }
       data.forEach(item => this.addItem(items, item));
+
     });
   }
   addItem(items: FormArray, order: ImportExport): void {
@@ -116,9 +120,30 @@ export class ImportExportListComponent implements OnInit {
         fk_client_id: [null, Validators.required],
         country: [null, Validators.required],
         reference: [null, Validators.required],
-        procedureType: [null, Validators.required] // normal/urgent
+        procedureType: [null, Validators.required], // normal/urgent
+        administrations: this.fb.array([])
     });
     form.patchValue(order);
+
+    let itemsAdmin = form.get('administrations') as FormArray;
+    order['administrations'].forEach(item => this.addItemAdministration(itemsAdmin, item));
+    return form;
+  }
+  addItemAdministration(items: FormArray, admin: Administration): void {
+    items.push(this.createItemAdmin(admin));
+  }
+  createItemAdmin(admin: Administration): FormGroup {
+    let form = this.fb.group({
+      id: [null, Validators.required],
+      kind: [null, Validators.required],
+      certifCheck: [null, Validators.required],
+      annexeCheck: [null, Validators.required],
+      copyCheck: [null, Validators.required],
+      invoicesCheck: [null, Validators.required],
+      copyInvoicesCheck: [null, Validators.required],
+      fk_uuid_ie: [null, Validators.required],
+    });
+    form.patchValue(admin);
     return form;
   }
 }

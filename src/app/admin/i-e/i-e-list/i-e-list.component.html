@@ -23,6 +23,19 @@
       <mat-form-field><input matInput placeholder="Pays" formControlName="country" required></mat-form-field>
       <mat-form-field><input matInput placeholder="Reference" formControlName="reference" required></mat-form-field>
 
+      <div formArrayName="administrations"
+           *ngFor="let itemAdmin of item.get('administrations').controls; let j = index;">
+        <div [formGroupName]="j" style="margin:5px 0;width:100%;background-color:#cdcfe6;display:flex;flex-wrap: wrap;justify-content: space-between;">
+          <mat-form-field class="order-d"><input matInput disabled value="{{itemAdmin.get('kind').value}}" placeholder="kind">
+          </mat-form-field>
+          <mat-checkbox [labelPosition]="'before'" formControlName="certifCheck">certif</mat-checkbox>
+          <mat-checkbox [labelPosition]="'before'" formControlName="annexeCheck">annexe</mat-checkbox>
+          <mat-checkbox [labelPosition]="'before'" formControlName="copyCheck">copy</mat-checkbox>
+          <mat-checkbox [labelPosition]="'before'" formControlName="invoicesCheck">invoices</mat-checkbox>
+          <mat-checkbox [labelPosition]="'before'" formControlName="copyInvoicesCheck">copy Invoices</mat-checkbox>
+        </div>
+      </div>
+
       <mat-form-field>
         <mat-select placeholder="Procédure" formControlName="procedureType" required>
           <mat-option [value]="'normale'">normale</mat-option>

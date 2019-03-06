@@ -4,7 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {OrderTranslate} from "../../../models/translate";
 import {HttpParams} from "@angular/common/http";
-import {ImportExport} from "../../../models/import-export";
+import {ImportExport, Administration} from "../../../models/import-export";
 
 @Injectable({
   providedIn: 'root'
@@ -29,5 +29,11 @@ export class ImportExportService {
     // return of(DUMMY_CLIENTS);
     let url = this.apiUrl+'php//update_ie_order.php';
     return this.http.post<ImportExport>(url, order);
+  }
+
+  updateItemAdministration(order: Administration): Observable<Administration> {
+    // return of(DUMMY_CLIENTS);
+    let url = this.apiUrl+'php//update_ie_administration.php';
+    return this.http.post<Administration>(url, order);
   }
 }

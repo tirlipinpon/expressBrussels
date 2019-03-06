@@ -62,4 +62,20 @@ export class ImportExportStoreEffects {
     )
   );
 
+  @Effect()
+  updateAdministrationRequestEffect$: Observable<Action> = this.actions$.pipe(
+    ofType<ImportExportActions.UpdateAdminRequestAction>(ImportExportActions.ImportExportActionTypes.UPDATE_ADMIN_REQUEST),
+    switchMap(action =>
+      this.dataService
+        .updateItemAdministration(action.payload.changes)
+        .pipe(
+          map( item =>
+            new ImportExportActions.UpdateAdminSuccessAction({item})
+          ),
+          catchError(error =>
+            of(new ImportExportActions.LoadFailureAction({ error }))
+          )
+        )
+    )
+  );
 }

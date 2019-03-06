@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import {ImportExport} from "../../../models/import-export";
+import {ImportExport, Administration} from "../../../models/import-export";
 
 
 export enum ImportExportActionTypes {
@@ -10,6 +10,10 @@ export enum ImportExportActionTypes {
   UPDATE_REQUEST = '[ImportExport] UPDATE REQUEST',
   UPDATE_FAILURE = '[ImportExport] UPDATE FAILURE',
   UPDATE_SUCCESS = '[ImportExport] UPDATE SUCCESS',
+
+  UPDATE_ADMIN_REQUEST = '[ImportExport adminsitration] UPDATE REQUEST',
+  UPDATE_ADMIN_FAILURE = '[ImportExport adminsitration] UPDATE FAILURE',
+  UPDATE_ADMIN_SUCCESS = '[ImportExport adminsitration] UPDATE SUCCESS',
 
   SET_FAILURE = '[ImportExport] SET FAILURE'
 }
@@ -47,9 +51,29 @@ export class SetFailureAction implements Action {
   readonly type = ImportExportActionTypes.SET_FAILURE;
   constructor(public payload: { error: string }) {}
 }
+// ================= UPDATE ADMINISTRATION ===============
+export class UpdateAdminRequestAction implements Action {
+  readonly type = ImportExportActionTypes.UPDATE_ADMIN_REQUEST;
+  constructor(public payload: {
+    id: number,
+    changes: Administration
+  }) {}
+}
+export class UpdateAdminFailureAction implements Action {
+  readonly type = ImportExportActionTypes.UPDATE_ADMIN_FAILURE;
+  constructor(public payload: { error: string }) {}
+}
+export class UpdateAdminSuccessAction implements Action {
+  readonly type = ImportExportActionTypes.UPDATE_ADMIN_SUCCESS;
+  constructor(public payload: { item: Administration }) {}
+}
 
 
 export type Actions =
+    UpdateAdminRequestAction |
+    UpdateAdminFailureAction |
+    UpdateAdminSuccessAction |
+
     LoadRequestAction |
     LoadFailureAction |
     LoadSuccessAction |
