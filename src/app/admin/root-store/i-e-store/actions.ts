@@ -11,9 +11,9 @@ export enum ImportExportActionTypes {
   UPDATE_FAILURE = '[ImportExport] UPDATE FAILURE',
   UPDATE_SUCCESS = '[ImportExport] UPDATE SUCCESS',
 
-  UPDATE_ADMIN_REQUEST = '[ImportExport adminsitration] UPDATE REQUEST',
-  UPDATE_ADMIN_FAILURE = '[ImportExport adminsitration] UPDATE FAILURE',
-  UPDATE_ADMIN_SUCCESS = '[ImportExport adminsitration] UPDATE SUCCESS',
+  UPDATE_ADMINISTRATIONS_REQUEST = '[ImportExport adminsitration] UPDATE REQUEST',
+  UPDATE_ADMINISTRATIONS_FAILURE = '[ImportExport adminsitration] UPDATE FAILURE',
+  UPDATE_ADMINISTRATIONS_SUCCESS = '[ImportExport adminsitration] UPDATE SUCCESS',
 
   SET_FAILURE = '[ImportExport] SET FAILURE'
 }
@@ -53,19 +53,16 @@ export class SetFailureAction implements Action {
 }
 // ================= UPDATE ADMINISTRATION ===============
 export class UpdateAdminRequestAction implements Action {
-  readonly type = ImportExportActionTypes.UPDATE_ADMIN_REQUEST;
-  constructor(public payload: {
-    id: number,
-    changes: Administration
-  }) {}
+  readonly type = ImportExportActionTypes.UPDATE_ADMINISTRATIONS_REQUEST;
+  constructor(public payload: { items: Administration[]} ) {}
 }
 export class UpdateAdminFailureAction implements Action {
-  readonly type = ImportExportActionTypes.UPDATE_ADMIN_FAILURE;
+  readonly type = ImportExportActionTypes.UPDATE_ADMINISTRATIONS_FAILURE;
   constructor(public payload: { error: string }) {}
 }
 export class UpdateAdminSuccessAction implements Action {
-  readonly type = ImportExportActionTypes.UPDATE_ADMIN_SUCCESS;
-  constructor(public payload: { item: Administration }) {}
+  readonly type = ImportExportActionTypes.UPDATE_ADMINISTRATIONS_SUCCESS;
+  constructor(public payload: { items: Administration[] }) {}
 }
 
 

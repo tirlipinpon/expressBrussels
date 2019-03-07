@@ -62,10 +62,9 @@ export class ImportExportListComponent implements OnInit {
   }
   update(order: ImportExport): void {
     this.store$.dispatch(new ImportExportStoreActions.UpdateRequestAction({id: order.id, changes: order}));
-    order.administrations.forEach( admini => {
-      this.store$.dispatch(new ImportExportStoreActions.UpdateAdminRequestAction({id: admini.id, changes: admini}));
-    })
+    this.store$.dispatch( new ImportExportStoreActions.UpdateAdminRequestAction({ items: order.administrations }) );
   }
+
   crateForm() {
     this.myForm = this.fb.group({
       items: this.fb.array([ ])
