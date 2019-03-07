@@ -12,6 +12,7 @@ import {Observable} from "rxjs";
 import {FormBuilder, FormGroup, FormArray, Validators} from "@angular/forms";
 import {MatSelect} from "@angular/material";
 import {OrderTranslate} from "../../../models/translate";
+import {Destination} from "../../../models/destination";
 
 @Component({
   selector: 'app-translate-list',
@@ -130,9 +131,31 @@ export class TranslateListComponent implements OnInit {
         communeCheck: [null],
         consulatCheck: [null],
         notaireCheck: [null],
-        procedureType: [null, Validators.required], // normal/urgent
+        procedureType: [null, Validators.required], // normal/urgent,
+        destinations: this.fb.array([ ])
     });
     form.patchValue(order);
+    this.addDestinations(form, order.destinations);
     return form;
+  }
+  addDestinations(form: FormGroup, data: Destination[]): void {
+    let items = form.get('destinations') as FormArray;
+    data.forEach(item => items.push(this.createDestination(item)));
+  }
+  createDestination(destini: Destination): FormGroup {
+    return this.fb.group({
+      id: [destini.id, Validators.required],
+      orderType: [destini.orderType, Validators.required], // translate/import-export
+      kind: [destini.kind, Validators.required], // removal/recipient/commune/notaire
+      name: [destini.name, Validators.required],
+      contact: [destini.contact],
+      phone: [destini.phone, Validators.required],
+      message: [destini.message],
+      fk_uuid: [destini.fk_uuid],// uuid_translate/uuid_import-export
+      address: [destini.address, Validators.required],
+      number: [destini.number, Validators.required],
+      cp: [destini.cp, Validators.required],
+      state: [destini.state, Validators.required]
+    })
   }
 }

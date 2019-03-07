@@ -53,8 +53,8 @@
       <mat-form-field><input type="number" step="0.01" matInput placeholder="price" formControlName="price" required></mat-form-field>
       <mat-form-field>
         <mat-select formControlName="valid" placeholder="validé">
-          <mat-option [value]="'0'">non validé</mat-option>
-          <mat-option [value]="'1'">validé</mat-option>
+          <mat-option [value]="0">non validé</mat-option>
+          <mat-option [value]="1">validé</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -63,7 +63,7 @@
 </form>
 
 
-<pre>{{translateItems$|async|json}}</pre>
+<pre>{{myForm.value|json}}</pre>
 
 <!--<div style="border:3px solid red;">-->
   <!--<pre>{{(error$|async)?.message}}</pre>-->

@@ -193,7 +193,7 @@ export class ClientsListComponent implements OnInit {
   uploadFileToActivity() {
     if (this.myClientForm.get('id').value && this.myClientForm.get('id').value.length) {
       this.clientsService.postFile(this.fileToUpload, this.myClientForm.get('id').value).subscribe(data => {
-        this.message = 'File uploaded'
+        this.message = 'File uploaded';
         this.cdr.markForCheck();
       });
     }else {

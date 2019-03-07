@@ -1,4 +1,4 @@
-import {Component, OnInit, HostListener, ViewChild} from '@angular/core';
+import {Component, OnInit, HostListener, ViewChild, ChangeDetectorRef} from '@angular/core';
 import {FormBuilder, FormGroup, Validators, FormArray} from "@angular/forms";
 import {ComponentDeactivable} from "../../services/can-deactivate-form-guard.service";
 import * as uuid from 'uuid';
@@ -35,7 +35,8 @@ export class OrderComponent implements OnInit, ComponentDeactivable {
 
   constructor(private fb: FormBuilder,
               private store$: Store<RootStoreState.RootState>,
-              private customerService: CustomerService) {
+              private customerService: CustomerService,
+              private cdr: ChangeDetectorRef) {
     this.cptDestinationChecked = 0;
     this.customerService.currentCustomerId.subscribe(id => {
       if(+id !== 0) {
@@ -43,7 +44,6 @@ export class OrderComponent implements OnInit, ComponentDeactivable {
       }
     });
     this.createForm();
-    this.onChanges();
   }
 
   ngOnInit() {
@@ -113,6 +113,7 @@ export class OrderComponent implements OnInit, ComponentDeactivable {
         ])
       })
     });
+    this.onChanges();
   }
   addItem(step: string, kind: string, index: number): void {
     let items = this.myOrderForm.get([step, 'destination']) as FormArray;
@@ -157,6 +158,8 @@ export class OrderComponent implements OnInit, ComponentDeactivable {
     this.mapFormToOrderTranslate();
     this.store$.dispatch( new OrderTranslateStoreActions.AddRequestAction({item: this.order}) );
     this.stepper.reset();
+    this.cptDestinationChecked = 0;
+    this.cdr.markForCheck();
     this.createForm();
   }
   mapFormToOrderTranslate() {
