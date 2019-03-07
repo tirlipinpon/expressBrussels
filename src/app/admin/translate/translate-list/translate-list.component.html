@@ -37,8 +37,31 @@
       </div>
       <div style="display:flex;flex-direction:column;">
         <mat-checkbox  [labelPosition]="'after'" formControlName="communeCheck">Commune</mat-checkbox>
+        <div style="background-color:aliceblue;" *ngIf="item.get('communeCheck').value===1 || item.get('communeCheck').value">
+          <div formArrayName="destinations" *ngFor="let itemDest of item.get('destinations').controls; let j = index;">
+            <div *ngIf="itemDest.get('kind').value==='commune'" [formGroupName]="j">
+              <app-destination [formDestination]="itemDest"></app-destination>
+            </div>
+          </div>
+        </div>
         <mat-checkbox  [labelPosition]="'after'" formControlName="notaireCheck">Notaire</mat-checkbox>
+        <div style="background-color:aliceblue;" *ngIf="item.get('notaireCheck').value===1 || item.get('notaireCheck').value">
+          <div formArrayName="destinations" *ngFor="let itemDest of item.get('destinations').controls; let k = index;">
+            <div *ngIf="itemDest.get('kind').value==='notaire'">
+              <div [formGroupName]="k">
+                <app-destination [formDestination]="itemDest"></app-destination>
+              </div>
+            </div>
+          </div>
+        </div>
         <mat-checkbox  [labelPosition]="'after'" formControlName="consulatCheck">Consulat</mat-checkbox>
+        <div style="background-color:aliceblue;" *ngIf="item.get('consulatCheck').value===1 || item.get('consulatCheck').value">
+          <div formArrayName="destinations" *ngFor="let itemDest of item.get('destinations').controls; let l = index;">
+            <div *ngIf="itemDest.get('kind').value==='consulat'" [formGroupName]="l">
+              <app-destination [formDestination]="itemDest"></app-destination>
+            </div>
+          </div>
+        </div>
         <mat-checkbox  [labelPosition]="'after'" formControlName="greffeInstanceCheck">Greffe de 1ère instance</mat-checkbox>
         <mat-checkbox  [labelPosition]="'after'" formControlName="coursAppelCheck">Cours d’appel</mat-checkbox>
         <mat-checkbox  [labelPosition]="'after'" formControlName="spfEtrangereCheck">SPF affaires étrangères</mat-checkbox>

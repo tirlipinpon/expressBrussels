@@ -112,9 +112,9 @@
   </mat-step>
 </mat-horizontal-stepper>
 
-<div style="display:flex;">
-  <pre>invalid: {{findInvalidControlsRecursive(ieForm)}}</pre>
-  <pre>form: {{ieForm.value|json}}</pre>
+<div *ngIf="ieForm" style="display:flex;">
+  <pre style="flex:1;border:1px solid blue;" >invalid: {{findInvalidControlsRecursive(ieForm)}}</pre>
+  <pre style="flex:1;border:1px solid blue;">form: {{ieForm.value|json}}</pre>
 </div>
 
 

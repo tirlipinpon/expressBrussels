@@ -136,6 +136,7 @@ export class TranslateListComponent implements OnInit {
     });
     form.patchValue(order);
     this.addDestinations(form, order.destinations);
+    this.onChanges(form);
     return form;
   }
   addDestinations(form: FormGroup, data: Destination[]): void {
@@ -157,5 +158,59 @@ export class TranslateListComponent implements OnInit {
       cp: [destini.cp, Validators.required],
       state: [destini.state, Validators.required]
     })
+  }
+  createDestinationFormEmpty(kind: string): FormGroup {
+    return this.fb.group({
+      id: [null, Validators.required],
+      orderType: [null, Validators.required], // translate/import-export
+      kind: [kind, Validators.required], // removal/recipient/commune/notaire
+      name: [null, Validators.required],
+      contact: [null],
+      phone: [null, Validators.required],
+      message: [null],
+      fk_uuid: [null],// uuid_translate/uuid_import-export
+      address: [null, Validators.required],
+      number: [null, Validators.required],
+      cp: [null, Validators.required],
+      state: [null, Validators.required]
+    })
+  }
+  onChanges(form: FormGroup): void {
+    form.get('communeCheck').valueChanges.subscribe(val => {
+      if (val) {
+        this.addDestinationEmpty(form, 'commune');
+      }else {
+        this.removeDestinationEmpty(form, 'commune');
+      }
+    });
+    form.get('notaireCheck').valueChanges.subscribe(val => {
+      if (val) {
+        this.addDestinationEmpty(form, 'notaire');
+      }else {
+        this.removeDestinationEmpty(form, 'notaire');
+      }
+    });
+    form.get('consulatCheck').valueChanges.subscribe(val => {
+      if (val) {
+        this.addDestinationEmpty(form, 'consulat');
+      }else {
+        this.removeDestinationEmpty(form, 'consulat');
+      }
+    });
+  }
+  addDestinationEmpty(form: FormGroup, kind: string): void {
+    let items = form.get('destinations') as FormArray;
+    items.push(this.createDestinationFormEmpty(kind));
+  }
+  removeDestinationEmpty(form: FormGroup, kind: string): void {
+    let items = form.get('destinations') as FormArray;
+    let i = 0;
+    for (let item of items.controls) {
+      if (item.get('kind').value === kind) {
+        items.removeAt(i);
+        break;
+      }
+      i++;
+    }
   }
 }

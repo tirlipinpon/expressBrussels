@@ -9,6 +9,8 @@ import {FormGroup} from "@angular/forms";
 export class DestinationComponent implements OnInit {
 
   @Input() formDestination: FormGroup;
+  @Input() typeSize: string;
+
 
   constructor() { }
 
