@@ -27,7 +27,7 @@ export class IEOrderComponent implements OnInit {
   isAtLeasOneAdminCheck: number;
   @ViewChild('stepper') stepper: MatStepper;
   get arrayFormDataStep1() { return <FormArray>this.ieForm.get(['step1', 'administration']); }
-  get arrayFormDataStep2() { return <FormArray>this.ieForm.get(['step2', 'destination']); }
+  get arrayFormDataStep2() { return <FormArray>this.ieForm.get(['step2', 'destinations']); }
 
   constructor(private store$: Store<RootStoreState.RootState>,
               private fb: FormBuilder,
@@ -173,12 +173,13 @@ export class IEOrderComponent implements OnInit {
       }),
       step2: this.fb.group({
         procedureType: [null, Validators.required], // normal/urgent
-        destination: this.fb.array([
+        destinations: this.fb.array([
           this.createItemDest('removal'),
           this.createItemDest('recipient')
         ])
       })
     });
+    this.onChanges();
   }
   createItemDest(kind: string): FormGroup {
     return this.fb.group({
@@ -204,7 +205,7 @@ export class IEOrderComponent implements OnInit {
       ...{administration: this.ieForm.get(['step1', 'administration']).value},
       ...this.ieForm.get('step2').value
     };
-    let dest1 = this.ieForm.get(['step2', 'destination']).value;
+    let dest1 = this.ieForm.get(['step2', 'destinations']).value;
     this.order.destinations = [
       ...dest1
     ];
@@ -215,6 +216,9 @@ export class IEOrderComponent implements OnInit {
     this.store$.dispatch( new ImportExportStoreActions.AddRequestAction({item: this.removeEmpty(this.order)}) );
     this.stepper.reset();
     this.isAtLeasOneAdminCheck = 0;
+    this.createForm();
+    this.addItemAdmin();
+    this.onChanges();
   }
 
   removeEmpty(obj: any): any {
@@ -231,4 +235,20 @@ export class IEOrderComponent implements OnInit {
     return  Object.keys(obj).length > 0 || obj instanceof Array ? obj : undefined;
   };
 
+  public findInvalidControlsRecursive(formToInvestigate:FormGroup|FormArray):string[] {
+    let invalidControls:string[] = [];
+    let recursiveFunc = (form:FormGroup|FormArray) => {
+      Object.keys(form.controls).forEach(field => {
+        const control = form.get(field);
+        if (control.invalid) invalidControls.push(field);
+        if (control instanceof FormGroup) {
+          recursiveFunc(control);
+        } else if (control instanceof FormArray) {
+          recursiveFunc(control);
+        }
+      });
+    };
+    recursiveFunc(formToInvestigate);
+    return invalidControls;
+  }
 }

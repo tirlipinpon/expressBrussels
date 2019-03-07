@@ -30,8 +30,8 @@ export class OrderComponent implements OnInit, ComponentDeactivable {
   error$: Observable<string>;
   @ViewChild('stepper') stepper: MatStepper;
 
-  get arrayFormDataStep2() { return <FormArray>this.myOrderForm.get(['step2','destination']); }
-  get arrayFormDataStep3() { return <FormArray>this.myOrderForm.get(['step3','destination']); }
+  get arrayFormDataStep2() { return <FormArray>this.myOrderForm.get(['step2','destinations']); }
+  get arrayFormDataStep3() { return <FormArray>this.myOrderForm.get(['step3','destinations']); }
 
   constructor(private fb: FormBuilder,
               private store$: Store<RootStoreState.RootState>,
@@ -103,11 +103,11 @@ export class OrderComponent implements OnInit, ComponentDeactivable {
         communeCheck: [null],
         consulatCheck: [null],
         notaireCheck: [null],
-        destination: this.fb.array([ ])
+        destinations: this.fb.array([ ])
       }),
       step3: this.fb.group({
         procedureType: [null, Validators.required], // normal/urgent
-        destination: this.fb.array([
+        destinations: this.fb.array([
           this.createItem('removal'),
           this.createItem('recipient')
         ])
@@ -116,11 +116,11 @@ export class OrderComponent implements OnInit, ComponentDeactivable {
     this.onChanges();
   }
   addItem(step: string, kind: string, index: number): void {
-    let items = this.myOrderForm.get([step, 'destination']) as FormArray;
+    let items = this.myOrderForm.get([step, 'destinations']) as FormArray;
     items.insert(index, this.createItem(kind));
   }
   removeItem(step: string, kind: string): void {
-    let items = this.myOrderForm.get([step, 'destination']) as FormArray;
+    let items = this.myOrderForm.get([step, 'destinations']) as FormArray;
     let i = 0;
     for (let item of items.controls) {
       if (item.get('kind').value === kind) {
@@ -169,9 +169,9 @@ export class OrderComponent implements OnInit, ComponentDeactivable {
       ...this.myOrderForm.get('step2').value,
       ...this.myOrderForm.get('step3').value
     };
-    let dest1 = this.myOrderForm.get(['step2', 'destination']).value;
-    let dest2 = this.myOrderForm.get(['step3', 'destination']).value;
-    this.order.destination = [
+    let dest1 = this.myOrderForm.get(['step2', 'destinations']).value;
+    let dest2 = this.myOrderForm.get(['step3', 'destinations']).value;
+    this.order.destinations = [
       ...dest1, ...dest2
     ];
   }

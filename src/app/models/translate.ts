@@ -14,7 +14,7 @@ export interface OrderTranslate {
   price: number;
   fk_client_id: number;
 
-  destination?: Destination[]
+  destinations?: Destination[]
 
   docName: string;
   originalNbr: number;

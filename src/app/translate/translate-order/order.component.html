@@ -81,7 +81,7 @@
           <mat-card-content>
             <h2 class="example-h2">Commune</h2>
             <div style="display:flex;flex-direction:column;width:300px;margin:10px;">
-              <div formArrayName="destination" *ngFor="let item of myOrderForm.get(['step2','destination']).controls; let i = index;">
+              <div formArrayName="destinations" *ngFor="let item of myOrderForm.get(['step2','destinations']).controls; let i = index;">
                 <div *ngIf="item.get('kind').value==='commune'" [formGroupName]="i">
                   <app-destination [formDestination]="item"></app-destination>
                 </div>
@@ -94,7 +94,7 @@
           <mat-card-content>
             <h2 class="example-h2">Notaire</h2>
             <div style="display:flex;flex-direction:column;width:300px;margin:10px;">
-              <div formArrayName="destination"
+              <div formArrayName="destinations"
                    *ngFor="let item of arrayFormDataStep2.controls; let i = index;">
                 <div *ngIf="item.get('kind').value==='notaire'" [formGroupName]="i">
                   <app-destination [formDestination]="item"></app-destination>
@@ -107,7 +107,7 @@
           <mat-card-content>
             <h2 class="example-h2">Consulat</h2>
             <div style="display:flex;flex-direction:column;width:300px;margin:10px;">
-              <div formArrayName="destination"
+              <div formArrayName="destinations"
                    *ngFor="let item of arrayFormDataStep2.controls; let i = index;">
                 <div *ngIf="item.get('kind').value==='consulat'" [formGroupName]="i">
                   <app-destination [formDestination]="item" ></app-destination>
@@ -137,7 +137,7 @@
           </mat-select>
         </mat-form-field>
         <div style="display:flex;width:300px;margin:10px;">
-          <div  formArrayName="destination"  *ngFor="let item of arrayFormDataStep3.controls; let i = index;">
+          <div  formArrayName="destinations"  *ngFor="let item of arrayFormDataStep3.controls; let i = index;">
             <mat-card>
               <mat-card-content>
                 <h2 class="example-h2">{{item.get('kind').value==='removal'?'Enlevement':'Destination'}}</h2>
