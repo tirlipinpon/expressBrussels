@@ -159,16 +159,16 @@ export class TranslateListComponent implements OnInit {
       state: [destini.state, Validators.required]
     })
   }
-  createDestinationFormEmpty(kind: string): FormGroup {
+  createDestinationFormEmpty(kind: string, uuid: string): FormGroup {
     return this.fb.group({
-      id: [null, Validators.required],
-      orderType: [null, Validators.required], // translate/import-export
+      id: [null],
+      orderType: ['translate', Validators.required], // translate/import-export
       kind: [kind, Validators.required], // removal/recipient/commune/notaire
       name: [null, Validators.required],
       contact: [null],
       phone: [null, Validators.required],
       message: [null],
-      fk_uuid: [null],// uuid_translate/uuid_import-export
+      fk_uuid: [uuid, Validators.required],// uuid_translate/uuid_import-export
       address: [null, Validators.required],
       number: [null, Validators.required],
       cp: [null, Validators.required],
@@ -200,7 +200,7 @@ export class TranslateListComponent implements OnInit {
   }
   addDestinationEmpty(form: FormGroup, kind: string): void {
     let items = form.get('destinations') as FormArray;
-    items.push(this.createDestinationFormEmpty(kind));
+    items.push(this.createDestinationFormEmpty(kind, form.get('uuid').value));
   }
   removeDestinationEmpty(form: FormGroup, kind: string): void {
     let items = form.get('destinations') as FormArray;

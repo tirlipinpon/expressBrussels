@@ -24,7 +24,6 @@ export class OrderComponent implements OnInit, ComponentDeactivable {
   myOrderFormTemp: FormGroup;
   isLinear = false;
   order: OrderTranslate;
-  orderTemp: OrderTranslate;
   customerId: number;
   cptDestinationChecked: number;
   error$: Observable<string>;
@@ -183,8 +182,8 @@ export class OrderComponent implements OnInit, ComponentDeactivable {
     }
   }
   initiateTemp(value) {
-    this.myOrderFormTemp = value;
-    this.myOrderFormTemp  = this.removeEmpty(this.myOrderFormTemp.value)
+    // this.myOrderFormTemp = value;
+    // this.myOrderFormTemp  = this.removeEmpty(this.myOrderFormTemp.value)
   }
   removeEmpty(obj: any): any {
     Object.keys(obj).forEach((key) => {
