@@ -43,14 +43,9 @@ export class ClientsListComponent implements OnInit {
   myPrixZoneMotoForm: FormGroup;
   myPrixZoneCarForm: FormGroup;
 
-  fileToUpload: File = null;
-  message: string;
-
   constructor(private store$: Store<RootStoreState.State>,
               private fb: FormBuilder,
-              private notificationsService: NotificationService,
-              private cdr: ChangeDetectorRef,
-              private clientsService: ClientsService) {
+              private notificationsService: NotificationService) {
   }
 
   ngOnInit() {
@@ -185,21 +180,6 @@ export class ClientsListComponent implements OnInit {
   }
   removeOne(id: string): void {
     this.store$.dispatch(new ClientsStoreActions.RemoveRequestAction(id));
-  }
-
-  handleFileInput(files: FileList) {
-    this.fileToUpload = files.item(0);
-  }
-  uploadFileToActivity() {
-    if (this.myClientForm.get('id').value && this.myClientForm.get('id').value.length) {
-      this.clientsService.postFile(this.fileToUpload, this.myClientForm.get('id').value).subscribe(data => {
-        this.message = 'File uploaded';
-        this.cdr.markForCheck();
-      });
-    }else {
-      this.message = 'Wrong client id -> '+this.myClientForm.get('id').value;
-      this.cdr.markForCheck();
-    }
   }
 
 // useless

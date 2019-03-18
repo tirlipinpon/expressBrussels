@@ -28,6 +28,7 @@ export class TranslateListComponent implements OnInit {
   myForm: FormGroup;
   selectedOption: string;
   months: {id:number, name:string}[];
+  client_id: number;
 
   @ViewChild('matSelect') matSelect: MatSelect;
   get formData() { return <FormArray>this.myForm.get('items'); }
@@ -81,11 +82,10 @@ export class TranslateListComponent implements OnInit {
     );
   }
   selectClientById(id: string) {
+    this.client_id = +id;
     this.selectedOption = '-1';
     if (id && id.length && id != '0') {
-      this.translateItems$ = this.store$.pipe(
-        select( TranslatesStoreSelectors.selectTranslatesItemsById(+id) )
-      );
+      this.translateItems$ = this.store$.pipe(select( TranslatesStoreSelectors.selectTranslatesItemsById(+id) ));
       this.setTranslateFormFromSelect(this.translateItems$);
     }
   }

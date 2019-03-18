@@ -30,11 +30,13 @@ export class ClientsService {
     let url = this.apiUrl+'php//update.php';
     return this.http.post<DataForm>(url, client);
   }
-  postFile(fileToUpload: File, fk_customer_id: number ): Observable<boolean> {
+  postFile(fileToUpload: File, fk_customer_id: number, kind: string ): Observable<boolean> {
     const endpoint = this.apiUrl+'php//upload_file.php';
     const formData: FormData = new FormData();
     formData.append('file', fileToUpload, fileToUpload.name);
-    return this.http.post(endpoint, formData, { params:  new HttpParams().set('fk_customer_id', ''+fk_customer_id) }).pipe(
+    return this.http.post(endpoint, formData, {
+      params:  new HttpParams().set('fk_customer_id', ''+fk_customer_id).set('kind', kind)
+    }).pipe(
       map(() => { return true; }),
       catchError((e) =>  {
         console.log(e);

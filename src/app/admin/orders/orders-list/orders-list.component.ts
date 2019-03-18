@@ -30,6 +30,7 @@ export class OrdersListComponent implements OnInit {
   myOrderForm: FormGroup;
   selectedOption: number;
   months: {id:number, name:string}[];
+  client_id: number;
 
   @ViewChild('matSelect') matSelect: MatSelect;
   get formData() { return <FormArray>this.myOrderForm.get('items'); }
@@ -82,6 +83,7 @@ export class OrdersListComponent implements OnInit {
     );
   }
   selectClientById(id: string) {
+    this.client_id = +id;
     this.selectedOption = -1;
     if (id && id.length && id != '0') {
       this.store$.dispatch(new OrdersStoreActions.LoadRequestAction(+id));

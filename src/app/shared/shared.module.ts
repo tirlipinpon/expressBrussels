@@ -61,6 +61,7 @@ import {GetNameByIdPipe} from "../admin/pipe/get-name-by-id.pipe";
 import { DestinationComponent } from './components/form/destination/destination.component';
 import { SelectClientComponent } from './components/form/select-client/select-client.component';
 import { SelectMonthComponent } from './components/form/select-month/select-month.component';
+import { UploadPdfComponent } from './components/upload-pdf/upload-pdf.component';
 
 library.add(faPhone, faHome, faClock, faUser, faUniversity, faFilePdf, faEraser,
   faIdCard, faComment, faUserTie, faUserTag, faEuroSign, faMapMarkedAlt, faClock, faMotorcycle, faCar, faEye, faEyeSlash);
@@ -127,7 +128,8 @@ library.add(faPhone, faHome, faClock, faUser, faUniversity, faFilePdf, faEraser,
     GetNameByIdPipe,
     DestinationComponent,
     SelectClientComponent,
-    SelectMonthComponent
+    SelectMonthComponent,
+    UploadPdfComponent
   ],
   declarations: [
     // component
@@ -155,7 +157,8 @@ library.add(faPhone, faHome, faClock, faUser, faUniversity, faFilePdf, faEraser,
     GetNameByIdPipe,
     DestinationComponent,
     SelectClientComponent,
-    SelectMonthComponent
+    SelectMonthComponent,
+    UploadPdfComponent
   ],
   providers: [
     ConfirmationService
