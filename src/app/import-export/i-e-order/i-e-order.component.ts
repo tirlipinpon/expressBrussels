@@ -19,12 +19,11 @@ import {MatStepper} from "@angular/material";
 })
 export class IEOrderComponent implements OnInit {
 
-  importExportItems$: Observable<ImportExport[]>;
   error$: Observable<string>;
   ieForm: FormGroup;
   order: ImportExport;
   customerId: number;
-  isAtLeasOneAdminCheck: number;
+  nbAdminChecked: number;
   @ViewChild('stepper') stepper: MatStepper;
   get arrayFormDataStep1() { return <FormArray>this.ieForm.get(['step1', 'administration']); }
   get arrayFormDataStep2() { return <FormArray>this.ieForm.get(['step2', 'destinations']); }
@@ -43,9 +42,7 @@ export class IEOrderComponent implements OnInit {
     });
     this.createForm();
     this.addItemAdmin();
-    this.onChanges();
-    // this.store$.dispatch( new ImportExportStoreActions.AddRequestAction({item: null}) );
-    this.isAtLeasOneAdminCheck = 0;
+    this.nbAdminChecked = 0;
   }
   addItemAdmin() {
     this.addItem('step1', 'beci', 0);
@@ -58,55 +55,55 @@ export class IEOrderComponent implements OnInit {
   onChanges(): void {
     this.ieForm.get(['step1', 'adminName', 'beci']).valueChanges.subscribe(val => {
       if (val) {
-        this.isAtLeasOneAdminCheck++;
+        this.nbAdminChecked++;
         this.enable('step1', 'beci', 0);
       }else {
-        this.isAtLeasOneAdminCheck--;
+        this.nbAdminChecked--;
         this.disable('step1', 'beci', 0);
       }
     });
     this.ieForm.get(['step1', 'adminName', 'traduction']).valueChanges.subscribe(val => {
       if (val) {
-        this.isAtLeasOneAdminCheck++;
+        this.nbAdminChecked++;
         this.enable('step1', 'traduction', 1);
       }else {
-        this.isAtLeasOneAdminCheck--;
+        this.nbAdminChecked--;
         this.disable('step1', 'traduction', 1);
       }
     });
     this.ieForm.get(['step1', 'adminName', 'spfae']).valueChanges.subscribe(val => {
       if (val) {
-        this.isAtLeasOneAdminCheck++;
+        this.nbAdminChecked++;
         this.enable('step1', 'spfae',  2);
       }else {
-        this.isAtLeasOneAdminCheck--;
+        this.nbAdminChecked--;
         this.disable('step1', 'spfae', 2);
       }
     });
     this.ieForm.get(['step1', 'adminName', 'afsca']).valueChanges.subscribe(val => {
       if (val) {
-        this.isAtLeasOneAdminCheck++;
+        this.nbAdminChecked++;
         this.enable('step1', 'afsca',  3);
       }else {
-        this.isAtLeasOneAdminCheck--;
+        this.nbAdminChecked--;
         this.disable('step1', 'afsca', 3);
       }
     });
     this.ieForm.get(['step1', 'adminName', 'chambrebelgo']).valueChanges.subscribe(val => {
       if (val) {
-        this.isAtLeasOneAdminCheck++;
+        this.nbAdminChecked++;
         this.enable('step1', 'chambrebelgo',  4);
       }else {
-        this.isAtLeasOneAdminCheck--;
+        this.nbAdminChecked--;
         this.disable('step1', 'chambrebelgo', 4);
       }
     });
     this.ieForm.get(['step1', 'adminName', 'ambassade']).valueChanges.subscribe(val => {
       if (val) {
-        this.isAtLeasOneAdminCheck++;
+        this.nbAdminChecked++;
         this.enable('step1', 'ambassade', 5);
       }else {
-        this.isAtLeasOneAdminCheck--;
+        this.nbAdminChecked--;
         this.disable('step1', 'ambassade', 5);
       }
     });
@@ -215,10 +212,9 @@ export class IEOrderComponent implements OnInit {
     this.mapFormToOrderTranslate();
     this.store$.dispatch( new ImportExportStoreActions.AddRequestAction({item: this.removeEmpty(this.order)}) );
     this.stepper.reset();
-    this.isAtLeasOneAdminCheck = 0;
+    this.nbAdminChecked = 0;
     this.createForm();
     this.addItemAdmin();
-    this.onChanges();
   }
 
   removeEmpty(obj: any): any {

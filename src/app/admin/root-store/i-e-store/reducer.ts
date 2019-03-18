@@ -38,9 +38,20 @@ export function importExportReducer(state = initalImportExportState, action: Act
           isLoading: false,
           error: null
         }
-
       )
     }
+    // case ImportExportActionTypes.UPDATE_ADMINISTRATIONS_SUCCESS: {
+    //   return importExportAdapter.updateOne({
+    //       id: action.payload.items.id,
+    //       changes: action.payload.items
+    //     },
+    //     {
+    //       ...state,
+    //       isLoading: false,
+    //       error: null
+    //     }
+    //   )
+    // }
     default: {
       return state;
     }

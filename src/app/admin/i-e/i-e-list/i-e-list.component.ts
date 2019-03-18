@@ -62,7 +62,7 @@ export class ImportExportListComponent implements OnInit {
   }
   update(order: ImportExport): void {
     this.store$.dispatch(new ImportExportStoreActions.UpdateRequestAction({id: order.id, changes: order}));
-    this.store$.dispatch( new ImportExportStoreActions.UpdateAdminRequestAction({ items: order.administrations }) );
+    this.store$.dispatch( new ImportExportStoreActions.UpdateAdminRequestAction({ items: order.administrations, id: order.id }) );
   }
 
   crateForm() {

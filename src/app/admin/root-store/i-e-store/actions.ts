@@ -54,7 +54,7 @@ export class SetFailureAction implements Action {
 // ================= UPDATE ADMINISTRATION ===============
 export class UpdateAdminRequestAction implements Action {
   readonly type = ImportExportActionTypes.UPDATE_ADMINISTRATIONS_REQUEST;
-  constructor(public payload: { items: Administration[]} ) {}
+  constructor(public payload: { items: Administration[], id: number} ) {}
 }
 export class UpdateAdminFailureAction implements Action {
   readonly type = ImportExportActionTypes.UPDATE_ADMINISTRATIONS_FAILURE;

@@ -28,7 +28,7 @@
       <div style="display:flex;margin:auto;width:1000px;" >
       <mat-card>
         <mat-card-content style="display:flex;flex-direction:column;">
-            <h2 class="example-h2">({{isAtLeasOneAdminCheck}}) administration{{isAtLeasOneAdminCheck>1?'s':''}} </h2>
+            <h2 class="example-h2">({{nbAdminChecked}}) administration{{nbAdminChecked>1?'s':''}} </h2>
 
             <div formGroupName="adminName" style="display:flex;margin:10px 10px 30px 10px;justify-content:space-between;">
               <mat-checkbox style="width:150px;margin:0px;" [labelPosition]="'after'" formControlName="beci">beci</mat-checkbox>
@@ -58,7 +58,7 @@
 
       <div style="display:flex;margin:25px auto;width:220px;">
         <button mat-raised-button color="primary" matStepperPrevious>Retour</button>
-        <div *ngIf="ieForm.get('step1').valid && isAtLeasOneAdminCheck>0">
+        <div *ngIf="ieForm.get('step1').valid && nbAdminChecked>0">
           <button  mat-raised-button color="primary" matStepperNext>Procédure</button>
         </div>
       </div>
@@ -112,9 +112,9 @@
   </mat-step>
 </mat-horizontal-stepper>
 
-<div *ngIf="ieForm" style="display:flex;">
-  <pre style="flex:1;border:1px solid blue;" >invalid: {{findInvalidControlsRecursive(ieForm)}}</pre>
-  <pre style="flex:1;border:1px solid blue;">form: {{ieForm.value|json}}</pre>
-</div>
+<!--<div *ngIf="ieForm" style="display:flex;">-->
+  <!--<pre style="flex:1;border:1px solid blue;" >invalid: {{findInvalidControlsRecursive(ieForm)}}</pre>-->
+  <!--<pre style="flex:1;border:1px solid blue;">form: {{ieForm.value|json}}</pre>-->
+<!--</div>-->
 
 
