@@ -209,7 +209,7 @@ const orderInitOrder: PurchasseOrder =  {
     contact_recipient: '',
     message_recipient: '',
 
-    created: new Date(),
+    created: null,
 
     price: 0,
     distance: 0,

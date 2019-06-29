@@ -319,7 +319,6 @@ export class OrdersComponent implements OnInit, OnDestroy {
     return null;
   }
   downloadPdf(url: string): void {
-
     console.log(url);
   }
 }

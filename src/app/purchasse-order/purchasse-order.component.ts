@@ -25,6 +25,7 @@ import {Contact} from "../models/contact";
 
 import { map } from 'rxjs/operators';
 import {NotificationService} from "../services/notification.service";
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: 'app-purchasse-order',
@@ -323,6 +324,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     }
   }
   recapOrder() {
+    this.showSendBtn = false;
     this.store.dispatch(new OrderActions.SaveOrder());
     this.addContacts(this.formRemoval, this.formRecipient);
     this.resetOrder();

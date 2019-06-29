@@ -7,7 +7,7 @@ import {OrderService} from '../../services/order.service';
 import {NotificationService} from '../../services/notification.service';
 import * as OrderActions  from '../../actions/purchasseOrder.actions';
 import * as ToasterActions  from '../../actions/toaster.actions';
-import {withLatestFrom, switchMap, catchError, map, tap} from "rxjs/internal/operators";
+import {withLatestFrom, switchMap, catchError, map} from "rxjs/internal/operators";
 import {SaveOrderSuccess} from "../../actions/purchasseOrder.actions";
 
 @Injectable()
@@ -24,15 +24,15 @@ export class PurchasseOrderEffectService {
     ofType(OrderActions.SAVE_ORDER),
     withLatestFrom(  this.store.select('order'), this.store.select('customer')),
     switchMap(([payload, order, customer]) =>
-      this.orderService.saveOrder(order, customer.id).pipe(
-        map((payload) => {
-          return new SaveOrderSuccess(payload)
-        }),
-        catchError(err => {
-          // this.notif.notify('error', 'Error', err);
-          return  of(new OrderActions.SaveOrderFail(err))
-        })
-      )
+        this.orderService.saveOrder(order, customer.id).pipe(
+          map((payload) => {
+            return new SaveOrderSuccess(payload)
+          }),
+          catchError(err => {
+            // this.notif.notify('error', 'Error', err);
+            return  of(new OrderActions.SaveOrderFail(err))
+          })
+        )
     )
   );
 

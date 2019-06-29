@@ -101,7 +101,9 @@ export class TranslateListComponent implements OnInit {
       while (items.length !== 0) {
         items.removeAt(0)
       }
-      data.forEach(item => this.addItem(items, item));
+      if (data) {
+        data.forEach(item => this.addItem(items, item));
+      }
     });
   }
   addItem(items: FormArray, order: OrderTranslate): void {

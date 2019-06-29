@@ -46,12 +46,12 @@
             [matTooltipPosition]="'above'"> Numéro du bon </th>
         <td mat-cell *matCellDef="let transaction; let i = index;" >{{i+1}} - (n°:{{transaction.id}})</td>
         <td mat-footer-cell *matFooterCellDef matTooltip="Total des commandes pour l'année ({{getCurrentDate() | date:'yyyy'}})"
-            [matTooltipPosition]="'right'"> Total ({{getCurrentDate() | date:'yyyy'}})</td>
+            [matTooltipPosition]="'right'"><span *ngIf="customerId===2">Total ({{getCurrentDate() | date:'yyyy'}})</span></td>
       </ng-container>
       <!-- created Column -->
       <ng-container matColumnDef="created">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> date de création </th>
-        <td mat-cell *matCellDef="let transaction" class="mat-h1 mat-title">{{transaction.created | date:'dd/MM/yyyy'}} <br> {{transaction.created | date:'h:MM:ss'}}</td>
+        <td mat-cell *matCellDef="let transaction" class="mat-h1 mat-title">{{transaction.created | date:'dd/MM/yyyy'}} <br> {{transaction.created | date:'h:mm:ss'}}</td>
         <td mat-footer-cell *matFooterCellDef>  </td>
       </ng-container>
       <!-- removal Column -->
@@ -117,7 +117,7 @@
           <p>{{transaction.price}} €</p>
         </td>
 
-        <td mat-footer-cell *matFooterCellDef> {{getTotalCost() | currency:'EUR':true}} </td>
+        <td  mat-footer-cell *matFooterCellDef> <span *ngIf="customerId===2">{{getTotalCost() | currency:'EUR':true}} </span></td>
       </ng-container>
       <!-- Disclaimer column -->
       <ng-container matColumnDef="disclaimer">
