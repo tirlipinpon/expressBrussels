@@ -20,7 +20,9 @@
                   (selectionChange)="applyFilterMonth($event.value, $event)">
         <mat-option [value]="'none'"></mat-option>
         <mat-option *ngFor="let month of months" [value]="month">
-          {{month|numberTransformToMonth}} ({{month|countOrdersByMonth:dataSource.data}}) {{month|countOrdersPriceByMonth:dataSource.data}} €
+          {{month|numberTransformToMonth}}
+          ({{month|countOrdersByMonth:dataSource.data}})
+          {{(month|countOrdersPriceByMonth:dataSource.data).toFixed(2)}} €
         </mat-option>
       </mat-select>
     </mat-form-field>
