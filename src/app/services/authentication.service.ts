@@ -34,7 +34,7 @@ export class AuthenticationService {
   setCustomerDecoded(): void {
     let decoded = jwt_decode(this.getToken());
     this.store.dispatch(new CustomerActions.SetCustomer(decoded));
-    // console.log(decoded);
+    console.log(decoded);
   }
   getToken(): string {
     return localStorage.getItem(TOKEN_NAME);

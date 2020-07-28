@@ -142,7 +142,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns" class="to-print" id="print-{{row.id}}"></tr>
       <tr mat-footer-row *matFooterRowDef="displayedColumns;" class="example-first-footer-row"></tr>
     </table>
-    <mat-paginator [pageSizeOptions]="[1000]" showFirstLastButtons></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[100]" showFirstLastButtons></mat-paginator>
   </div>
 </div>
 

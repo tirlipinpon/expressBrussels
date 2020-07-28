@@ -1,6 +1,14 @@
 import { Action } from '@ngrx/store';
 import {PurchasseOrder} from '../models/PurchasseOrder';
 
+export const RESET_ORDERS = 'Reset Orders';
+export class ResetOrders implements Action {
+  readonly type = RESET_ORDERS;
+  constructor() {
+    // console.log('in actions get orders by fk_customer_id payload= ',payload);
+  }
+}
+
 export const GET_ORDERS = 'Get Orders';
 export class GetOrders implements Action {
   readonly type = GET_ORDERS;
@@ -26,6 +34,7 @@ export class GetOrdersFail implements Action {
 }
 
 export type All =
-  GetOrders
+  ResetOrders
+  | GetOrders
   | GetOrdersSuccess
   | GetOrdersFail;

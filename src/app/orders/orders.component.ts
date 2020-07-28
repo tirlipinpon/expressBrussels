@@ -176,10 +176,13 @@ export class OrdersComponent implements OnInit, OnDestroy {
   storeSelect() {
     this.removals$ = this.store.pipe(select(fromRoot.selectors.getRemovalsData));
     this.recipients$ = this.store.pipe(select(fromRoot.selectors.getRecipientsData));
+
     this.orders$ = this.store.pipe(select(fromRoot.selectors.getOrders));
   }
   storeDispatch() {
+    this.store.dispatch(new OrdersActions.ResetOrders());
     this.store.dispatch(new OrdersActions.GetOrders(this.customerId));
+
     this.store.dispatch(new RemovalActions.GetRemovals(this.customerId*10+1)); // (id + type)  eg: id = 69; type=1 fk_type=691
     this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10+2)); // (id + type)  eg: id = 69; type=2 fk_type=692
   }

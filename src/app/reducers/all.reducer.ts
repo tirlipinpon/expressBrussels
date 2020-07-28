@@ -320,6 +320,8 @@ export const PurchasseOrderSelector = {
 // ======================================================
 export function ordersReducer(state: PurchasseOrder[], action: ActionOrders): PurchasseOrder[] {
   switch(action.type){
+    case OrdersActions.RESET_ORDERS:
+      return [];
     case OrdersActions.GET_ORDERS_SUCCESS:
       // console.log('in orders reducer get orders by fk_customer_id',action.payload);
       return Object.assign({}, state, action.payload);

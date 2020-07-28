@@ -1,6 +1,6 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Observable} from "rxjs";
-import {Store} from "@ngrx/store";
+import {select, Store} from "@ngrx/store";
 import * as fromRoot from './shared/appState';
 import {AuthenticationService} from "./services/authentication.service";
 import {Router} from "@angular/router";
@@ -19,7 +19,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.customerId$ = this.store.select(fromRoot.selectors.getCustomerId)
+    this.authenticationService.setCustomerDecoded();
+    this.customerId$ = this.store.pipe(select(fromRoot.selectors.getCustomerId));
   }
 
   goPlaces() {
