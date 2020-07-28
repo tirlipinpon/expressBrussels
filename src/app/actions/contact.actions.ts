@@ -1,5 +1,13 @@
 import {Action} from '@ngrx/store';
-import {ContactState, Contact} from '../models/contact';
+import {ContactState} from '../models/contact';
+
+export const RESET_CONTACT = 'Reset CONTACT';
+export class ResetContact implements Action {
+  readonly type = RESET_CONTACT;
+  constructor() {
+    // console.log('in actions:' , this.type);
+  }
+}
 
 export const GET_CONTACT = 'Get CONTACT';
 export class GetContact implements Action {
@@ -51,7 +59,8 @@ export class AddContactFail implements Action {
 }
 
 export type All =
-  GetContact
+  ResetContact
+    | GetContact
     | GetContactSuccess
     | GetContactFail
     | AddContacts

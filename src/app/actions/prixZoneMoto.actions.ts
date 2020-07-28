@@ -1,6 +1,13 @@
 import {Action} from '@ngrx/store';
 import {PrixZone} from "../models/prixZone";
 
+export const RESET_PRIX_ZONE_MOTO = 'Reset prix zone moto';
+export class ResetPrixZoneMoto implements Action {
+  readonly type = RESET_PRIX_ZONE_MOTO;
+  constructor() {
+    // console.log('in actions get prix zone moto payload:', payload);
+  }
+}
 
 export const GET_PRIX_ZONE_MOTO = 'Get prix zone moto';
 export class GetPrixZoneMoto implements Action {
@@ -29,6 +36,7 @@ export class GetPrixZoneMotoFail implements Action {
 // =============================================================
 
 export type All =
-  GetPrixZoneMoto
+  ResetPrixZoneMoto
+| GetPrixZoneMoto
 | GetPrixZoneMotoSuccess
 | GetPrixZoneMotoFail;

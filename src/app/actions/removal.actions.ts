@@ -1,6 +1,13 @@
 import { Action } from '@ngrx/store';
 import {DataForm, DataDataFormState} from '../models/DataForm';
 
+export const RESET_REMOVALS = 'Reset Removals';
+export class ResetRemovals implements Action {
+  readonly type = RESET_REMOVALS;
+  constructor() {
+    // console.log('in actions get customer payload= ',payload);
+  }
+}
 
 export const GET_REMOVALS = 'Get Removals';
 export class GetRemovals implements Action {
@@ -127,7 +134,8 @@ export class DeleteRemovalFail implements Action {
 }
 
 export type All =
-      GetRemovals
+      ResetRemovals
+    | GetRemovals
     | GetRemovalsSuccess
     | GetRemovalsFail
 

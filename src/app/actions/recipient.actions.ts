@@ -1,6 +1,13 @@
 import { Action } from '@ngrx/store';
 import {DataForm, DataDataFormState} from '../models/DataForm';
 
+export const RESET_RECIPIENTS = 'Reset Recipients';
+export class ResetRecipients implements Action {
+  readonly type = RESET_RECIPIENTS;
+  constructor() {
+    // console.log('in actions get Recipients payload= ',payload);
+  }
+}
 
 export const GET_RECIPIENTS = 'Get Recipients';
 export class GetRecipients implements Action {
@@ -88,7 +95,7 @@ export class GetLastRecipient implements Action {
 export const GET_LAST_RECIPIENT_SUCCESS = 'Get Last Recipient Success';
 export class GetLastRecipientSuccess implements Action {
   readonly type = GET_LAST_RECIPIENT_SUCCESS;
-  constructor(public payload: DataForm) {
+  constructor(public payload?: DataForm) {
     // console.log('in actions get last Recipient success payload= ',payload);
   }
 }
@@ -128,7 +135,8 @@ export class DeleteRecipientFail implements Action {
 
 
 export type All =
-  GetRecipients
+  ResetRecipients
+    | GetRecipients
     | GetRecipientsSuccess
     | GetRecipientsFail
 

@@ -12,11 +12,11 @@ import * as ToasterActions from '../actions/toaster.actions';
 import * as _ from 'lodash';
 import {DataForm, DataDataFormState} from '../models/DataForm';
 import {PurchasseOrder} from '../models/PurchasseOrder';
-import {MyClientZones, MyClientZonesState} from '../models/my-client-zones';
-import {PrixZone, MyPrixZoneState} from "../models/prixZone";
+import {MyClientZonesState} from '../models/my-client-zones';
+import {MyPrixZoneState} from "../models/prixZone";
 import {ContactState} from "../models/contact";
-import {DeleteRemovalSuccess} from "../actions/removal.actions";
-import {DeleteRecipientSuccess} from "../actions/recipient.actions";
+import {AddRemovalSuccess, DeleteRemovalSuccess, EditRemovalSuccess} from "../actions/removal.actions";
+import {AddRecipientSuccess, DeleteRecipientSuccess, EditRecipientSuccess} from "../actions/recipient.actions";
 import {ToasterState} from "../models/toaster";
 import { ImportExport } from '../models/import-export';
 
@@ -84,7 +84,7 @@ const initRemoval: DataDataFormState = {
   data: [],
   count: 0
 };
-export function removalReducer(state = initRemoval, action: ActionRemoval): DataDataFormState {
+export function removalReducer(state = initRemoval, action: any): DataDataFormState {
   // console.log('2 - Reducer customer :', action.type, state);
   switch (action.type) {
     case RemovalActions.GET_REMOVALS_SUCCESS:
@@ -97,11 +97,13 @@ export function removalReducer(state = initRemoval, action: ActionRemoval): Data
       return handleAddRemovalState(state, action);
     case RemovalActions.DELETE_REMOVAL_SUCCESS:
       return handleDeleteRemovalState(state, action);
+    case RemovalActions.RESET_REMOVALS:
+      return initRemoval;
     default:
       return state;
   }
 }
-function handleAddRemovalState(state: DataDataFormState, action: ActionRemoval): any {
+function handleAddRemovalState(state: DataDataFormState, action: AddRemovalSuccess): any {
   const data =  [...state.data, ...[action.payload]];
   const newState = {
     data: data,
@@ -109,7 +111,7 @@ function handleAddRemovalState(state: DataDataFormState, action: ActionRemoval):
   };
   return newState;
 }
-function handleEditRemovalState(state: DataDataFormState, action: ActionRemoval): any {
+function handleEditRemovalState(state: DataDataFormState, action: EditRemovalSuccess): any {
   const data =  state.data.map(item => {
     if (item.id == action.payload['id']) {
       return action.payload;
@@ -146,7 +148,7 @@ const initRecipient: DataDataFormState = {
   data: [],
   count: 0
 };
-export function recipientReducer(state = initRecipient, action: ActionRecipient): DataDataFormState {
+export function recipientReducer(state = initRecipient, action: any): DataDataFormState {
   // console.log('2 - Reducer customer :', action.type, state);
   switch (action.type) {
     case RecipientActions.GET_RECIPIENTS_SUCCESS:
@@ -157,11 +159,12 @@ export function recipientReducer(state = initRecipient, action: ActionRecipient)
       return handleAddRecipientState(state, action);
     case RecipientActions.DELETE_RECIPIENT_SUCCESS:
       return handleDeleteRecipientState(state, action);
+
     default:
       return state;
   }
 }
-function handleAddRecipientState(state: DataDataFormState, action: ActionRecipient): any {
+function handleAddRecipientState(state: DataDataFormState, action: AddRecipientSuccess): any {
   const data =  [...state.data, ...[action.payload]];
   const newState = {
     data: data,
@@ -169,7 +172,7 @@ function handleAddRecipientState(state: DataDataFormState, action: ActionRecipie
   };
   return newState;
 }
-function handleEditRecipientState(state: DataDataFormState, action: ActionRecipient): any {
+function handleEditRecipientState(state: DataDataFormState, action: EditRecipientSuccess): any {
   const data =  state.data.map(item => {
     if (item.id == action.payload['id']) {
       return action.payload;
