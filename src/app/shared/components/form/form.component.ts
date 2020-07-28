@@ -62,7 +62,6 @@ export class FormComponent implements OnInit, AfterViewInit {
 
   goPlaces(nameform: string): void {
     this.router.navigate(['/', 'menu', nameform]).then(nav => {
-      console.log(nav); // true if navigation is successful
     }, err => {
       console.log(err) // when there's an error
     });

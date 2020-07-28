@@ -15,7 +15,6 @@ export class MenuComponent implements OnInit {
   }
   goPlaces() {
     this.router.navigate(['/']).then(nav => {
-      console.log(nav); // true if navigation is successful
       this.authenticationService.logout();
     }, err => {
       console.log(err) // when there's an error
