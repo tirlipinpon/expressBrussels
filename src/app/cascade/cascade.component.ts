@@ -34,6 +34,8 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
   private valueRecipientInfosChanges$: Subscription;
   datas: any;
   nameForm = ['removal', 'recipient'];
+  private sub$: Subscription;
+  private subscriptions = [];
 
   constructor (
     private store: Store<fromRoot.AppState>,
@@ -86,12 +88,10 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
       this.itemsCascade.removeAt(index);
     }
   }
-  ngOnDestroy() {
-    // this.valueRemovalChanges$.unsubscribe();
-    // // this.valueRecipientChanges$.unsubscribe();
-    // this.valueOptionsChanges$.unsubscribe();
-    // this.valueRemovalInfosChanges$.unsubscribe();
-    // this.valueRecipientInfosChanges$.unsubscribe();
+  ngOnDestroy(): void {
+    if (this.subscriptions.length) {
+      this.subscriptions.forEach(sub => sub.unsubscribe());
+    }
   }
   storeSelect() {
     // this.customerId$ = this.store.select(fromRoot.selectors.getCustomerId);
@@ -102,13 +102,14 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
     // this.clientZones$ = this.store.select(fromRoot.selectors.getClientZonesData);
   }
   storeDispatch() {
-    this.customerService.currentCustomerId.subscribe(id => {
+    this.sub$ = this.customerService.currentCustomerId.subscribe(id => {
       if(+id !== 0) {
         this.customerId = id;
         this.store.dispatch(new RemovalActions.GetRemovals(this.customerId*10 + 1)); // (id + type)  eg: id = 69; type=1 fk_type=691
         this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10 + 2)); // (id + type)  eg: id = 69; type=2 fk_type=692
       }
     });
+    this.subscriptions.push(this.sub$);
     // this.store.dispatch(new ClientZonesActions.GetClientZones());
   }
   pushAllForms(allFormGroup: FormGroup[]): FormGroup[] {
@@ -129,24 +130,34 @@ export class CascadeComponent implements OnInit, OnDestroy, ComponentDeactivable
         this.store.dispatch(new OrderActions.EditOrderRecipientInfosCascades(infos));
       }
     });
+    this.subscriptions.push(this.valueRecipientInfosChanges$);
     this.valueRemovalChanges$ = this.formRemoval.get('id').valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderRemoval(val));
     });
+    this.subscriptions.push(this.valueRemovalChanges$);
+
     this.valueRemovalInfosChanges$ = this.formRemoval.get('infos').valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderRemovalInfos(val));
     });
+    this.subscriptions.push(this.valueRemovalInfosChanges$);
+
     this.valueOptionsChanges$ = this.formOptions.valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderOption(val));
       this.getFormValidationErrors()
     });
-    this.formRemoval.valueChanges.subscribe(val => {
+    this.subscriptions.push(this.valueOptionsChanges$);
+
+    this.sub$ = this.formRemoval.valueChanges.subscribe(val => {
       this.chackIsFormAsValue(this.formRemoval, val);
     });
-    this.formRecipientCascade.valueChanges.subscribe(val => {
+    this.subscriptions.push(this.sub$);
+
+    this.sub$ = this.formRecipientCascade.valueChanges.subscribe(val => {
       val.items.forEach(item => {
         this.chackIsFormAsValue(this.fb.group(item), val);
       })
     });
+    this.subscriptions.push(this.sub$);
   }
   pushRecipientsValueInArray(val, id, infos) {
     val.items.forEach(item => {

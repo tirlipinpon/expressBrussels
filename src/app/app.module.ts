@@ -12,6 +12,7 @@ import { AlwaysAuthGuardService } from './services/always-auth-guard.service';
 import { UnsearchedTermGuard } from './services/UnseavedTermGuard';
 import {CustomerService} from './services/customer.service';
 import {OrderService} from './services/order.service';
+import {OrderIEService} from './services/order-ie.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MessageService} from 'primeng/components/common/messageservice';
 import { CommonModule } from '@angular/common';
@@ -20,6 +21,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {RemovalsEditModule} from './removals-edit/removals-edit.module';
 import {RemovalService} from './services/removal.service';
 import { OrdersComponent } from './orders/orders.component';
+import { ImportExportOrdersComponent  } from './order-import-export/i-e-orders.component';
 import {MatTableModule} from '@angular/material/table';
 import {
   MatFormFieldModule, MatSortModule, MatPaginatorModule, MatInputModule, MatMenuModule,
@@ -83,6 +85,12 @@ const appRoutes: Routes = [
         canDeactivate: [CanDeactivateFormGuardService]
       },
       {
+        path: 'ie-orders',
+        component: ImportExportOrdersComponent,
+        // canActivate: [AlwaysAuthGuardService],
+        canDeactivate: [CanDeactivateFormGuardService]
+      },
+      {
         path: 'removals',
         component: RemovalsComponent,
         // canActivate: [AlwaysAuthGuardService],
@@ -140,6 +148,7 @@ const appRoutes: Routes = [
     AppComponent,
     SortByValuePipe,
     OrdersComponent,
+    ImportExportOrdersComponent,
     LoginComponent,
     MenuComponent
   ],
@@ -193,6 +202,7 @@ const appRoutes: Routes = [
   providers: [
     CustomerService,
     OrderService,
+    OrderIEService,
     RemovalService,
     AlwaysAuthGuardService,
     UnsearchedTermGuard,

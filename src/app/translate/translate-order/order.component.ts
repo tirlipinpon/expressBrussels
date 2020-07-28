@@ -1,4 +1,4 @@
-import {Component, OnInit, HostListener, ViewChild, ChangeDetectorRef} from '@angular/core';
+import {Component, OnInit, HostListener, ViewChild, ChangeDetectorRef, OnDestroy} from '@angular/core';
 import {FormBuilder, FormGroup, Validators, FormArray} from "@angular/forms";
 import {ComponentDeactivable} from "../../services/can-deactivate-form-guard.service";
 import * as uuid from 'uuid';
@@ -10,7 +10,7 @@ import {
 } from '../root-store';
 import {OrderTranslate} from "../../models/translate";
 import {CustomerService} from "../../services/customer.service";
-import {Observable} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {MatStepper} from "@angular/material";
 
 @Component({
@@ -18,7 +18,7 @@ import {MatStepper} from "@angular/material";
   templateUrl: 'order.component.html',
   styleUrls: ['order.component.css']
 })
-export class OrderComponent implements OnInit, ComponentDeactivable {
+export class OrderComponent implements OnInit, OnDestroy, ComponentDeactivable {
 
   myOrderForm: FormGroup;
   myOrderFormTemp: FormGroup;
@@ -31,46 +31,59 @@ export class OrderComponent implements OnInit, ComponentDeactivable {
 
   get arrayFormDataStep2() { return <FormArray>this.myOrderForm.get(['step2','destinations']); }
   get arrayFormDataStep3() { return <FormArray>this.myOrderForm.get(['step3','destinations']); }
+  private sub$: Subscription;
+  private subscriptions = [];
 
   constructor(private fb: FormBuilder,
               private store$: Store<RootStoreState.RootState>,
               private customerService: CustomerService,
               private cdr: ChangeDetectorRef) {
     this.cptDestinationChecked = 0;
-    this.customerService.currentCustomerId.subscribe(id => {
+    this.sub$ = this.customerService.currentCustomerId.subscribe(id => {
       if(+id !== 0) {
         this.customerId = +id;
       }
     });
+    this.subscriptions.push(this.sub$);
     this.createForm();
   }
 
   ngOnInit() {
     this.error$ = this.store$.pipe( select( OrderTranslateSelectors.selectOrderTranslateError ) );
   }
+  ngOnDestroy(): void {
+    if (this.subscriptions.length) {
+      this.subscriptions.forEach(sub => sub.unsubscribe());
+    }
+  }
 
   onChanges(): void {
-    this.myOrderForm.get(['step2', 'communeCheck']).valueChanges.subscribe(val => {
+    this.sub$ = this.myOrderForm.get(['step2', 'communeCheck']).valueChanges.subscribe(val => {
       if (val) {
         this.addItem('step2', 'commune', 0);
       }else {
         this.removeItem('step2', 'commune');
       }
     });
-    this.myOrderForm.get(['step2', 'notaireCheck']).valueChanges.subscribe(val => {
+    this.subscriptions.push(this.sub$);
+
+    this.sub$ = this.myOrderForm.get(['step2', 'notaireCheck']).valueChanges.subscribe(val => {
       if (val) {
         this.addItem('step2', 'notaire', 1);
       }else {
         this.removeItem('step2', 'notaire');
       }
     });
-    this.myOrderForm.get(['step2', 'consulatCheck']).valueChanges.subscribe(val => {
+    this.subscriptions.push(this.sub$);
+
+    this.sub$ = this.myOrderForm.get(['step2', 'consulatCheck']).valueChanges.subscribe(val => {
       if (val) {
         this.addItem('step2', 'consulat', 2);
       }else {
         this.removeItem('step2', 'consulat');
       }
     });
+    this.subscriptions.push(this.sub$);
   }
 
   createForm(): void {

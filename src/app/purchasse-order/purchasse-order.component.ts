@@ -2,7 +2,7 @@
 import {Component, OnInit, OnDestroy, HostListener, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, Validators, FormGroup} from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import * as RemovalActions from '../actions/removal.actions';
 import * as RecipientActions from '../actions/recipient.actions';
 import * as OrderActions from '../actions/purchasseOrder.actions';
@@ -63,6 +63,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   private valueRecipientInfosChanges$;
   private customerId: number;
   private idClient: any;
+  private sub$: Subscription;
+  private subscriptions = [];
 
   constructor (
     private store: Store<fromRoot.AppState>,
@@ -87,6 +89,9 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.onValueOrderChanged();
   }
   ngOnDestroy() {
+    if (this.subscriptions.length) {
+      this.subscriptions.forEach(sub => sub.unsubscribe());
+    }
     this.valueRemovalChanges$.unsubscribe();
     this.valueRecipientChanges$.unsubscribe();
     this.valueOptionsChanges$.unsubscribe();
@@ -101,15 +106,16 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.prixZoneCamionnette$ = this.store.select(fromRoot.selectors.getPrixZoneCamionnetteData);
     this.contact$ = this.store.select(fromRoot.selectors.getContactData);
     this.toast$ = this.store.select(fromRoot.selectors.getToasterData);
-    this.toast$.subscribe(data => {
+    this.sub$ = this.toast$.subscribe(data => {
       if (data && data[0]) {
         this.notificationsService.notify(data[0].severity, data[0].summary, data[0].detail);
         this.cdr.markForCheck();
       }
-    })
+    });
+    this.subscriptions.push(this.sub$);
   }
   storeDispatch() {
-    this.customerService.currentCustomerId.subscribe(id => {
+    this.sub$ = this.customerService.currentCustomerId.subscribe(id => {
       if(+id !== 0) {
         this.customerId = id;
         this.store.dispatch(new RemovalActions.GetRemovals(this.customerId*10+1)); // (id + type)  eg: id = 69; type=1 fk_type=691
@@ -119,6 +125,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
         this.store.dispatch(new ContactActions.GetContact());
       }
     });
+    this.subscriptions.push(this.sub$);
     // this.store.dispatch(new ClientZonesActions.GetClientZones());
   }
   pushAllForms(allFormGroup: FormGroup[]): FormGroup[] {
@@ -137,6 +144,8 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
           map(x => x.filter(data => +data['fk_resp_dest_id'] === +val) )
         );
     });
+    this.subscriptions.push(this.valueRemovalChanges$);
+
     this.valueRecipientChanges$ = this.formRecipient.get('id').valueChanges.subscribe(val => {
       this.resetDistance();
       this.store.dispatch(new OrderActions.EditOrderRecipient(val));
@@ -146,25 +155,39 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
           map(x => x.filter(data =>   +data['fk_resp_dest_id'] === +val) )
         );
     });
+    this.subscriptions.push(this.valueRecipientChanges$);
+
+
     this.valueRemovalInfosChanges$ = this.formRemoval.get('infos').valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderRemovalInfos(val));
     });
+    this.subscriptions.push(this.valueRemovalInfosChanges$);
+
     this.valueRecipientInfosChanges$ = this.formRecipient.get('infos').valueChanges.subscribe(val => {
       this.store.dispatch(new OrderActions.EditOrderRecipientInfos(val));
     });
+    this.subscriptions.push(this.valueRecipientInfosChanges$);
+
     this.valueOptionsChanges$ = this.formOptions.valueChanges.subscribe(val => {
       this.resetDistance();
       this.store.dispatch(new OrderActions.EditOrderOption(val));
     });
-    this.formRemoval.valueChanges.subscribe(val => {
+    this.subscriptions.push(this.valueOptionsChanges$);
+
+    this.sub$ = this.formRemoval.valueChanges.subscribe(val => {
       this.chackIsFormAsValue(this.formRemoval, val);
     });
-    this.formRecipient.valueChanges.subscribe(val => {
+    this.subscriptions.push(this.sub$);
+
+    this.sub$ = this.formRecipient.valueChanges.subscribe(val => {
       this.chackIsFormAsValue(this.formRecipient, val);
     });
-    this.formDistance.valueChanges.subscribe(val => {
+    this.subscriptions.push(this.sub$);
+
+    this.sub$ = this.formDistance.valueChanges.subscribe(val => {
         this.store.dispatch(new OrderActions.EditOrderDistance(val));
     });
+    this.subscriptions.push(this.sub$);
   }
   resetDistance() {
     this.formDistance.reset();
@@ -370,7 +393,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     }
   }
   calculTransportAndOptionBxl(prixZoneTransport: Observable<PrixZone>, zone: number): void {
-    prixZoneTransport.subscribe(data => {
+    this.sub$ = prixZoneTransport.subscribe(data => {
       let price = +data['zone'+zone];
       price = this.afte15h(price, data, zone);
       if (this.formOptions.get('options').value === 'double_express') {
@@ -387,27 +410,34 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
         status: 'Zone origine: ' + this.formRemoval.get('clientZone').value + ' To zone dest: ' + this.formRecipient.get('clientZone').value
       });
     });
+    this.subscriptions.push(this.sub$);
   }
   afte15h(price: number, data: any, zone: number): number {
     const hour = new Date().getHours();
-    if (this.formOptions.get('options').value !== 'double_express' && +data.after15h !== 0 && hour >= 15) {
-      price = (+data['zone'+zone])*(+data.after15h);
+    if (this.formOptions.get('options').value !== 'double_express' && this.formOptions.get('tomorrow').value == false && +data.after15h !== 0 && hour >= 15) {
+      price += (price * (+data.after15h) / 100);
     }
     return price
   }
   calculTransportAndOptionNational(prixZoneTransport: Observable<PrixZone>, price: number): void {
-  prixZoneTransport.subscribe(data => {
+    this.sub$ = prixZoneTransport.subscribe(data => {
+    const hour = new Date().getHours();
     price *= data.prixKm;
+
     if(this.formOptions.get('options').value === 'double_express') {
-      price +=  (price * data.double_express / 100);
+      price +=  (price * (+data.double_express) / 100);
     }
     else if(this.formOptions.get('options').value === 'go_and_back') {
-      price +=  (price * data.go_and_back / 100);
+      price +=  (price * (+data.go_and_back) / 100);
+    }
+    else if (this.formOptions.get('tomorrow').value == false && +data.after15h > 0 && hour >= 15) {
+      price += (price * (+data.after15h) / 100);
     }
     this.formDistance.patchValue({
       price: price.toFixed(2)
     });
   });
+    this.subscriptions.push(this.sub$);
 }
   calculPriceNational() {
   // set distance total +10km *2

@@ -1,5 +1,5 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {Observable} from "rxjs";
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Observable, Subscription} from "rxjs";
 import {ImportExport} from "../../models/import-export";
 import {Store} from "@ngrx/store";
 import {
@@ -17,7 +17,7 @@ import {MatStepper} from "@angular/material";
   templateUrl: './i-e-order.component.html',
   styleUrls: ['./i-e-order.component.css']
 })
-export class IEOrderComponent implements OnInit {
+export class IEOrderComponent implements OnInit, OnDestroy {
 
   error$: Observable<string>;
   ieForm: FormGroup;
@@ -27,6 +27,8 @@ export class IEOrderComponent implements OnInit {
   @ViewChild('stepper') stepper: MatStepper;
   get arrayFormDataStep1() { return <FormArray>this.ieForm.get(['step1', 'administration']); }
   get arrayFormDataStep2() { return <FormArray>this.ieForm.get(['step2', 'destinations']); }
+  private sub$: Subscription;
+  private subscriptions = [];
 
   constructor(private store$: Store<RootStoreState.RootState>,
               private fb: FormBuilder,
@@ -35,14 +37,21 @@ export class IEOrderComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.customerService.currentCustomerId.subscribe(id => {
+    this.sub$ = this.customerService.currentCustomerId.subscribe(id => {
       if(+id !== 0) {
         this.customerId = +id;
       }
     });
+    this.subscriptions.push(this.sub$);
+
     this.createForm();
     this.addItemAdmin();
     this.nbAdminChecked = 0;
+  }
+  ngOnDestroy(): void {
+    if (this.subscriptions.length) {
+      this.subscriptions.forEach(sub => sub.unsubscribe());
+    }
   }
   addItemAdmin() {
     this.addItem('step1', 'beci', 0);
@@ -53,7 +62,7 @@ export class IEOrderComponent implements OnInit {
     this.addItem('step1', 'ambassade', 5);
   }
   onChanges(): void {
-    this.ieForm.get(['step1', 'adminName', 'beci']).valueChanges.subscribe(val => {
+    this.sub$ = this.ieForm.get(['step1', 'adminName', 'beci']).valueChanges.subscribe(val => {
       if (val) {
         this.nbAdminChecked++;
         this.enable('step1', 'beci', 0);
@@ -62,7 +71,9 @@ export class IEOrderComponent implements OnInit {
         this.disable('step1', 'beci', 0);
       }
     });
-    this.ieForm.get(['step1', 'adminName', 'traduction']).valueChanges.subscribe(val => {
+    this.subscriptions.push(this.sub$);
+
+    this.sub$ = this.ieForm.get(['step1', 'adminName', 'traduction']).valueChanges.subscribe(val => {
       if (val) {
         this.nbAdminChecked++;
         this.enable('step1', 'traduction', 1);
@@ -71,7 +82,8 @@ export class IEOrderComponent implements OnInit {
         this.disable('step1', 'traduction', 1);
       }
     });
-    this.ieForm.get(['step1', 'adminName', 'spfae']).valueChanges.subscribe(val => {
+    this.subscriptions.push(this.sub$);
+    this.sub$ = this.ieForm.get(['step1', 'adminName', 'spfae']).valueChanges.subscribe(val => {
       if (val) {
         this.nbAdminChecked++;
         this.enable('step1', 'spfae',  2);
@@ -80,7 +92,8 @@ export class IEOrderComponent implements OnInit {
         this.disable('step1', 'spfae', 2);
       }
     });
-    this.ieForm.get(['step1', 'adminName', 'afsca']).valueChanges.subscribe(val => {
+    this.subscriptions.push(this.sub$);
+    this.sub$ = this.ieForm.get(['step1', 'adminName', 'afsca']).valueChanges.subscribe(val => {
       if (val) {
         this.nbAdminChecked++;
         this.enable('step1', 'afsca',  3);
@@ -89,7 +102,8 @@ export class IEOrderComponent implements OnInit {
         this.disable('step1', 'afsca', 3);
       }
     });
-    this.ieForm.get(['step1', 'adminName', 'chambrebelgo']).valueChanges.subscribe(val => {
+    this.subscriptions.push(this.sub$);
+    this.sub$ = this.ieForm.get(['step1', 'adminName', 'chambrebelgo']).valueChanges.subscribe(val => {
       if (val) {
         this.nbAdminChecked++;
         this.enable('step1', 'chambrebelgo',  4);
@@ -98,7 +112,8 @@ export class IEOrderComponent implements OnInit {
         this.disable('step1', 'chambrebelgo', 4);
       }
     });
-    this.ieForm.get(['step1', 'adminName', 'ambassade']).valueChanges.subscribe(val => {
+    this.subscriptions.push(this.sub$);
+    this.sub$ = this.ieForm.get(['step1', 'adminName', 'ambassade']).valueChanges.subscribe(val => {
       if (val) {
         this.nbAdminChecked++;
         this.enable('step1', 'ambassade', 5);
@@ -107,6 +122,7 @@ export class IEOrderComponent implements OnInit {
         this.disable('step1', 'ambassade', 5);
       }
     });
+    this.subscriptions.push(this.sub$);
   }
   addItem(step: string, kind: string, index: number): void {
     let items = this.ieForm.get([step, 'administration']) as FormArray;

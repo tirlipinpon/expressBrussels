@@ -3,6 +3,7 @@ import * as RemovalActions  from '../actions/removal.actions';
 import * as RecipientActions  from '../actions/recipient.actions';
 import * as PurchasseOrderActions  from '../actions/purchasseOrder.actions';
 import * as OrdersActions from '../actions/orders.actions';
+import * as IEOrdersAction from '../actions/orders-ie.actions';
 import * as ClientZonesActions from '../actions/clientZones.actions';
 import * as PrixZoneMotoActions from '../actions/prixZoneMoto.actions';
 import * as PrixZoneCamionnetteActions from '../actions/prixZoneCamionnette.actions';
@@ -17,12 +18,14 @@ import {ContactState} from "../models/contact";
 import {DeleteRemovalSuccess} from "../actions/removal.actions";
 import {DeleteRecipientSuccess} from "../actions/recipient.actions";
 import {ToasterState} from "../models/toaster";
+import { ImportExport } from '../models/import-export';
 
 export type ActionCustomer = CustomerActions.All;
 export type ActionRemoval = RemovalActions.All;
 export type ActionRecipient = RecipientActions.All;
 export type ActionPurchasseOrder = PurchasseOrderActions.All;
 export type ActionOrders = OrdersActions.All;
+export type ActionIeOrders = IEOrdersAction.All;
 export type ActionClientZones = ClientZonesActions.All;
 export type ActionPrixZoneMoto = PrixZoneMotoActions.All;
 export type ActionPrixZoneCamionnette = PrixZoneCamionnetteActions.All;
@@ -324,6 +327,23 @@ export function ordersReducer(state: PurchasseOrder[], action: ActionOrders): Pu
 }
 export const OrderSelector = {
   orders: (state: PurchasseOrder[]) => { return state; }
+};
+
+// ======================================================
+// ieorders reducer
+// ======================================================
+export function ieOrdersReducer(state: ImportExport[], action: ActionIeOrders): ImportExport[] {
+  switch (action.type) {
+    case IEOrdersAction.ActionTypes.GET_SUCCESS: {
+      return Object.assign({}, state, action.payload);
+    }
+    default: {
+      return state;
+    }
+  }
+}
+export const ieOrderSelector = {
+  ieorders: (state: ImportExport[]) => { return state; }
 };
 
 // ======================================================

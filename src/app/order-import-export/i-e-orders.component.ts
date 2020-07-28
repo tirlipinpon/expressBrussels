@@ -1,16 +1,14 @@
 import {
   Component, OnInit, ViewEncapsulation, OnDestroy, ViewChild, ViewChildren, QueryList, Attribute, AfterContentChecked
 } from '@angular/core';
-import {PurchasseOrder} from '../models/PurchasseOrder';
+
 import {Observable, Subscription} from 'rxjs';
 import * as fromRoot from '../shared/appState';
 import {Store, select} from '@ngrx/store';
 
 import {MatPaginator, MatSort, MatTableDataSource, MatSortable} from '@angular/material';
 
-import * as OrdersActions from '../actions/orders.actions';
-import * as RemovalActions from '../actions/removal.actions';
-import * as RecipientActions from '../actions/recipient.actions';
+import * as OrdersIEActions from '../actions/orders-ie.actions';
 import {DataForm} from '../models/DataForm';
 
 import * as _ from 'lodash';
@@ -19,30 +17,30 @@ import {CustomerService} from "../services/customer.service";
 import * as jspdf from 'jspdf';
 import * as html2canvas from "html2canvas"
 import {environment} from "../../environments/environment.prod";
+import { ImportExport } from '../models/import-export';
 
 @Component({
-  selector: 'app-orders',
-  templateUrl: './orders.component.html',
-  styleUrls: ['./orders.component.css']
+  selector: 'app-import-export-orders',
+  templateUrl: './i-e-orders.component.html',
+  styleUrls: ['./i-e-orders.component.css']
 })
-export class OrdersComponent implements OnInit, OnDestroy {
+export class ImportExportOrdersComponent implements OnInit, OnDestroy {
 
-  orders$: Observable<PurchasseOrder[]>;
-  removals$: Observable<DataForm[]>;
-  recipients$: Observable<DataForm[]>;
+  orders$: Observable<ImportExport[]>;
+
   private customerId: number;
-  isReferenceClient = false;
-  datasOrders:  PurchasseOrder[];
-  datasRemovals:  DataForm[];
-  datasRecipients:  DataForm[];
+
+  datasOrders:  ImportExport[];
   displayedColumns = [
     'id',
+    'reference',
     'created',
     'fk_removal_id',
     'fk_recipient_id',
-    'options',
+    'price',
+    'procedureType',
     'print'];
-  dataSource: MatTableDataSource<PurchasseOrder>;
+  dataSource: MatTableDataSource<ImportExport>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChildren('mati') matInput: QueryList<any>;
@@ -62,7 +60,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
         this.storeDispatch();
       }
     });
-      this.subscriptions.push(this.sub$);
+    this.subscriptions.push(this.sub$);
     this.isAllMonthOrdersValide = false;
   }
 
@@ -70,29 +68,9 @@ export class OrdersComponent implements OnInit, OnDestroy {
     this.storeSelect();
     this.getDatas();
   }
-  ngOnDestroy(): void {
-    if (this.subscriptions.length) {
-      this.subscriptions.forEach(sub => sub.unsubscribe());
-    }
+  ngOnDestroy(){
   }
   getDatas() {
-    this.sub$ = this.removals$.subscribe(data => {
-      // console.log('data removals: ', data);
-      if (data.length) {
-        this.datasRemovals = data;
-        this.isDataLoaded();
-      }
-    });
-    this.subscriptions.push(this.sub$);
-    this.sub$ = this.recipients$.subscribe(data => {
-      // console.log('data recipients: ', data);
-      if (data.length) {
-        this.datasRecipients = data;
-        this.isDataLoaded();
-      }
-
-    });
-    this.subscriptions.push(this.sub$);
     this.sub$ = this.orders$.subscribe( (data: any) =>  {
       if (data) {
         this.datasOrders = []; // TODO: why multiple record same value ?
@@ -111,52 +89,14 @@ export class OrdersComponent implements OnInit, OnDestroy {
     return false;
   }
   isDataLoaded() {
-    if (this.datasRemovals
-      && this.datasRecipients
-      && this.datasOrders
-      && this.datasOrders.length) {
-
-      for(let i=0; i< Object.keys(this.datasOrders).length; i++) {
-        const removalId = this.datasOrders[i].fk_removal_id;
-        const removal = _.find(this.datasRemovals,['id', removalId]);
-        const recipientId = this.datasOrders[i].fk_recipient_id;
-        const recipient = _.find(this.datasRecipients,['id', recipientId]);
-
-        if (removal || recipient) {
-          this.isReferenceClient =
-            this.isExistReferenceClient(removal?removal.ref_client:null, recipient?recipient.ref_client:null);
-          _.merge(this.datasOrders[i],
-            {
-              'removal_address': removal?removal.address:'',
-              'removal_cp': removal?removal.cp:'',
-              'removal_name': removal?removal.name:'',
-              'removal_ref_client': removal?removal.ref_client:'',
-              'removal_number': removal?removal.number:'',
-              'removal_phone': removal?removal.phone:'',
-              'removal_state': removal?removal.state:'',
-              'removal_info1': removal?removal.infos.info1:'',
-              'removal_info2': removal?removal.infos.info2:'',
-            },
-            {
-              'recipient_address': recipient?recipient.address:'',
-              'recipient_cp': recipient?recipient.cp:'',
-              'recipient_name': recipient?recipient.name:'',
-              'recipient_ref_client': recipient?recipient.ref_client:'',
-              'recipient_number': recipient?recipient.number:'',
-              'recipient_phone': recipient?recipient.phone:'',
-              'recipient_state': recipient?recipient.state:'',
-              'recipient_info1': recipient?recipient.infos.info1:'',
-              'recipient_info2': recipient?recipient.infos.info2:'',
-            });
-        }
-      }
+    if (this.datasOrders && this.datasOrders.length) {
       this.extractCurrentMonths(this.datasOrders);
       this.dataSource = new MatTableDataSource(this.datasOrders);
       this.dataSource.paginator = this.paginator;
       this.initialSort()
     }
   }
-  extractCurrentMonths(orders: PurchasseOrder[]): void {
+  extractCurrentMonths(orders: ImportExport[]): void {
     orders.forEach(data => {
       const year = data.created.slice(0, 4);
       const current_year = (new Date()).getFullYear();
@@ -170,27 +110,21 @@ export class OrdersComponent implements OnInit, OnDestroy {
     return new Date();
   }
   initialSort() {
-    this.sort.sort(<MatSortable>({ id: 'created', start: 'desc'}));
+    this.sort.sort(<MatSortable>({id: 'created', start: 'desc'}));
     this.dataSource.sort = this.sort;
   }
   storeSelect() {
-    this.removals$ = this.store.pipe(select(fromRoot.selectors.getRemovalsData));
-    this.recipients$ = this.store.pipe(select(fromRoot.selectors.getRecipientsData));
-    this.orders$ = this.store.pipe(select(fromRoot.selectors.getOrders));
+    this.orders$ = this.store.pipe(select(fromRoot.selectors.getIeOrders));
   }
   storeDispatch() {
-    this.store.dispatch(new OrdersActions.GetOrders(this.customerId));
-    this.store.dispatch(new RemovalActions.GetRemovals(this.customerId*10+1)); // (id + type)  eg: id = 69; type=1 fk_type=691
-    this.store.dispatch(new RecipientActions.GetRecipients(this.customerId*10+2)); // (id + type)  eg: id = 69; type=2 fk_type=692
+    this.store.dispatch(new OrdersIEActions.GetRequestAction(this.customerId));
   }
-  applyFilterName(filterValue: string, target: any): void {
+  applyFilterReference(filterValue: string, target: any): void {
     if (this.dataSource) {
       this.isAllMonthOrdersValide = false;
-      this.dataSource.filterPredicate = (data: any, filter: string) =>
-      data.recipient_name.indexOf(filter) != -1 || data.removal_name.indexOf(filter) != -1;
+      this.dataSource.filterPredicate = (data: any, filter: string) => data.reference.indexOf(filter) != -1;
       this.filterTable(filterValue, target);
     }
-
   }
   applyFilterDate(filterValue: string, target: any): void {
     if (this.dataSource) {
@@ -199,13 +133,10 @@ export class OrdersComponent implements OnInit, OnDestroy {
       this.filterTable(filterValue, target);
     }
   }
-  applyFilterRefClient(filterValue: string, target: any): void {
+  applyFilterProcedureType(filterValue: string, target: any): void {
     if (this.dataSource) {
       this.isAllMonthOrdersValide = false;
-      this.dataSource.filterPredicate = (data: any, filter: string) =>
-        data.recipient_ref_client ? data.recipient_ref_client.indexOf(filter) != -1 : false
-          ||
-          data.removal_ref_client ? data.removal_ref_client.indexOf(filter) != -1 : false;
+      this.dataSource.filterPredicate = (data: any, filter: string) => data.procedureType.indexOf(filter) != -1;
       this.filterTable(filterValue, target);
     }
   }

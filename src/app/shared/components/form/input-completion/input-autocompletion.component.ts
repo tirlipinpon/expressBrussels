@@ -1,6 +1,7 @@
 import {Component, OnInit, Input, OnDestroy} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {debounceTime} from "rxjs/internal/operators";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-input-autocompletion',
@@ -17,6 +18,8 @@ export class InputAutocompletionComponent implements OnInit, OnDestroy {
    showDropDown = false;
   private valueNameChanges$: any;
   disabled = false;
+  private sub$: Subscription;
+  private subscriptions = [];
 
   constructor() {}
 
@@ -29,7 +32,11 @@ export class InputAutocompletionComponent implements OnInit, OnDestroy {
     if (this.witchForm === 1) {
       this.valueNameChanges$.unsubscribe();
     }
+    if (this.subscriptions.length) {
+      this.subscriptions.forEach(sub => sub.unsubscribe());
+    }
   }
+
   // auto completion
   toogleDropDown(action: boolean) {
     this.showDropDown = action;

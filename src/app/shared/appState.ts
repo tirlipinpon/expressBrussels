@@ -5,6 +5,7 @@ import {
   clientZonesReducer,
   customerReducer,
   ordersReducer,
+  ieOrdersReducer,
   purchasseOrderReducer,
   prixZoneMotoReducer,
   prixZoneCamionnetteReducer,
@@ -19,12 +20,13 @@ import {
   ClientZonesSelector,
   PrixZoneMotoSelector,
   PrixZoneCamionnetteSelector,
-  ContactSelector, toasterReducer, ToasterSelector
+  ContactSelector, toasterReducer, ToasterSelector, ieOrderSelector
 } from '../reducers/all.reducer';
 import {MyClientZones, MyClientZonesState} from '../models/my-client-zones';
 import {PrixZone, MyPrixZoneState} from "../models/prixZone";
 import {ContactState, Contact} from "../models/contact";
 import {ToasterState, Toaster} from "../models/toaster";
+import { ImportExport } from '../models/import-export';
 
 export interface AppState {
   customer: DataForm;
@@ -32,6 +34,7 @@ export interface AppState {
   recipients: DataDataFormState;
   order: PurchasseOrder;
   orders: PurchasseOrder[];
+  ieorders: ImportExport[];
   clientZones: MyClientZonesState;
   prixZoneMoto: MyPrixZoneState;
   prixZoneCamionnette: MyPrixZoneState;
@@ -45,6 +48,7 @@ export const reducers: ActionReducerMap<AppState> = {
   recipients: recipientReducer,
   order: purchasseOrderReducer,
   orders: ordersReducer,
+  ieorders: ieOrdersReducer,
   clientZones: clientZonesReducer,
   prixZoneMoto: prixZoneMotoReducer,
   prixZoneCamionnette: prixZoneCamionnetteReducer,
@@ -57,6 +61,7 @@ const getRemovalsState = createFeatureSelector('removals');
 const getRecipientsState = createFeatureSelector('recipients');
 const getOrderState = createFeatureSelector('order');
 const getOrdersState = createFeatureSelector('orders');
+const getIeOrdersState = createFeatureSelector('ieorders');
 const getClientZonesState = createFeatureSelector('clientZones');
 const getPrixZoneMotoState = createFeatureSelector('prixZoneMoto');
 const getPrixZoneCamionnetteState = createFeatureSelector('prixZoneCamionnette');
@@ -83,6 +88,7 @@ export interface Selectors {
 
   getOrder: MemoizedSelector<AppState, PurchasseOrder>;
   getOrders: MemoizedSelector<AppState, PurchasseOrder[]>;
+  getIeOrders: MemoizedSelector<AppState, ImportExport[]>;
 
   getClientZonesData: MemoizedSelector<AppState, MyClientZones[]>;
   getClientZonesCount: MemoizedSelector<AppState, number>;
@@ -109,6 +115,7 @@ export const selectors: Selectors = {
 
   getOrder: createSelector(getOrderState, PurchasseOrderSelector.order ),
   getOrders: createSelector(getOrdersState, OrderSelector.orders ),
+  getIeOrders: createSelector(getIeOrdersState, ieOrderSelector.ieorders ),
 
   getClientZonesData: createSelector(getClientZonesState, ClientZonesSelector.data ),
   getClientZonesCount: createSelector(getClientZonesState, ClientZonesSelector.count ),

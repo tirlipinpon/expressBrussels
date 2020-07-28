@@ -1,4 +1,12 @@
-import {Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ElementRef,
+  ViewChild,
+  ChangeDetectorRef,
+  ChangeDetectionStrategy,
+  OnDestroy
+} from '@angular/core';
 import {Store, select} from "@ngrx/store";
 import {
   RootStoreState,
@@ -8,7 +16,7 @@ import {
   ClientsStoreSelectors
 } from '../../root-store';
 import {DataForm} from "../../../models/DataForm";
-import {Observable} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {PurchasseOrder} from "../../../models/PurchasseOrder";
 import {FormBuilder, FormGroup, FormArray, Validators} from "@angular/forms";
 import {MatSelect} from "@angular/material";
@@ -19,7 +27,7 @@ import {MatSelect} from "@angular/material";
   styleUrls: ['./orders-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OrdersListComponent implements OnInit {
+export class OrdersListComponent implements OnInit, OnDestroy {
 
   clientsItems$: Observable<DataForm[]>;
   removalsItems$: Observable<DataForm[]>;
@@ -31,6 +39,8 @@ export class OrdersListComponent implements OnInit {
   selectedOption: number;
   months: {id:number, name:string}[];
   client_id: number;
+  private sub$: Subscription;
+  private subscriptions = [];
 
   @ViewChild('matSelect') matSelect: MatSelect;
   get formData() { return <FormArray>this.myOrderForm.get('items'); }
@@ -58,7 +68,14 @@ export class OrdersListComponent implements OnInit {
       ]
   }
   ngOnInit() {
+    this.store$.dispatch(new OrdersStoreActions.ResetRequestAction());
     this.select();
+    this.setOrderFormFromSelect();
+  }
+  ngOnDestroy(): void {
+    if (this.subscriptions.length) {
+      this.subscriptions.forEach(sub => sub.unsubscribe());
+    }
   }
   crateFormOrder() {
     this.myOrderForm = this.fb.group({
@@ -75,8 +92,11 @@ export class OrdersListComponent implements OnInit {
     this.clientsItems$ = this.store$.pipe(
       select(  ClientsStoreSelectors.selectClientsItems(0) )
     );
+    let currentDate = new Date();
+    let monthNumber = currentDate.getMonth();
+    this.selectedOption = monthNumber;
     this.ordersItems$ = this.store$.pipe(
-      select( OrdersStoreSelectors.selectOrdersItems )
+      select( OrdersStoreSelectors.selectOrdersByMonth(monthNumber) )
     );
     this.error$ = this.store$.pipe(
       select( OrdersStoreSelectors.selectOrdersError )
@@ -84,11 +104,9 @@ export class OrdersListComponent implements OnInit {
   }
   selectClientById(id: string) {
     this.client_id = +id;
-    this.selectedOption = -1;
     if (id && id.length && id != '0') {
+      this.store$.dispatch(new OrdersStoreActions.ResetRequestAction());
       this.store$.dispatch(new OrdersStoreActions.LoadRequestAction(+id));
-      this.ordersItems$ = this.store$.pipe( select( OrdersStoreSelectors.selectOrdersItems ) );
-      this.setOrderFormFromSelect(this.ordersItems$);
     }
   }
   updateOrder(order: PurchasseOrder): void {
@@ -99,16 +117,17 @@ export class OrdersListComponent implements OnInit {
     this.ordersItems$ = this.store$.pipe(
       select( OrdersStoreSelectors.selectOrdersByMonth(+month) )
     );
-    this.setOrderFormFromSelect(this.ordersItems$);
+    this.setOrderFormFromSelect();
   }
-  setOrderFormFromSelect(ordersItems$: Observable<PurchasseOrder[]>) {
-    ordersItems$.subscribe(data => {
-      let items = this.myOrderForm.get('items') as FormArray;
-      while (items.length !== 0) {
-        items.removeAt(0)
+  setOrderFormFromSelect() {
+    this.sub$ = this.ordersItems$.subscribe(data => {
+      this.crateFormOrder();
+      if (data.length) {
+        let items = this.myOrderForm.get('items') as FormArray;
+        data.forEach(item => this.addItem(items, item));
       }
-      data.forEach(item => this.addItem(items, item));
     });
+    this.subscriptions.push(this.sub$);
   }
   addItem(items: FormArray, order: PurchasseOrder): void {
     items.push(this.createItem(order));

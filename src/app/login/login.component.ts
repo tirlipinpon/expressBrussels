@@ -1,8 +1,8 @@
-import {Component, OnInit, ViewEncapsulation, ChangeDetectorRef} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation, ChangeDetectorRef, OnDestroy} from '@angular/core';
 import {AuthenticationService} from '../services/authentication.service';
 import {Router} from '@angular/router';
 import {FormBuilder, Validators, FormGroup} from '@angular/forms';
-import {Observable} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {Store} from "@ngrx/store";
 import {SendCustomerEmail} from "../actions/customer.actions";
 import * as fromRoot from '../shared/appState';
@@ -14,12 +14,14 @@ import * as fromRoot from '../shared/appState';
 })
 
 
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   form: FormGroup;
   loading = false;
   error = '';
   respAuthService$: Observable<any>;
   isforgotProcess: boolean;
+  private sub$: Subscription;
+  private subscriptions = [];
 
   typeInput = 'password';
 
@@ -41,13 +43,18 @@ export class LoginComponent implements OnInit {
     // reset login status
     this.authenticationService.logout();
   }
+  ngOnDestroy(): void {
+    if (this.subscriptions.length) {
+      this.subscriptions.forEach(sub => sub.unsubscribe());
+    }
+  }
 
   login() {
     const val = this.form.value;
     this.loading = true;
     if (val.email && val.password) {
       this.respAuthService$ = this.authenticationService.login(val);
-      this.respAuthService$.subscribe(data => {
+      this.sub$ = this.respAuthService$.subscribe(data => {
           // console.log('LoginComponent data:', data);
           if (data && (data !== 'error' && data != 'e')) {
             this.authenticationService.setCustomerDecoded();
@@ -61,6 +68,7 @@ export class LoginComponent implements OnInit {
             this.loading = false;
           }
         });
+      this.subscriptions.push(this.sub$);
     }
   }
   forgotProcess() {

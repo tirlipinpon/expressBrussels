@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Store} from '@ngrx/store';
-import {Observable} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import * as actionsRemoval  from '../../actions/removal.actions';
 import * as actionsRecipient  from '../../actions/recipient.actions';
 import * as fromRoot from '../../shared/appState';
@@ -32,6 +32,8 @@ export class RemovalsComponent implements OnInit, OnDestroy {
   clientZones$: Observable<MyClientZones[]>;
   clientZones: MyClientZones[];
   private witchComponent: string;
+  private sub$: Subscription;
+  private subscriptions = [];
 
 
   constructor(private store: Store<fromRoot.AppState>,
@@ -53,10 +55,14 @@ export class RemovalsComponent implements OnInit, OnDestroy {
     this.allFormGroup.push(this.createFormGroup(null));
     this.initFormsRemoval();
   }
-  ngOnDestroy() {  }
+  ngOnDestroy(): void {
+    if (this.subscriptions.length) {
+      this.subscriptions.forEach(sub => sub.unsubscribe());
+    }
+  }
   storeDispatch() {
     this.store.dispatch(new ClientZonesActions.GetClientZones());
-    this.customerService.currentCustomerId.subscribe(id => {
+    this.sub$ = this.customerService.currentCustomerId.subscribe(id => {
       if (+id !== 0) {
         this.customerId = id;
         if (this.witchComponent === 'removals') {
@@ -66,6 +72,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
         }
       }
     });
+    this.subscriptions.push(this.sub$);
   }
   storeSelect() {
     if (this.witchComponent === 'removals') {
@@ -75,12 +82,13 @@ export class RemovalsComponent implements OnInit, OnDestroy {
     }
 
     this.clientZones$ = this.store.select(fromRoot.selectors.getClientZonesData);
-    this.clientZones$.subscribe(data => {
+    this.sub$ = this.clientZones$.subscribe(data => {
       this.clientZones = data;
     });
+    this.subscriptions.push(this.sub$);
   }
   initFormsRemoval(): void {
-    this.storeDataForm$.subscribe(data => {
+    this.sub$ = this.storeDataForm$.subscribe(data => {
       this.cd.markForCheck(); // TODO: remove ?
       if (data && data.length ) {
         // init data
@@ -98,6 +106,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
         // this.disableForm();
       }
     });
+    this.subscriptions.push(this.sub$);
   }
 
 

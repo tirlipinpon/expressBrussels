@@ -41,6 +41,9 @@ export function ordersReducer(state = initalOrdersState, action: Actions): Order
 
       )
     }
+    case OrdersActionTypes.RESET: {
+      return ordersAdapter.removeAll(state)
+    }
     default: {
       return state;
     }

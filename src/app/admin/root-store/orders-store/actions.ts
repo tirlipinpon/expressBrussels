@@ -9,6 +9,7 @@ export enum OrdersActionTypes {
   UPDATE_REQUEST = '[ORDERS] UPDATE REQUEST',
   UPDATE_FAILURE = '[ORDERS] UPDATE FAILURE',
   UPDATE_SUCCESS = '[ORDERS] UPDATE SUCCESS',
+  RESET = '[ORDERS] RESET',
 
   SET_FAILURE = '[ORDERS] SET FAILURE'
 }
@@ -48,6 +49,11 @@ export class SetFailureAction implements Action {
 }
 
 
+export class ResetRequestAction implements Action {
+  readonly type = OrdersActionTypes.RESET;
+  constructor() {}
+}
+
 export type Actions =
     LoadRequestAction |
     LoadFailureAction |
@@ -56,6 +62,7 @@ export type Actions =
     UpdateRequestAction |
     UpdateFailureAction |
     UpdateSuccessAction |
+    ResetRequestAction |
 
     SetFailureAction;
 

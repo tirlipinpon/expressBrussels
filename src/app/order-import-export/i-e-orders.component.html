@@ -1,0 +1,154 @@
+<div >
+  <div class="example-header">
+    <mat-form-field>
+      <input type="number" #mati matInput (keyup)="applyFilterNumber($event.target.value, $event.target)"
+             placeholder="Numéro">
+    </mat-form-field>
+    <mat-form-field>
+      <input type="text" matInput #mati (keyup)="applyFilterReference($event.target.value, $event.target)" 
+        placeholder="Référence">
+    </mat-form-field>
+    <mat-form-field>
+      <input type="date" #mati matInput (keyup)="applyFilterDate($event.target.value, $event.target)"
+             placeholder="Date">
+    </mat-form-field>
+    <mat-form-field>
+      <input type="text" matInput #mati (keyup)="applyFilterProcedureType($event.target.value, $event.target)" 
+        placeholder="Procédure">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select matInput #mati id="month" placeholder="Mois ({{getCurrentDate() | date:'yyyy'}})"
+        (selectionChange)="applyFilterMonth($event.value, $event)">
+        <mat-option [value]="'none'"></mat-option>
+        <mat-option *ngFor="let month of months" [value]="month">
+          {{month|numberTransformToMonth}}
+          ({{month|countOrdersByMonth:dataSource.data}})
+          {{(month|countOrdersPriceByMonth:dataSource.data).toFixed(2)}} €
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-stroked-button (click)="resetFilterButtonClick()" color="primary">
+      <fa-icon style="color: red!important;" [icon]="['fas', 'eraser']" size="sm"></fa-icon>
+      Reinitialiser le filtre</button>
+    <button *ngIf="isAllMonthOrdersValide"
+            mat-stroked-button
+            (click)="captureScreen('contentToConvert')"
+            matTooltip="Enregistrer en PDF tous les bons de commandes de la page (utiliser le filtre pour affiner)"
+            [matTooltipPosition]="'above'">
+      <fa-icon [icon]="['fas', 'file-pdf']" size="sm"></fa-icon>
+      Enregistrer le(s) bon(s) selectionnés
+    </button>
+  </div>
+
+  <div class="mat-elevation-z8" id="contentToConvert">
+    <table mat-table [dataSource]="dataSource" matSort matSortActive="created">
+      <!-- id Column -->
+      <ng-container matColumnDef="id" class="mat-typography mat-h1 mat-headline">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header
+            matTooltip="Cliquez ici pour ordonnancer l'ordre croissant ou decroissant"
+            [matTooltipPosition]="'above'"> Numéro du bon </th>
+        <td mat-cell *matCellDef="let transaction; let i = index;" >{{i+1}} - (n°:{{transaction.id}})</td>
+        <td mat-footer-cell *matFooterCellDef matTooltip="Total des commandes pour l'année ({{getCurrentDate() | date:'yyyy'}})"
+            [matTooltipPosition]="'right'"><span *ngIf="customerId===2">Total ({{getCurrentDate() | date:'yyyy'}})</span></td>
+      </ng-container>
+      <!-- reference Column -->
+      <ng-container matColumnDef="reference">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Référence </th>
+        <td mat-cell *matCellDef="let transaction">
+          <p>{{transaction.reference}}</p>
+        </td>
+        <td mat-footer-cell *matFooterCellDef>  </td>
+      </ng-container>
+      <!-- created Column -->
+      <ng-container matColumnDef="created">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Date de création </th>
+        <td mat-cell *matCellDef="let transaction" class="mat-h1 mat-title">{{transaction.created | date:'dd/MM/yyyy'}} <br> {{transaction.created | date:'HH:mm:ss'}}</td>
+        <td mat-footer-cell *matFooterCellDef>  </td>
+      </ng-container>
+      <!-- removal Column -->
+      <ng-container matColumnDef="fk_removal_id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Enlèvement </th>
+          <td mat-cell *matCellDef="let transaction">
+            <ng-container *ngFor="let dest of transaction.destinations;">
+              <ng-container *ngIf="dest.kind == 'removal'">
+                <p matTooltip="Nom de la compagnie" [matTooltipPosition]="'left'">
+                  <fa-icon style="color: rgba(0,0,0,0.27)!important;" [icon]="['fas', 'user']" size="sm"></fa-icon>
+                  {{ dest.name  }}
+                </p>
+                <p matTooltip="Adresse d'enlevement" [matTooltipPosition]="'left'">
+                  <fa-icon style="color: rgba(0,0,0,0.27)!important;" [icon]="['fas', 'home']" size="sm"></fa-icon>
+                  {{ dest.address  }}, {{ dest.number  }}<br>
+                  <span style="margin:0 0 0 20px">{{ dest.cp  }} {{ dest.state  }}</span>
+                </p>
+              </ng-container>
+            </ng-container>
+          </td>
+        <td mat-footer-cell *matFooterCellDef> </td>
+      </ng-container>
+      <ng-container matColumnDef="fk_recipient_id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Destination </th>
+          <td mat-cell *matCellDef="let transaction">
+            <ng-container *ngFor="let dest of transaction.destinations;">
+              <ng-container *ngIf="dest.kind == 'recipient'">
+                <p matTooltip="Nom de la compagnie" [matTooltipPosition]="'left'">
+                  <fa-icon style="color: rgba(0,0,0,0.27)!important;" [icon]="['fas', 'user']" size="sm"></fa-icon>
+                  {{ dest.name  }}
+                </p>
+                <p matTooltip="Adresse de destination" [matTooltipPosition]="'left'">
+                  <fa-icon style="color: rgba(0,0,0,0.27)!important;" [icon]="['fas', 'home']" size="sm"></fa-icon>
+                  {{ dest.address  }}, {{ dest.number  }}<br>
+                  <span style="margin:0 0 0 20px">{{ dest.cp  }} {{ dest.state  }}</span>
+                </p>
+              </ng-container>
+            </ng-container>
+          </td>
+        <td mat-footer-cell *matFooterCellDef> </td>
+      </ng-container>
+      <!-- created Column -->
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix </th>
+        <td mat-cell *matCellDef="let transaction">
+          <p>{{transaction.price}} €</p>
+        </td>
+        <td mat-footer-cell *matFooterCellDef> <span *ngIf="customerId===2">{{getTotalCost() | currency:'EUR':true}} </span>
+        </td>
+      </ng-container>
+      <!-- Disclaimer column -->
+      <ng-container matColumnDef="disclaimer">
+        <td mat-footer-cell *matFooterCellDef colspan="2">
+          Please note that the cost of items displayed are completely and totally made up.
+        </td>
+      </ng-container>
+      <!-- procedureType Column -->
+      <ng-container matColumnDef="procedureType">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Type de procédure </th>
+        <td mat-cell *matCellDef="let transaction">
+          <p>{{transaction.procedureType}}</p>
+        </td>
+        <td mat-footer-cell *matFooterCellDef>  </td>
+      </ng-container>
+      <!-- print Column -->
+      <ng-container matColumnDef="print">
+        <th mat-header-cell *matHeaderCellDef> PDF </th>
+        <td mat-cell *matCellDef="let transaction">
+          <a mat-stroked-button href="{{apiUrl}}pdf/ie/{{this.customerId}}/import_export-N-{{transaction.id}}-DATE-{{transaction.created | date:'dd-MM-yyyy'}}.pdf" target="_blank"><fa-icon [icon]="['fas', 'file-pdf']" size="sm"></fa-icon></a>
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+      <!-- The table will render two header rows, one data row per data object, and two footer rows. -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"
+          class="example-first-header-row">
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns" class="to-print" id="print-{{row.id}}"></tr>
+      <tr mat-footer-row *matFooterRowDef="displayedColumns;" class="example-first-footer-row"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[1000]" showFirstLastButtons></mat-paginator>
+  </div>
+</div>
+
+<p-confirmDialog header="Confirmation"
+                 icon="fa fa-question-circle" width="400">
+</p-confirmDialog>
+
+

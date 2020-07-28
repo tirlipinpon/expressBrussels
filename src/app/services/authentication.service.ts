@@ -82,7 +82,7 @@ export class AuthenticationService {
   }
 
   login(value): Observable<any> {
-    let url = this.apiUrl + 'php//read_login.php';
+    let url = this.apiUrl + 'php/read_login.php';
     let data = value;
     // console.log('AuthenticationService url: ', url);
     // this is just the HTTP call,

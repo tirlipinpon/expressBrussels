@@ -1,4 +1,4 @@
-import {Component, OnInit, ElementRef, ViewChild} from '@angular/core';
+import {Component, OnInit, ElementRef, ViewChild, OnDestroy} from '@angular/core';
 import {Store, select} from "@ngrx/store";
 import {
   RootStoreState,
@@ -8,7 +8,7 @@ import {
   ClientsStoreSelectors
 } from '../../root-store';
 import {DataForm} from "../../../models/DataForm";
-import {Observable} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {FormBuilder, FormGroup, FormArray, Validators} from "@angular/forms";
 import {MatSelect} from "@angular/material";
 import {ImportExport, Administration} from "../../../models/import-export";
@@ -18,7 +18,7 @@ import {ImportExport, Administration} from "../../../models/import-export";
   templateUrl: './i-e-list.component.html',
   styleUrls: ['./i-e-list.component.css']
 })
-export class ImportExportListComponent implements OnInit {
+export class ImportExportListComponent implements OnInit, OnDestroy {
 
   clientsItems$: Observable<DataForm[]>;
   clientsById$: Observable<DataForm>;
@@ -28,6 +28,8 @@ export class ImportExportListComponent implements OnInit {
   selectedOption: string;
   months: {id:number, name:string}[];
   client_id: number;
+  private sub$: Subscription;
+  private subscriptions = [];
 
   @ViewChild('matSelect') matSelect: MatSelect;
   get formData() { return <FormArray>this.myForm.get('items'); }
@@ -60,6 +62,11 @@ export class ImportExportListComponent implements OnInit {
   }
   ngOnInit() {
     this.select();
+  }
+  ngOnDestroy(): void {
+    if (this.subscriptions.length) {
+      this.subscriptions.forEach(sub => sub.unsubscribe());
+    }
   }
   update(order: ImportExport): void {
     this.store$.dispatch(new ImportExportStoreActions.UpdateRequestAction({id: order.id, changes: order}));
@@ -99,7 +106,7 @@ export class ImportExportListComponent implements OnInit {
     this.setImportExportFormFromSelect(this.ieItems$);
   }
   setImportExportFormFromSelect(ieItems$: Observable<ImportExport[]>) {
-    ieItems$.subscribe(data => {
+    this.sub$ = ieItems$.subscribe(data => {
       let items = this.myForm.get('items') as FormArray;
       while (items.length !== 0) {
         items.removeAt(0)
@@ -107,6 +114,7 @@ export class ImportExportListComponent implements OnInit {
       data.forEach(item => this.addItem(items, item));
 
     });
+    this.subscriptions.push(this.sub$);
   }
   addItem(items: FormArray, order: ImportExport): void {
     items.push(this.createItem(order));

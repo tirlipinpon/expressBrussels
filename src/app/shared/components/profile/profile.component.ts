@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewEncapsulation, OnDestroy, HostListener} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {DataForm} from '../../../models/DataForm';
-import {Observable, Subject} from 'rxjs';
+import {Observable, Subject, Subscription} from 'rxjs';
 import * as fromRoot from '../../appState';
 import {Store} from '@ngrx/store';
 import * as CustomerActions from '../../../actions/customer.actions';
@@ -25,6 +25,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   customerId: number;
   datas: any;
   nameForm = ['customer'];
+  private sub$: Subscription;
+  private subscriptions = [];
 
   constructor (private store: Store<fromRoot.AppState>,
               private customerService: CustomerService,
@@ -36,7 +38,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.storeDispatch();
 
   }
-  ngOnDestroy() {
+  ngOnDestroy(): void {
+    if (this.subscriptions.length) {
+      this.subscriptions.forEach(sub => sub.unsubscribe());
+    }
   }
 
   showDialog() {
@@ -45,7 +50,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   storeSelect(){
     this.customer$ = this.store.select(fromRoot.selectors.getCustomer);
-    this.customer$.pipe(distinctUntilChanged()).subscribe(data => {
+    this.sub$ = this.customer$.pipe(distinctUntilChanged()).subscribe(data => {
       if (data && +data.id !== 0) {
         if (!this.registered) {
           this.registered = true;
@@ -53,10 +58,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.onValueCustomerChanged();
         }
       }
-    })
+    });
+    this.subscriptions.push(this.sub$);
   }
   onValueCustomerChanged() {
-    this.formCustomer.valueChanges.pipe(
+    this.sub$ = this.formCustomer.valueChanges.pipe(
       debounceTime(1000),
       distinctUntilChanged()
     ).subscribe(val => {
@@ -64,14 +70,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.store.dispatch(new CustomerActions.EditCustomer(val));
       }
     });
+      this.subscriptions.push(this.sub$);
   }
   storeDispatch() {
     // this.store.dispatch(new CustomerActions.GetCustomer(1));
-    this.customerService.currentCustomerId.subscribe(id => {
+    this.sub$ = this.customerService.currentCustomerId.subscribe(id => {
       if(+id !== 0) {
         this.customerId = id;
       }
     });
+      this.subscriptions.push(this.sub$);
   }
 
   saveCustomer(): void {

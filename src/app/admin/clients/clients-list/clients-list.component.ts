@@ -1,5 +1,5 @@
-import {Component, OnInit, ChangeDetectorRef} from '@angular/core';
-import {Observable} from "rxjs";
+import {Component, OnInit, ChangeDetectorRef, OnDestroy} from '@angular/core';
+import {Observable, Subscription} from "rxjs";
 import {Store, select} from "@ngrx/store";
 import {
   RootStoreState,
@@ -27,7 +27,7 @@ import {ClientsService} from "../services/clients.service";
   templateUrl: './clients-list.component.html',
   styleUrls: ['./clients-list.component.css']
 })
-export class ClientsListComponent implements OnInit {
+export class ClientsListComponent implements OnInit, OnDestroy {
 
   allItems$: Observable<DataForm[]>;
   clientsItems$: Observable<DataForm[]>;
@@ -42,6 +42,8 @@ export class ClientsListComponent implements OnInit {
   myClientForm: FormGroup;
   myPrixZoneMotoForm: FormGroup;
   myPrixZoneCarForm: FormGroup;
+  private sub$: Subscription;
+  private subscriptions = [];
 
   constructor(private store$: Store<RootStoreState.State>,
               private fb: FormBuilder,
@@ -64,6 +66,12 @@ export class ClientsListComponent implements OnInit {
     this.createFormClient();
     this.createFormPrixZoneMoto();
     this.createFormPrixZoneCar();
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscriptions.length) {
+      this.subscriptions.forEach(sub => sub.unsubscribe());
+    }
   }
 
   addClient(client: DataForm) {
@@ -138,27 +146,29 @@ export class ClientsListComponent implements OnInit {
   selectClientById(id: string) {
     if (id && id.length && id != '0') {
       this.clientsById$ = this.store$.pipe(select(ClientsStoreSelectors.selectClientById(+id)));
-      this.clientsById$.subscribe(client => {
+      this.sub$ = this.clientsById$.subscribe(client => {
           if (client) {
             this.myClientForm.patchValue(client);
 
             this.clientsPrixZoneMoto$ = this.store$.pipe(select(PrixZonesMotoStoreSelectors.selectZonesByClientId(+id)));
-            this.clientsPrixZoneMoto$.pipe(distinctUntilChanged(), skipWhile(d => !d)).subscribe(pzm => {
+            this.sub$ = this.clientsPrixZoneMoto$.pipe(distinctUntilChanged(), skipWhile(d => !d)).subscribe(pzm => {
               this.myPrixZoneMotoForm.patchValue(pzm)
             });
+            this.subscriptions.push(this.sub$);
 
             this.clientsPrixZoneCar$ = this.store$.pipe(select(PrixZonesCarStoreSelectors.selectZonesByClientId(+id)));
-            this.clientsPrixZoneCar$.pipe(distinctUntilChanged(), skipWhile(d => !d)).subscribe(pzm => {
+            this.sub$ = this.clientsPrixZoneCar$.pipe(distinctUntilChanged(), skipWhile(d => !d)).subscribe(pzm => {
               this.myPrixZoneCarForm.patchValue(pzm)
             });
+            this.subscriptions.push(this.sub$);
 
             this.selectRemovalsByClientId(id);
           } else {
             this.notificationsService.notify('error', 'Client not found', 'This id "' + id + '" not exist.');
             this.resetforms();
           }
-        }
-      );
+        });
+      this.subscriptions.push(this.sub$);
     } else {
       this.resetforms();
     }

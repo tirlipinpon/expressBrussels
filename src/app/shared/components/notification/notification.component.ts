@@ -14,6 +14,8 @@ export class NotificationComponent implements OnInit, OnDestroy {
   msgs: Message[] = [];
   subscription$: Subscription;
   type: string;
+  private sub$: Subscription;
+  private subscriptions = [];
 
   constructor(private notificationsService: NotificationService, private messageService: MessageService) { }
 
@@ -25,12 +27,13 @@ export class NotificationComponent implements OnInit, OnDestroy {
         this.type = notification.severity;
         this.messageService.add(notification);
       });
-
   }
-
 
   ngOnDestroy() {
     this.subscription$.unsubscribe();
+    if (this.subscriptions.length) {
+      this.subscriptions.forEach(sub => sub.unsubscribe());
+    }
   }
 
 }

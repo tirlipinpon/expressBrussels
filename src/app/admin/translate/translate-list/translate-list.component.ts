@@ -1,4 +1,4 @@
-import {Component, OnInit, ElementRef, ViewChild} from '@angular/core';
+import {Component, OnInit, ElementRef, ViewChild, OnDestroy} from '@angular/core';
 import {Store, select} from "@ngrx/store";
 import {
   RootStoreState,
@@ -8,7 +8,7 @@ import {
   ClientsStoreSelectors
 } from '../../root-store';
 import {DataForm} from "../../../models/DataForm";
-import {Observable} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {FormBuilder, FormGroup, FormArray, Validators} from "@angular/forms";
 import {MatSelect} from "@angular/material";
 import {OrderTranslate} from "../../../models/translate";
@@ -19,7 +19,7 @@ import {Destination} from "../../../models/destination";
   templateUrl: './translate-list.component.html',
   styleUrls: ['./translate-list.component.css']
 })
-export class TranslateListComponent implements OnInit {
+export class TranslateListComponent implements OnInit, OnDestroy {
 
   clientsItems$: Observable<DataForm[]>;
   clientsById$: Observable<DataForm>;
@@ -29,6 +29,8 @@ export class TranslateListComponent implements OnInit {
   selectedOption: string;
   months: {id:number, name:string}[];
   client_id: number;
+  private sub$: Subscription;
+  private subscriptions = [];
 
   @ViewChild('matSelect') matSelect: MatSelect;
   get formData() { return <FormArray>this.myForm.get('items'); }
@@ -61,6 +63,11 @@ export class TranslateListComponent implements OnInit {
   }
   ngOnInit() {
     this.select();
+  }
+  ngOnDestroy(): void {
+    if (this.subscriptions.length) {
+      this.subscriptions.forEach(sub => sub.unsubscribe());
+    }
   }
   update(order: OrderTranslate): void {
     this.store$.dispatch(new TranslatesStoreActions.UpdateRequestAction({id: order.id, changes: order}));
@@ -96,7 +103,7 @@ export class TranslateListComponent implements OnInit {
     this.setTranslateFormFromSelect(this.translateItems$);
   }
   setTranslateFormFromSelect(translateItems$: Observable<OrderTranslate[]>) {
-    translateItems$.subscribe(data => {
+    this.sub$ = translateItems$.subscribe(data => {
       let items = this.myForm.get('items') as FormArray;
       while (items.length !== 0) {
         items.removeAt(0)
@@ -105,6 +112,7 @@ export class TranslateListComponent implements OnInit {
         data.forEach(item => this.addItem(items, item));
       }
     });
+    this.subscriptions.push(this.sub$);
   }
   addItem(items: FormArray, order: OrderTranslate): void {
     items.push(this.createItem(order));
@@ -178,27 +186,30 @@ export class TranslateListComponent implements OnInit {
     })
   }
   onChanges(form: FormGroup): void {
-    form.get('communeCheck').valueChanges.subscribe(val => {
+    this.sub$ = form.get('communeCheck').valueChanges.subscribe(val => {
       if (val) {
         this.addDestinationEmpty(form, 'commune');
       }else {
         this.removeDestinationEmpty(form, 'commune');
       }
     });
-    form.get('notaireCheck').valueChanges.subscribe(val => {
+    this.subscriptions.push(this.sub$);
+    this.sub$ = form.get('notaireCheck').valueChanges.subscribe(val => {
       if (val) {
         this.addDestinationEmpty(form, 'notaire');
       }else {
         this.removeDestinationEmpty(form, 'notaire');
       }
     });
-    form.get('consulatCheck').valueChanges.subscribe(val => {
+    this.subscriptions.push(this.sub$);
+    this.sub$ = form.get('consulatCheck').valueChanges.subscribe(val => {
       if (val) {
         this.addDestinationEmpty(form, 'consulat');
       }else {
         this.removeDestinationEmpty(form, 'consulat');
       }
     });
+    this.subscriptions.push(this.sub$);
   }
   addDestinationEmpty(form: FormGroup, kind: string): void {
     let items = form.get('destinations') as FormArray;

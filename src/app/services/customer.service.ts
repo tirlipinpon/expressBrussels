@@ -1,5 +1,5 @@
-import {throwError as observableThrowError, Observable, BehaviorSubject} from 'rxjs';
-import {Injectable} from '@angular/core';
+import {throwError as observableThrowError, Observable, BehaviorSubject, Subscription} from 'rxjs';
+import {Injectable, OnDestroy} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {DataForm} from '../models/DataForm';
 import {environment} from '../../environments/environment';
@@ -8,21 +8,29 @@ import {Store} from "@ngrx/store";
 import {catchError} from "rxjs/internal/operators";
 
 @Injectable()
-export class CustomerService {
+export class CustomerService implements OnDestroy{
 
   private apiUrl = environment.apiUrl;
   private messageSource = new BehaviorSubject<number>(0);
   private customerId$: Observable<number>;
   currentCustomerId = this.messageSource.asObservable();
+  private sub$: Subscription;
+  private subscriptions = [];
 
   constructor(private http: HttpClient,
               private store: Store<fromRoot.AppState>) {
     this.customerId$ = this.store.select(fromRoot.selectors.getCustomerId);
-    this.customerId$.subscribe(data => {
+    this.sub$ = this.customerId$.subscribe(data => {
       if (+data !== 0) {
         this.setCustomerId(data)
       }
     });
+    this.subscriptions.push(this.sub$);
+  }
+  ngOnDestroy(): void {
+    if (this.subscriptions.length) {
+      this.subscriptions.forEach(sub => sub.unsubscribe());
+    }
   }
 
   setCustomerId(message: number) {

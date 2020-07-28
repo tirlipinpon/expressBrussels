@@ -19,6 +19,7 @@ import {ConfirmDialogModule} from 'primeng/components/confirmdialog/confirmdialo
 import {ConfirmationService} from 'primeng/components/common/confirmationservice';
 import {StoreModule} from '@ngrx/store';
 import {OrdersEffectService} from '../effects/orders/orders-effect.service';
+import {OrdersIEEffectService} from '../effects/orders-ie/orders-ie-effect.service';
 import {PurchasseOrderEffectService} from '../effects/order/purchasse-order-effect.service';
 import {RemovalEffectService} from '../effects/removals/removal-effect.service';
 import {CustomerEffectService} from '../effects/customer/customer-effect.service';
@@ -92,6 +93,7 @@ library.add(faPhone, faHome, faClock, faUser, faUniversity, faFilePdf, faEraser,
       CustomerEffectService,
       ClientZonesEffectService,
       OrdersEffectService,
+      OrdersIEEffectService,
       PurchasseOrderEffectService,
       PrixZoneMotoEffectService,
       PrixZoneCamionnetteEffectService,

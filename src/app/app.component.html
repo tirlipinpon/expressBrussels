@@ -1,7 +1,7 @@
 
 <div *ngIf="(customerId$|async)===0">
-  <span style="color:red;padding:5px;margin:5px;border:1px solid red;">Veuiller vous deconnecter et vous relogger.</span>
-  <button mat-button (click)="goPlaces()" color="warn">Déconnection</button>
+  <span style="color:red;padding:5px;margin:5px;border:1px solid red;">Veuiller vous déconnecter et vous relogger.</span>
+  <button mat-button (click)="goPlaces()" color="warn">Déconnexion</button>
 </div>
 
 <div style="padding:10px" *ngIf="(customerId$|async) && (customerId$|async)<3">
