@@ -449,11 +449,11 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.subscriptions.push(this.sub$);
 }
   calculPriceNational() {
-  // set distance total +10km *2
+  // set distance total +10km * 2
     let distM = 0;
     this.distances.map(w => { distM += w.distanceValue; });
     distM += 10000;
-    let distKm = distM / 1000;
+    let distKm = (distM * 2) / 1000;
     let price = distKm;
 
     if(this.formOptions.get('transport').value === 'moto') {

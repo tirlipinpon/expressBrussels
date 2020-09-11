@@ -38,8 +38,11 @@
       <div class="price-result" *ngIf="formDistance.get('price').value">
         <div  matTooltip="Ce montant est cité à titre indicatif, sous réserve d&#39;approbation de la direction."
               [matTooltipPosition]="'below'"><fa-icon [icon]="['fas', 'euro-sign']" size="sm"></fa-icon> {{ formDistance.get('price').value }}</div>
-        <div *ngIf="distances[0]?.distanceText"><fa-icon [icon]="['fas', 'map-marked-alt']" size="sm"></fa-icon> {{ distances[0]?.distanceText }} + {{ distances[1]?.distanceText }}</div>
-        <div *ngIf="distances[0]?.durationText"><fa-icon [icon]="['fas', 'clock']" size="sm"></fa-icon> {{ distances[0]?.durationText }} + {{ distances[1]?.durationText }}</div>
+        <ng-container *ngIf="false">
+          <div *ngIf="distances[0]?.distanceText"><fa-icon [icon]="['fas', 'map-marked-alt']" size="sm"></fa-icon> {{ distances[0]?.distanceText }} + {{ distances[1]?.distanceText }}</div>
+          <div *ngIf="distances[0]?.durationText"><fa-icon [icon]="['fas', 'clock']" size="sm"></fa-icon> {{ distances[0]?.durationText }} + {{ distances[1]?.durationText }}</div>
+        </ng-container>
+
       </div>
 
       <form [formGroup]="formDistance">
