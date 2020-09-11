@@ -14,7 +14,7 @@
       <mat-form-field class="example-full-width">
         <input type="text" matInput [matAutocomplete]="autoRefClient" formControlName="ref_client" placeholder="reference client" aria-label="Number">
         <mat-icon matSuffix><fa-icon [icon]="['fas', 'id-card'] " size="xs"></fa-icon></mat-icon>
-        <mat-autocomplete   #autoRefClient="matAutocomplete" (optionSelected)="itemSelectedRefClient($event)"  >
+        <mat-autocomplete   #autoRefClient="matAutocomplete" (optionSelected)="itemSelectedRefClient($event)">
           <mat-option  *ngFor="let option of (filteredRefClient | async)| notEmpty: 'ref_client'"  [value]="option?.ref_client">
             {{ option?.ref_client }}
           </mat-option>
@@ -31,31 +31,31 @@
       </mat-autocomplete>
     </mat-form-field>
     <input type="hidden" formControlName="id">
-    <div *ngIf="formGroup.get('id').value && formGroup.get('id').value.length">
-      <div matTooltip="Pour modifier l'adresse veuillez vous rendre sur la page {{nameForm === 'removals' ? 'Enlèvement' : 'Destinataire'}}"
-           [matTooltipPosition]="'above'"
-      class="not-allowed">
-        <div style="display:flex;">
-          <mat-form-field class="example-full-width">
-            <input matInput formControlName="address" [readonly]="true"   placeholder="adresse" value="test">
-          </mat-form-field>
-          <mat-form-field class="example-full-width">
-            <input matInput formControlName="number"  [readonly]="true"   placeholder="numero">
-            <!--<mat-icon matSuffix><fa-icon [icon]="['fas', 'home'] " size="xs"></fa-icon></mat-icon>-->
-          </mat-form-field>
-        </div>
-        <div style="display:flex;">
-          <mat-form-field class="example-full-width">
-            <input matInput formControlName="cp" [readonly]="true"  placeholder="code postale">
-          </mat-form-field>
-          <mat-form-field class="example-full-width">
-            <input matInput formControlName="state" [readonly]="true" placeholder="ville">
-            <!--<mat-icon matSuffix><fa-icon [icon]="['fas', 'university'] " size="xs"></fa-icon></mat-icon>-->
-          </mat-form-field>
-        </div>
-        <input type="hidden" formControlName="clientZone" [readonly]="true" placeholder="zone">
+    <div *ngIf="formGroup.get('id').value && formGroup.get('id').value.length
+    || ((filteredName | async)?.length === 0 || (filteredRefClient | async)?.length === 0)">
+      <div>
+        <app-address [formGroup]="formGroup" [data]="clientZones"></app-address>
+<!--        <div style="display:flex;">-->
+<!--          <mat-form-field class="example-full-width">-->
+<!--            <input matInput formControlName="address"    placeholder="adresse" value="">-->
+<!--          </mat-form-field>-->
+<!--          <mat-form-field class="example-full-width">-->
+<!--            <input matInput formControlName="number"     placeholder="numero" value="">-->
+<!--            &lt;!&ndash;<mat-icon matSuffix><fa-icon [icon]="['fas', 'home'] " size="xs"></fa-icon></mat-icon>&ndash;&gt;-->
+<!--          </mat-form-field>-->
+<!--        </div>-->
+<!--        <div style="display:flex;">-->
+<!--          <mat-form-field class="example-full-width">-->
+<!--            <input matInput formControlName="cp"   placeholder="code postale" value="">-->
+<!--          </mat-form-field>-->
+<!--          <mat-form-field class="example-full-width">-->
+<!--            <input matInput formControlName="state"  placeholder="ville" value="">-->
+<!--            &lt;!&ndash;<mat-icon matSuffix><fa-icon [icon]="['fas', 'university'] " size="xs"></fa-icon></mat-icon>&ndash;&gt;-->
+<!--          </mat-form-field>-->
+<!--        </div>-->
+        <input type="hidden" formControlName="clientZone"  placeholder="zone" value="1">
         <mat-form-field class="example-full-width">
-          <input type="tel" matInput placeholder="telephone" formControlName="phone" [readonly]="true">
+          <input type="tel" matInput placeholder="telephone" formControlName="phone" value="">
           <!--<mat-icon matSuffix><fa-icon [icon]="['fas', 'phone'] " size="xs"></fa-icon></mat-icon>-->
         </mat-form-field>
       </div>
@@ -63,9 +63,9 @@
 
       <app-info [contact]="contact | async" [formGroup]="formGroup.get('infos')"></app-info>
     </div>
-    <input type="hidden" formControlName="created" [readonly]="true">
-    <!--<button (click)="resetForm(formGroup)">reset: {{ nameForm }}</button>-->
-    <input type="hidden" formControlName="fk_type" [readonly]="true">
+    <input type="hidden" formControlName="created" >
+<!--    <button (click)="resetForm(formGroup)">reset: {{ nameForm }}</button>-->
+    <input type="hidden" formControlName="fk_type" >
     <div *ngIf="formGroup.get('addressValidated').value=='0'">
       <span class="text-red">Adresse non valide. </span>
       <button (click)="goPlaces(nameForm)" mat-raised-button color="warn">go to edit {{nameForm}}</button>
@@ -86,5 +86,6 @@
   <!--<input type="hidden" formControlName="fk_type" [readonly]="true">-->
 <!--</form>-->
 
-<!--{{formGroup.valid}}-->
+<pre>{{formGroup.value|json}}</pre>
+<!--{{dataValues|json}}-->
 

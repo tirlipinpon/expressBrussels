@@ -66,6 +66,13 @@
   </div>
 </div>
 
+<!-- DEBUG -->
+<div *ngIf="true" style="display:flex;">
+<!--  <pre style="flex:1;word-break:break-word;line-height:2;">playerInfo: {{form.get(['misc', 'playerInfo'])?.value|json}}</pre>-->
+  <div style="flex:1;word-break:break-word;line-height:2;">formRemoval: {{getInvalidControls(formRemoval)}}</div>
+  <div style="flex:1;word-break:break-word;line-height:2;">formRecipient: {{getInvalidControls(formRecipient)}}</div>
+</div>
+
 
 
 

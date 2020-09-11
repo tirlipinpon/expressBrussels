@@ -42,7 +42,8 @@ export class InputAutocompletionComponent implements OnInit, OnDestroy {
     this.showDropDown = action;
   }
   getSearchValue(value: string): string {
-    return this.formGroup.get(this.propName).value;
+    const resp =  this.formGroup.get(this.propName).value;
+    return resp;
   }
   private _initData1(data): void {
     // console.log('init data : ', data);
@@ -69,9 +70,9 @@ export class InputAutocompletionComponent implements OnInit, OnDestroy {
   }
   private _initData2(data: any): void {
       this.formGroup.patchValue({
-        cp: data?data.cp:'',
-        state: data?data.state:'',
-        clientZone: data?data.zone:'',
+        cp: data ? data.cp : 1000,
+        state: data ? data.state : 'sss',
+        clientZone: data ? data.zone : '',
       });
   }
   setSelectdedValue(value: string,  data: string): void {
@@ -90,7 +91,8 @@ export class InputAutocompletionComponent implements OnInit, OnDestroy {
     // console.log(value, ' ' , data)
     let arrayWithElem;
     arrayWithElem = this.data.filter(elem => {
-      return elem[value].toLowerCase() === data.toLowerCase()
+      const resp =  elem[value].toLowerCase() === data.toLowerCase()
+      return resp;
     });
     return arrayWithElem[0];
   }

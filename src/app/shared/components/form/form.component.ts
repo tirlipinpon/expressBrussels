@@ -1,11 +1,23 @@
-import {Component, Input, Output, EventEmitter, AfterViewInit, ChangeDetectorRef, OnInit} from '@angular/core';
-import {FormGroup} from '@angular/forms';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  AfterViewInit,
+  ChangeDetectorRef,
+  OnInit,
+  ViewChild, ElementRef
+} from '@angular/core';
+import {Form, FormGroup} from '@angular/forms';
 import {DataForm} from '../../../models/DataForm';
 import {Contact} from "../../../models/contact";
-import { Observable } from 'rxjs';
+import {Observable, of, Subscription} from 'rxjs';
 import {MatAutocompleteSelectedEvent} from "@angular/material";
 import {Router} from "@angular/router";
 import {map, startWith} from "rxjs/operators";
+import {MyClientZones} from "../../../models/my-client-zones";
+import * as fromRoot from "../../appState";
+import {Store} from "@ngrx/store";
 
 @Component({
   selector: 'app-form',
@@ -23,8 +35,20 @@ export class FormComponent implements OnInit, AfterViewInit {
   @Output() updateDataForm: EventEmitter<string> = new EventEmitter<string>();
   filteredName: Observable<string[]>;
   filteredRefClient: Observable<string[]>;
+  @ViewChild("cdk-overlay-2") divView: ElementRef;
 
-  constructor(private router: Router) {}
+  clientZones$: Observable<MyClientZones[]>;
+  clientZones: MyClientZones[];
+  private sub$: Subscription;
+  private subscriptions = [];
+
+  constructor(private router: Router, private store: Store<fromRoot.AppState>) {
+    this.clientZones$ = this.store.select(fromRoot.selectors.getClientZonesData);
+    this.sub$ = this.clientZones$.subscribe(data => {
+      this.clientZones = data;
+    });
+    this.subscriptions.push(this.sub$);
+  }
 
   ngOnInit() {
     this.filteredName = this.formGroup.get('name').valueChanges
@@ -32,8 +56,9 @@ export class FormComponent implements OnInit, AfterViewInit {
         startWith(''),
         map(value => {
           if (this.dataValues) {
-            return this._filter(value, 'name');
-          }else{
+            const resp = this._filter(value, 'name');
+            return resp;
+          } else {
             return;
           }
         })
@@ -43,7 +68,8 @@ export class FormComponent implements OnInit, AfterViewInit {
         startWith(''),
         map(value => {
           if (this.dataValues) {
-            return this._filter(value, 'ref_client');
+            const resp =  this._filter(value, 'ref_client');
+            return resp;
           } else {
             return;
           }
@@ -51,10 +77,26 @@ export class FormComponent implements OnInit, AfterViewInit {
       );
   }
 
+  private resetForm(formGroup: FormGroup) {
+    // formGroup.patchValue({
+    //   'address': '',
+    //   'number': '',
+    //   'cp': '',
+    //   'state': '',
+    //   'clientZone': 0,
+    //   'phone': '',
+    //   'infos': {
+    //   'info1': '',
+    //     'info2': ''
+    // }
+    // })
+  }
+
   private _filter(value: string, target: string): any[] {
     if (value && value.length) {
       const filterValue = value.toLowerCase();
-      return this.dataValues.filter(option => option[target].toLowerCase().includes(filterValue));
+      const result  = this.dataValues.filter(option => option[target].toLowerCase().includes(filterValue));
+      return result;
     }
     return;
   }
@@ -67,7 +109,9 @@ export class FormComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() {
+    console.log(this.divView);
+  }
 
   itemSelectedName (evt: MatAutocompleteSelectedEvent) {
     this._initData(this.filterStatesName(evt.option.value));
@@ -115,6 +159,5 @@ export class FormComponent implements OnInit, AfterViewInit {
   saveDataCustomer(): void {
     this.updateDataForm.emit(this.nameForm);
   }
-
 
 }

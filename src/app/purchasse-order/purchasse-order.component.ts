@@ -1,5 +1,13 @@
 /// <reference types="@types/googlemaps" />
-import {Component, OnInit, OnDestroy, HostListener, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  HostListener,
+  ChangeDetectorRef,
+  ChangeDetectionStrategy,
+  isDevMode
+} from '@angular/core';
 import {FormBuilder, Validators, FormGroup} from '@angular/forms';
 import { Store } from '@ngrx/store';
 import {Observable, Subscription} from 'rxjs';
@@ -26,6 +34,8 @@ import {Contact} from "../models/contact";
 import { map } from 'rxjs/operators';
 import {NotificationService} from "../services/notification.service";
 import {DatePipe} from "@angular/common";
+import {FindInvalidControlService} from "../services/find-invalid-control.service";
+import * as ClientZonesActions from "../actions/clientZones.actions";
 
 @Component({
   selector: 'app-purchasse-order',
@@ -73,11 +83,10 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     private cdr: ChangeDetectorRef,
     private customerService: CustomerService,
     private route: ActivatedRoute,
-    private notificationsService: NotificationService)
+    private notificationsService: NotificationService,
+    private findInvalidControlService: FindInvalidControlService)
   {
     this.storeDispatch();
-    this.initFormsRemoval();
-    this.initFormsRecipient();
     this.initFormsOptions();
     this.initFormsDistance();
   }
@@ -115,6 +124,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.subscriptions.push(this.sub$);
   }
   storeDispatch() {
+    this.store.dispatch(new ClientZonesActions.GetClientZones());
     this.sub$ = this.customerService.currentCustomerId.subscribe(id => {
       if(+id !== 0) {
         this.customerId = id;
@@ -132,6 +142,9 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
 
         this.store.dispatch(new ContactActions.ResetContact());
         this.store.dispatch(new ContactActions.GetContact());
+
+        this.initFormsRemoval(this.customerId);
+        this.initFormsRecipient(this.customerId);
       }
     });
     this.subscriptions.push(this.sub$);
@@ -144,6 +157,18 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     return allFormGroup;
   }
   onValueOrderChanged() {
+
+    this.sub$ = this.formRemoval.valueChanges.subscribe(val => {
+      this.isAllComplete(null);
+    });
+    this.subscriptions.push(this.sub$);
+
+    this.sub$ = this.formRecipient.valueChanges.subscribe(val => {
+      this.isAllComplete(null);
+    });
+    this.subscriptions.push(this.sub$);
+
+
     this.valueRemovalChanges$ = this.formRemoval.get('id').valueChanges.subscribe(val => {
       this.resetDistance();
       this.store.dispatch(new OrderActions.EditOrderRemoval(val));
@@ -245,50 +270,50 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     form.markAsPristine();
     form.markAsUntouched();
   }
-  initFormsRemoval(): void {
+  initFormsRemoval(idCustomerId: number): void {
     this.formRemoval = this.fb.group({
-      id: ['', Validators.required],
+      id: [''],
       name: ['', Validators.required],
       ref_client: [''],
-      address: [{value: '', disabled: true}, Validators.required],
-      number: [{value: '', disabled: true}, Validators.required],
-      cp: [{value: '', disabled: true}, Validators.required],
-      state: [{value: '', disabled: true}, Validators.required],
+      address: ['', Validators.required],
+      number: ['', Validators.required],
+      cp: ['', Validators.required],
+      state: ['', Validators.required],
       clientZone: [0, Validators.required],
-      phone: [{value: '', disabled: true}, Validators.required],
+      phone: ['', Validators.required],
       infos: this.fb.group({
         info1: ['', { updateOn: 'blur'} ],
         info2: ['', { updateOn: 'blur'} ],
       }),
-      type: ['', Validators.required],
-      fk_client: ['', Validators.required],
-      active: ['', Validators.required],
-      created: ['', Validators.required],
-      fk_type: ['', Validators.required],
-      addressValidated: ['']
+      type: [1, Validators.required],
+      fk_client: [idCustomerId, Validators.required],
+      active: [1, Validators.required],
+      created: [''],
+      fk_type: [idCustomerId+''+1, Validators.required],
+      addressValidated: [1]
     });
   }
-  initFormsRecipient(): void {
+  initFormsRecipient(idCustomerId: number): void {
     this.formRecipient = this.fb.group({
-      id: ['', Validators.required],
+      id: [''],
       name: ['', Validators.required],
       ref_client: [''],
-      address: [{value: '', disabled: true}, Validators.required],
-      number: [{value: '', disabled: true}, Validators.required],
-      cp: [{value: '', disabled: true}, Validators.required],
-      state: [{value: '', disabled: true}, Validators.required],
+      address: ['', Validators.required],
+      number: ['', Validators.required],
+      cp: ['', Validators.required],
+      state: ['', Validators.required],
       clientZone: [0, Validators.required],
-      phone: [{value: '', disabled: true}, Validators.required],
+      phone: ['', Validators.required],
       infos: this.fb.group({
         info1: ['', { updateOn: 'blur'} ],
         info2: ['', { updateOn: 'blur'} ],
       }),
-      type: ['', Validators.required],
-      fk_client: ['', Validators.required],
-      active: ['', Validators.required],
-      created: ['', Validators.required],
-      fk_type: ['', Validators.required],
-      addressValidated: ['']
+      type: [2, Validators.required],
+      fk_client: [idCustomerId, Validators.required],
+      active: [1, Validators.required],
+      created: [''],
+      fk_type: [idCustomerId+''+2, Validators.required],
+      addressValidated: [1]
     });
   }
   initFormsOptions(): void {
@@ -363,7 +388,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
 
   }
   isAllComplete(emitted?: any): void {
-    if (emitted && this.isFormsValide()) {
+    if (this.isFormsValide()) {
        this.calculDistance();
     }
   }
@@ -553,5 +578,11 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
         state: this.allFormGroup[0].get('state').value,
         country: ''
       });
+  }
+
+  getInvalidControls(form: FormGroup): string[] {
+    if (isDevMode()) {
+      return this.findInvalidControlService.find(form);
+    }
   }
 }
