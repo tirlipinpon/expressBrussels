@@ -70,9 +70,9 @@ export class InputAutocompletionComponent implements OnInit, OnDestroy {
   }
   private _initData2(data: any): void {
       this.formGroup.patchValue({
-        cp: data ? data.cp : 1000,
-        state: data ? data.state : 'sss',
-        clientZone: data ? data.zone : '',
+        cp: data ? data.cp : null,
+        state: data ? data.state : null,
+        clientZone: data ? data.zone : null,
       });
   }
   setSelectdedValue(value: string,  data: string): void {

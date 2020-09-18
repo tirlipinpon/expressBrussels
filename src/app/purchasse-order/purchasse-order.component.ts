@@ -9,7 +9,7 @@ import {
   isDevMode
 } from '@angular/core';
 import {FormBuilder, Validators, FormGroup} from '@angular/forms';
-import { Store } from '@ngrx/store';
+import {select, Store} from '@ngrx/store';
 import {Observable, Subscription} from 'rxjs';
 import * as RemovalActions from '../actions/removal.actions';
 import * as RecipientActions from '../actions/recipient.actions';
@@ -31,11 +31,13 @@ import {ActivatedRoute} from "@angular/router";
 import {PrixZone} from "../models/prixZone";
 import {Contact} from "../models/contact";
 
-import { map } from 'rxjs/operators';
+import {map, take} from 'rxjs/operators';
 import {NotificationService} from "../services/notification.service";
 import {DatePipe} from "@angular/common";
 import {FindInvalidControlService} from "../services/find-invalid-control.service";
 import * as ClientZonesActions from "../actions/clientZones.actions";
+import * as actionsRemoval from "../actions/removal.actions";
+import * as actionsRecipient from "../actions/recipient.actions";
 
 @Component({
   selector: 'app-purchasse-order',
@@ -75,6 +77,9 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
   private idClient: any;
   private sub$: Subscription;
   private subscriptions = [];
+  private removalsCount: Number = 0;
+  private recipientCount: Number = 0;
+  private orderSended = false;
 
   constructor (
     private store: Store<fromRoot.AppState>,
@@ -108,8 +113,22 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     this.valueRecipientInfosChanges$.unsubscribe();
   }
   storeSelect() {
-    this.removals$ = this.store.select(fromRoot.selectors.getRemovalsData);
+    this.removals$ = this.store.pipe(select(fromRoot.selectors.getRemovalsData));
+    this.sub$ = this.removals$.subscribe((data: DataForm[]) => {
+      if (!this.removalsCount && data && data.length !== 0) {
+        this.removalsCount = data.length;
+      }
+    });
+    this.subscriptions.push(this.sub$);
+
     this.recipients$ = this.store.select(fromRoot.selectors.getRecipientsData);
+    this.sub$ = this.recipients$.subscribe((data: DataForm[]) => {
+      if (!this.recipientCount  && data && data.length !== 0) {
+        this.recipientCount = data.length;
+      }
+    });
+    this.subscriptions.push(this.sub$);
+
     this.order$ = this.store.select(fromRoot.selectors.getOrder);
     this.prixZoneMoto$ = this.store.select(fromRoot.selectors.getPrixZoneMotoData);
     this.prixZoneCamionnette$ = this.store.select(fromRoot.selectors.getPrixZoneCamionnetteData);
@@ -184,8 +203,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       this.resetDistance();
       this.store.dispatch(new OrderActions.EditOrderRecipient(val));
       this.contactRecipient$ = null;
-      this.contactRecipient$ = this.contact$
-        .pipe(
+      this.contactRecipient$ = this.contact$.pipe(
           map(x => x.filter(data =>   +data['fk_resp_dest_id'] === +val) )
         );
     });
@@ -351,13 +369,32 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     return valid;
   }
   resetOrder() {
-    this.allFormGroup.forEach( form => {
-      form.reset();
-      // this.markAsPristine(form)
-    });
     this.formOptions.reset();
-    this.store.dispatch(new OrderActions.InitOrder(this.customerId));
+    this.formRemoval.patchValue({
+      id: null,
+      name: null,
+      ref_client: null,
+      address: null,
+      number: null,
+      cp: null,
+      state: null,
+      clientZone: 0,
+      phone: null,
+    });
+    this.formRecipient.patchValue({
+      id: null,
+      name: null,
+      ref_client: null,
+      address: null,
+      number: null,
+      cp: null,
+      state: null,
+      clientZone: 0,
+      phone: null,
+    });
+    this.initFormsRecipient(this.customerId);
     this.resetDistance();
+    this.store.dispatch(new OrderActions.InitOrder(this.customerId));
   }
   addContacts(removalForm: FormGroup, recipientForm: FormGroup): void {
     let  contact  = {
@@ -381,10 +418,57 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
     }
   }
   recapOrder() {
-    this.showSendBtn = false;
-    this.store.dispatch(new OrderActions.SaveOrder());
+    this.addRecipientsOrRemoval(this.formRemoval, this.formRecipient);
     this.addContacts(this.formRemoval, this.formRecipient);
-    this.resetOrder();
+    if (this.formRemoval.get('id').value && this.formRecipient.get('id').value) {
+      this.store.dispatch(new OrderActions.SaveOrder());
+      this.showSendBtn = false;
+      this.orderSended = true;
+      this.resetOrder();
+    }
+  }
+
+  addRecipientsOrRemoval(removalForm: FormGroup, recipientForm: FormGroup) {
+    let cpt = 0;
+    let cpt2 = 0;
+
+    if (!removalForm.get('id').value.length) {
+      cpt++;
+      this.store.dispatch(new actionsRemoval.AddRemoval(removalForm.value)); // diff
+    }
+
+    if (!recipientForm.get('id').value.length) {
+      cpt++;
+      this.store.dispatch(new actionsRecipient.AddRecipient(recipientForm.value)); // diff
+    }
+
+    this.removals$.subscribe( (removals: DataForm[]) => {
+      if (this.removalsCount < removals.length) {
+        const lastElemId = removals[removals.length -1];
+        this.store.dispatch(new OrderActions.EditOrderRemoval(lastElemId.id));
+        cpt2++;
+        if (cpt2 === cpt) {
+          this.store.dispatch(new OrderActions.SaveOrder());
+          this.showSendBtn = false;
+          this.orderSended = true;
+          this.resetOrder();
+        }
+      }
+    });
+
+    this.recipients$.subscribe((recipients: DataForm[]) => {
+      if (this.recipientCount < recipients.length) {
+        const lastElemId = recipients[recipients.length -1];
+        this.store.dispatch(new OrderActions.EditOrderRecipient(lastElemId.id));
+        cpt2++;
+        if (cpt2 === cpt) {
+          this.store.dispatch(new OrderActions.SaveOrder());
+          this.showSendBtn = false;
+          this.orderSended = true;
+          this.resetOrder();
+        }
+      };
+    });
 
   }
   isAllComplete(emitted?: any): void {
@@ -503,15 +587,15 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
        respGoogleMatrix.then(result => {
          if (this.distances.length < 2) {
          // if (true) {
-           const respStatus = result.distance.rows["0"].elements["0"].status;
+           const respStatus = result.distance.rows['0'].elements['0'].status;
            if (respStatus === CONST.DIST_MATRIX_OK) {
              this.distance = {
                price: 0,
-               distanceText: result.distance.rows["0"].elements["0"].distance.text,
-               distanceValue: result.distance.rows["0"].elements["0"].distance.value,
-               durationText: result.distance.rows["0"].elements["0"].duration.text,
-               durationValue: result.distance.rows["0"].elements["0"].duration.value,
-               status: result.distance.rows["0"].elements["0"].status,
+               distanceText: result.distance.rows['0'].elements['0'].distance.text,
+               distanceValue: result.distance.rows['0'].elements['0'].distance.value,
+               durationText: result.distance.rows['0'].elements['0'].duration.text,
+               durationValue: result.distance.rows['0'].elements['0'].duration.value,
+               status: result.distance.rows['0'].elements['0'].status,
                whichForm: whichForm,
                way:  ' orig: ' + result.distance.originAddresses[0] + ' dest: ' +  result.distance.destinationAddresses[0]
              };
@@ -525,7 +609,7 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
                distanceValue: 0,
                durationText: 'error',
                durationValue: 0,
-               status: result.distance.rows["0"].elements["0"].status,
+               status: result.distance.rows['0'].elements['0'].status,
                whichForm: whichForm,
                way:  ' orig: ' + result.distance.originAddresses[0] + ' dest: ' +  result.distance.destinationAddresses[0]
              };

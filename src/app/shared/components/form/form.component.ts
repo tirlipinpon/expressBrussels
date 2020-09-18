@@ -11,7 +11,7 @@ import {
 import {Form, FormGroup} from '@angular/forms';
 import {DataForm} from '../../../models/DataForm';
 import {Contact} from "../../../models/contact";
-import {Observable, of, Subscription} from 'rxjs';
+import {forkJoin, Observable, of, Subscription} from 'rxjs';
 import {MatAutocompleteSelectedEvent} from "@angular/material";
 import {Router} from "@angular/router";
 import {map, startWith} from "rxjs/operators";
@@ -33,8 +33,8 @@ export class FormComponent implements OnInit, AfterViewInit {
   @Input('contact') contact: Observable<Contact[]>;
   @Input('datas') dataValues:  DataForm[];
   @Output() updateDataForm: EventEmitter<string> = new EventEmitter<string>();
-  filteredName: Observable<string[]>;
-  filteredRefClient: Observable<string[]>;
+  filteredName$: Observable<string[]>;
+  filteredRefClient$: Observable<string[]>;
   @ViewChild("cdk-overlay-2") divView: ElementRef;
 
   clientZones$: Observable<MyClientZones[]>;
@@ -51,45 +51,41 @@ export class FormComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.filteredName = this.formGroup.get('name').valueChanges
+    this.filteredName$ = this.formGroup.get('name').valueChanges
       .pipe(
         startWith(''),
         map(value => {
           if (this.dataValues) {
             const resp = this._filter(value, 'name');
+            if (!resp  ||   resp.length === 0) {
+              this.formGroup.patchValue({
+                ref_client: null,
+                address: null,
+                number: null,
+                cp: null,
+                state: null,
+                clientZone: 0,
+              })
+            }
             return resp;
           } else {
             return;
           }
         })
       );
-    this.filteredRefClient = this.formGroup.get('ref_client').valueChanges
+    this.filteredRefClient$ = this.formGroup.get('ref_client').valueChanges
       .pipe(
         startWith(''),
         map(value => {
           if (this.dataValues) {
             const resp =  this._filter(value, 'ref_client');
+
             return resp;
           } else {
             return;
           }
         })
       );
-  }
-
-  private resetForm(formGroup: FormGroup) {
-    // formGroup.patchValue({
-    //   'address': '',
-    //   'number': '',
-    //   'cp': '',
-    //   'state': '',
-    //   'clientZone': 0,
-    //   'phone': '',
-    //   'infos': {
-    //   'info1': '',
-    //     'info2': ''
-    // }
-    // })
   }
 
   private _filter(value: string, target: string): any[] {
@@ -99,6 +95,19 @@ export class FormComponent implements OnInit, AfterViewInit {
       return result;
     }
     return;
+  }
+
+  get isFilteredNotFound(): boolean {
+    // return ((filteredName | async)?.length === 0 || (filteredRefClient | async)?.length === 0)
+
+    forkJoin([this.filteredName$, this.filteredRefClient$]).subscribe(results => {
+      console.log(results);
+      // results[0] is our character
+      // results[1] is our character homeworld
+      // results[0].homeworld = results[1];
+      // this.loadedCharacter = results[0];
+    });
+    return true;
   }
 
 

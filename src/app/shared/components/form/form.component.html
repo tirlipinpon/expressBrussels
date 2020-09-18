@@ -15,7 +15,7 @@
         <input type="text" matInput [matAutocomplete]="autoRefClient" formControlName="ref_client" placeholder="reference client" aria-label="Number">
         <mat-icon matSuffix><fa-icon [icon]="['fas', 'id-card'] " size="xs"></fa-icon></mat-icon>
         <mat-autocomplete   #autoRefClient="matAutocomplete" (optionSelected)="itemSelectedRefClient($event)">
-          <mat-option  *ngFor="let option of (filteredRefClient | async)| notEmpty: 'ref_client'"  [value]="option?.ref_client">
+          <mat-option *ngFor="let option of (filteredRefClient$ | async)| notEmpty: 'ref_client'" [value]="option?.ref_client">
             {{ option?.ref_client }}
           </mat-option>
         </mat-autocomplete>
@@ -25,14 +25,14 @@
       <input type="text" matInput [matAutocomplete]="autoName" formControlName="name" placeholder="nom" aria-label="Number">
       <mat-icon matSuffix><fa-icon [icon]="['fas', 'user'] " size="xs"></fa-icon></mat-icon>
       <mat-autocomplete  #autoName="matAutocomplete" (optionSelected)="itemSelectedName($event)"  >
-        <mat-option *ngFor="let option of (filteredName | async)|notDesactive" [value]="option?.name">
+        <mat-option *ngFor="let option of (filteredName$ | async)|notDesactive" [value]="option?.name">
           {{ option?.name }}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
     <input type="hidden" formControlName="id">
     <div *ngIf="formGroup.get('id').value && formGroup.get('id').value.length
-    || ((filteredName | async)?.length === 0 || (filteredRefClient | async)?.length === 0)">
+    ||  ((filteredName$ | async)?.length === 0 || (filteredRefClient$ | async)?.length === 0)">
       <div>
         <app-address [formGroup]="formGroup" [data]="clientZones"></app-address>
 <!--        <div style="display:flex;">-->
@@ -55,7 +55,7 @@
 <!--        </div>-->
         <input type="hidden" formControlName="clientZone"  placeholder="zone" value="1">
         <mat-form-field class="example-full-width">
-          <input type="tel" matInput placeholder="telephone" formControlName="phone" value="">
+          <input type="tel" matInput placeholder="telephone" formControlName="phone" value="" required>
           <!--<mat-icon matSuffix><fa-icon [icon]="['fas', 'phone'] " size="xs"></fa-icon></mat-icon>-->
         </mat-form-field>
       </div>

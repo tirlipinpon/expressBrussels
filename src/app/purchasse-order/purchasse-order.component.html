@@ -38,7 +38,7 @@
       <div class="price-result" *ngIf="formDistance.get('price').value">
         <div  matTooltip="Ce montant est cité à titre indicatif, sous réserve d&#39;approbation de la direction."
               [matTooltipPosition]="'below'"><fa-icon [icon]="['fas', 'euro-sign']" size="sm"></fa-icon> {{ formDistance.get('price').value }}</div>
-        <ng-container *ngIf="false">
+        <ng-container *ngIf="customerId < 3">
           <div *ngIf="distances[0]?.distanceText"><fa-icon [icon]="['fas', 'map-marked-alt']" size="sm"></fa-icon> {{ distances[0]?.distanceText }} + {{ distances[1]?.distanceText }}</div>
           <div *ngIf="distances[0]?.durationText"><fa-icon [icon]="['fas', 'clock']" size="sm"></fa-icon> {{ distances[0]?.durationText }} + {{ distances[1]?.durationText }}</div>
         </ng-container>
@@ -58,7 +58,7 @@
           (click)="recapOrder()"
           mat-raised-button
           color="primary"
-          [disabled]="!showSendBtn">Envoyer le bon de commande</button>
+          [disabled]="!showSendBtn || !formRemoval.valid || !formRecipient.valid">Envoyer le bon de commande </button>
       </div>
 
     </div>

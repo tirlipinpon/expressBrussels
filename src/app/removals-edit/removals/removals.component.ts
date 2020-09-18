@@ -44,7 +44,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
     this.witchComponent = this.route.routeConfig.path;
     if (this.witchComponent === 'removals') {
       this.typeDataForm = 1; // diff
-    }else{
+    } else {
       this.typeDataForm = 2; // diff
     }
 
@@ -170,7 +170,7 @@ export class RemovalsComponent implements OnInit, OnDestroy {
   add(form: FormGroup): void {
     if (this.witchComponent === 'removals') {
       this.store.dispatch(new actionsRemoval.AddRemoval(form.value)); // diff
-    }else if (this.witchComponent === 'recipients') {
+    } else if (this.witchComponent === 'recipients') {
       this.store.dispatch(new actionsRecipient.AddRecipient(form.value)); // diff
     }
     this.allFormGroup[0].reset();

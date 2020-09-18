@@ -34,8 +34,8 @@ export class InfoComponent implements OnInit, OnChanges {
   }
 
   private _filter(value: any, target?: string): any[] {
+    if (!this.contact || !value) return;
     const filterValue = value.toLowerCase();
-    if (!this.contact) return;
     return this.contact.filter(option => option.name.toLowerCase().includes(filterValue));
   }
 }
