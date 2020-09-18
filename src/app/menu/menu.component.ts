@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import {Router} from "@angular/router";
 import {AuthenticationService} from "../services/authentication.service";
+import {select, Store} from "@ngrx/store";
+import * as fromRoot from "../shared/appState";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-menu',
@@ -9,9 +12,12 @@ import {AuthenticationService} from "../services/authentication.service";
 })
 export class MenuComponent implements OnInit {
 
-  constructor(private router: Router, private authenticationService: AuthenticationService) { }
+  customerId$: Observable<number>;
+
+  constructor(private store: Store<fromRoot.AppState>, private router: Router, private authenticationService: AuthenticationService) { }
 
   ngOnInit() {
+    this.customerId$ = this.store.pipe(select(fromRoot.selectors.getCustomerId));
   }
   goPlaces() {
     this.router.navigate(['/']).then(nav => {

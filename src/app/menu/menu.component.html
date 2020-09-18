@@ -1,3 +1,7 @@
+<div style="padding:10px" *ngIf="(customerId$|async) && (customerId$|async)<3">
+  <app-menu-admin></app-menu-admin>
+</div>
+
 <div class="flex-menu">
   <div>
     <img src="assets/img/logo_sfe_long.jpg">

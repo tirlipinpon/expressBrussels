@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
   title = 'app';
   customerId$: Observable<number>;
 
-  constructor(private store: Store<fromRoot.AppState>,private router: Router, private authenticationService: AuthenticationService) {
+  constructor(private store: Store<fromRoot.AppState>, private router: Router, private authenticationService: AuthenticationService) {
   }
 
   ngOnInit() {

@@ -63,6 +63,7 @@ import { DestinationComponent } from './components/form/destination/destination.
 import { SelectClientComponent } from './components/form/select-client/select-client.component';
 import { SelectMonthComponent } from './components/form/select-month/select-month.component';
 import { UploadPdfComponent } from './components/upload-pdf/upload-pdf.component';
+import { MenuAdminComponent } from './components/menu-admin/menu-admin.component';
 
 library.add(faPhone, faHome, faClock, faUser, faUniversity, faFilePdf, faEraser,
   faIdCard, faComment, faUserTie, faUserTag, faEuroSign, faMapMarkedAlt, faClock, faMotorcycle, faCar, faEye, faEyeSlash);
@@ -131,7 +132,8 @@ library.add(faPhone, faHome, faClock, faUser, faUniversity, faFilePdf, faEraser,
     DestinationComponent,
     SelectClientComponent,
     SelectMonthComponent,
-    UploadPdfComponent
+    UploadPdfComponent,
+    MenuAdminComponent
   ],
   declarations: [
     // component
@@ -160,7 +162,8 @@ library.add(faPhone, faHome, faClock, faUser, faUniversity, faFilePdf, faEraser,
     DestinationComponent,
     SelectClientComponent,
     SelectMonthComponent,
-    UploadPdfComponent
+    UploadPdfComponent,
+    MenuAdminComponent
   ],
   providers: [
     ConfirmationService

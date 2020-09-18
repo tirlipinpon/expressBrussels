@@ -392,7 +392,6 @@ export class PurchasseOrderComponent implements OnInit, OnDestroy, ComponentDeac
       clientZone: 0,
       phone: null,
     });
-    this.initFormsRecipient(this.customerId);
     this.resetDistance();
     this.store.dispatch(new OrderActions.InitOrder(this.customerId));
   }

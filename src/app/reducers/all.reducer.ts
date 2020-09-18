@@ -237,17 +237,13 @@ export function purchasseOrderReducer(state: PurchasseOrder = orderInitOrder, ac
     case PurchasseOrderActions.EDIT_ORDER_REMOVAL:
       // console.log('in order reducer edit Order removal payload = ',action.payload);
       return Object.assign({}, state, {
-        fk_removal_id: action.payload,
-        contact_removal: null,
-        message_removal: null
+        fk_removal_id: action.payload
       });
 
     case PurchasseOrderActions.EDIT_ORDER_RECIPIENT:
       // console.log('in order reducer edit Order Recipient payload = ',action.payload);
       return Object.assign({}, state, {
-        fk_recipient_id: action.payload,
-        contact_recipient: null,
-        message_recipient: null
+        fk_recipient_id: action.payload
       });
 
     case PurchasseOrderActions.EDIT_ORDER_RECIPIENT_CASCADES:

@@ -1,5 +1,9 @@
 <app-notification></app-notification>
 
+<div>
+  <app-menu-admin></app-menu-admin>
+</div>
+
 <!-- SEARCH -->
 <app-select-client [clients]="clientsItems$|async" (selectedClient)="selectClientById($event)"></app-select-client>
 
